@@ -1,0 +1,17 @@
+#define #cm chest_minecart
+#override minecraft
+#uninstall
+
+#define #pack_id 4
+#define #namespace template
+#define #page_number 9
+
+#define #skillList ["Mining", "Foraging", "Excavation", "Combat", "Farming"]
+
+#define #lenSkills 5
+
+#define #color1 #441752
+#define #color2 #8174A0
+#define #color3 #A888B5
+#define #color4 #EFB6C8
+#define #soundNo playsound minecraft:entity.enderman.teleport ambient @p[tag=skills.pref.sound] ~ ~ ~ 1 1
