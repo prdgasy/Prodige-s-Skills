@@ -5,3 +5,11 @@
     3: Combat,
     4: Farming
 };
+
+function indexToName() {
+    // Input: storage (string), var (string)
+    // Output: storage.var (string)
+    ::Indexes.index = prodiges_skills.gui.index:@s; // ?
+    execute run { $::Indexes.name = ::Indexes.Skills.$(index); } with ::Indexes;
+    $::$(storage) = ::Indexes.name;
+}

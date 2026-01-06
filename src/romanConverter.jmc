@@ -1,13 +1,9 @@
-class romanConverter {
-    @lazy function toRoman(storage, var) {
-        // Input: storage, var
-        // Output: Roman number in storage.var
-        // Example: storage = "temp", var = "number" (integer)
-        // >> Output: temp.roman_conv (string)
-        ::romanConverter.number = ::$storage.$var;
+class RomanConverter {
+    @lazy function toRoman(input, output) {
+        ::romanConverter.number = ::$input;
         execute run {
-            $::$storage.$var = ::romanConverter.Numbers.$(num);
-        } with ::temp.roman_conv;
+            $::$output = ::romanConverter.Numbers.$(number);
+        } with ::romanConverter;
     }
 }
 

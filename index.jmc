@@ -1,6 +1,6 @@
 function uninstall() {
     // Text.tellraw(@s, "&<red, bold>Skills ♦ &<red>Every trace of the datapack has been deleted. &<gray>You can safely remove it from your datapack folder.");
-    
+
     for ($index = 0; $index < 7; $index++) {
         ::temp.init.index = $index;
         execute run { $::temp.init.name = ::DB.Indexes.$(index); } with ::temp.init;
@@ -46,27 +46,9 @@ function uninstall() {
     ::DB.del();
 }
 
-function index_to_name() {
-    // @Param: storage
-    ::temp.index_to_name.index = skills.gui.index:@s;
-    execute run { $::temp.index_to_name.name = ::DB.Indexes.$(index); } with ::temp.index_to_name;
-    $::$(storage) = ::temp.index_to_name.name;
-}
 
-class Assert {
-    function inventoryFull() {
-        Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Inventory full! Free up some space."); playsound minecraft:entity.enderman.teleport ambient @p[ tag = skills.pref.sound ] ~ ~ ~ 1 1;
-    }
 
-    function notEnoughSP() {
-        Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Not enough Skill Point to buy this."); playsound minecraft:entity.enderman.teleport ambient @p[ tag = skills.pref.sound ] ~ ~ ~ 1 1;
-    }
 
-    function upgradeMax() {
-        Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You cannot upgrade this Talent anymore.");
-        playsound entity.item.picked_up ambient @p[ tag = skills.pref.sound ] ~ ~ ~ 1 0;
-    }
-}
 
 eligible_scores();
 

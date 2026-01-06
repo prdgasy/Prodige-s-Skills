@@ -1,5 +1,5 @@
 class Array {
-    @lazy function len(var, array) {
+    @lazy function length(var, array) {
         $var = execute if data storage prodiges_skills:prodiges_skills $array[];
     }
 
