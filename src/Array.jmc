@@ -1,0 +1,9 @@
+class Array {
+    @lazy function len(var, array) {
+        $var = execute if data storage prodiges_skills:prodiges_skills $array[];
+    }
+
+    @lazy function playerInv_length(var) {
+        $var = execute if data entity @p Inventory[];
+    }
+}

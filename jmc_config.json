@@ -2,6 +2,6 @@
     "namespace": "prodiges_skills",
     "description": "Level up your skills as you mine, farm, and more!",
     "pack_format": "48",
-    "target": "main.jmc",
+    "target": "index.jmc",
     "output": "."
 }

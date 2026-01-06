@@ -1,0 +1,7 @@
+::Indexes.Skills = {
+    0: Mining,
+    1: Foraging,
+    2: Excavation,
+    3: Combat,
+    4: Farming
+};
