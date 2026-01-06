@@ -1,0 +1,121 @@
+Scoreboard.add(_:namespace:.id);
+Scoreboard.add(_:namespace:.page);
+
+Scoreboard.add(_:triggerCommand:, trigger);
+forceload add _:packID: _:packID:;
+setblock _:packID: 0 _:packID: yellow_shulker_box;
+
+new loot_table(minecraft.blocks.yellow_shulker_box) {
+    "type":"minecraft:block", "pools":[ { "rolls":1, "bonus_rolls":0, "entries":[ { "type":"minecraft:item", "name":"minecraft:yellow_shulker_box", "functions":[ { "function":"minecraft:copy_components", "source":"block_entity", "include":[ "minecraft:custom_name", "minecraft:container", "minecraft:lock", "minecraft:container_loot" ] } ] } ], "conditions":[ { "condition":"minecraft:inverted", "term":{ "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } } ] }, { "rolls":1, "bonus_rolls":0, "entries":[ { "type":"minecraft:dynamic", "name":"minecraft:contents" } ], "conditions":[ { "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } ] } ], "random_sequence":"minecraft:blocks/yellow_shulker_box", "__smithed__":{ "priority":{ "stage":"early" }, "rules":[ { "type":"append", "target":"pools[0].conditions", "source":{ "type":"reference", "path":"pools[0].conditions[0]" } }, { "type":"append", "target":"pools", "source":{ "type":"reference", "path":"pools[1]" } } ] }
+}
+
+class _:namespace: {
+    class Constructor {
+        function findGUI() {
+            // Find the GUI minecart linked to the player
+            // At the player, as the GUI
+            execute at @s as @e[type = :guiEntity:, tag = _:namespace:] run {
+                if (_:namespace:.id:@p == _:namespace:.id:@s) {
+                    _:namespace:.Constructor.loop();
+                }
+            }
+        }
+
+        function close() {
+            tp @s ~ ~-1000 ~;
+            kill @s;
+        }
+
+        function loop() {
+            // Executed each tick when the GUI is active and linked to a player
+            execute at @s run {
+                if (!entity @p[ distance = ..1 ]) {
+                    // Close the GUI if the player is too far
+                    _:namespace:.Constructor.close();
+                }
+            }
+
+            _:namespace:.returnItems();
+            _:namespace:.clickDetection();
+        }
+
+        function summon() {
+            // Create the GUI minecart near the player
+            // Unique ID management
+            if (!entity @e[ type = :guiEntity:, tag = _:namespace:, distance = ..1 ] && block ~ ~ ~ air && block ~ ~1 ~ air) {
+                // Summon entity
+                summon :guiEntity: ~ ~1 ~ { Tags:[ _:namespace:, this ], NoGravity:1b, Silent:1b, Invulnerable:1b };
+
+                // ID management
+                _:namespace:.id:global.id += 1;
+                _:namespace:.id:_:newGUI: = _:namespace:.id:global.id;
+                _:namespace:.id:@s = _:namespace:.id:global.id;
+
+                // Init page 1
+                _:namespace:.page:_:newGUI: = 1;
+                execute as _:newGUI: run {
+                    tag @s remove this;
+                    _:namespace:.refresh();
+                }
+            } else {
+                Text.actionbar(@p, "&<red, bold>_:triggerCommand:: ♦ &<red>GUI already active or there is no free space!");
+            }
+        }
+    }
+
+    function main() {
+        // Trigger detect
+        execute as @a[ scores = { _:triggerCommand: = 1.. } ] at @s run _:namespace:.Constructor.summon();
+        _:triggerCommand: = 0;
+        scoreboard players enable @a _:triggerCommand:;
+    }
+
+    function returnItems() {
+        _:shulkerBox: = @s::Items;
+        _:shulkerBox:[{ components:{ "minecraft:custom_data":{ _:namespace::1b } } } ].del();
+
+        $foreignItem = loot give @p mine _:packID: 0 _:packID: stick[ custom_data = { drop_contents: 1b } ];
+
+        if ($foreignItem) { _:namespace:.refresh(); }
+
+    }
+
+    function refresh() {
+        // Refresh items from the menu
+        @s::Items.del();
+
+        Hardcode.switch(
+            _:namespace:.page:@s,
+            "[id]",
+            () => { _:userFile:.Pages.[id](); },
+            _:pageNumber:
+        );
+    }
+
+    @lazy function changePage(pageId) {
+        _:namespace:.page:@s = $pageId;
+        _:namespace:.click();
+    }
+
+    function click() {
+        playsound minecraft:block.stone.break ambient @p[ tag = _:namespace:.pref.sound ] ~ ~ ~ .5;
+        _:namespace:.refresh();
+    }
+
+    function clickDetection() {
+        // Detect missing items in the menu
+        // According to the page, the positions of the items change
+
+        $playerClicked ?= clear @p *[custom_data = { _:namespace::1b } ];
+        if ($playerClicked) {
+            Hardcode.switch(
+                _:namespace:.page:@s,
+                "[id]",
+                () => {
+                    _:userFile:.Click.[id]();
+                },
+                _:pageNumber:
+            );
+        }
+    }
+}

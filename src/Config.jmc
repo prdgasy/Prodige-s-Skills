@@ -238,7 +238,7 @@ class Config {
     }
 
     function Crate() {
-        ::DB.Shop.Crates = [
+        ::Config.Shop.Crates = [
             // Spécial Items (random)
             { command: "function prodiges_skills:player/specialitems/give_random", repr: "-" },
 
@@ -259,15 +259,11 @@ class Config {
             { command: "function prodiges_skills:rewards/basic", repr: "§7Basic Loot" },
 
             // Skill Points (SP)
-            { command: "scoreboard players add @p skills.player.sp 250", repr: "§6250 Skill Points (SP)" },
-            { command: "scoreboard players add @p skills.player.sp 150", repr: "§6150 Skill Points (SP)" },
-            { command: "scoreboard players add @p skills.player.sp 80", repr: "§680 Skill Points (SP)" },
-            { command: "scoreboard players add @p skills.player.sp 50", repr: "§650 Skill Points (SP)" },
-            { command: "scoreboard players add @p skills.player.sp 40", repr: "§640 Skill Points (SP)" }
+            { command: "scoreboard players add @p prodiges_skills.player.sp 250", repr: "§6250 Skill Points (SP)" },
+            { command: "scoreboard players add @p prodiges_skills.player.sp 150", repr: "§6150 Skill Points (SP)" },
+            { command: "scoreboard players add @p prodiges_skills.player.sp 80", repr: "§680 Skill Points (SP)" },
+            { command: "scoreboard players add @p prodiges_skills.player.sp 50", repr: "§650 Skill Points (SP)" },
+            { command: "scoreboard players add @p prodiges_skills.player.sp 40", repr: "§640 Skill Points (SP)" }
         ];
     }
 }
-
-
-
-

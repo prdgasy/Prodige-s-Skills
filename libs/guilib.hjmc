@@ -1,0 +1,8 @@
+#define _:packID: 930005
+#define _:userFile: Menu
+#define _:pageNumber: 9
+#define _:namespace: skillsLIB
+#define _:triggerCommand: Skills
+
+#define _:shulkerBox: [_:packID:, 0, _:packID:]::Items
+#define _:newGUI: @e[type = :guiEntity:, tag = _:namespace:, tag = this]
