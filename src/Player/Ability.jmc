@@ -1,0 +1,46 @@
+class Player.Ability {
+    function main() {
+        $get = random value 0..100;
+        $scoreboard players operation $prestige_lvl skills.__variable__ = @s skills.$(name).prestige;
+        $chance = $prestige_lvl;
+        $chance *= 5;
+
+        if ($get < $chance) {
+            execute run {
+                // JMC.put("$function prodiges_skills:player/ability/$(name_lower)"); // RETIRER COMMENTAIRE
+            } with ::Player.onEvent.taskData;
+        }
+    }
+
+    function mining() {
+        effect give @s haste 60 4;
+    }
+
+    function foraging() {
+        execute at @s anchored eyes run loot spawn ^ ^ ^1.5 loot { "pools":[ { "rolls":1, "entries":[ { "type":"minecraft:item", "name":"minecraft:golden_apple" } ] } ] };
+        execute at @s run {
+            playsound minecraft:entity.arrow.shoot ambient @s ~ ~ ~ 1 0;
+            particle minecraft:happy_villager ~ ~ ~ 1 1 1 1 100;
+
+            $r = random value 0..2;
+            switch($r) {
+                case 0: ::temp.Player.ability.foraging.type = "oak_sapling";
+                case 1: ::temp.Player.ability.foraging.type = "dark_oak_sapling";
+                case 2: ::temp.Player.ability.foraging.type = "acacia_sapling";
+            }
+            execute run { $fill ~-2 ~-1 ~-2 ~2 ~ ~2 $(type) keep; } with ::temp.Player.ability.foraging;
+        }
+    }
+
+    function excavation() {
+        execute at @s anchored eyes run loot spawn ^ ^ ^1.5 loot { "pools":[ { "rolls":3, "entries":[ { "type":"minecraft:item", "name":"minecraft:clay_ball", "weight":10 }, { "type":"minecraft:item", "name":"minecraft:flint", "weight":8 }, { "type":"minecraft:item", "name":"minecraft:brick", "weight":6 }, { "type":"minecraft:item", "name":"minecraft:bone", "weight":7 }, { "type":"minecraft:item", "name":"minecraft:bone_block", "weight":4 }, { "type":"minecraft:item", "name":"minecraft:glass", "weight":3 }, { "type":"minecraft:item", "name":"minecraft:amethyst_shard", "weight":5 }, { "type":"minecraft:item", "name":"minecraft:egg", "weight":5 }, { "type":"minecraft:item", "name":"minecraft:prismarine_crystals", "weight":4 }, { "type":"minecraft:item", "name":"minecraft:sniffer_egg", "weight":1 }, { "type":"minecraft:item", "name":"minecraft:cooked_porkchop", "weight":6 }, { "type":"minecraft:item", "name":"minecraft:rabbit_foot", "weight":3 }, { "type":"minecraft:item", "name":"minecraft:suspicious_sand", "weight":3 }, { "type":"minecraft:item", "name":"minecraft:globe_banner_pattern", "weight":1 }, { "type":"minecraft:item", "name":"minecraft:potato", "weight":6 } ] } ] };
+    }
+
+    function combat() {
+        effect give @s strength 60 4;
+    }
+
+    function farming() {
+        execute at @s anchored eyes run loot spawn ^ ^ ^1.5 loot { "pools":[ { "rolls":3, "entries":[ { "type":"minecraft:item", "name":"bone_meal", "weight":5 }, { "type":"item", "name":"minecraft:golden_carrot", "weight":5 }, { "type":"item", "name":"minecraft:glow_berries", "weight":7 }, { "type":"item", "name":"minecraft:honey_bottle", "weight":4 }, { "type":"item", "name":"minecraft:beetroot_soup", "weight":3 }, { "type":"item", "name":"minecraft:cake", "weight":2 }, { "type":"item", "name":"minecraft:sweet_berries", "weight":8 }, { "type":"item", "name":"minecraft:melon_slice", "weight":9 }, { "type":"item", "name":"minecraft:pumpkin_pie", "weight":4 }, { "type":"item", "name":"minecraft:golden_apple", "weight":1 }, { "type":"item", "name":"minecraft:enchanted_golden_apple", "weight":0.5 }, { "type":"item", "name":"minecraft:baked_potato", "weight":6 }, { "type":"item", "name":"minecraft:cookie", "weight":5 }, { "type":"item", "name":"minecraft:rabbit_stew", "weight":2 }, { "type":"item", "name":"minecraft:mushroom_stew", "weight":3 } ] } ] };
+    }
+}

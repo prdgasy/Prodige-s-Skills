@@ -1,0 +1,24 @@
+class Player.Items {
+    function give() {
+        $give @p $(item_repr)[ custom_data = { prodiges_skills:{ specialItem: 1b } }, custom_name = '{"text":"$(item_name)","italic":false}', lore = [ '[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(desc1)","italic":true,"color":"light_purple"}]', '[{"text":"$(desc2)","italic":true,"color":"light_purple"}]' ], enchantments = { $(ench_0_name):$(ench_0_level), $(ench_1_name):$(ench_1_level) } ];
+    }
+
+    function give_from_id() {
+        $::temp.specialItems.give = ::DB.Shop.specialItems[ $(id) ];
+        ::temp.specialItems.give.ench_0_name = ::temp.specialItems.give.Enchants[ 0 ].name;
+        ::temp.specialItems.give.ench_0_level = ::temp.specialItems.give.Enchants[ 0 ].level;
+        ::temp.specialItems.give.ench_1_name = ::temp.specialItems.give.Enchants[ 1 ].name;
+        ::temp.specialItems.give.ench_1_level = ::temp.specialItems.give.Enchants[ 1 ].level;
+        Player.specialItems.give() with ::temp.specialItems.give;
+    }
+
+    function give_random() {
+        $id = random value 0..21;
+        ::temp.crate.id = $id;
+        execute run {
+            $::temp.gui.crate.repr = ::DB.Shop.specialItems[ $(id) ].item_name;
+        } with ::temp.crate;
+
+        Player.specialItems.give_from_id() with ::temp.crate;
+    }
+}

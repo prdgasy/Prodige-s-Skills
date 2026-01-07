@@ -1,0 +1,17 @@
+class Player.Schedule {
+    function wait5s() {
+        ExploitFilter.usedFilteredObject();
+        Player.onEvent.check();
+    }
+
+    function wait1m() {
+        Player.Booster.loop();
+        if (skills.crate.cooldown:@p >= 0) {
+            skills.crate.cooldown:@p -= 1;
+        }
+    }
+
+    function wait10s() {
+        tag @s remove skills.not_eligible;
+    }
+}

@@ -1,0 +1,251 @@
+class Player.onEvent {
+        function check() {
+            Hardcode.repeatList(
+                "[name]",
+                () => {
+                    $taskExist = 1;
+                    $i = 0;
+                    while ($taskExist) {
+                        ::Player.onEvent.i = $i;
+                        execute run {
+                            // Clean up
+                            // ::Player.onEvent.taskData.del(); // ne devrait pas etre necessiare, a voir...
+
+                            // Get task data, if it exists
+                            $$taskExist ?= ::Player.onEvent.taskData = ::Config.Skills.[name].Tasks[$(i)];
+
+
+                            if ($taskExist) {
+                                ::Player.onEvent.taskData.name = ::Config.Skills.[name].name;
+                                :::Player.onEvent.taskData.lowerCaseName = ::Config.Skills.[name].nameLower;
+
+                                Player.onEvent.isTasking() with ::Player.onEvent.taskData;
+                            }
+                        } with ::Player.onEvent;
+
+                        $i++;
+                    }
+                }, _:skillList:
+            );
+        }
+
+        // Check if the player is doing a specific task
+        // Input >> keywoard: Skill name, keywoard: task
+        function isTasking() {
+            // il devrait il y a voir un probleme: pas le meme nom de tag dans guilib
+
+            // check if the player has progression on and is doing the task
+            $execute if score @s[tag = prodiges_skills.pref.skillProgression] prodiges_skills.$(name).task.$(task) matches 1.. run {
+                if (entity @s[ tag = !prodiges_skills.exploitfilter ]) Player.onEvent.acceptTask() with ::Player.onEvent.taskData;
+
+                $execute if entity @s[tag = prodiges_skills.ability.$(name)] run Player.Ability.main() with ::Player.onEvent.taskData;
+                $scoreboard players reset @s prodiges_skills.$(name).task.$(task);
+            } with ::Player.onEvent.taskData;
+        }
+
+        function acceptTask() {
+            Player.onEvent.giveXp() with ::Player.onEvent.taskData;
+            Player.onEvent.givePoint() with ::Player.onEvent.taskData;
+
+            // Set storages
+            $::Player.onEvent.showComponents.currentXp = prodiges_skills.$(name).xp:@s;
+            $::Player.onEvent.showComponents.currentLvl = prodiges_skills.$(name).lvl:@s;
+            $::Player.onEvent.showComponents.xpToNext = prodiges_skills.$(name).xpToNext:@s;
+
+            RomanConverter.toRoman(Player.onEvent.showComponents.romanLvl, Player.onEvent.showComponents.currentLvl);
+
+            // Get percentage %
+            $progress_100 := skills.$(name).xp:@s * 100 / skills.$(name).xpToNext:@s;
+            //$scoreboard players operation $den skills.__variable__ = @s skills.$(name).xp;
+            // $scoreboard players operation $num skills.__variable__ = @s skills.$(name).xpToNext;
+
+            // $100ratio = $den;
+            // $100ratio *= 100;
+            // $100ratio /= $num;
+            ::Player.onEvent.showComponents.progress_100 = $progress_100;
+
+            // Send notif
+            $execute if score @s prodiges_skills.$(name).lvl matches ..99 as @s[tag = prodiges_skills.ref.xpNotif] run Player.onEvent.xpNotif() with ::Player.onEvent.showComponents;
+
+            $execute if score @s prodiges_skills.$(name).lvl matches 100 as @s[tag = prodiges_skills.pref.xpNotif] run Player.onEvent.xpNotifMax() with ::Player.onEvent.showComponents;
+
+            // Lvl check
+            $execute if score @s prodiges_skills.$(name).lvl matches ..99 if score @s prodiges_skills.$(name).xp >= @s prodiges_skills.$(name).xpToNext run Player.onEvent.lvlUp() with ::Player.onEvent.showComponents;
+        }
+
+        function xpNotif() {
+            // $Text.actionbar(@s, "&<aqua>+$(xp) &<aqua>XP (x&<$xp_power>) &<dark_gray>• &<gold>+$(point) &<gold>SP (x&<$point_power>) &<dark_gray>| &<#A888B5>$(name) &<#EFB6C8, bold>$(romanLvl) &<dark_gray>| &<gray>$(currentXp)&<dark_gray>/&<gray>$(xpToNext) $(progress_100)%");
+            $say "name: $(name), currentLvl: $(currentLvl), currentXp: $(currentXp), xpToNext: $(xpToNext), progress: $(progress_100)";
+            // color rework
+        }
+
+        function xpNotifMax() {
+            $say "name: $(name), currentLvl: $(currentLvl), currentXp: $(currentXp), xpToNext: $(xpToNext), progress: $(progress_100)";
+            // $Text.actionbar(@s, "&<gold>+$(point) &<bold>x&<$point_power> &<gold>SP &<dark_gray>| &<light_purple>$(name) &<dark_purple, bold>$(current_lvl) &<dark_gray>| &<gray>$(current_xp)&<dark_gray>/&<gray>$(current_xp) 100%");
+        }
+
+        function giveXp() {
+            $xpGained := ({ ::Player.onEvent.taskData.xp } * prodiges_skills.$(name).task.$(task):@s * prodiges_skills.booster.power:@s)
+            $$prodiges_skills.$(name).xp:@s += $xpGained;
+            ::Player.onEvent.showComponents.xpGained = $xpGained;
+        }
+
+        function givePoint() {
+            $point = Config.Points();
+
+            $pointGained := ($point * prodiges_skills.$(name).task.$(task):@s * prodiges_skills.pointBooster.power:@s);
+            $$prodiges_skills.points:@s += $pointGained;
+
+            ::Player.onEvent.showComponents.pointGained = $pointGained;
+        }
+
+        // Input >> keyword: name
+        function lvlUp() {
+            $execute if score @s prodiges_skills.$(name).lvl matches ..98 run {
+                // -- FIRST SEND FULL XP NOTIF -- //
+                // Send full xp notif
+                $::Player.onEvent.showComponents.currentXp = prodiges_skills.$(name).xpToNext:@s;
+                $::Player.onEvent.showComponents.xpToNext = prodiges_skills.$(name).xpToNext:@s;
+                $::Player.onEvent.showComponents.currentLvl = prodiges_skills.$(name).lvl:@s;
+                RomanConverter.toRoman(Player.onEvent.showComponents.currentLvl, Player.onEvent.showComponents.currentLvl);
+                execute as @s[tag = prodiges_skills.pref.lvlNotif] run Player.onEvent.xpNotif() with ::Player.onEvent.showComponents;
+
+                // -- THEN PROCESS LEVEL UP -- //
+                // Reset xp
+                $skills.$(name).xp:@s -= prodiges_skills.$(name).xpToNext:@s;
+
+                // Set new xpToNext: "U(n+1) = U(n)*1.2" < 2000
+                $xpToNext := (prodiges_skills.$(name).xpToNext:@s * 12) / 10;
+                $prodiges_skills.$(name).xpToNext:@s = $xpToNext;
+
+                $execute if score @s prodiges_skills.$(name).xpToNext matches 5001.. run scoreboard players set @s prodiges_skills.$(name).xpToNext 5000;
+
+                // Store $temp_lvl for lvl_notif
+                $$previousLvl = prodiges_skills.$(name).lvl:@s;
+
+                // Previous lvl
+                ::Player.onEvent.lvlUp.previousLvl = $previousLvl;
+
+                // $passed_lvl = $temp_lvl;
+                execute run { $tag @s add skills.toClaim.$(name).$(previousLvl); } with ::Player.onEvent.lvlUp;
+
+                // New lvl
+                $skills.$(name).lvl:@s += 1;
+                $::Player.onEvent.lvlUp.currentLvl = skills.$(name).lvl:@s;
+
+                // Next lvl
+                $nextLvl :+= $previousLvl + 2;
+                ::Player.onEvent.lvlUp.nextLvl = $nextLvl;
+
+                // Set storages
+                ::Player.onEvent.lvlUp.name = ::Player.onEvent.showComponents.name;
+
+                // Roman conversion
+                RomanConverter.toRoman(Player.onEvent.lvlUp.nextLvl, ::Player.onEvent.lvlUp.nextLvl);
+                RomanConverter.toRoman(Player.onEvent.lvlUp.previousLvl, ::Player.onEvent.lvlUp.previousLvl);
+                RomanConverter.toRoman(Player.onEvent.lvlUp.currentLvl, ::Player.onEvent.lvlUp.currentLvl);
+
+                // Set max xp bar
+                // ::Player.onEvent.lvlUp.bar = ::Progress.Bars.15;
+
+                // Set rewards
+                $mod = $previousLvl;
+                $mod %= 10;
+
+                if ($mod == 0) {
+                    ::Player.onEvent.lvlUp.point = ::Config.Rewards.3.point;
+                    ::Player.onEvent.lvlUp.show = ::Config.Rewards.3.show;
+                }
+                else if ($mod == 6 || $mod == 2) {
+                    ::Player.onEvent.lvlUp.point = ::Config.Rewards.2.point;
+                    ::Player.onEvent.lvlUp.show = ::Config.Rewards.2.show;
+                }
+                else {
+                    ::Player.onEvent.lvlUp.point = ::Config.Rewards.1.point;
+                    ::Player.onEvent.lvlUp.show = ::Config.Rewards.1.show;
+                }
+
+                // Send lvl notif
+                execute as @s[tag = prodiges_skills.pref.lvlNotif] run Player.onEvent.lvlNotif() with ::Player.onEvent.lvlUp;
+
+                // Broadcast lvl up
+                execute as @s[tag = prodiges_skills.pref.lvlBroadcast] run Player.onEvent.lvlBroadcast() with ::Player.onEvent.showComponents;
+
+                // While
+                $execute if score @s prodiges_skills.$(name).xp >= @s prodiges_skills.$(name).xpToNext run Player.onEvent.lvlUp() with ::Player.onEvent.showComponents;
+            } with ::Player.onEvent.showComponents;
+
+            $execute if score @s prodiges_skills.$(name).lvl matches 99 run {
+                // Previous lvl
+                $previousLvl = 99;
+                $tag @s add prodiges_skills.toClaim.$(name).99;
+
+                $prodiges_skills.$(name).lvl:@s = 100;
+                // Current lvl
+                $current_lvl = 100;
+
+
+                // Set storages
+                ::Player.onEvent.lvlUp.name = ::Player.onEvent.showComponents.name;
+                // Roman conversion
+                ::Player.onEvent.lvlUp.previousLvl = ::RomanConverter.Numbers.99;
+
+                $::Player.onEvent.lvlUp.xp = scoreboard players get @s skills.$(name).xp;
+
+
+                ::Player.onEvent.lvlUp.100ratio = 100;
+                ::Player.onEvent.lvlUp.bar = ::Progress.Bars.15;
+
+                // Set rewards
+                $mod = $previousLvl;
+                $mod %= 10;
+
+                if ($mod == 0) {
+                    ::Player.onEvent.lvlUp.point = ::DB.Rewards.3.point;
+                    ::Player.onEvent.lvlUp.show = ::DB.Rewards.3.show;
+                }
+                else if ($mod == 6 || $mod == 2) {
+                    ::Player.onEvent.lvlUp.point = ::DB.Rewards.2.point;
+                    ::Player.onEvent.lvlUp.show = ::DB.Rewards.2.show;
+                }
+                else {
+                    ::Player.onEvent.lvlUp.point = ::DB.Rewards.1.point;
+                    ::Player.onEvent.lvlUp.show = ::DB.Rewards.1.show;
+                }
+
+                execute as @s[tag = prodiges_skills.pref.lvlNotif] run Player.onEvent.lvlMax() with ::Player.onEvent.lvlUp;
+                execute as @s[tag = prodiges_skills.pref.lvlBbroadcast] run Player.onEvent.lvlBroadcast() with ::Player.onEvent.lvlUp;
+            } with ::Player.onEvent.showComponents;
+        }
+
+        // Input: >> keyword: name, currentLvl, previousLvl, nextLvl, show, point, bar, xp, xpToNext, 100ratio
+        function lvlNotif() {
+            // ╔ ╗ ║ ╚ ╝ ═
+            if (entity @s[tag = prodiges_skills.pref.sound]) { execute at @s run playsound minecraft:entity.player.levelup ambient @s[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0; }
+
+            $say "Leveled up $(name) from $(previousLvl) to $(currentLvl)! Rewards: $(show), +$(point) SP";
+            // $tellraw @p[tag = prodiges_skills.pref.lvl_notif] [ "", { "text":"=================================", "color":"#715979" }, { "text":"\n " }, { "text":"Skill ", "color":"yellow" }, { "text":"Level Up", "bold":true, "color":"yellow" }, { "text":"!", "color":"yellow" }, { "text":" $(name)", "color":"#A888B5" }, { "text":" $(prev_lvl)", "color":"dark_gray" }, { "text":"\u2192", "bold":true, "color":"dark_gray" }, { "text":"$(current_lvl)\n ", "bold":true, "color":"#EFB6C8" }, { "text":"\n" }, { "text":" Rewards:", "color":"yellow" }, { "text":"\n" }, { "text":"  -", "color":"dark_gray" }, { "text":" $(show)\n" }, { "text":"  -", "color":"dark_gray" }, { "text":" +$(point) SP", "color":"gold" }, { "text":"\n" }, { "text":" ", "italic":true }, { "text":"Claim your rewards in the menu. (i)", "italic":true, "color":"gray", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the UI using §d/trigger skills.lib.ui" } }, { "text":"\n\n " }, { "text":"Progress to", "color":"gray" }, { "text":" $(name)", "color":"#A888B5" }, { "text":" $(next_lvl)", "bold":true, "color":"#EFB6C8" }, { "text":":", "color":"gray" }, { "text":" $(100ratio)%", "color":"gray" }, { "text":"\n" }, { "text":" $(bar)" }, { "text":" $(xp)", "color":"#EFB6C8" }, { "text":"/", "color":"#A888B5" }, { "text":"$(xpToNext)", "color":"#EFB6C8" }, { "text":"\n" }, { "text":"=================================", "color":"#715979" } ];
+
+            // $Text.title(@s, "&<yellow>$(name) &<green>Level Up!");
+            // $Text.subtitle(@s, "&<gray>$(prev_lvl) &<dark_gray,bold>➜ &<bold, green>$(currentLvl)");
+        }
+
+        // Input: >> keyword: name, currentLvl, previousLvl, nextLvl, show, point, bar, xp, xpToNext, 100ratio
+        function lvlMax() {
+            if (entity @s[tag = prodiges_skills.pref.sound]) {
+                execute at @s run playsound minecraft:entity.player.levelup ambient @s[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+                execute at @s run playsound minecraft:entity.ender_dragon.growl ambient @s[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+            }
+            say "MAXLEVEL";
+            //$tellraw @p [ "", { "text":"=================================", "color":"#715979" }, { "text":"\n " }, { "text":"Skill ", "color":"yellow" }, { "text":"Level Up", "bold":true, "color":"yellow" }, { "text":"!", "color":"yellow" }, { "text":" $(name)", "color":"#A888B5" }, { "text":" $(prev_lvl)", "color":"dark_gray" }, { "text":"\u2192", "bold":true, "color":"dark_gray" }, { "text":"C", "bold":true, "color":"dark_purple" }, { "text":"\n" }, { "text":" \n" }, { "text":" Rewards:", "color":"yellow" }, { "text":"\n" }, { "text":"  -", "color":"dark_gray" }, { "text":" $(show)\n" }, { "text":"  -", "color":"dark_gray" }, { "text":" $(point) SP", "color":"gold" }, { "text":"\n" }, { "text":" ", "italic":true }, { "text":"Claim your rewards in the menu. (i)", "italic":true, "color":"gray", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the UI using §d/trigger skills.lib.ui" } }, { "text":"\n\n " }, { "text":"Check out the", "color":"gray", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":" ", "bold":true, "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":"Prestige", "bold":true, "color":"light_purple", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":" ", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":"menu in\n the ", "color":"gray", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":"Shop", "color":"green", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":"!", "color":"gray", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":" ", "color":"#EFB6C8", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":"(i)", "italic":true, "color":"gray", "hoverEvent":{ "action":"show_text", "contents":"§fOpen the Shop using §d/trigger skills.lib.ui" } }, { "text":"\n" }, { "text":"=================================", "color":"#715979" } ];
+
+            $Text.title(@s, "&<#A888B5>$(name) &<#EFB6C8>Level Up!");
+            // $Text.subtitle(@s, "&<#ce81ff>$(prev_lvl) &<dark_gray,bold>➜ &<bold, #ce81ff>C");
+        }
+
+        // Input: >> keyword: name, roman_lvl
+        function lvlBroadcast() {
+            say "@s BROADCAST LEVEL UP";
+            // $Text.tellraw(@a[ tag = prodiges_skills.pref.lvl_broadcast ], "&<yellow, bold>Skills ♦ &<light_purple>&<@s> &<yellow>has reached &<#A888B5>$(name) &<#EFB6C8, bold>$(roman_lvl)&<yellow>!");
+        }
+    }
