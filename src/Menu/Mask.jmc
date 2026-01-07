@@ -1,0 +1,53 @@
+class Menu.Mask {
+    function 1() {
+        Hardcode.repeat(
+            "[SLOT]",
+            () => {
+                item replace entity @s container.[SLOT] with minecraft:purple_stained_glass_pane[
+                    minecraft:hide_tooltip = { }, custom_data = { __namespace__:1b }
+                ];
+            },
+            0, 27
+        );
+    }
+    function 2() {
+        Hardcode.repeat(
+            "[SLOT]",
+            () => {
+                item replace entity @s container.[SLOT] with minecraft:gray_stained_glass_pane[
+                    minecraft:hide_tooltip = { }, custom_data = { __namespace__:1b }
+                ];
+            },
+            0, 9
+        );
+        Hardcode.repeat(
+            "[SLOT]",
+            () => {
+                item replace entity @s container.[SLOT] with minecraft:black_stained_glass_pane[
+                    minecraft:hide_tooltip = { }, custom_data = { __namespace__:1b }
+                ];
+            },
+            9, 18
+        );
+        Hardcode.repeat(
+            "[SLOT]",
+            () => {
+                item replace entity @s container.[SLOT] with minecraft:gray_stained_glass_pane[
+                    minecraft:hide_tooltip = { }, custom_data = { __namespace__:1b }
+                ];
+            },
+            18, 27
+        );
+    }
+    function 3() {
+        Hardcode.repeat(
+            "[SLOT]",
+            () => {
+                item replace entity @s container.[SLOT] with minecraft:red_stained_glass_pane[
+                    minecraft:hide_tooltip = { }, custom_data = { __namespace__:1b }
+                ];
+            },
+            0, 27
+        );
+    }
+}

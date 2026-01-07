@@ -1,0 +1,78 @@
+class Menu.ItemShop {
+    function set_param() {
+        $::temp.gui.items.type = ::DB.Shop.specialItems[ $(index) ].type;
+        $::temp.gui.items.item_name = ::DB.Shop.specialItems[ $(index) ].item_name;
+        $::temp.gui.items.rarity = ::DB.Shop.specialItems[ $(index) ].rarity;
+        $::temp.gui.items.item_repr = ::DB.Shop.specialItems[ $(index) ].item_repr;
+        $::temp.gui.items.ench_0_name = ::DB.Shop.specialItems[ $(index) ].Enchants[ 0 ].name;
+        $::temp.gui.items.ench_0_level = ::DB.Shop.specialItems[ $(index) ].Enchants[ 0 ].level;
+        $::temp.gui.items.ench_1_name = ::DB.Shop.specialItems[ $(index) ].Enchants[ 1 ].name;
+        $::temp.gui.items.ench_1_level = ::DB.Shop.specialItems[ $(index) ].Enchants[ 1 ].level;
+        // roman_conv(ench_0_level, temp.gui.items);
+        // roman_conv(ench_1_level, temp.gui.items);
+        $::temp.gui.items.desc1 = ::DB.Shop.specialItems[ $(index) ].desc1;
+        $::temp.gui.items.desc2 = ::DB.Shop.specialItems[ $(index) ].desc2;
+        $$cost = ::DB.Shop.specialItems[ $(index) ].cost;
+        ::temp.gui.items.cost = $cost;
+        $sp = prodiges_skills.player.sp:@p;
+        if ($cost > $sp) {
+            ::temp.gui.items.sp_color = "§8";
+        } else {
+            ::temp.gui.items.sp_color = "§6";
+        }
+    }
+
+    function set_item() {
+        // set avec param
+        $item replace entity @s container.$(slot) with $(item_repr)[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(sp_color)$(cost) SP","italic":false}', lore = [ '[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(desc1)","italic":true,"color":"light_purple"}]', '[{"text":"$(desc2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]' ], enchantments = { $(ench_0_name):$(ench_0_level), $(ench_1_name):$(ench_1_level) } ];
+    }
+
+    function click() {
+        len_array($len_items, DB.Shop.specialItems);
+        Hardcode.repeatLists(
+            [ "[start]", "[end]" ],
+            () => {
+                for ($slot = [ start ]; $slot < [ end ]; $slot++) {
+                    $len_items -= 1;
+                    if ($len_items < 0) { return 0; }
+                    ::temp.gui.items.del();
+                    ::temp.gui.items.slot = $slot;
+
+                    execute run {
+                        $execute unless data entity @s Items[ { Slot:$(slot)b } ] run {
+                            ::temp.gui.items.id = $len_items;
+                            GUI.Items.click_slot() with ::temp.gui.items;
+                        }
+                    } with ::temp.gui.items;
+                }
+            },
+            [ ["1", "10", "19" ], [ "8", "17", "26" ]]
+        );
+    }
+
+    function click_slot() {
+        $::temp.gui.items.item_name = ::DB.Shop.specialItems[ $(id) ].item_name;
+        $::temp.gui.items.cost = ::DB.Shop.specialItems[ $(id) ].cost;
+        GUI.Items.buy() with ::temp.gui.items;
+    }
+
+    function buy() {
+        $sp = prodiges_skills.player.sp:@p;
+        $scoreboard players set $cost prodiges_skills.__variable__ $(cost);
+        len_inv($len_inv);
+        if ($sp < $cost) {
+            execute run { $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Not enough SP to buy $(item_name)&<red>."); } with ::temp.gui.items;
+            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+        } else if ($len_inv > 34) {
+            Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Inventory is full.");
+            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+        } else {
+            execute run {
+                $Player.specialItems.give_from_id({ id: $(id) });
+                $Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You bought $(item_name) &<green>for &<gold>&<$cost> SP&<green>.");
+            } with ::temp.gui.items;
+            playsound minecraft:block.note_block.pling ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 2;
+            prodiges_skills.player.sp:@p -= $cost;
+        }
+    }
+}

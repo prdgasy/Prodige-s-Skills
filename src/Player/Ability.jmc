@@ -8,7 +8,7 @@ class Player.Ability {
         if ($get < $chance) {
             execute run {
                 // JMC.put("$function prodiges_skills:player/ability/$(name_lower)"); // RETIRER COMMENTAIRE
-            } with ::Player.onEvent.taskData;
+            } with ::Player.OnEvent.taskData;
         }
     }
 

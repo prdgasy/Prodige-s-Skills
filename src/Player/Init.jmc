@@ -1,0 +1,22 @@
+class Player.Init {
+    function initData() {
+        tag @s add prodiges_skills.pref.sound;
+        tag @s add prodiges_skills.pref.lvlNotif;
+        tag @s add prodiges_skills.pref.lvlBroadcast;
+        tag @s add prodiges_skills.pref.xpNotif;
+        tag @s add prodiges_skills.pref.skillProgression;
+        prodiges_skills.xpBooster:@s = 1;
+        prodiges_skills.pointBooster:@s = 1;
+        Hardcode.repeatList(
+            "[name]",
+            () => {
+                tag @s add prodiges_skills.ability.[name];
+                prodiges_skills.[name].xp:@s = 0;
+                prodiges_skills.[name].prestige:@s = 0;
+                prodiges_skills.[name].lvl:@s = 1;
+                prodiges_skills.[name].xpToNext:@s = ::DB.Skills.[name].xpstart;
+            },
+            __skillList__
+        );
+    }
+}

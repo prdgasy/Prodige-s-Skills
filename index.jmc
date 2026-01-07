@@ -1,185 +1,36 @@
-function uninstall() {
-    // Text.tellraw(@s, "&<red, bold>Skills ♦ &<red>Every trace of the datapack has been deleted. &<gray>You can safely remove it from your datapack folder.");
-
-    for ($index = 0; $index < 7; $index++) {
-        ::temp.init.index = $index;
-        execute run { $::temp.init.name = ::DB.Indexes.$(index); } with ::temp.init;
-        execute run {
-            $scoreboard objectives remove skills.$(name).prestige;
-            $scoreboard objectives remove skills.$(name).xp;
-            $scoreboard objectives remove skills.$(name).lvl;
-            $scoreboard objectives remove skills.$(name).xpToNext;
-
-            $i = 0;
-            $exist = 0;
-            ::temp.init.i = $i;
-            execute run {
-                $$exist ?= ::DB.Skills.$(name).Tasks[ $(i) ];
-            } with ::temp.init;
-
-            while ($exist) {
-                execute run {
-                    $::temp.init.task = ::DB.Skills.$(name).Tasks[ $(i) ].task;
-                } with ::temp.init;
-
-                execute run {
-                    $scoreboard objectives remove skills.$(name).task.$(task);
-                } with ::temp.init;
-
-                $i++;
-                ::temp.init.i = $i;
-                execute run {
-                    $$exist ?= ::DB.Skills.$(name).Tasks[ $(i) ];
-                } with ::temp.init;
-            }
-        } with ::temp.init;
-    }
-
-    // len_array($len, DB.notEligible);
-    for ($len = $len; $len > 0; $len--) {
-        ::temp.eli.i = $len;
-        execute run { $::temp.eli.id = ::DB.notEligible[ $(i) ]; } with ::temp.eli;
-        execute run { $scoreboard objectives remove skills.noteligible.$(id); } with ::temp.eli;
-    }
-    kill @e[ type = chest_minecart, tag = skillsLIB ];
-    ::temp.del();
-    ::DB.del();
-}
 
 
+// -- Imports -- //
+import 'src/Array.jmc';
+import 'src/ExploitFilter.jmc';
+import 'src/Config.jmc';
+import 'src/RomanConverter.jmc';
+import 'src/Player/Init.jmc';
 
+import 'src/Player/Ability.jmc';
+import 'src/Player/OnEvent.jmc';
+import 'src/Player/Schedule.jmc';
 
+import 'libs/guilib.jmc';
+import 'src/Menu/Pages.jmc';
 
-eligible_scores();
+// Initialize Exploit Filter
+ExploitFilter.createScore();
 
+// Load data
 Config.Skills();
 Config.Rewards();
 Config.specialItems();
 Config.Crate();
 
-// import "libs/gui.jmc";
+// Launch scheduled functions
+Player.Schedule.wait1s();
+Player.Schedule.wait5s();
+Player.Schedule.wait10s();
+Player.Schedule.wait1m();
 
-// import "src/DB.jmc";
-// import "src/gui.jmc";
-// import "src/Player.jmc";
-
-Scoreboard.add(skills.__int__);
-
-
-function __tick__() {
-    kill @e[ type = item, nbt = { Item:{ components:{ "minecraft:custom_data":{ skills_lib_gui:1b } } } } ];
-    execute as @a run {
-        skillsLIB.Trigger.main();
-        skillsLIB.construct.main();
-    }
-}
-Schedule.5s();
-Schedule.1s();
-Schedule.1m();
-Schedule.20s();
-
-class Schedule {
-    function 1s() {
-        execute as @e[ type = chest_minecart, tag = skillsLIB, scores = { skillsLIB.page = 5 } ] run GUI.loop.booster_state();
-
-        schedule function Schedule.1s() 1s;
-    }
-
-    function 20s() {
-        execute as @a run Player.20s();
-
-        schedule function Schedule.20s() 20s;
-    }
-
-    function 5s() {
-        execute as @a run Player.5s();
-
-        schedule function Schedule.5s() 5s;
-    }
-
-    function 1m() {
-        execute as @a run Player.1m();
-
-        schedule function Schedule.1m() 60s;
-    }
-}
-
-
+// First join setup
 Player.firstJoin(() => {
-    tag @s add skills.pref.sound;
-    tag @s add skills.pref.lvl_notif;
-    tag @s add skills.pref.lvl_broadcast;
-    tag @s add skills.pref.xp_notif;
-    tag @s add skills.pref.skill_prog;
-    skills.booster.1.power:@s = 1;
-    skills.booster.2.power:@s = 1;
-    Hardcode.repeatList(
-        ":name:",
-        () => {
-            tag @s add skills.ability.[ name ];
-            skills.:name:.xp:@s = 0;
-            skills.:name:.prestige:@s = 0;
-            skills.:name:.lvl:@s = 1;
-            skills.:name:.xpToNext:@s = ::DB.Skills.:name:.xpstart;
-        },
-        #skillList
-    );
+    // Initialize skills data for first join players
+    execute as @a run Player.Init.initData();
 });
-
-
-for ($index = 0; $index < 7; $index++) {
-    ::temp.init.index = $index;
-    execute run { $::temp.init.name = ::DB.Indexes.$(index); } with ::temp.init;
-    execute run {
-        $scoreboard objectives add skills.$(name).prestige dummy;
-        $scoreboard objectives add skills.$(name).xp dummy;
-        $scoreboard objectives add skills.$(name).lvl dummy;
-        $scoreboard objectives add skills.$(name).xpToNext dummy;
-
-
-        // Main tasks
-        $i = 0;
-        ::temp.init.i = $i;
-        execute run {
-            $$exist ?= ::DB.Skills.$(name).Tasks[ $(i) ];
-        } with ::temp.init;
-
-        while ($exist) {
-            execute run {
-                $::temp.init.criteria = ::DB.Skills.$(name).Tasks[ $(i) ].criteria;
-                $::temp.init.task = ::DB.Skills.$(name).Tasks[ $(i) ].task;
-            } with ::temp.init;
-
-            execute run {
-                $scoreboard objectives add skills.$(name).task.$(task) $(criteria):$(task);
-            } with ::temp.init;
-
-            $i++;
-            ::temp.init.i = $i;
-            execute run {
-                $$exist ?= ::DB.Skills.$(name).Tasks[ $(i) ];
-            } with ::temp.init;
-        }
-    } with ::temp.init;
-}
-
-class rewards {
-    function basic() {
-        loot spawn ~ ~ ~ loot { "pools":[ { "rolls":3, "entries":[ { "type":"item", "name":"bread", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":2, "max":5 } } ] }, { "type":"item", "name":"cooked_beef", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":5, "max":15 } } ] }, { "type":"item", "name":"torch", "weight":6, "functions":[ { "function":"set_count", "count":{ "min":4, "max":8 } } ] }, { "type":"item", "name":"coal", "weight":6, "functions":[ { "function":"set_count", "count":{ "min":5, "max":9 } } ] }, { "type":"item", "name":"stick", "weight":5, "functions":[ { "function":"set_count", "count":{ "min":20, "max":40 } } ] }, { "type":"item", "name":"iron_nugget", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":5, "max":15 } } ] }, { "type":"item", "name":"oak_log", "weight":4, "functions":[ { "function":"set_count", "count":{ "min":8, "max":20 } } ] }, { "type":"item", "name":"minecraft:beetroot_seeds", "weight":2, "functions":[ { "function":"set_count", "count":{ "min":1, "max":3 } } ] }, { "type":"item", "name":"gold_nugget", "weight":5, "functions":[ { "function":"set_count", "count":{ "min":8, "max":16 } } ] }, { "type":"item", "name":"emerald", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":1, "max":2 } } ] }, { "type":"item", "name":"minecraft:sugar_cane", "weight":5, "functions":[ { "function":"set_count", "count":{ "min":8, "max":16 } } ] }, { "type":"item", "name":"melon_seeds", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":5, "max":15 } } ] }, { "type":"item", "name":"carrot", "weight":13, "functions":[ { "function":"set_count", "count":{ "min":10, "max":15 } } ] }, { "type":"item", "name":"leather", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":5, "max":20 } } ] }, { "type":"item", "name":"minecraft:wheat_seeds", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":10, "max":20 } } ] } ] } ] };
-    }
-
-    function advanced() {
-        loot spawn ~ ~ ~ loot { "pools":[ { "rolls":3, "entries":[ { "type":"item", "name":"gold_ingot", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":5, "max":10 } } ] }, { "type":"item", "name":"iron_ingot", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":20, "max":25 } } ] }, { "type":"item", "name":"cooked_porkchop", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":20, "max":30 } } ] }, { "type":"item", "name":"redstone", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":4, "max":8 } } ] }, { "type":"item", "name":"lapis_lazuli", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":4, "max":8 } } ] }, { "type":"item", "name":"minecraft:experience_bottle", "weight":6, "functions":[ { "function":"set_count", "count":{ "min":1, "max":3 } } ] }, { "type":"item", "name":"hay_block", "weight":6, "functions":[ { "function":"set_count", "count":{ "min":5, "max":15 } } ] }, { "type":"item", "name":"gunpowder", "weight":6, "functions":[ { "function":"set_count", "count":{ "min":2, "max":5 } } ] }, { "type":"item", "name":"cooked_beef", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":20, "max":40 } } ] }, { "type":"item", "name":"ender_pearl", "weight":5, "functions":[ { "function":"set_count", "count":{ "min":4, "max":6 } } ] }, { "type":"item", "name":"diamond", "weight":4, "functions":[ { "function":"set_count", "count":{ "min":2, "max":6 } } ] }, { "type":"item", "name":"minecraft:obsidian", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":3, "max":6 } } ] }, { "type":"item", "name":"nether_wart", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":2, "max":4 } } ] }, { "type":"item", "name":"minecraft:lapis_lazuli", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":3, "max":8 } } ] }, { "type":"item", "name":"iron_block", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":2, "max":3 } } ] } ] } ] };
-    }
-
-    function elite() {
-        loot spawn ~ ~ ~ loot { "pools":[ { "rolls":5, "entries":[ { "type":"item", "name":"diamond", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":10, "max":20 } } ] }, { "type":"item", "name":"emerald", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":5, "max":10 } } ] }, { "type":"item", "name":"netherite_scrap", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":1, "max":4 } } ] }, { "type":"item", "name":"totem_of_undying", "weight":1, "functions":[ { "function":"set_count", "count":{ "min":1, "max":1 } } ] }, { "type":"item", "name":"golden_apple", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":2, "max":4 } } ] }, { "type":"item", "name":"ender_pearl", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":16, "max":32 } } ] }, { "type":"item", "name":"cooked_chicken", "weight":6, "functions":[ { "function":"set_count", "count":{ "min":64, "max":128 } } ] }, { "type":"item", "name":"cooked_porkchop", "weight":6, "functions":[ { "function":"set_count", "count":{ "min":64, "max":128 } } ] }, { "type":"item", "name":"golden_carrot", "weight":5, "functions":[ { "function":"set_count", "count":{ "min":64, "max":128 } } ] }, { "type":"item", "name":"iron_ingot", "weight":10, "functions":[ { "function":"set_count", "count":{ "min":32, "max":64 } } ] }, { "type":"item", "name":"minecraft:obsidian", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":10, "max":20 } } ] }, { "type":"item", "name":"coal_block", "weight":8, "functions":[ { "function":"set_count", "count":{ "min":10, "max":30 } } ] }, { "type":"item", "name":"redstone", "weight":3, "functions":[ { "function":"set_count", "count":{ "min":32, "max":64 } } ] }, { "type":"item", "name":"minecraft:torchflower_seeds", "weight":2, "functions":[ { "function":"set_count", "count":{ "min":5, "max":90 } } ] } ] } ] };
-    }
-}
-
-
-
-// $firstjoin = skills.Mining.lvl:@r;
-// if ($firstjoin == 0) {
-    // advancement revoke @a only prodiges_skills:__private__/player_first_join;
-    // POURQUOI ?

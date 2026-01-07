@@ -1,0 +1,46 @@
+class Menu.Prestige {
+    function Click() {
+        $scoreboard players operation $p_lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).prestige;
+        $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+        if ($lvl < 100) {
+            execute run {
+                $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You need to be Level C (100) in &<gold>$(name) &<red>to Prestige.");
+            } with ::temp.gui.prestige;
+
+            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+        } else if ($p_lvl == 5) {
+            execute run {
+                $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You cannot Prestige in &<gold>$(name) &<red>any anymore.");
+            } with ::temp.gui.prestige;
+
+            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+        } else {
+            execute run {
+                $::temp.gui.prestige.ability = ::DB.prodiges_skills.$(name).prestige.ability;
+                $::temp.gui.prestige.ability_desc1 = ::DB.prodiges_skills.$(name).prestige.ability_desc1;
+                $::temp.gui.prestige.ability_desc2 = ::DB.prodiges_skills.$(name).prestige.ability_desc2;
+
+                $p_lvl++;
+                ::temp.gui.prestige.lvl = $p_lvl;
+                roman_conv(lvl, temp.gui.prestige);
+                $power = $p_lvl;
+                $power *= 5;
+                ::temp.gui.prestige.power = $power;
+
+                execute run {
+                    $Text.tellraw(@p, "&<#8174A0, bold>Skills ♦ &<green>You Prestiged &<gold>$(name)&<#8174A0>.");
+                    $tellraw @p [ "", { "text":"You unlocked §l$(ability) $(lvl):", "color":"#EFB6C8" }, { "text":"\n $(ability_desc1)\n $(ability_desc2)\n " }, { "text":"\u2192 ", "bold":true, "color":"dark_gray" }, { "text":"+$(power)%", "bold":true, "color":"red" } ];
+
+                } with ::temp.gui.prestige;
+
+
+                // Operations
+                $scoreboard players add @p prodiges_skills.$(name).prestige 1;
+                $scoreboard players set @p prodiges_skills.$(name).lvl 1;
+                $scoreboard players set @p prodiges_skills.$(name).xp 0;
+                $execute store result score @p prodiges_skills.$(name).xpToNext run data get storage prodiges_skills:prodiges_skills DB.prodiges_skills.$(name).xpstart;
+                playsound minecraft:entity.ender_dragon.growl ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+            } with ::temp.gui.prestige;
+        }
+    }
+}

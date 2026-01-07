@@ -1,11 +1,22 @@
 class Player.Schedule {
+    // MENU
+    function wait1s() {
+        // execute as @e[type = chest_minecart, tag = skillsLIB, scores = { skillsLIB.page = 5 } ] run GUI.loop.booster_state();
+
+        schedule function Player.Schedule.wait1s() 1s;
+    }
+
     function wait5s() {
-        ExploitFilter.usedFilteredObject();
-        Player.onEvent.check();
+        execute as @a run {
+            ExploitFilter.usedFilteredObject();
+            Player.OnEvent.check();
+        }
+
+        schedule function Player.Schedule.wait5s() 5s;
     }
 
     function wait1m() {
-        Player.Booster.loop();
+        // Player.Booster.loop();
         if (skills.crate.cooldown:@p >= 0) {
             skills.crate.cooldown:@p -= 1;
         }

@@ -1,0 +1,1 @@
+execute as @a run function prodiges_skills:player/init/initdata

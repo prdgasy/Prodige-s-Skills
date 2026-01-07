@@ -2,7 +2,7 @@ class RomanConverter {
     @lazy function toRoman(input, output) {
         ::romanConverter.number = ::$input;
         execute run {
-            $::$output = ::romanConverter.Numbers.$(number);
+            $data modify storage prodiges_skills:prodiges_skills $output set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number);
         } with ::romanConverter;
     }
 }

@@ -1,0 +1,2 @@
+function prodiges_skills:exploitfilter/usedfilteredobject
+function prodiges_skills:player/onevent/check

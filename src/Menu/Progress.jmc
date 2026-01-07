@@ -1,0 +1,102 @@
+class Menu.Progress {
+        function ability_switch() {
+            index_to_name({ storage: temp.gui.prog.name });
+            execute run {
+                $execute if entity @p[ tag = prodiges_skills.ability.$(name) ] run return run tag @p remove prodiges_skills.ability.$(name);
+                $tag @p add prodiges_skills.ability.$(name);
+            } with ::temp.gui.prog;
+            playsound minecraft:entity.arrow.hit_player ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+        }
+
+        function fill() {
+            Hardcode.repeatLists(
+                [ "[start]", "[end]" ],
+                () => {
+                    for ($slot = [ start ]; $slot < [ end ]; $slot++) {
+                        if ($lvlstart > 100) { return 0; }
+                        ::temp.gui.prog.data.slot = $slot;
+                        ::temp.gui.prog.data.lvlcheck_int = $lvlstart;
+                        ::temp.gui.prog.data.lvlcheck = $lvlstart;
+                        roman_conv(lvlcheck, temp.gui.prog.data);
+                        // Claimed ?
+                        ::temp.gui.prog.data.lvl_id = $lvlstart;
+                        $claimed = false;
+                        execute run {
+                            $execute if entity @p[ tag = !prodiges_skills.claimed.$(name).$(lvl_id) ] run { $claimed = true; }
+                        } with ::temp.gui.prog.data;
+
+                        // Set rewards
+                        $mod = $lvlstart;
+                        $mod %= 10;
+
+                        if ($mod == 0) {
+                            ::temp.gui.prog.data.point = ::DB.Rewards.3.point;
+                            ::temp.gui.prog.data.show = ::DB.Rewards.3.show;
+                        }
+                        else if ($mod == 6 || $mod == 2) {
+                            ::temp.gui.prog.data.point = ::DB.Rewards.2.point;
+                            ::temp.gui.prog.data.show = ::DB.Rewards.2.show;
+                        }
+                        else {
+                            ::temp.gui.prog.data.point = ::DB.Rewards.1.point;
+                            ::temp.gui.prog.data.show = ::DB.Rewards.1.show;
+                        }
+                        GUI.prog.set_items() with ::temp.gui.prog.data;
+                    }
+                },
+                [ ["1", "10", "19" ], [ "8", "17", "26" ]]
+            );
+        }
+
+        function set_items() {
+            $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+            if ($lvl < $lvlstart) {
+                execute run {
+                    $item replace entity @s container.$(slot) with minecraft:charcoal[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(name) §4§l$(lvlcheck)","color":"red","italic":false}', lore = [ '[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '[{"text":"Rewards:","italic":false,"color":"yellow"}]', '[{"text":"§8- $(show)"}]', '[{"text":"§8- §6+$(point) Skill Points (SP)"}]', '[""]', '["",{"text":"You cannot claim this!","italic":false,"color":"red"}]' ]];
+                } with ::temp.gui.prog.data;
+                if ($lvlstart == 100) {
+                    execute run {
+                        $item replace entity @s container.$(slot) with minecraft:charcoal[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(name) §4§l$(lvlcheck)","color":"red","italic":false}', lore = [ '[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '["",{"text":"This is the maximum level","italic":false,"color":"red"}]' ]];
+                    } with ::temp.gui.prog.data;
+                }
+
+            } else if ($lvl > $lvlstart && $claimed) {
+                execute run {
+                    $item replace entity @s container.$(slot) with quartz[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(name) §8§l$(lvlcheck)","color":"gray","italic":false}', lore = [ '[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '[{"text":"Rewards:","italic":false,"color":"yellow"}]', '[{"text":"§8- $(show)"}]', '[{"text":"§8- §6+$(point) Skill Points (SP)"}]', '[""]', '["",{"text":"You already claimed this!","italic":false,"color":"green"}]' ]];
+                } with ::temp.gui.prog.data;
+            } else if ($lvl > $lvlstart && !$claimed) {
+                execute run {
+                    $item replace entity @s container.$(slot) with large_amethyst_bud[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(name) §5§l$(lvlcheck)","color":"light_purple","italic":false}', lore = [ '[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '[{"text":"Rewards:","italic":false,"color":"yellow"}]', '[{"text":"§8- $(show)"}]', '[{"text":"§8- §6+$(point) Skill Points (SP)"}]', '[""]', '["",{"text":"Click to claim!","italic":false,"color":"light_purple"}]' ]];
+                } with ::temp.gui.prog.data;
+            } else if ($lvl == 100 && $lvlstart == 100) {
+                execute run {
+                    $item replace entity @s container.$(slot) with minecraft:dragon_egg[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(name) §5§l$(lvlcheck)","color":"light_purple","italic":false}', lore = [ '[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '["",{"text":"Maximum Level reached!","italic":false,"color":"dark_purple"}]', '[""]', '[{"text":"Click to go to the Prestige Menu!","color":"yellow","italic":false}]' ]];
+                } with ::temp.gui.prog.data;
+            } else if ($lvlstart == 100) {
+                execute run {
+                    $item replace entity @s container.$(slot) with minecraft:charcoal[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(name) §4§l$(lvlcheck)","color":"red","italic":false}', lore = [ '[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '[""]', '["",{"text":"You cannot claim this!","italic":false,"color":"red"}]' ]];
+                } with ::temp.gui.prog.data;
+            } else {
+                execute run {
+                    $item replace entity @s container.$(slot) with amethyst_shard[ custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"§l$(lvl)","italic":false,"color":"#EFB6C8"}]', lore = [ '[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '["",{"text":"$(desc1)","italic":false,"color":"white"}]', '["",{"text":"$(desc2)","italic":false,"color":"white"}]', '[""]', '["",{"text":"Progress to $(name)","italic":false,"color":"gray"},{"text":" $(nextLvl)","italic":false,"bold":true,"color":"#EFB6C8"},{"text":": ","italic":false,"color":"gray"},{"text":"$(100ratio)%","italic":false,"color":"#8174A0"}]', '["",{"text":"$(bar)","italic":false,"color":"white"},{"text":" $(xp)","italic":false,"color":"#EFB6C8"},{"text":"/","italic":false,"color":"#8174A0"},{"text":"$(xpToNext) ","italic":false,"color":"#EFB6C8"}]', '[""]', '[{"text":"Rewards:","italic":false,"color":"yellow"}]', '[{"text":"§8- $(show)"}]', '[{"text":"§8- §6+$(point) Skill Points (SP)"}]', ], !attribute_modifiers, enchantment_glint_override = true ];
+                } with ::temp.gui.prog.data;
+            }
+
+            $lvlstart++;
+        }
+
+        function start() {
+            item replace entity @s container.26 with paper[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Next Page »","color":"yellow","italic":false, "bold":true}' ];
+            item replace entity @s container.8 with map[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"« Previous Page","color":"gray","italic":false}' ];
+        }
+
+        function mid() {
+            item replace entity @s container.26 with paper[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Next Page »","color":"yellow","italic":false, "bold":true}' ];
+            item replace entity @s container.8 with paper[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"« Previous Page","color":"yellow","italic":false, "bold":true}' ];
+        }
+
+        function end() {
+            item replace entity @s container.26 with map[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Next Page »","color":"gray","italic":false}' ];
+            item replace entity @s container.8 with paper[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"« Previous Page","color":"yellow","italic":false, "bold":true}' ];
+        }
+    }

@@ -1,0 +1,26 @@
+class Menu.Tasks {
+    function fill() {
+        Hardcode.repeatLists(
+            [ "[start]", "[end]" ],
+            () => {
+                for ($slot = [ start ]; $slot < [ end ]; $slot++) {
+                    ::temp.gui.tasks.del();
+                    ::temp.gui.tasks.slot = $slot;
+                    ::temp.gui.tasks.i = $i;
+                    GUI.Tasks.get_data() with ::temp.gui.tasks;
+                    GUI.Tasks.set_items() with ::temp.gui.tasks;
+                    $i++;
+                }
+            },
+            [ ["1", "10", "19" ], [ "8", "17", "26" ]]
+        );
+    }
+
+    function get_data() {
+        $::temp.gui.tasks += ::temp.gui.tasks_.tab[ $(i) ];
+    }
+
+    function set_items() {
+        $item replace entity @s container.$(slot) with $(item_repr)[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(item_name) §b+$(xp) xp","color":"gray","italic":false}', !attribute_modifiers ];
+    }
+}

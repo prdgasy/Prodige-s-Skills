@@ -6,10 +6,47 @@
     4: Farming
 };
 
-function indexToName() {
-    // Input: storage (string), var (string)
-    // Output: storage.var (string)
-    ::Indexes.index = prodiges_skills.gui.index:@s; // ?
-    execute run { $::Indexes.name = ::Indexes.Skills.$(index); } with ::Indexes;
-    $::$(storage) = ::Indexes.name;
+class Indexes {
+    function toName() {
+        // Input: storage (string), var (string)
+        // Output: storage.var (string)
+        ::Indexes.index = prodiges_skills.gui.index:@s; // ?
+        execute run { $::Indexes.name = ::Indexes.Skills.$(index); } with ::Indexes;
+        $::$(storage) = ::Indexes.name;
+    }
+
+    function initSkills {
+        for ($skillIndex = 0; $skillIndex < 7; $skillIndex++) {
+            ::Indexes.initSkills.i = $skillIndex;
+            execute run { $::Indexes.initSkills.name = ::Indexes.Skills.$(skillIndex); } with ::Indexes.initSkills;
+            execute run {
+                $scoreboard objectives add skills.$(name).prestige dummy;
+                $scoreboard objectives add skills.$(name).xp dummy;
+                $scoreboard objectives add skills.$(name).lvl dummy;
+                $scoreboard objectives add skills.$(name).xpToNext dummy;
+
+                // Main tasks
+                $taskIndexe = 0;
+                $exist = 1;
+
+                while ($exist) {
+                    execute run {
+                        $::Indexes.initSkills.criteria = ::Config.Skills.$(name).Tasks[$(taskIndex)].criteria;
+                        $::Indexes.initSkills.task = ::Config.Skills.$(name).Tasks[$(taskIndex)].task;
+                    } with ::Indexes.initSkills;
+
+                    execute run {
+                        $scoreboard objectives add skills.$(name).task.$(task) $(criteria):$(task);
+                    } with ::Indexes.initSkills;
+
+                    // Next task
+                    $taskIndexe++;
+                    ::Indexes.initSkills.i = $taskIndexe;
+                    execute run {
+                        $$exist ?= ::Config.Skills.$(name).Tasks[$(i)];
+                    } with ::Indexes.initSkills;
+                }
+            } with ::Indexes.initSkills;
+        }
+    }
 }

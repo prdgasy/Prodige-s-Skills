@@ -1,0 +1,2 @@
+execute at @s run playsound minecraft:entity.player.levelup ambient @s[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 0
+execute at @s run playsound minecraft:entity.ender_dragon.growl ambient @s[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 0
