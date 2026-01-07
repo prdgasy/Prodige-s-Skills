@@ -1,0 +1,182 @@
+class Menu.Pages.Main {
+    function __set__() {
+        Menu.Mask.grayBlackGray();
+
+        // Prestiges
+        item replace entity @s container.21 with netherite_scrap[ custom_data = { __namespace__:1b }, custom_name = '["",{"text":"Prestiges","italic":false,"color":"dark_purple"}]', lore = [ '[{"text":"Once you reach ","italic":false,"color":"white"},{"text":"level","italic":false,"color":"gold"},{"text":" ","italic":false,"color":"white"},{"text":"100","italic":false},{"text":" (C) in a","italic":false,"color":"white"}]', '["",{"text":"skill, you can reset it to gain","italic":false,"color":"white"}]', '["",{"text":"a ","italic":false,"color":"white"},{"text":"permanent bonus","italic":false,"color":"green"},{"text":"!","italic":false,"color":"white"}]', '[{"text":"Grow even stronger over time!","italic":false,"color":"gray"}]', '[""]', '[{"text":"Click to view!","color":"yellow","italic":false}]' ], enchantment_glint_override = true ];
+
+        // close
+        item replace entity @s container.23 with barrier[ custom_data = { __namespace__:1b }, custom_name = '{"text":"Close","color":"red","italic":false}' ];
+
+        // Config Panel
+        if (entity @p[tag = global.admin]) {
+            item replace entity @s container.8 with command_block[ custom_data = { __namespace__:1b }, custom_name = '["",{"text":"Configuration Panel","italic":false,"color":"red"}]', lore = [ '["",{"text":"Modify all server-wide settings","italic":false,"color":"white"}]', '["",{"text":"here.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]' ]];
+        }
+
+        // Shop
+        item replace entity @s container.22 with player_head[ profile = { id:[ I; 1434832075, -102998962, -1229628019, 1369636598 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { __namespace__:1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = [ '["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]' ]];
+
+        // Discord
+        item replace entity @s container.26 with player_head[ profile = { id:[ I; -566027055, -1373812234, -1824937619, -1364409557 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg3M2MxMmJmZmI1MjUxYTBiODhkNWFlNzVjNzI0N2NiMzlhNzVmZjFhODFjYmU0YzhhMzliMzExZGRlZGEifX19" } ] }, custom_data = { __namespace__:1b }, custom_name = '{"text":"Join the discord","color":"blue","italic":false}', lore = [ '[{"text":"Need help ?","color":"white","italic":false}]', '[""]', '[{"text":"Click to join the discord!","color":"yellow","italic":false}]' ]];
+
+        // Profile & Preferences
+        Menu.Pages.Main.profileAndPreferences();
+
+        // Skills
+        Menu.Pages.Main.skills();
+    }
+
+    function profileAndPreferences() {
+        Menu.Pages.Main.getPoints();
+        Menu.Pages.Main.getBoosters();
+
+        execute run {
+            $execute as @p run loot replace entity @n[type = chest_minecart, tag = skillsLIB] container.4 loot { "type":"minecraft:command", "pools":[{ "rolls":1, "entries":[{ "type":"minecraft:item", "name":"minecraft:player_head", "functions":[{ "function":"minecraft:set_name", "entity":"this", "target":"custom_name", "name":{ "text":"Profile", "color":"light_purple", "italic":false } }, { "function":"minecraft:fill_player_head", "entity":"this" }, { "function":"minecraft:set_custom_data", "tag":"{__namespace__:1b}" }, { "function":"minecraft:set_lore", "entity":"this", "lore":[{ "text":"" }, { "text":"§8§l♦ §rPoints: ", "type":"text", "extra":[{ "text":"$(sp) SP", "type":"text", "color":"gold", "italic":false } ], "color":"#A888B5", "italic":false }, { "text":"" }, { "text":"Active Boosters:", "color":"yellow", "italic":false }, { "text":"§8• $(booster_xp)", "italic":false }, { "text":"§8• $(booster_sp)", "italic":false }, { "text":"" }, { "text":"Click to view!", "color":"yellow", "italic":false } ], "mode":"append" } ], "conditions":[] } ] } ] };
+        } with ::Menu.Pages.Main;
+    }
+
+    function getPoints() {
+        ::Menu.Pages.Main.points = prodiges.points:@p;
+    }
+
+    function getBoosters() {
+        ::Menu.Pages.Main.xpBooster = "§c-";
+        $xpBoosterDuration = prodiges_skills.xpBooster.duration:@p;
+        if ($xpBoosterDuration > 1) {
+            ::Menu.Pages.Main.xpBoosterDuration = $xpBoosterDuration;
+            ::Menu.Pages.Main.xpBoosterPower = prodiges_skills.xpBooster.power:@p;
+
+            execute run {
+                $::Menu.Pages.Main.xpBooster = "§bx$(xpBoosterPower) XP Booster §7- $(xpBoosterDuration) minute(s) left";
+            } with ::Menu.Pages.Main;
+        }
+
+        ::Menu.Pages.Main.pointBooster = "§c-";
+        $pointBoosterDuration = prodiges_skills.pointBooster.duration:@p;
+        if ($pointBoosterDuration > 1) {
+            ::Menu.Pages.Main.pointBoosterDuration = $pointBoosterDuration;
+            ::Menu.Pages.Main.pointBoosterPower = prodiges_skills.pointBooster.power:@p;
+            execute run {
+                $::Menu.Pages.Main.pointBooster = "§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left";
+            } with ::Menu.Pages.Main;
+        }
+    }
+
+    function skills() {
+        $slot = 11;
+        for ($skillsIndex = 0; $skillsIndex < __skillsLength__; $skillsIndex++) {
+            Menu.Pages.Main.getSkillName();
+
+            execute run {
+                ::Menu.Pages.Main.slot = $slot;
+
+                // Get infos
+                Menu.Pages.Main.getSkillInfos() with ::Menu.Pages.Main;
+
+                // Set item
+                if ($lvl < 100) {
+                    execute run { $::Menu.Pages.Main.bar = ::Config.Progress.$(ratio_15); } with ::Menu.Pages.Main;
+                    Menu.Pages.main.setSkillItem() with ::Menu.Pages.Main;
+                } else {
+                    Menu.Pages.main.setSkillItemLvlMax() with ::Menu.Pages.Main;
+                }
+
+
+            } with ::temp.init;
+            $slot++;
+        }
+    }
+
+    function getSkillInfos() {
+        $::Menu.Pages.Main.name = ::Config.Skills.$(name).name;
+        $::Menu.Pages.Main.item = ::Config.Skills.$(name).item;
+        $::Menu.Pages.Main.lore1 = ::Config.Skills.$(name).lore1;
+        $::Menu.Pages.Main.lore2 = ::Config.Skills.$(name).lore2;
+
+        $::Menu.Pages.Main.prestigeLore1 = ::Config.Skills.$(name).prestige.lore1;
+        $::Menu.Pages.Main.prestigeLore2 = ::Config.Skills.$(name).prestige.lore2;
+        $::Menu.Pages.Main.ability = ::Config.Skills.$(name).prestige.ability;
+
+        $scoreboard players operation $prestigeLvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).prestige;
+        ::Menu.Pages.Main.prestigeLvl = $prestigeLvl;
+        RomanConverter.toRoman(Menu.Pages.Main.prestigeLvl);
+
+        ::Menu.Pages.Main.abilityPower := $prestigeLvl * 5;
+
+        // Get scores
+        $scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(name).xp;
+        $scoreboard players operation $xpToNext prodiges_skills.__variable__ = @p prodiges_skills.$(name).xpToNext;
+        $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+        $nextLvl := $lvl + 1;
+
+        ::Menu.Pages.Main.xp = $xp;
+        ::Menu.Pages.Main.xpToNext = $xpToNext;
+        ::Menu.Pages.Main.lvlBaseInt = $lvl;
+        ::Menu.Pages.Main.lvlBaseRoman = $lvl;
+        ::Menu.Pages.Main.nextLvl = $nextLvl;
+        RomanConverter.toRoman(Menu.Pages.Main.lvlBaseRoman);
+        RomanConverter.toRoman(Menu.Pages.Main.nextLvl);
+
+        $ratio_100 := $xp * 100 / $xpToNext;
+        $ratio_15 := $xp * 15 / $xpToNext;
+        $100ratio = $xp;
+        $10ratio = $xp;
+
+        $100ratio *= 100;
+        $100ratio /= $xpToNext;
+        $10ratio *= 15;
+        $10ratio /= $xpToNext;
+
+
+        ::Menu.Pages.Main.ratio_100 = $ratio_100;
+        ::Menu.Pages.Main.ratio_15 = $ratio_15;
+    }
+
+    function getSkillName() {
+        ::Menu.Pages.Main.skillsIndex = $skillsIndex;
+        execute run { $::Menu.Pages.Main.skillName = ::Indexes.Skills.$(skillsIndex); } with ::Menu.Pages.Main;
+    }
+
+    function setSkillItem() {
+        $item replace entity @s container.$(slot) with $(item)[
+            custom_data = { __namespace__:1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
+            lore = [
+                '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
+                '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',
+                '["",{"text":"$(desc2) ","italic":false,"color":"white"},{"text":" ","italic":false}]',
+                '[""]',
+                '["",{"text":"Progress to ","italic":false,"color":"gray"},{"text":"$(name) ","italic":false,"color":"yellow"},{"text":"$(nextLvl)","italic":false,"color":"yellow","bold":true},{"text":":","italic":false,"color":"gray"},{"text":" ","italic":false},{"text":"$(100ratio)%","italic":false,"color":"gray"}]',
+                '["",{"text":" ","italic":false,"color":"gray"},{"text":"$(bar)","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"$(xp)","italic":false,"color":"#efb6c8"},{"text":"/","italic":false,"color":"#a888b5"},{"text":"$(xpToNext)","italic":false,"color":"#efb6c8"}]',
+                '[""]',
+                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Prestige:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"$(name) §8§l♦ §8[§c§l$(prestige_lvl)§8]","italic":false,"color":"#efb6c8"}]',
+                '[""]',
+                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Ability:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"§l$(ability)","italic":false,"color":"#efb6c8"}]',
+                '["",{"text":"  ","italic":false},{"text":"$(ability_desc1)  ","italic":false,"color":"#efb6c8"}]',
+                '["",{"text":"  $(ability_desc2)","italic":false,"color":"#efb6c8"}]',
+                '["",{"text":"  ","italic":false,"color":"yellow","bold":true},{"text":"→","italic":false,"bold":true,"color":"dark_gray"},{"text":" $(power)%","italic":false,"bold":true,"color":"red"}]',
+                '[""]',
+                '["",{"text":"Click to view!","italic":false,"color":"yellow"}]'
+            ], !minecraft:attribute_modifiers
+        ];
+    }
+
+    function setSkillItemLvlMax() {
+        $item replace entity @s container.$(slot) with $(item)[
+            custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
+            lore = [
+                '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
+                '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',
+                '["",{"text":"$(desc2) ","italic":false,"color":"white"},{"text":" ","italic":false}]',
+                '[""]',
+                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Prestige:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"$(name) §8§l♦ §8[§c§l$(prestige_lvl)§8]","italic":false,"color":"#efb6c8"}]',
+                '[""]',
+                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Ability:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"§l$(ability)","italic":false,"color":"#efb6c8"}]',
+                '["",{"text":"  ","italic":false},{"text":"$(ability_desc1)  ","italic":false,"color":"#efb6c8"}]',
+                '["",{"text":"  $(ability_desc2)","italic":false,"color":"#efb6c8"}]',
+                '["",{"text":"  ","italic":false,"color":"yellow","bold":true},{"text":"→","italic":false,"bold":true,"color":"dark_gray"},{"text":" $(power)%","italic":false,"bold":true,"color":"red"}]',
+                '[""]',
+                '["",{"text":"Click to view!","italic":false,"color":"yellow"}]'
+            ], !minecraft:attribute_modifiers, enchantment_glint_override = true
+        ];
+    }
+}

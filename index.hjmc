@@ -21,3 +21,4 @@
 
 // CONST
 #define __skillList__ ["Mining", "Foraging", "Excavation", "Combat", "Farming"]
+#define __skillsLength__ 5

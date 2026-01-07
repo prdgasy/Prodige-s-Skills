@@ -1,5 +1,5 @@
 class Menu.Mask {
-    function 1() {
+    function fullPurple() {
         Hardcode.repeat(
             "[SLOT]",
             () => {
@@ -10,7 +10,8 @@ class Menu.Mask {
             0, 27
         );
     }
-    function 2() {
+    
+    function grayBlackGray() {
         Hardcode.repeat(
             "[SLOT]",
             () => {
@@ -39,7 +40,8 @@ class Menu.Mask {
             18, 27
         );
     }
-    function 3() {
+
+    function fullRed() {
         Hardcode.repeat(
             "[SLOT]",
             () => {

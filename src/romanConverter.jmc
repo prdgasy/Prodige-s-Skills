@@ -1,8 +1,8 @@
 class RomanConverter {
-    @lazy function toRoman(input, output) {
-        ::romanConverter.number = ::$input;
+    @lazy function toRoman(path) {
+        ::romanConverter.number = ::$path;
         execute run {
-            $data modify storage prodiges_skills:prodiges_skills $output set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number);
+            $data modify storage prodiges_skills:prodiges_skills $path set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number);
         } with ::romanConverter;
     }
 }
