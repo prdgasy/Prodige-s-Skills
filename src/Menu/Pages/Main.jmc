@@ -3,21 +3,21 @@ class Menu.Pages.Main {
         Menu.Mask.grayBlackGray();
 
         // Prestiges
-        item replace entity @s container.21 with netherite_scrap[ custom_data = { __namespace__:1b }, custom_name = '["",{"text":"Prestiges","italic":false,"color":"dark_purple"}]', lore = [ '[{"text":"Once you reach ","italic":false,"color":"white"},{"text":"level","italic":false,"color":"gold"},{"text":" ","italic":false,"color":"white"},{"text":"100","italic":false},{"text":" (C) in a","italic":false,"color":"white"}]', '["",{"text":"skill, you can reset it to gain","italic":false,"color":"white"}]', '["",{"text":"a ","italic":false,"color":"white"},{"text":"permanent bonus","italic":false,"color":"green"},{"text":"!","italic":false,"color":"white"}]', '[{"text":"Grow even stronger over time!","italic":false,"color":"gray"}]', '[""]', '[{"text":"Click to view!","color":"yellow","italic":false}]' ], enchantment_glint_override = true ];
+        item replace entity @s container.21 with netherite_scrap[custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"Prestiges","italic":false,"color":"dark_purple"}]', lore = ['[{"text":"Once you reach ","italic":false,"color":"white"},{"text":"level","italic":false,"color":"gold"},{"text":" ","italic":false,"color":"white"},{"text":"100","italic":false},{"text":" (C) in a","italic":false,"color":"white"}]', '["",{"text":"skill, you can reset it to gain","italic":false,"color":"white"}]', '["",{"text":"a ","italic":false,"color":"white"},{"text":"permanent bonus","italic":false,"color":"green"},{"text":"!","italic":false,"color":"white"}]', '[{"text":"Grow even stronger over time!","italic":false,"color":"gray"}]', '[""]', '[{"text":"Click to view!","color":"yellow","italic":false}]'], enchantment_glint_override = true ];
 
         // close
-        item replace entity @s container.23 with barrier[ custom_data = { __namespace__:1b }, custom_name = '{"text":"Close","color":"red","italic":false}' ];
+        item replace entity @s container.23 with barrier[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Close","color":"red","italic":false}'];
 
         // Config Panel
         if (entity @p[tag = global.admin]) {
-            item replace entity @s container.8 with command_block[ custom_data = { __namespace__:1b }, custom_name = '["",{"text":"Configuration Panel","italic":false,"color":"red"}]', lore = [ '["",{"text":"Modify all server-wide settings","italic":false,"color":"white"}]', '["",{"text":"here.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]' ]];
+            item replace entity @s container.8 with command_block[custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"Configuration Panel","italic":false,"color":"red"}]', lore = ['["",{"text":"Modify all server-wide settings","italic":false,"color":"white"}]', '["",{"text":"here.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
         }
 
         // Shop
-        item replace entity @s container.22 with player_head[ profile = { id:[ I; 1434832075, -102998962, -1229628019, 1369636598 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { __namespace__:1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = [ '["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]' ]];
+        item replace entity @s container.22 with player_head[ profile = { id:[ I; 1434832075, -102998962, -1229628019, 1369636598 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = ['["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
 
         // Discord
-        item replace entity @s container.26 with player_head[ profile = { id:[ I; -566027055, -1373812234, -1824937619, -1364409557 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg3M2MxMmJmZmI1MjUxYTBiODhkNWFlNzVjNzI0N2NiMzlhNzVmZjFhODFjYmU0YzhhMzliMzExZGRlZGEifX19" } ] }, custom_data = { __namespace__:1b }, custom_name = '{"text":"Join the discord","color":"blue","italic":false}', lore = [ '[{"text":"Need help ?","color":"white","italic":false}]', '[""]', '[{"text":"Click to join the discord!","color":"yellow","italic":false}]' ]];
+        item replace entity @s container.26 with player_head[ profile = { id:[ I; -566027055, -1373812234, -1824937619, -1364409557 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg3M2MxMmJmZmI1MjUxYTBiODhkNWFlNzVjNzI0N2NiMzlhNzVmZjFhODFjYmU0YzhhMzliMzExZGRlZGEifX19" } ] }, custom_data = { __namespace__: 1b }, custom_name = '{"text":"Join the discord","color":"blue","italic":false}', lore = ['[{"text":"Need help ?","color":"white","italic":false}]', '[""]', '[{"text":"Click to join the discord!","color":"yellow","italic":false}]']];
 
         // Profile & Preferences
         Menu.Pages.Main.profileAndPreferences();
@@ -31,7 +31,7 @@ class Menu.Pages.Main {
         Menu.Pages.Main.getBoosters();
 
         execute run {
-            $execute as @p run loot replace entity @n[type = chest_minecart, tag = skillsLIB] container.4 loot { "type":"minecraft:command", "pools":[{ "rolls":1, "entries":[{ "type":"minecraft:item", "name":"minecraft:player_head", "functions":[{ "function":"minecraft:set_name", "entity":"this", "target":"custom_name", "name":{ "text":"Profile", "color":"light_purple", "italic":false } }, { "function":"minecraft:fill_player_head", "entity":"this" }, { "function":"minecraft:set_custom_data", "tag":"{__namespace__:1b}" }, { "function":"minecraft:set_lore", "entity":"this", "lore":[{ "text":"" }, { "text":"§8§l♦ §rPoints: ", "type":"text", "extra":[{ "text":"$(sp) SP", "type":"text", "color":"gold", "italic":false } ], "color":"#A888B5", "italic":false }, { "text":"" }, { "text":"Active Boosters:", "color":"yellow", "italic":false }, { "text":"§8• $(booster_xp)", "italic":false }, { "text":"§8• $(booster_sp)", "italic":false }, { "text":"" }, { "text":"Click to view!", "color":"yellow", "italic":false } ], "mode":"append" } ], "conditions":[] } ] } ] };
+            $execute as @p run loot replace entity @n[type = chest_minecart, tag = skillsLIB] container.4 loot { "type":"minecraft:command", "pools":[{ "rolls":1, "entries":[{ "type":"minecraft:item", "name":"minecraft:player_head", "functions":[{ "function":"minecraft:set_name", "entity":"this", "target":"custom_name", "name":{ "text":"Profile", "color":"light_purple", "italic":false } }, { "function":"minecraft:fill_player_head", "entity":"this" }, { "function":"minecraft:set_custom_data", "tag":"{__namespace__: 1b}" }, { "function":"minecraft:set_lore", "entity":"this", "lore":[{ "text":"" }, { "text":"§8§l♦ §rPoints: ", "type":"text", "extra":[{ "text":"$(sp) SP", "type":"text", "color":"gold", "italic":false } ], "color":"#A888B5", "italic":false }, { "text":"" }, { "text":"Active Boosters:", "color":"yellow", "italic":false }, { "text":"§8• $(booster_xp)", "italic":false }, { "text":"§8• $(booster_sp)", "italic":false }, { "text":"" }, { "text":"Click to view!", "color":"yellow", "italic":false } ], "mode":"append" } ], "conditions":[] } ] } ] };
         } with ::Menu.Pages.Main;
     }
 
@@ -134,12 +134,12 @@ class Menu.Pages.Main {
 
     function getSkillName() {
         ::Menu.Pages.Main.skillsIndex = $skillsIndex;
-        execute run { $::Menu.Pages.Main.skillName = ::Indexes.Skills.$(skillsIndex); } with ::Menu.Pages.Main;
+        execute run { $::Menu.Pages.Main.skillName = ::Consts.Skills.$(skillsIndex); } with ::Menu.Pages.Main;
     }
 
     function setSkillItem() {
         $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { __namespace__:1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
+            custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
             lore = [
                 '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
                 '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',
@@ -162,7 +162,7 @@ class Menu.Pages.Main {
 
     function setSkillItemLvlMax() {
         $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
+            custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
             lore = [
                 '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
                 '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',

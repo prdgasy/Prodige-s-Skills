@@ -33,7 +33,7 @@ class Menu.Macro {
 
     function prestige_set() {
         $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { skills_lib_gui:1b },
+            custom_data = { __namespace__: 1b },
             custom_name = '[{"text":"$(name) ","italic":false,"color":"$(color_1)"}, {"text":"$(lvl) §8§l♦ ","italic":false,"color":"$(color_2)","bold":true}, {"text":"[","color":"dark_gray"},{"text":"$(prestige_lvl)","bold":true,"color":"red"},{"text":"]","color":"dark_gray"}]',
             lore = [
                 '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
@@ -60,7 +60,7 @@ class Menu.Macro {
 
     function prestige_set_max() {
         $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { skills_lib_gui:1b },
+            custom_data = { __namespace__: 1b },
             custom_name = '[{"text":"$(name) ","italic":false,"color":"$(color_1)"}, {"text":"$(lvl) §8§l♦ ","italic":false,"color":"$(color_2)","bold":true}, {"text":"[","color":"dark_gray"},{"text":"$(prestige_lvl)","bold":true,"color":"red"},{"text":"]","color":"dark_gray"}]',
             lore = [
                 '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',

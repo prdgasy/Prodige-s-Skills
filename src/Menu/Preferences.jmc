@@ -5,6 +5,6 @@ class Menu.Preference {
         } else {
             tag @p add prodiges_skills.pref.$tag;
         }
-        playsound minecraft:entity.arrow.hit_player ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+        playsound minecraft:entity.arrow.hit_player ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
     }
 }

@@ -1,6 +1,6 @@
 class Player.Items {
     function give() {
-        $give @p $(item_repr)[ custom_data = { prodiges_skills:{ specialItem: 1b } }, custom_name = '{"text":"$(item_name)","italic":false}', lore = [ '[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(desc1)","italic":true,"color":"light_purple"}]', '[{"text":"$(desc2)","italic":true,"color":"light_purple"}]' ], enchantments = { $(ench_0_name):$(ench_0_level), $(ench_1_name):$(ench_1_level) } ];
+        $give @p $(item_repr)[custom_data = { prodiges_skills:{ specialItem: 1b } }, custom_name = '{"text":"$(item_name)","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(desc1)","italic":true,"color":"light_purple"}]', '[{"text":"$(desc2)","italic":true,"color":"light_purple"}]'], enchantments = { $(ench_0_name):$(ench_0_level), $(ench_1_name):$(ench_1_level) } ];
     }
 
     function give_from_id() {

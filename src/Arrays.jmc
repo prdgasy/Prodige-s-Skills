@@ -1,0 +1,9 @@
+class Arrays {
+    @lazy function length(array) {
+        return run $array;
+    }
+
+    @lazy function playerInv_length() {
+        return run @p::Inventory[];
+    }
+}

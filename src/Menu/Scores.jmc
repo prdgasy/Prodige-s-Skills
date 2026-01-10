@@ -1,7 +1,7 @@
-Scoreboard.add(prodiges_skills.gui.index);
-Scoreboard.add(prodiges_skills.gui.prog.page);
-Scoreboard.add(prodiges_skills.gui.tasks.page);
-Scoreboard.add(prodiges_skills.gui.booster.type);
-Scoreboard.add(prodiges_skills.gui.booster.power);
-Scoreboard.add(prodiges_skills.gui.shop.boost_state);
-Scoreboard.add(prodiges_skills.gui.booster.duration);
+Scoreboard.add(prodiges_skills.Menu.index);
+Scoreboard.add(prodiges_skills.Menu.prog.page);
+Scoreboard.add(prodiges_skills.Menu.tasks.page);
+Scoreboard.add(prodiges_skills.Menu.booster.type);
+Scoreboard.add(prodiges_skills.Menu.booster.power);
+Scoreboard.add(prodiges_skills.Menu.shop.boost_state);
+Scoreboard.add(prodiges_skills.Menu.booster.duration);

@@ -1,7 +1,7 @@
 
 
 // -- Imports -- //
-import 'src/Array.jmc';
+import 'src/Arrays.jmc';
 import 'src/ExploitFilter.jmc';
 import 'src/Config.jmc';
 import 'src/RomanConverter.jmc';

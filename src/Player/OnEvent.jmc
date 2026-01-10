@@ -156,7 +156,7 @@ class Player.OnEvent {
             RomanConverter.toRoman(Player.OnEvent.lvlUp.currentLvl, ::Player.OnEvent.lvlUp.currentLvl);
 
             // Set max xp bar
-            // ::Player.OnEvent.lvlUp.bar = ::Progress.Bars.15;
+            // ::Player.OnEvent.lvlUp.bar = ::Consts.Bars.15;
 
             // Set rewards
             $mod = $previousLvl;
@@ -204,7 +204,7 @@ class Player.OnEvent {
 
 
             ::Player.OnEvent.lvlUp.100ratio = 100;
-            ::Player.OnEvent.lvlUp.bar = ::Progress.Bars.15;
+            ::Player.OnEvent.lvlUp.bar = ::Consts.Bars.15;
 
             // Set rewards
             $mod = $previousLvl;

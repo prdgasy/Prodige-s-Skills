@@ -8,8 +8,8 @@ class Menu.ItemShop {
         $::temp.gui.items.ench_0_level = ::DB.Shop.specialItems[ $(index) ].Enchants[ 0 ].level;
         $::temp.gui.items.ench_1_name = ::DB.Shop.specialItems[ $(index) ].Enchants[ 1 ].name;
         $::temp.gui.items.ench_1_level = ::DB.Shop.specialItems[ $(index) ].Enchants[ 1 ].level;
-        // roman_conv(ench_0_level, temp.gui.items);
-        // roman_conv(ench_1_level, temp.gui.items);
+        // RomanConverter.toRoman(ench_0_level, temp.gui.items);
+        // RomanConverter.toRoman(ench_1_level, temp.gui.items);
         $::temp.gui.items.desc1 = ::DB.Shop.specialItems[ $(index) ].desc1;
         $::temp.gui.items.desc2 = ::DB.Shop.specialItems[ $(index) ].desc2;
         $$cost = ::DB.Shop.specialItems[ $(index) ].cost;
@@ -24,7 +24,7 @@ class Menu.ItemShop {
 
     function set_item() {
         // set avec param
-        $item replace entity @s container.$(slot) with $(item_repr)[ custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(sp_color)$(cost) SP","italic":false}', lore = [ '[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(desc1)","italic":true,"color":"light_purple"}]', '[{"text":"$(desc2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]' ], enchantments = { $(ench_0_name):$(ench_0_level), $(ench_1_name):$(ench_1_level) } ];
+        $item replace entity @s container.$(slot) with $(item_repr)[custom_data = { __namespace__: 1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(sp_color)$(cost) SP","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(desc1)","italic":true,"color":"light_purple"}]', '[{"text":"$(desc2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]'], enchantments = { $(ench_0_name):$(ench_0_level), $(ench_1_name):$(ench_1_level) } ];
     }
 
     function click() {

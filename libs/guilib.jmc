@@ -66,7 +66,7 @@ class __namespace__ {
 
     @add(__tick__) function main() {
         // Clear dropped MENU items on the ground every tick
-        kill @e[type = item, nbt = { Item:{ components:{ "minecraft:custom_data":{ __namespace__:1b } } } } ];
+        kill @e[type = item, nbt = { Item:{ components:{ "minecraft:custom_data":{ __namespace__: 1b } } } } ];
 
         // Trigger detect
         execute as @a[scores = { _:triggerCommand: = 1.. } ] at @s run __namespace__.Constructor.summon();
@@ -76,9 +76,9 @@ class __namespace__ {
 
     function returnItems() {
         __shulkerBox__ = @s::Items;
-        __shulkerBox__[{ components:{ "minecraft:custom_data":{ __namespace__:1b } } } ].del();
+        __shulkerBox__[{ components:{ "minecraft:custom_data":{ __namespace__: 1b } } } ].del();
 
-        $foreignItem = loot give @p mine __packID__ 0 __packID__ stick[ custom_data = { drop_contents: 1b } ];
+        $foreignItem = loot give @p mine __packID__ 0 __packID__ stick[custom_data = { drop_contents: 1b } ];
 
         if ($foreignItem) { __namespace__.refresh(); }
 
@@ -110,7 +110,7 @@ class __namespace__ {
         // Detect missing items in the menu
         // According to the page, the positions of the items change
 
-        $playerClicked ?= clear @p *[custom_data = { __namespace__:1b } ];
+        $playerClicked ?= clear @p *[custom_data = { __namespace__: 1b } ];
         if ($playerClicked) {
             Hardcode.switch(
                 __namespace__.page:@s,

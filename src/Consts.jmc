@@ -1,0 +1,69 @@
+::Consts.Skills = {
+    0: Mining,
+    1: Foraging,
+    2: Excavation,
+    3: Combat,
+    4: Farming
+};
+::Consts.Bars = {
+    0: "§r----------------",
+    1: "§a-§r---------------",
+    2: "§a--§r--------------",
+    3: "§a---§r-------------",
+    4: "§a----§r------------",
+    5: "§a-----§r-----------",
+    6: "§a------§r----------",
+    7: "§a-------§r---------",
+    8: "§a--------§r--------",
+    9: "§a---------§r--------",
+    10: "§a----------§r------",
+    11: "§a-----------§r-----",
+    12: "§a------------§r----",
+    13: "§a-------------§r---",
+    14: "§a--------------§r--",
+    15: "§a---------------§r"
+};
+class Consts {
+    function toName() {
+        // Input: storage (string), var (string)
+        // Output: storage.var (string)
+        ::Consts.index = prodiges_skills.Menu.index:@s; // ?
+        execute run { $::Consts.name = ::Consts.Skills.$(index); } with ::Indexes;
+        $::$(storage) = ::Consts.name;
+    }
+
+    function initSkills {
+        for ($skillIndex = 0; $skillIndex < 7; $skillIndex++) {
+            ::Consts.initSkills.i = $skillIndex;
+            execute run { $::Consts.initSkills.name = ::Consts.Skills.$(skillIndex); } with ::Consts.initSkills;
+            execute run {
+                $scoreboard objectives add skills.$(name).prestige dummy;
+                $scoreboard objectives add skills.$(name).xp dummy;
+                $scoreboard objectives add skills.$(name).lvl dummy;
+                $scoreboard objectives add skills.$(name).xpToNext dummy;
+
+                // Main tasks
+                $taskIndexe = 0;
+                $exist = 1;
+
+                while ($exist) {
+                    execute run {
+                        $::Consts.initSkills.criteria = ::Config.Skills.$(name).Tasks[$(taskIndex)].criteria;
+                        $::Consts.initSkills.task = ::Config.Skills.$(name).Tasks[$(taskIndex)].task;
+                    } with ::Consts.initSkills;
+
+                    execute run {
+                        $scoreboard objectives add skills.$(name).task.$(task) $(criteria):$(task);
+                    } with ::Consts.initSkills;
+
+                    // Next task
+                    $taskIndexe++;
+                    ::Consts.initSkills.i = $taskIndexe;
+                    execute run {
+                        $$exist ?= ::Config.Skills.$(name).Tasks[$(i)];
+                    } with ::Consts.initSkills;
+                }
+            } with ::Consts.initSkills;
+        }
+    }
+}

@@ -1,0 +1,200 @@
+// Progress
+class Menu.Pages.Progress {
+    function __set__() {
+        Menu.Mask.grayBlackGray();
+
+        // Go back
+        item replace entity @s container.0 with arrow[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Go Back","color":"gray","italic":false}'];
+
+        // Ou est l'index ?
+        Menu.Pages.Progress.getSkillName() with ::Menu.Pages.Progress;
+
+        // Get data
+        Menu.Pages.Progress.getData() with ::Menu.Pages.Progress;
+
+        // Get scores and set storages
+        Menu.Pages.Progress.getScoresAndStorages() with ::Menu.Pages.Progress;
+        
+        // Prestige item
+        execute run {
+            $item replace entity @s container.9 with $(item)[custom_data = { __namespace__: 1b }, custom_name = '["", { "text":"🏆", "italic":false, "bold":true, "color":"yellow" }, { "text":" ", "italic":false }, { "text":"Prestige Your Skill!", "italic":false, "color":"yellow", "bold":false } ]', lore = ['["", { "text":"Once you reach ", "italic":false, "color":"white" }, { "text":"Level", "italic":false, "color":"light_purple" }, { "text":" ", "italic":false, "color":"white" }, { "text":"C ", "italic":false, "color":"dark_purple" }, { "text":"(100", "italic":false, "color":"gray" }, { "text":")", "italic":false, "color":"gray" }, { "text":",", "italic":false, "color":"white" } ]', '["", { "text":"you can ", "italic":false, "color":"white" }, { "text":"Prestige", "italic":false, "color":"aqua" }, { "text":" your skill!", "italic":false, "color":"white" } ]', '["", { "text":"Unlock ", "italic":false, "color":"gray" }, { "text":"exclusive bonuses", "italic":false, "color":"gray" }, { "text":" and", "italic":false, "color":"gray" } ]', '["", { "text":"showcase your mastery", "italic":false, "color":"gray" } ]', '[""]', '["", { "text":"Click here to view!", "italic":false, "color":"yellow" } ]'], !attribute_modifiers, enchantment_glint_override = true ];
+        } with ::Menu.Pages.Progress.data;
+
+        // Ability switch
+        ::Menu.Pages.Progress.ability = "§a§l✔";
+        execute run {
+            $execute if entity @p[ tag = !prodiges_skills.ability.$(name) ] run ::Menu.Pages.Progress.ability = "§c§l❌";
+        } with ::Menu.Pages.Progress;
+        execute run {
+            $item replace entity @s container.18 with minecraft:redstone_torch[custom_data = { __namespace__: 1b }, custom_name = '[{ "text":"Ability Toggle ", "italic":false, "color":"yellow" }, { "text":"§7[$(ability)§7]", "italic":false } ]', lore = ['[{ "text":"Enable or disable this", "italic":false, "color":"gray" } ]', '[{ "text":"ability.", "italic":false, "color":"gray" } ]', '[""]', '{ "text":"Click to toggle!", "color":"yellow", "italic":false } ']];
+        } with ::Menu.Pages.Progress;
+
+        // Set page
+
+        Menu.Pages.Progress.setProgressPage();
+
+        // Rewards
+        item replace entity @s container.17 with book[custom_data = { __namespace__: 1b }, custom_name = '["", { "text":"Task Rewards", "italic":false, "color":"#996666" } ]', lore = ['["", { "text":"See", "italic":false, "color":"white" }, { "text":" ", "italic":false, "color":"gray" }, { "text":"XP", "italic":false, "color":"aqua" }, { "text":" ", "italic":false, "color":"gray" }, { "text":"values for each", "italic":false, "color":"white" }, { "text":" ", "italic":false, "color":"gray" }, { "text":"Tasks.", "italic":false, "color":"gold" } ]', '["", { "text":"Find out which actions pay off", "italic":false, "color":"gray" } ]', '["", { "text":"the most!", "italic":false, "color":"gray" } ]', '[""]', '["", { "text":"Click to view!", "italic":false, "color":"yellow" } ]']];
+
+
+    }
+
+    function getSkillName() {
+        ::Menu.Pages.Progress.index = prodiges_skills.Menu.index:@s;
+        execute run { $::Menu.Pages.Progress.name = ::Consts.Skills.$(index); } with ::Menu.Pages.Progress;
+    }
+
+    function getData() {
+        $::Menu.Pages.Progress.data = ::Config.Skills.$(name);
+    }
+
+    function getScoresAndStorages() {
+        $scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(name).xp;
+        $scoreboard players operation $xpToNext prodiges_skills.__variable__ = @p prodiges_skills.$(name).xpToNext;
+        $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+        $nextLvl := $lvl + 1;
+
+        ::Menu.Pages.Progress.data.xp = $xp;
+        ::Menu.Pages.Progress.data.xpToNext = $xpToNext;
+        ::Menu.Pages.Progress.data.lvlRoman = $lvl;
+        ::Menu.Pages.Progress.data.nextLvlRoman = $nextLvl;
+        RomanConverter.toRoman(Menu.Pages.Progress.data.lvlRoman);
+        RomanConverter.toRoman(Menu.Pages.Progress.data.nextLvlRoman);
+
+        $ratio_100 := $xp * 100 / $xpToNext;
+        $ratio_15 := $xp * 15 / $xpToNext;
+
+        ::Menu.Pages.Progress.data.ratio_100 = $ratio_100;
+        ::Menu.Pages.Progress.data.ratio_15 = $ratio_15;
+
+        execute run { $::Menu.Pages.Progress.data.bar = ::Consts.Bars.$(ratio_15); } with ::Menu.Pages.Progress.data;
+    }
+
+    function setProgressPage() {
+        switch(prodiges_skills.Menu.progressPage:@s) {
+            case 1: Menu.Pages.Progress.debut(); $lvlStart = 1; $lvlEnd = 21;
+            case 2: Menu.Pages.Progress.mid(); $lvlStart = 22; $lvlEnd = 43;
+            case 3: Menu.Pages.Progress.mid(); $lvlStart = 44; $lvlEnd = 65;
+            case 4: Menu.Pages.Progress.mid(); $lvlStart = 66; $lvlEnd = 87;
+            case 5: Menu.Pages.Progress.end(); $lvlStart = 88; $lvlEnd = 99;
+        }
+
+        Menu.Pages.Progress.fill() with ::Menu.Pages.Progress.data;
+    }
+
+    function abilitySwitch() {
+        index_to_name({ storage: Menu.Pages.Progress.name });
+        execute run {
+            $execute if entity @p[tag = prodiges_skills.ability.$(name)] run return run tag @p remove prodiges_skills.ability.$(name);
+            $tag @p add prodiges_skills.ability.$(name);
+        } with ::Menu.Pages.Progress;
+        playsound minecraft:entity.arrow.hit_player ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
+    }
+
+    function fill() {
+        $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+        Hardcode.repeatLists(
+            ["[start]", "[end]"],
+            () => {
+                for ($slot = [start]; $slot < [end]; $slot++) {
+                    // if ($lvlStart > 100) { return 0; } // pas possible
+                    ::Menu.Pages.Progress.data.slot = $slot;
+                    ::Menu.Pages.Progress.data.lvlTest = $lvlStart;
+                    ::Menu.Pages.Progress.data.lvlTestRoman = $lvlStart;
+                    RomanConverter.toRoman(lvlRoman, Menu.Pages.Progress.data);
+
+                    // Claimed ?
+                    ::Menu.Pages.Progress.data.lvlClaimTest = $lvlStart;
+                    $toClaim = false;
+                    execute run {
+                        $execute if entity @p[tag = prodiges_skills.toClaim.$(name).$(lvlClaimTest)] run { $toClaim = true; }
+                    } with ::Menu.Pages.Progress.data;
+
+                    // Set rewards
+                    $mod = $lvlStart;
+                    $mod %= 10;
+
+                    if ($mod == 0) {
+                        ::Menu.Pages.Progress.data.point = ::Config.3.point;
+                        ::Menu.Pages.Progress.data.show = ::Config.3.show;
+                    }
+                    else if ($mod == 6 || $mod == 2) {
+                        ::Menu.Pages.Progress.data.point = ::Config.2.point;
+                        ::Menu.Pages.Progress.data.show = ::Config.2.show;
+                    }
+                    else {
+                        ::Menu.Pages.Progress.data.point = ::Config.1.point;
+                        ::Menu.Pages.Progress.data.show = ::Config.1.show;
+                    }
+
+                    Menu.Pages.Progress.setItems() with ::Menu.Pages.Progress.data;
+                }
+            },
+            [["1", "10", "19"], ["8", "17", "26"]]
+        );
+    }
+
+    function setItems() {
+        $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+        // Lvl not reached yet
+        if ($lvl < $lvlStart) {
+            execute run {
+                $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" } ]']];
+            } with ::Menu.Pages.Progress.data;
+            if ($lvlStart == 100) {
+                execute run {
+                    $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '["", { "text":"This is the maximum level", "italic":false, "color":"red" } ]']];
+                } with ::Menu.Pages.Progress.data;
+            }
+
+        }
+        // Lvl reached and claimed
+        else if ($lvl > $lvlStart && $claimed) {
+            execute run {
+                $item replace entity @s container.$(slot) with quartz[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §8§l$(lvlTestRoman)", "color":"gray", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', '[""]', '["", { "text":"You already claimed this!", "italic":false, "color":"green" } ]']];
+            } with ::Menu.Pages.Progress.data;
+        }
+        // Lvl reached and not claimed
+        else if ($lvl > $lvlStart && !$claimed) {
+            execute run {
+                $item replace entity @s container.$(slot) with large_amethyst_bud[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §5§l$(lvlTestRoman)", "color":"light_purple", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', '[""]', '["", { "text":"Click to claim!", "italic":false, "color":"light_purple" } ]']];
+            } with ::Menu.Pages.Progress.data;
+        }
+        // Max lvl reached, go to prestige
+        else if ($lvl == 100 && $lvlStart == 100) {
+            execute run {
+                $item replace entity @s container.$(slot) with minecraft:dragon_egg[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §5§l$(lvlTestRoman)", "color":"light_purple", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '["", { "text":"Maximum Level reached!", "italic":false, "color":"dark_purple" } ]', '[""]', '[{ "text":"Click to go to the Prestige Menu!", "color":"yellow", "italic":false } ]']];
+            } with ::Menu.Pages.Progress.data;
+        }   
+        
+        // Je ne sais pas a quoi ca sert
+        // else if ($lvlStart == 100) {
+        //     execute run {
+        //         $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" } ]']];
+        //     } with ::Menu.Pages.Progress.data;
+        // }
+        // Current level in progress
+        else {
+            execute run {
+                $item replace entity @s container.$(slot) with amethyst_shard[custom_data = { __namespace__: 1b }, custom_name = '["", { "text":"$(name) ", "italic":false, "color":"#A888B5" }, { "text":"§l$(lvl)", "italic":false, "color":"#EFB6C8" } ]', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '["", { "text":"$(desc1)", "italic":false, "color":"white" } ]', '["", { "text":"$(desc2)", "italic":false, "color":"white" } ]', '[""]', '["", { "text":"Progress to $(name)", "italic":false, "color":"gray" }, { "text":" $(nextLvl)", "italic":false, "bold":true, "color":"#EFB6C8" }, { "text":": ", "italic":false, "color":"gray" }, { "text":"$(100ratio)%", "italic":false, "color":"#8174A0" } ]', '["", { "text":"$(bar)", "italic":false, "color":"white" }, { "text":" $(xp)", "italic":false, "color":"#EFB6C8" }, { "text":"/", "italic":false, "color":"#8174A0" }, { "text":"$(xpToNext) ", "italic":false, "color":"#EFB6C8" } ]', '[""]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', ], !attribute_modifiers, enchantment_glint_override = true ];
+            } with ::Menu.Pages.Progress.data;
+        }
+
+        $lvlStart++;
+    }
+
+    function debut() {
+        item replace entity @s container.26 with paper[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"Next Page »", "color":"yellow", "italic":false, "bold":true } '];
+        item replace entity @s container.8 with map[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"« Previous Page", "color":"gray", "italic":false } '];
+    }
+
+    function mid() {
+        item replace entity @s container.26 with paper[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"Next Page »", "color":"yellow", "italic":false, "bold":true } '];
+        item replace entity @s container.8 with paper[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"« Previous Page", "color":"yellow", "italic":false, "bold":true } '];
+    }
+
+    function end() {
+        item replace entity @s container.26 with map[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"Next Page »", "color":"gray", "italic":false } '];
+        item replace entity @s container.8 with paper[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"« Previous Page", "color":"yellow", "italic":false, "bold":true } '];
+    }
+}

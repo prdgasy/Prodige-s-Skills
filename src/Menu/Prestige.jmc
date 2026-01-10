@@ -22,7 +22,7 @@ class Menu.Prestige {
 
                 $p_lvl++;
                 ::temp.gui.prestige.lvl = $p_lvl;
-                roman_conv(lvl, temp.gui.prestige);
+                RomanConverter.toRoman(lvl, temp.gui.prestige);
                 $power = $p_lvl;
                 $power *= 5;
                 ::temp.gui.prestige.power = $power;
