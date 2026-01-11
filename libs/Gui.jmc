@@ -9,14 +9,14 @@ new loot_table(minecraft.blocks.yellow_shulker_box) {
     "type":"minecraft:block", "pools":[ { "rolls":1, "bonus_rolls":0, "entries":[ { "type":"minecraft:item", "name":"minecraft:yellow_shulker_box", "functions":[ { "function":"minecraft:copy_components", "source":"block_entity", "include":[ "minecraft:custom_name", "minecraft:container", "minecraft:lock", "minecraft:container_loot" ] } ] } ], "conditions":[ { "condition":"minecraft:inverted", "term":{ "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } } ] }, { "rolls":1, "bonus_rolls":0, "entries":[ { "type":"minecraft:dynamic", "name":"minecraft:contents" } ], "conditions":[ { "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } ] } ], "random_sequence":"minecraft:blocks/yellow_shulker_box", "__smithed__":{ "priority":{ "stage":"early" }, "rules":[ { "type":"append", "target":"pools[0].conditions", "source":{ "type":"reference", "path":"pools[0].conditions[0]" } }, { "type":"append", "target":"pools", "source":{ "type":"reference", "path":"pools[1]" } } ] }
 }
 
-class __namespace__ {
+class Gui {
     class Constructor {
         @add(__tick__) function findGUI() {
             // Find the GUI minecart linked to the player
             // At the player, as the GUI
             execute as @a at @s as @e[type = __guiEntity__, tag = __namespace__] run {
                 if (__namespace__.id:@p == __namespace__.id:@s) {
-                    __namespace__.Constructor.loop();
+                    Gui.Constructor.loop();
                 }
             }
         }
@@ -32,12 +32,12 @@ class __namespace__ {
             execute at @s run {
                 if (!entity @p[ distance = ..1 ]) {
                     // Close the GUI if the player is too far
-                    __namespace__.Constructor.close();
+                    Gui.Constructor.close();
                 }
             }
 
-            __namespace__.returnItems();
-            __namespace__.clickDetection();
+            Gui.returnItems();
+            Gui.clickDetection();
         }
 
         function summon() {
@@ -56,7 +56,7 @@ class __namespace__ {
                 __namespace__.page:__newGUI__ = 1;
                 execute as __newGUI__ run {
                     tag @s remove this;
-                    __namespace__.refresh();
+                    Gui.refresh();
                 }
             } else {
                 Text.actionbar(@p, "&<red, bold>_:triggerCommand:: ♦ &<red>GUI already active or there is no free space!");
@@ -69,7 +69,7 @@ class __namespace__ {
         kill @e[type = item, nbt = { Item:{ components:{ "minecraft:custom_data":{ __namespace__: 1b } } } } ];
 
         // Trigger detect
-        execute as @a[scores = { _:triggerCommand: = 1.. } ] at @s run __namespace__.Constructor.summon();
+        execute as @a[scores = { _:triggerCommand: = 1.. } ] at @s run Gui.Constructor.summon();
         _:triggerCommand::@a = 0;
         scoreboard players enable @a _:triggerCommand:;
     }
@@ -80,7 +80,7 @@ class __namespace__ {
 
         $foreignItem = loot give @p mine __packID__ 0 __packID__ stick[custom_data = { drop_contents: 1b } ];
 
-        if ($foreignItem) { __namespace__.refresh(); }
+        if ($foreignItem) { Gui.refresh(); }
 
     }
 
@@ -98,12 +98,12 @@ class __namespace__ {
 
     @lazy function changePage(pageId) {
         __namespace__.page:@s = $pageId;
-        __namespace__.click();
+        Gui.click();
     }
 
     function click() {
         playsound minecraft:block.stone.break ambient @p[ tag = __namespace__.pref.sound ] ~ ~ ~ .5;
-        __namespace__.refresh();
+        Gui.refresh();
     }
 
     function clickDetection() {

@@ -11,7 +11,7 @@ class Menu.Mask {
         );
     }
 
-    function grayBlackGray() {
+    function default() {
         Hardcode.repeat(
             "[SLOT]",
             () => {

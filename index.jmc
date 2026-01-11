@@ -11,7 +11,7 @@ import 'src/Player/Ability.jmc';
 import 'src/Player/OnEvent.jmc';
 import 'src/Player/Schedule.jmc';
 
-import 'libs/guilib.jmc';
+import 'libs/Gui.jmc';
 import 'src/Menu/Pages.jmc';
 
 // Initialize Exploit Filter

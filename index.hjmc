@@ -17,7 +17,7 @@
 // #define #soundNo playsound minecraft:entity.enderman.teleport ambient @p[tag = skills.pref.sound] ~ ~ ~ 1 1
 
 // import lib
-#include 'libs/guilib.hjmc'
+#include 'libs/Gui.hjmc'
 
 // CONST
 #define __skillList__ ["Mining", "Foraging", "Excavation", "Combat", "Farming"]

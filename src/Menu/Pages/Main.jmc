@@ -1,6 +1,6 @@
 class Menu.Pages.Main {
     function __set__() {
-        Menu.Mask.grayBlackGray();
+        Menu.Mask.default();
 
         // Prestiges
         item replace entity @s container.21 with netherite_scrap[custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"Prestiges","italic":false,"color":"dark_purple"}]', lore = ['[{"text":"Once you reach ","italic":false,"color":"white"},{"text":"level","italic":false,"color":"gold"},{"text":" ","italic":false,"color":"white"},{"text":"100","italic":false},{"text":" (C) in a","italic":false,"color":"white"}]', '["",{"text":"skill, you can reset it to gain","italic":false,"color":"white"}]', '["",{"text":"a ","italic":false,"color":"white"},{"text":"permanent bonus","italic":false,"color":"green"},{"text":"!","italic":false,"color":"white"}]', '[{"text":"Grow even stronger over time!","italic":false,"color":"gray"}]', '[""]', '[{"text":"Click to view!","color":"yellow","italic":false}]'], enchantment_glint_override = true ];

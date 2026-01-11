@@ -1,7 +1,7 @@
 // Progress
 class Menu.Pages.Progress {
     function __set__() {
-        Menu.Mask.grayBlackGray();
+        Menu.Mask.default();
 
         // Go back
         item replace entity @s container.0 with arrow[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Go Back","color":"gray","italic":false}'];
