@@ -23,10 +23,10 @@ class Menu.Pages {
         }
 
         // Shop
-        item replace entity @s container.22 with player_head[ profile = { id:[ I; 1434832075, -102998962, -1229628019, 1369636598 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = ['["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
+        item replace entity @s container.22 with player_head[ profile = { id:[ I; 1434832075, -102998962, -1229628019, 1369636598 ], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = ['["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
 
         // Discord
-        item replace entity @s container.26 with player_head[ profile = { id:[ I; -566027055, -1373812234, -1824937619, -1364409557 ], properties:[ { name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg3M2MxMmJmZmI1MjUxYTBiODhkNWFlNzVjNzI0N2NiMzlhNzVmZjFhODFjYmU0YzhhMzliMzExZGRlZGEifX19" } ] }, custom_data = { __namespace__: 1b }, custom_name = '{"text":"Join the discord","color":"blue","italic":false}', lore = ['[{"text":"Need help ?","color":"white","italic":false}]', '[""]', '[{"text":"Click to join the discord!","color":"yellow","italic":false}]']];
+        item replace entity @s container.26 with player_head[ profile = { id:[ I; -566027055, -1373812234, -1824937619, -1364409557 ], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg3M2MxMmJmZmI1MjUxYTBiODhkNWFlNzVjNzI0N2NiMzlhNzVmZjFhODFjYmU0YzhhMzliMzExZGRlZGEifX19" } ] }, custom_data = { __namespace__: 1b }, custom_name = '{"text":"Join the discord","color":"blue","italic":false}', lore = ['[{"text":"Need help ?","color":"white","italic":false}]', '[""]', '[{"text":"Click to join the discord!","color":"yellow","italic":false}]']];
 
         // Profile & Preferences
         Menu.Pages.Main.profileAndPreferences();
@@ -58,14 +58,13 @@ class Menu.Pages {
         // Ability switch
         ::Menu.Pages.Progress.ability = "§a§l✔";
         execute run {
-            $execute if entity @p[ tag = !prodiges_skills.ability.$(name) ] run ::Menu.Pages.Progress.ability = "§c§l❌";
+            $execute if entity @p[tag = !prodiges_skills.ability.$(name)] run ::Menu.Pages.Progress.ability = "§c§l❌";
         } with ::Menu.Pages.Progress;
         execute run {
             $item replace entity @s container.18 with minecraft:redstone_torch[custom_data = { __namespace__: 1b }, custom_name = '[{ "text":"Ability Toggle ", "italic":false, "color":"yellow" }, { "text":"§7[$(ability)§7]", "italic":false } ]', lore = ['[{ "text":"Enable or disable this", "italic":false, "color":"gray" } ]', '[{ "text":"ability.", "italic":false, "color":"gray" } ]', '[""]', '{ "text":"Click to toggle!", "color":"yellow", "italic":false } ']];
         } with ::Menu.Pages.Progress;
 
         // Set page
-
         Menu.Pages.Progress.setProgressPage();
 
         // Rewards
@@ -113,7 +112,7 @@ class Menu.Pages {
         item replace entity @s container.23 with barrier[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"Close", "color":"red", "italic":false } '];
 
         // Infos about the Shop
-        item replace entity @s container.22 with player_head[profile = { id:[I; 1434832075, -102998962, -1229628019, 1369636598], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { __namespace__: 1b }, custom_name = '["", { "text":"Shop", "italic":false, "color":"green" } ]', lore = ['["", { "text":"Buy ", "italic":false, "color":"white" }, { "text":"boosters", "italic":false, "color":"gold" }, { "text":", ", "italic":false, "color":"white" }, { "text":"XP", "italic":false, "color":"gold" }, { "text":", ", "italic":false, "color":"white" }, { "text":"prestige", "italic":false, "color":"gold" }, { "text":", and", "italic":false, "color":"white" } ]', '["", { "text":"more! Unlock exclusive perks to", "italic":false, "color":"white" } ]', '["", { "text":"enhance your gameplay experience!", "italic":false, "color":"white" } ]']];
+        item replace entity @s container.22 with player_head[profile = { id:[I; 1434832075, -102998962, -1229628019, 1369636598], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" }] }, custom_data = { __namespace__: 1b }, custom_name = '["", { "text":"Shop", "italic":false, "color":"green" } ]', lore = ['["", { "text":"Buy ", "italic":false, "color":"white" }, { "text":"boosters", "italic":false, "color":"gold" }, { "text":", ", "italic":false, "color":"white" }, { "text":"XP", "italic":false, "color":"gold" }, { "text":", ", "italic":false, "color":"white" }, { "text":"prestige", "italic":false, "color":"gold" }, { "text":", and", "italic":false, "color":"white" } ]', '["", { "text":"more! Unlock exclusive perks to", "italic":false, "color":"white" } ]', '["", { "text":"enhance your gameplay experience!", "italic":false, "color":"white" } ]']];
 
         // Active boosters & infos
         Menu.Pages.Shop.activeBoosters();

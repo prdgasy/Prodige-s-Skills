@@ -1,10 +1,10 @@
 class Menu.Pages.Main {
-    function setProgressPage() {
+    function isProgressPage() {
         $execute unless data entity @s Items[{ Slot:$(slot)b } ] run {
             // Get skill name
             $scoreboard players set @s prodiges_skills.Menu.index $(index);
             ::Menu.Pages.Main.index = prodiges_skills.Menu.index:@s;
-            execute run { $::Menu.Pages.Main.name = ::Consts.Indexes.$(index); } with ::Menu.Pages.Main;
+            execute run { $::Menu.Pages.Main.name = ::Consts.Skils.$(index); } with ::Menu.Pages.Main;
 
             // Get level
             execute run { $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl; } with ::Menu.Pages.Main;
@@ -17,7 +17,7 @@ class Menu.Pages.Main {
             else if ($lvl <= 100) { prodiges_skills.Menu.progressPage:@s = 5; }
 
 
-            Gui.Logic.switchPage(2);
+            Gui.switchPage(Progress);
             $break = true;
         } with ::Menu.Pages.Main;
     }

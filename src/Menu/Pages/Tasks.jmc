@@ -27,7 +27,7 @@ class Menu.Pages.Tasks {
 
     function setSkillItem() {
         ::Menu.Pages.Tasks.index = prodiges_skills.Menu.index:@s;
-        execute run { $::Menu.Pages.Tasks.name = ::Consts.Indexes.$(index); } with ::Menu.Pages.Tasks;
+        execute run { $::Menu.Pages.Tasks.name = ::Consts.Skils.$(index); } with ::Menu.Pages.Tasks;
         execute run { $::Menu.Pages.Tasks.item = ::Config.Skills.$(name).item; } with ::Menu.Pages.Tasks;
         execute run {
             $item replace entity @s container.9 with $(item)[custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"$(name) Task Rewards","italic":false,"color":"yellow"}]', lore = ['["",{"text":"Here, you can find all ","italic":false,"color":"white"},{"text":"actions","italic":false,"color":"gold"}]', '["",{"text":"that grant ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"aqua"},{"text":". Check how much","italic":false,"color":"white"}]', '["",{"text":"each ","italic":false,"color":"white"},{"text":"task rewards you","italic":false,"color":"dark_purple"},{"text":". Use this","italic":false,"color":"white"}]', '["",{"text":"to optimize your skill","italic":false,"color":"white"}]', '["",{"text":"progression!","italic":false,"color":"white"}]'], !attribute_modifiers, enchantment_glint_override = true];
@@ -46,7 +46,7 @@ class Menu.Pages.Tasks {
         $pageNumber = $tabLength;
         $pageNumber /= 21;
 
-        $index = prodiges_skills.Menu.Tasks.page:@s;
+        $index = prodiges_skills.Menu.taskPage.page:@s;
         $index *= 21;
         Menu.Pages.Tasks.fill();
     }
@@ -60,6 +60,19 @@ class Menu.Pages.Tasks {
         }
         if (prodiges_skills.Menu.pageTasks:@s == 0) {
             item replace entity @s container.8 with paper[custom_data = { __namespace__: 1b }, custom_name = '{"text":"« Previous Page","color":"gray","italic":false}'];
+        }
+    }
+
+    function sliders() {
+        // First page, no next button
+        if (prodiges_skills.Menu.taskPage:@s < $pageNumber && !data entity @s Items[{ Slot:26b } ]) {
+            prodiges_skills.Menu.taskPage:@s++;
+            Gui.click();
+        }
+        // Last page, no prev button
+        else if (prodiges_skills.Menu.taskPage:@s > 0 && !data entity @s Items[{ Slot:8b } ]) {
+            prodiges_skills.Menu.taskPage:@s--;
+            Gui.click();
         }
     }
 }

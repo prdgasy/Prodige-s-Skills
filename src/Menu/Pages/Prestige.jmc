@@ -1,46 +1,21 @@
 class Menu.Prestige {
-    function Click() {
-        $scoreboard players operation $p_lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).prestige;
+    function click() {
+        $scoreboard players operation $prestigeLvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).prestige;
         $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
         if ($lvl < 100) {
             execute run {
                 // $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You need to be Level C (100) in &<gold>$(name) &<red>to Prestige.");
             } with ::Menu.Pages.Prestige;
 
-            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+            playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
         } else if ($p_lvl == 5) {
             execute run {
                 // $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You cannot Prestige in &<gold>$(name) &<red>any anymore.");
             } with ::Menu.Pages.Prestige;
 
-            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+            playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
         } else {
-            execute run {
-                $::Menu.Pages.Prestige.ability = ::Config.Skills.$(name).prestige.ability;
-                $::Menu.Pages.Prestige.ability_desc1 = ::Config.Skills.$(name).prestige.ability_desc1;
-                $::Menu.Pages.Prestige.ability_desc2 = ::Config.Skills.$(name).prestige.ability_desc2;
-
-                $p_lvl++;
-                ::Menu.Pages.Prestige.lvl = $p_lvl;
-                RomanConverter.toRoman(lvl, Menu.Pages.Prestige);
-                $power = $p_lvl;
-                $power *= 5;
-                ::Menu.Pages.Prestige.power = $power;
-
-                execute run {
-                    $Text.tellraw(@p, "&<#8174A0, bold>Skills ♦ &<green>You Prestiged &<gold>$(name)&<#8174A0>.");
-                    $tellraw @p [ "", { "text":"You unlocked §l$(ability) $(lvl):", "color":"#EFB6C8" }, { "text":"\n $(ability_desc1)\n $(ability_desc2)\n " }, { "text":"\u2192 ", "bold":true, "color":"dark_gray" }, { "text":"+$(power)%", "bold":true, "color":"red" } ];
-
-                } with ::Menu.Pages.Prestige;
-
-
-                // Operations
-                $scoreboard players add @p prodiges_skills.$(name).prestige 1;
-                $scoreboard players set @p prodiges_skills.$(name).lvl 1;
-                $scoreboard players set @p prodiges_skills.$(name).xp 0;
-                $execute store result score @p prodiges_skills.$(name).xpToNext run data get storage prodiges_skills:prodiges_skills DB.prodiges_skills.$(name).xpstart;
-                playsound minecraft:entity.ender_dragon.growl ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
-            } with ::Menu.Pages.Prestige;
+            Menu.Pages.Prestige.success() with ::Menu.Pages.Prestige;
         }
     }
 
@@ -48,7 +23,7 @@ class Menu.Prestige {
         $slot = 11;
         for ($index = 0; $index < __skillsLength__; $index++) {
             ::Menu.Pages.Prestige.index = $index;
-            execute run { $::Menu.Pages.Prestige.name = ::Consts.Indexes.$(index); } with ::Menu.Pages.Prestige;
+            execute run { $::Menu.Pages.Prestige.name = ::Consts.Skils.$(index); } with ::Menu.Pages.Prestige;
 
             Menu.Pages.Prestige.getData() with ::Menu.Pages.Prestige;
             execute run {
@@ -150,5 +125,31 @@ class Menu.Prestige {
 
             !minecraft:attribute_modifiers
         ];
+    }
+
+    function success() {
+        $::Menu.Pages.Prestige.ability = ::Config.Skills.$(name).prestige.ability;
+        $::Menu.Pages.Prestige.ability_desc1 = ::Config.Skills.$(name).prestige.lore1;
+        $::Menu.Pages.Prestige.ability_desc2 = ::Config.Skills.$(name).prestige.lore2;
+
+        $prestigeLvl++;
+        ::Menu.Pages.Prestige.lvl = $prestigeLvl;
+        ::Menu.Pages.Prestige.lvl RomanConverter.toRoman(::Menu.Pages.Prestige.lvl);
+        $power := $prestigeLvl * 5;
+        ::Menu.Pages.Prestige.power = $power;
+
+        execute run {
+            // $Text.tellraw(@p, "&<#8174A0, bold>Skills ♦ &<green>You Prestiged &<gold>$(name)&<green>.");
+            $tellraw @p [ "", { "text":"You unlocked §l$(ability) $(lvl):", "color":"green" }, { "text":"\n $(ability_desc1)\n $(ability_desc2)\n " }, { "text":"\u2192 ", "bold":true, "color":"dark_gray" }, { "text":"+$(power)%", "bold":true, "color":"red" } ];
+
+        } with ::Menu.Pages.Prestige;
+
+
+        // Operations
+        $scoreboard players add @p prodiges_skills.$(name).prestige 1;
+        $scoreboard players set @p prodiges_skills.$(name).lvl 1;
+        $scoreboard players set @p prodiges_skills.$(name).xp 0;
+        $execute store result score @p prodiges_skills.$(name).xpToNext run data get storage prodiges_skills:prodiges_skills Config.Skills.$(name).xpstart;
+        playsound minecraft:entity.ender_dragon.growl ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
     }
 }

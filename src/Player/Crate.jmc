@@ -4,13 +4,13 @@ class Player.Crate {
         len_inv($invlen);
         if (skills.crate.cooldown:@p > 0) {
             // Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You are still on a cooldown (&<skills.crate.cooldown:@p> minute(s))."); // SOUCIS DE QUOTES MALFORMEE
-            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+            playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
         } else if ($invlen > 34) {
             Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Inventory is full.");
-            playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+            playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
         } else {
-            playsound minecraft:block.chest.open ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
-            playsound minecraft:entity.wind_charge.wind_burst ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+            playsound minecraft:block.chest.open ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
+            playsound minecraft:entity.wind_charge.wind_burst ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
             skills.crate.cooldown:@p = 60;
             len_array($len_crate, DB.Shop.crate);
             $len_crate -= 1;

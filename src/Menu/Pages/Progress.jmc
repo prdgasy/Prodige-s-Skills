@@ -44,7 +44,8 @@ class Menu.Pages.Progress {
     }
 
     function abilitySwitch() {
-        index_to_name({ storage: Menu.Pages.Progress.name });
+        ::Menu.Pages.Progress.index = prodiges_skills.Menu.index:@s;
+        execute run { $::Menu.Pages.Progress.name = ::Consts.Skills.$(name); }
         execute run {
             $execute if entity @p[tag = prodiges_skills.ability.$(name)] run return run tag @p remove prodiges_skills.ability.$(name);
             $tag @p add prodiges_skills.ability.$(name);
@@ -100,11 +101,11 @@ class Menu.Pages.Progress {
         // Lvl not reached yet
         if ($lvl < $lvlStart) {
             execute run {
-                $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" } ]']];
+                $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" }]', '[{ "text":"§8- $(show)" }]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" }]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" }]']];
             } with ::Menu.Pages.Progress.data;
             if ($lvlStart == 100) {
                 execute run {
-                    $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '["", { "text":"This is the maximum level", "italic":false, "color":"red" } ]']];
+                    $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '["", { "text":"This is the maximum level", "italic":false, "color":"red" }]']];
                 } with ::Menu.Pages.Progress.data;
             }
 
@@ -112,34 +113,33 @@ class Menu.Pages.Progress {
         // Lvl reached and claimed
         else if ($lvl > $lvlStart && $claimed) {
             execute run {
-                $item replace entity @s container.$(slot) with quartz[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §8§l$(lvlTestRoman)", "color":"gray", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', '[""]', '["", { "text":"You already claimed this!", "italic":false, "color":"green" } ]']];
+                $item replace entity @s container.$(slot) with quartz[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §8§l$(lvlTestRoman)", "color":"gray", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" }]', '[{ "text":"§8- $(show)" }]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" }]', '[""]', '["", { "text":"You already claimed this!", "italic":false, "color":"green" }]']];
             } with ::Menu.Pages.Progress.data;
         }
         // Lvl reached and not claimed
         else if ($lvl > $lvlStart && !$claimed) {
             execute run {
-                $item replace entity @s container.$(slot) with large_amethyst_bud[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §5§l$(lvlTestRoman)", "color":"light_purple", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', '[""]', '["", { "text":"Click to claim!", "italic":false, "color":"light_purple" } ]']];
+                $item replace entity @s container.$(slot) with large_amethyst_bud[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §5§l$(lvlTestRoman)", "color":"light_purple", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" }]', '[{ "text":"§8- $(show)" }]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" }]', '[""]', '["", { "text":"Click to claim!", "italic":false, "color":"light_purple" }]']];
             } with ::Menu.Pages.Progress.data;
         }
         // Max lvl reached, go to prestige
         else if ($lvl == 100 && $lvlStart == 100) {
             execute run {
-                $item replace entity @s container.$(slot) with minecraft:dragon_egg[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §5§l$(lvlTestRoman)", "color":"light_purple", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '["", { "text":"Maximum Level reached!", "italic":false, "color":"dark_purple" } ]', '[""]', '[{ "text":"Click to go to the Prestige Menu!", "color":"yellow", "italic":false } ]']];
+                $item replace entity @s container.$(slot) with minecraft:dragon_egg[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §5§l$(lvlTestRoman)", "color":"light_purple", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '["", { "text":"Maximum Level reached!", "italic":false, "color":"dark_purple" }]', '[""]', '[{ "text":"Click to go to the Prestige Menu!", "color":"yellow", "italic":false }]']];
             } with ::Menu.Pages.Progress.data;
         }
 
-        // Je ne sais pas a quoi ca sert
-        // else if ($lvlStart == 100) {
-            // execute run {
-                // $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" } ]']];
-                //
+        Je ne sais pas a quoi ca sert
+        else if ($lvlStart == 100) {
+            execute run {
+                // $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" }]']];
+
             } with ::Menu.Pages.Progress.data;
-            //
         }
         // Current level in progress
         else {
             execute run {
-                $item replace entity @s container.$(slot) with amethyst_shard[custom_data = { __namespace__: 1b }, custom_name = '["", { "text":"$(name) ", "italic":false, "color":"#A888B5" }, { "text":"§l$(lvl)", "italic":false, "color":"#EFB6C8" } ]', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" } ]', '["", { "text":"$(desc1)", "italic":false, "color":"white" } ]', '["", { "text":"$(desc2)", "italic":false, "color":"white" } ]', '[""]', '["", { "text":"Progress to $(name)", "italic":false, "color":"gray" }, { "text":" $(nextLvl)", "italic":false, "bold":true, "color":"#EFB6C8" }, { "text":": ", "italic":false, "color":"gray" }, { "text":"$(100ratio)%", "italic":false, "color":"#8174A0" } ]', '["", { "text":"$(bar)", "italic":false, "color":"white" }, { "text":" $(xp)", "italic":false, "color":"#EFB6C8" }, { "text":"/", "italic":false, "color":"#8174A0" }, { "text":"$(xpToNext) ", "italic":false, "color":"#EFB6C8" } ]', '[""]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" } ]', '[{ "text":"§8- $(show)" } ]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" } ]', ], !attribute_modifiers, enchantment_glint_override = true ];
+                $item replace entity @s container.$(slot) with amethyst_shard[custom_data = { __namespace__: 1b }, custom_name = '["", { "text":"$(name) ", "italic":false, "color":"#A888B5" }, { "text":"§l$(lvl)", "italic":false, "color":"#EFB6C8" }]', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '["", { "text":"$(desc1)", "italic":false, "color":"white" }]', '["", { "text":"$(desc2)", "italic":false, "color":"white" }]', '[""]', '["", { "text":"Progress to $(name)", "italic":false, "color":"gray" }, { "text":" $(nextLvl)", "italic":false, "bold":true, "color":"#EFB6C8" }, { "text":": ", "italic":false, "color":"gray" }, { "text":"$(100ratio)%", "italic":false, "color":"#8174A0" }]', '["", { "text":"$(bar)", "italic":false, "color":"white" }, { "text":" $(xp)", "italic":false, "color":"#EFB6C8" }, { "text":"/", "italic":false, "color":"#8174A0" }, { "text":"$(xpToNext) ", "italic":false, "color":"#EFB6C8" }]', '[""]', '[{ "text":"Rewards:", "italic":false, "color":"yellow" }]', '[{ "text":"§8- $(show)" }]', '[{ "text":"§8- §6+$(point) Prodige Points (PPoints)" }]', ], !attribute_modifiers, enchantment_glint_override = true ];
             } with ::Menu.Pages.Progress.data;
         }
 
@@ -161,34 +161,92 @@ class Menu.Pages.Progress {
         item replace entity @s container.8 with paper[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"« Previous Page", "color":"yellow", "italic":false, "bold":true } '];
     }
 
-    function click_prog() {
-        $execute unless data entity @s Items[ { Slot:$(slot)b } ] run {
+    function clickLevel() {
+        $execute unless data entity @s Items[{ Slot:$(slot)b } ] run {
             $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
 
             if ($lvl < $lvlstart) {
                 Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You cannot claim this reward yet.");
-                execute at @p run playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+                execute at @p run playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
             } else if ($lvl > $lvlstart && $claimed) {
                 Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You already claimed this reward.");
-                execute at @p run playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+                execute at @p run playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
             } else if ($lvl > $lvlstart && !$claimed) {
                 execute run {
-                    $tag @p remove prodiges_skills.claimed.$(name).$(lvl_id);
+                    $tag @p remove prodiges_skills.toClaim.$(name).$(lvl_id);
                     // $Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You have claimed &<light_purple>$(name) &<dark_purple, bold>$(lvl)&<green>!");
                     // $$(command);
                     // $Text.tellraw(@p, " &<dark_gray>- $(show)");
                     // $Text.tellraw(@p, " &<dark_gray>- &<gold>+$(point) Skill Points (SP)");
-                    execute at @p run playsound minecraft:entity.arrow.hit_player ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 2;
-                } with ::temp.gui.prog.data;
+                    execute at @p run playsound minecraft:entity.arrow.hit_player ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 2;
+                } with ::Menu.Pages.Progress.data;
             } else if ($lvl == 100 && $lvlstart == 100) {
-                playsound minecraft:block.ender_chest.open ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
-                skillsLIB.Logic.switch_page(7);
+                playsound minecraft:block.ender_chest.open ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
+                Gui.switchPage(Prestige);
             } else {
                 execute run {
                     // $Text.tellraw(@p, "&<yellow, bold>Skills ♦ &<gold>$(name) $(lvl) &<yellow>is still in progress.");
-                } with ::temp.gui.prog.data;
+                } with ::Menu.Pages.Progress.data;
             }
-        } with ::temp.gui.prog.data;
+        } with ::Menu.Pages.Progress.data;
 
+    }
+
+    function levels() {
+        Hardcode.repeatLists(
+            [ "[start]", "[end]" ],
+            () => {
+                for ($slot = [ start ]; $slot < [ end ]; $slot++) {
+                    if ($lvlstart > 100) { return 0; }
+                    ::Menu.Pages.Progress.data.slot = $slot;
+                    ::Menu.Pages.Progress.data.lvl = $lvlstart;
+                    ::Menu.Pages.Progress.data.lvl = RomanConverter.toRoman(::Menu.Pages.Progress.data.lvl);
+
+                    // Claim test
+                    $claimed = false;
+                    execute run {
+                        $execute if entity @p[ tag = !prodiges_skills.toClaim.$(name).$(lvl) ] run { $claimed = true; }
+                    } with ::Menu.Pages.Progress.data;
+
+                    // Set rewards
+                    $mod = $lvlstart;
+                    $mod %= 10;
+
+                    if ($mod == 0) {
+                        ::Menu.Pages.Progress.data.command = ::Config.Rewards.3.command;
+                        ::Menu.Pages.Progress.data.point = ::Config.Rewards.3.point;
+                        ::Menu.Pages.Progress.data.show = ::Config.Rewards.3.show;
+                    }
+                    else if ($mod == 6 || $mod == 2) {
+                        ::Menu.Pages.Progress.data.command = ::Config.Rewards.2.command;
+                        ::Menu.Pages.Progress.data.point = ::Config.Rewards.2.point;
+                        ::Menu.Pages.Progress.data.show = ::Config.Rewards.2.show;
+                    }
+                    else {
+                        ::Menu.Pages.Progress.data.command = ::Config.Rewards.1.command;
+                        ::Menu.Pages.Progress.data.point = ::Config.Rewards.1.point;
+                        ::Menu.Pages.Progress.data.show = ::Config.Rewards.1.show;
+                    }
+
+                    Menu.Pages.Progress.clickLevel() with ::Menu.Pages.Progress.data;
+                    $lvlstart++;
+                }
+            },
+            [ ["1", "10", "19" ], [ "8", "17", "26" ]]
+        );
+    }
+
+    function sliders() {
+        // First page, no next button
+        if (prodiges_skills.Menu.progressPage:@s < 5 && !data entity @s Items[{ Slot:26b } ]) {
+            prodiges_skills.Menu.progressPage:@s++;
+            Gui.click();
+        }
+
+        // Last page, no prev button
+        else if (prodiges_skills.Menu.progressPage:@s > 1 && !data entity @s Items[{ Slot:8b } ]) {
+            prodiges_skills.Menu.progressPage:@s--;
+            Gui.click();
+        }
     }
 }

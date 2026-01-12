@@ -4,22 +4,23 @@ class Menu.Boosters {
     }
 
     function click() {
-        $points = prodiges_skills.player.PPoints:@p;
-        len_inv($invlen);
+        $points = PPoints:@p;
+        $invlen = Arrays.playerInv_length(@p);
+
         Hardcode.repeatLists(
             [ "[slot]", "[item]", "[power]", "[duration]", "[color]", "[cost]", "[type_int]", "[type]" ],
             () => {
-                if (!data entity @s Items[ { Slot:[slot]b } ]) {
+                if (!data entity @s Items[{ Slot:[slot]b } ]) {
                     if ($points < [ cost ]) {
                         Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Not enough SP to buy &<[color]>x[power] [type] Booster&<red>.");
-                        playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+                        playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
                     } else if ($invlen > 34) {
                         Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Inventory is full.");
-                        playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+                        playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
                     } else {
-                        Player.Booster.give({ type_int: [ type_int ], type: "[type]", power: [ power ], duration: [ duration ], booster_color: "[color]", model: [ item ] });
-                        playsound minecraft:block.note_block.pling ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 2;
-                        prodiges_skills.player.sp:@p -= [ cost ];
+                        Player.Booster.give({ type_int: [type_int], type: "[type]", power: [power], duration: [duration], booster_color: "[color]", model: [item] });
+                        playsound minecraft:block.note_block.pling ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 2;
+                        PPoints:@p -= [cost];
                         Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You bought a &<[color]>x[power] [type] Booster &<green>for &<gold>[cost] SP&<green>.");
                     }
                 }

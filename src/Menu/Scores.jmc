@@ -1,6 +1,6 @@
 Scoreboard.add(prodiges_skills.Menu.index);
 Scoreboard.add(prodiges_skills.Menu.progressPage);
-Scoreboard.add(prodiges_skills.Menu.tasks.page);
+Scoreboard.add(prodiges_skills.Menu.taskPage);
 Scoreboard.add(prodiges_skills.Menu.booster.type);
 Scoreboard.add(prodiges_skills.Menu.booster.power);
 Scoreboard.add(prodiges_skills.Menu.shop.boost_state);

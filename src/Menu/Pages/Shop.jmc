@@ -1,5 +1,4 @@
 class Menu.Pages.Shop {
-
     function activeBoosters() {
         // Points
         ::Menu.Pages.Shop.points = prodiges_skills.PPoints:@p;
