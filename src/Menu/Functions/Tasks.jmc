@@ -1,20 +1,4 @@
 class Menu.Pages.Tasks {
-    function __set__() {
-        Menu.Mask.blackGrayBlack();
-
-        item replace entity @s container.0 with arrow[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Go Back","color":"gray","italic":false}'];
-        item replace entity @s container.18 with barrier[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Close","color":"red","italic":false}'];
-
-        // Set Skill Item
-        Menu.Pages.Tasks.setSkillItem();
-
-        // Get data
-        Menu.Pages.Tasks.setItems();
-
-        // Sliders
-        Menu.Pages.Tasks.setSliders();
-    }
-
     function fill() {
         Hardcode.repeatLists(
             [ "[start]", "[end]" ],

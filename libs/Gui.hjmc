@@ -1,8 +1,9 @@
 #define __packID__ 930005
 #define __userFile__ Menu
-#define __pageNumber__ 9
-#define __namespac__ skillsLIB
+#define __namespace__ skillsLIB
 #define __triggerCommand__ Skills
 
 #define __shulkerBox__ [__packID_, 0, __packID__]::Items
 #define __newGUI__ @e[type = __guiEntity__, tag = __namespace__, tag = this]
+
+#define __pageList__ ["Main", "Progress", "Boosters", "Skills", "Tasks", "ItemShop", "Prestige", "Preferences", "Shop", "Tasks"]

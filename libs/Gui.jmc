@@ -9,7 +9,33 @@ new loot_table(minecraft.blocks.yellow_shulker_box) {
     "type":"minecraft:block", "pools":[ { "rolls":1, "bonus_rolls":0, "entries":[ { "type":"minecraft:item", "name":"minecraft:yellow_shulker_box", "functions":[ { "function":"minecraft:copy_components", "source":"block_entity", "include":[ "minecraft:custom_name", "minecraft:container", "minecraft:lock", "minecraft:container_loot" ] } ] } ], "conditions":[ { "condition":"minecraft:inverted", "term":{ "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } } ] }, { "rolls":1, "bonus_rolls":0, "entries":[ { "type":"minecraft:dynamic", "name":"minecraft:contents" } ], "conditions":[ { "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } ] } ], "random_sequence":"minecraft:blocks/yellow_shulker_box", "__smithed__":{ "priority":{ "stage":"early" }, "rules":[ { "type":"append", "target":"pools[0].conditions", "source":{ "type":"reference", "path":"pools[0].conditions[0]" } }, { "type":"append", "target":"pools", "source":{ "type":"reference", "path":"pools[1]" } } ] }
 }
 
+::Gui.Pages = __pageList__;
+
 class Gui {
+    @lazy function switchPage(pageName) {
+        Gui.pageToScore({ pageName: $pageName }); // ::Gui.pageToScore.index;
+        __namespace__.page:@s = ::Gui.pageToScore.index;
+        Gui.click();
+    }
+
+    function scoreToPage() {
+        ::Gui.scoreToPage.pageScore = __namespace__.page:@s;
+        execute run { $::Gui.pageToScore.name = ::Gui.Pages[$(pageScore)]; }
+    }
+
+    function pageToScore() {
+        // Find index based page name
+        $::Gui.pageToScore.pageNameToCompare = $(pageName);
+        $index = 0;
+        Arrays.forEach(page, ::Gui.Pages, {
+            $::Gui.pageToScore.name = $(page);
+            if (Object.isEqual("Gui.pageToScore", name, "Gui.pageToScore", pageNameToCompare)) {
+                ::Gui.pageToScore.index = $index;
+            }
+            $index++;
+        });
+    }
+
     class Constructor {
         @add(__tick__) function findGUI() {
             // Find the GUI minecart linked to the player
@@ -52,8 +78,8 @@ class Gui {
                 __namespace__.id:__newGUI__ = __namespace__.id:global.id;
                 __namespace__.id:@s = __namespace__.id:global.id;
 
-                // Init page 1
-                __namespace__.page:__newGUI__ = 1;
+                // Init page
+                __namespace__.page:__newGUI__ = 0;
                 execute as __newGUI__ run {
                     tag @s remove this;
                     Gui.refresh();
@@ -87,19 +113,11 @@ class Gui {
     function refresh() {
         // Refresh items from the menu
         @s::Items.del();
-
-        Hardcode.switch(
-            __namespace__.page:@s,
-            "[id]",
-            () => { __userFile__.Pages.[id](); },
-            __pageNumber__
-        );
+        Gui.scoreToPage(); // ::Gui.scoreToPage.name;
+        execute run { $__userFile__.Pages.$(name)(); } with ::Gui.scoreToPage;
     }
 
-    @lazy function changePage(pageId) {
-        __namespace__.page:@s = $pageId;
-        Gui.click();
-    }
+
 
     function click() {
         playsound minecraft:block.stone.break ambient @p[ tag = __namespace__.pref.sound ] ~ ~ ~ .5;
@@ -111,15 +129,10 @@ class Gui {
         // According to the page, the positions of the items change
 
         $playerClicked ?= clear @p *[custom_data = { __namespace__: 1b } ];
+
         if ($playerClicked) {
-            Hardcode.switch(
-                __namespace__.page:@s,
-                "[id]",
-                () => {
-                    __userFile__.Click.[id]();
-                },
-                __pageNumber__
-            );
+            Gui.scoreToPage(); // ::Gui.scoreToPage.name;
+            execute run { $__userFile__.Clicks.$(name)(); } with ::Gui.scoreToPage;
         }
     }
 }

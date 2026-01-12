@@ -1,31 +1,4 @@
 class Menu.ItemShop {
-    function __set__() {
-        Menu.Mask.default();
-
-        item replace entity @s container.0 with arrow[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Go Back","color":"gray","italic":false}'];
-        item replace entity @s container.9 with stone[ item_model = "minecraft:leather_helmet", custom_data = { __namespace__: 1b }, custom_name = '{"text":"Special Items","color":"aqua","italic":false}', lore = ['["",{"text":"Browse and purchase ","italic":false,"color":"white"},{"text":"exclusive","italic":false,"color":"light_purple"}]', '["",{"text":"tools ","italic":false,"color":"light_purple"},{"text":"and","italic":false,"color":"white"},{"text":" armor","italic":false,"color":"light_purple"},{"text":".","italic":false,"color":"white"}]', '["",{"text":"Unlock powerful gear!","italic":false,"color":"gray"}]']];
-        item replace entity @s container.18 with barrier[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Close","color":"red","italic":false}'];
-
-        $itemsLength = Arrays.length(::Config.Shop.specialItems);
-        Hardcode.repeatLists(
-            [ "[start]", "[end]" ],
-            () => {
-                for ($slot = [start]; $slot < [end]; $slot++) {
-                    $itemsLength -= 1;
-                    // Stop if no more items
-                    if ($itemsLength < 0) { return 0; }
-                    ::Menu.Pages.ItemShop.del();
-                    ::Menu.Pages.ItemShop.slot = $slot;
-                    ::Menu.Pages.ItemShop.index = $itemsLength;
-
-                    Menu.Pages.ItemShop.setParam() with ::Menu.Pages.ItemShop;
-                    Menu.Pages.ItemShop.setItem() with ::Menu.Pages.ItemShop;
-                }
-            },
-            [ ["1", "10", "19" ], [ "8", "17", "26" ]]
-        );
-    }
-
     function setParam() {
         $::Menu.Pages.ItemShop.type = ::Config.Shop.specialItems[$(index)].type;
         $::Menu.Pages.ItemShop.itemName = ::Config.Shop.specialItems[$(index)].itemName;

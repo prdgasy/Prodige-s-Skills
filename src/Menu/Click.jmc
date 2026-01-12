@@ -1,6 +1,38 @@
-class Menu.Click {
-    function 1() {
-        Menu.Pages.Main.__click__();
+class Menu.Clicks {
+    function Main() {
+        // Parse through skills to find which one was clicked
+        $slot = 11;
+        $break = false;
+        for ($index = 0; $index < __skillsLength__ && !$break; $index++) {
+            ::Menu.Pages.Main.slot = $slot;
+            ::Menu.Pages.Main.index = $index;
+            Menu.Pages.Main.setProgressPage() with ::Menu.Pages.Main;
+            $slot++;
+        }
+
+        //
+        if (!data entity @s Items[ { Slot:4b } ]) {
+            skillsLIB.Logic.switch_page(4);
+        } else if (!data entity @s Items[ { Slot:8b } ]) {
+            skillsLIB.Logic.switch_page(6);
+        } else if (!data entity @s Items[ { Slot:22b } ]) {
+            prodiges_skills.gui.booster.type:@s = 1;
+            prodiges_skills.gui.booster.power:@s = 1;
+            prodiges_skills.gui.booster.duration:@s = 1;
+
+            playsound minecraft:block.amethyst_block.place ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+            skillsLIB.Logic.switch_page(5);
+        } else if (!data entity @s Items[ { Slot:26b } ]) {
+            tellraw @p [ "", { "text":"Skills \u2666 ", "bold":true, "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"Click ", "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"here", "bold":true, "underlined":true, "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":" to join the ", "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"Discord", "bold":true, "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"!", "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } } ];
+            skillsLIB.construct.close();
+        } else if (!data entity @s Items[ { Slot:21b } ]) {
+            playsound minecraft:block.ender_chest.open ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+            skillsLIB.Logic.switch_page(7);
+        } else if (!data entity @s Items[ { Slot:23b } ]) {
+            skillsLIB.construct.close();
+        }
+
+        skillsLIB.Logic.refresh();
     }
 
     function 2() {
