@@ -1,49 +1,77 @@
 class Menu.ItemShop {
-    function set_param() {
-        $::temp.gui.items.type = ::DB.Shop.specialItems[ $(index) ].type;
-        $::temp.gui.items.item_name = ::DB.Shop.specialItems[ $(index) ].item_name;
-        $::temp.gui.items.rarity = ::DB.Shop.specialItems[ $(index) ].rarity;
-        $::temp.gui.items.item_repr = ::DB.Shop.specialItems[ $(index) ].item_repr;
-        $::temp.gui.items.ench_0_name = ::DB.Shop.specialItems[ $(index) ].Enchants[ 0 ].name;
-        $::temp.gui.items.ench_0_level = ::DB.Shop.specialItems[ $(index) ].Enchants[ 0 ].level;
-        $::temp.gui.items.ench_1_name = ::DB.Shop.specialItems[ $(index) ].Enchants[ 1 ].name;
-        $::temp.gui.items.ench_1_level = ::DB.Shop.specialItems[ $(index) ].Enchants[ 1 ].level;
-        // RomanConverter.toRoman(ench_0_level, temp.gui.items);
-        // RomanConverter.toRoman(ench_1_level, temp.gui.items);
-        $::temp.gui.items.desc1 = ::DB.Shop.specialItems[ $(index) ].desc1;
-        $::temp.gui.items.desc2 = ::DB.Shop.specialItems[ $(index) ].desc2;
-        $$cost = ::DB.Shop.specialItems[ $(index) ].cost;
-        ::temp.gui.items.cost = $cost;
-        $sp = prodiges_skills.player.sp:@p;
-        if ($cost > $sp) {
-            ::temp.gui.items.sp_color = "§8";
+    function __set__() {
+        Menu.Mask.default();
+
+        item replace entity @s container.0 with arrow[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Go Back","color":"gray","italic":false}'];
+        item replace entity @s container.9 with stone[ item_model = "minecraft:leather_helmet", custom_data = { __namespace__: 1b }, custom_name = '{"text":"Special Items","color":"aqua","italic":false}', lore = ['["",{"text":"Browse and purchase ","italic":false,"color":"white"},{"text":"exclusive","italic":false,"color":"light_purple"}]', '["",{"text":"tools ","italic":false,"color":"light_purple"},{"text":"and","italic":false,"color":"white"},{"text":" armor","italic":false,"color":"light_purple"},{"text":".","italic":false,"color":"white"}]', '["",{"text":"Unlock powerful gear!","italic":false,"color":"gray"}]']];
+        item replace entity @s container.18 with barrier[custom_data = { __namespace__: 1b }, custom_name = '{"text":"Close","color":"red","italic":false}'];
+
+        $itemsLength = Arrays.length(::Config.Shop.specialItems);
+        Hardcode.repeatLists(
+            [ "[start]", "[end]" ],
+            () => {
+                for ($slot = [start]; $slot < [end]; $slot++) {
+                    $itemsLength -= 1;
+                    // Stop if no more items
+                    if ($itemsLength < 0) { return 0; }
+                    ::Menu.Pages.ItemShop.del();
+                    ::Menu.Pages.ItemShop.slot = $slot;
+                    ::Menu.Pages.ItemShop.index = $itemsLength;
+
+                    Menu.Pages.ItemShop.setParam() with ::Menu.Pages.ItemShop;
+                    Menu.Pages.ItemShop.setItem() with ::Menu.Pages.ItemShop;
+                }
+            },
+            [ ["1", "10", "19" ], [ "8", "17", "26" ]]
+        );
+    }
+
+    function setParam() {
+        $::Menu.Pages.ItemShop.type = ::Config.Shop.specialItems[$(index)].type;
+        $::Menu.Pages.ItemShop.itemName = ::Config.Shop.specialItems[$(index)].itemName;
+        $::Menu.Pages.ItemShop.itemRepr = ::Config.Shop.specialItems[$(index)].itemRepr;
+        $::Menu.Pages.ItemShop.enchantName0 = ::Config.Shop.specialItems[$(index)].Enchants[0].name;
+        $::Menu.Pages.ItemShop.enchantLevel0 = ::Config.Shop.specialItems[$(index)].Enchants[0].level;
+        $::Menu.Pages.ItemShop.enchantName1 = ::Config.Shop.specialItems[$(index)].Enchants[1].name;
+        $::Menu.Pages.ItemShop.enchantLevel1 = ::Config.Shop.specialItems[$(index)].Enchants[1].level;
+        ::Menu.Pages.ItemShop.enchantLevel0 = RomanConverter.toRoman(::Menu.Pages.ItemShop.enchantLevel0);
+        ::Menu.Pages.ItemShop.enchantLevel1 = RomanConverter.toRoman(::Menu.Pages.ItemShop.enchantLevel1);
+
+        $::Menu.Pages.ItemShop.lore1 = ::Config.Shop.specialItems[$(index)].lore1;
+        $::Menu.Pages.ItemShop.lore2 = ::Config.Shop.specialItems[$(index)].lore2;
+        $$cost = ::Config.Shop.specialItems[$(index)].cost;
+        ::Menu.Pages.ItemShop.cost = $cost;
+        $points = prodiges_skills.PPoints:@p;
+        if ($cost > $points) {
+            // Cannot buy
+            ::Menu.Pages.ItemShop.pointsColor = "§8";
         } else {
-            ::temp.gui.items.sp_color = "§6";
+            ::Menu.Pages.ItemShop.pointsColor = "§6";
         }
     }
 
-    function set_item() {
+    function setItem() {
         // set avec param
-        $item replace entity @s container.$(slot) with $(item_repr)[custom_data = { __namespace__: 1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(sp_color)$(cost) SP","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(desc1)","italic":true,"color":"light_purple"}]', '[{"text":"$(desc2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]'], enchantments = { $(ench_0_name):$(ench_0_level), $(ench_1_name):$(ench_1_level) } ];
+        $item replace entity @s container.$(slot) with $(itemRepr)[custom_data = { __namespace__: 1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(pointsColor)$(cost) SP","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(lore1)","italic":true,"color":"light_purple"}]', '[{"text":"$(lore2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]'], enchantments = { $(enchantName0):$(enchantLevel0), $(enchantName1):$(enchantLevel1) } ];
     }
 
     function click() {
-        len_array($len_items, DB.Shop.specialItems);
+        len_array($itemsLength, Config.Shop.specialItems);
         Hardcode.repeatLists(
             [ "[start]", "[end]" ],
             () => {
                 for ($slot = [ start ]; $slot < [ end ]; $slot++) {
-                    $len_items -= 1;
-                    if ($len_items < 0) { return 0; }
-                    ::temp.gui.items.del();
-                    ::temp.gui.items.slot = $slot;
+                    $itemsLength -= 1;
+                    if ($itemsLength < 0) { return 0; }
+                    ::Menu.Pages.ItemShop.del();
+                    ::Menu.Pages.ItemShop.slot = $slot;
 
                     execute run {
                         $execute unless data entity @s Items[ { Slot:$(slot)b } ] run {
-                            ::temp.gui.items.id = $len_items;
-                            GUI.Items.click_slot() with ::temp.gui.items;
+                            ::Menu.Pages.ItemShop.id = $itemsLength;
+                            Menu.Pages.ItemShop.click_slot() with ::Menu.Pages.ItemShop;
                         }
-                    } with ::temp.gui.items;
+                    } with ::Menu.Pages.ItemShop;
                 }
             },
             [ ["1", "10", "19" ], [ "8", "17", "26" ]]
@@ -51,9 +79,9 @@ class Menu.ItemShop {
     }
 
     function click_slot() {
-        $::temp.gui.items.item_name = ::DB.Shop.specialItems[ $(id) ].item_name;
-        $::temp.gui.items.cost = ::DB.Shop.specialItems[ $(id) ].cost;
-        GUI.Items.buy() with ::temp.gui.items;
+        $::Menu.Pages.ItemShop.item_name = ::Config.Shop.specialItems[ $(id) ].item_name;
+        $::Menu.Pages.ItemShop.cost = ::Config.Shop.specialItems[ $(id) ].cost;
+        Menu.Pages.ItemShop.buy() with ::Menu.Pages.ItemShop;
     }
 
     function buy() {
@@ -61,7 +89,7 @@ class Menu.ItemShop {
         $scoreboard players set $cost prodiges_skills.__variable__ $(cost);
         len_inv($len_inv);
         if ($sp < $cost) {
-            execute run { $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Not enough SP to buy $(item_name)&<red>."); } with ::temp.gui.items;
+            // execute run { $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Not enough SP to buy $(item_name)&<red>."); } with ::Menu.Pages.ItemShop;
             playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
         } else if ($len_inv > 34) {
             Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Inventory is full.");
@@ -69,8 +97,8 @@ class Menu.ItemShop {
         } else {
             execute run {
                 $Player.specialItems.give_from_id({ id: $(id) });
-                $Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You bought $(item_name) &<green>for &<gold>&<$cost> SP&<green>.");
-            } with ::temp.gui.items;
+                // $Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You bought $(item_name) &<green>for &<gold>&<$cost> SP&<green>.");
+            } with ::Menu.Pages.ItemShop;
             playsound minecraft:block.note_block.pling ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 2;
             prodiges_skills.player.sp:@p -= $cost;
         }

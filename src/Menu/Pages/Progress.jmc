@@ -197,4 +197,35 @@ class Menu.Pages.Progress {
         item replace entity @s container.26 with map[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"Next Page »", "color":"gray", "italic":false } '];
         item replace entity @s container.8 with paper[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"« Previous Page", "color":"yellow", "italic":false, "bold":true } '];
     }
+
+    function click_prog() {
+        $execute unless data entity @s Items[ { Slot:$(slot)b } ] run {
+            $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+
+            if ($lvl < $lvlstart) {
+                Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You cannot claim this reward yet.");
+                execute at @p run playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+            } else if ($lvl > $lvlstart && $claimed) {
+                Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You already claimed this reward.");
+                execute at @p run playsound minecraft:entity.enderman.teleport ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 1;
+            } else if ($lvl > $lvlstart && !$claimed) {
+                execute run {
+                    $tag @p remove prodiges_skills.claimed.$(name).$(lvl_id);
+                    // $Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You have claimed &<light_purple>$(name) &<dark_purple, bold>$(lvl)&<green>!");
+                    // $$(command);
+                    // $Text.tellraw(@p, " &<dark_gray>- $(show)");
+                    // $Text.tellraw(@p, " &<dark_gray>- &<gold>+$(point) Skill Points (SP)");
+                    execute at @p run playsound minecraft:entity.arrow.hit_player ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 2;
+                } with ::temp.gui.prog.data;
+            } else if ($lvl == 100 && $lvlstart == 100) {
+                playsound minecraft:block.ender_chest.open ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ 1 0;
+                skillsLIB.Logic.switch_page(7);
+            } else {
+                execute run {
+                    // $Text.tellraw(@p, "&<yellow, bold>Skills ♦ &<gold>$(name) $(lvl) &<yellow>is still in progress.");
+                } with ::temp.gui.prog.data;
+            }
+        } with ::temp.gui.prog.data;
+
+    }
 }

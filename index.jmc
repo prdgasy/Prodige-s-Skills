@@ -1,7 +1,9 @@
 
 
 // -- Imports -- //
-import 'src/Arrays.jmc';
+import 'libs/Arrays.jmc';
+import 'libs/Gui.jmc';
+
 import 'src/ExploitFilter.jmc';
 import 'src/Config.jmc';
 import 'src/RomanConverter.jmc';
@@ -11,7 +13,6 @@ import 'src/Player/Ability.jmc';
 import 'src/Player/OnEvent.jmc';
 import 'src/Player/Schedule.jmc';
 
-import 'libs/Gui.jmc';
 import 'src/Menu/Pages.jmc';
 
 // Initialize Exploit Filter

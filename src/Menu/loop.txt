@@ -1,6 +1,0 @@
-// class loop {
-    //     function booster_state() {
-    //         prodiges_skills.gui.shop.boost_state:@s++;
-    //         skillsLIB.Logic.refresh();
-    //     }
-    // }
