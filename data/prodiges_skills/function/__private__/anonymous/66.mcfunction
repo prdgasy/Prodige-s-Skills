@@ -1,0 +1,1 @@
+$execute if entity @p[tag=!prodiges_skills.toClaim.$(name).$(lvl)] run scoreboard players set $claimed skills.__variable__ 1

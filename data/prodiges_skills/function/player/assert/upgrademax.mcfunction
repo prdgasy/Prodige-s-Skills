@@ -1,0 +1,2 @@
+tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"You cannot upgrade this Talent anymore.","color":"red","type":"text"}]
+playsound entity.item.picked_up ambient @p[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 0

@@ -1,0 +1,1 @@
+$tellraw @p ["",{"text":"You unlocked \u00a7l$(ability) $(lvl):","color":"green"},{"text":"\n $(ability_desc1)\n $(ability_desc2)\n "},{"text":"\u2192 ","bold":true,"color":"dark_gray"},{"text":"+$(power)%","bold":true,"color":"red"}]

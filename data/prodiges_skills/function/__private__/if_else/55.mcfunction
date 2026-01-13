@@ -1,0 +1,2 @@
+execute if score $lvl skills.__variable__ matches 100 if score $lvlStart skills.__variable__ matches 100 run function prodiges_skills:__private__/if_else/52
+execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/54

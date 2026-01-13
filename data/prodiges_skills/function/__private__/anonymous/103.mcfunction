@@ -1,0 +1,1 @@
+$function prodiges_skills:player/specialitems/givefromid {id:$(id)}

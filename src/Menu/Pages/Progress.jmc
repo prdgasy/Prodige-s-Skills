@@ -10,7 +10,7 @@ class Menu.Pages.Progress {
     }
 
     function getScoresAndStorages() {
-        $scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(name).xp;
+        JMC.put('$scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(name).xp');
         $scoreboard players operation $xpToNext prodiges_skills.__variable__ = @p prodiges_skills.$(name).xpToNext;
         $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
         $nextLvl := $lvl + 1;
@@ -19,8 +19,8 @@ class Menu.Pages.Progress {
         ::Menu.Pages.Progress.data.xpToNext = $xpToNext;
         ::Menu.Pages.Progress.data.lvlRoman = $lvl;
         ::Menu.Pages.Progress.data.nextLvlRoman = $nextLvl;
-        RomanConverter.toRoman(Menu.Pages.Progress.data.lvlRoman);
-        RomanConverter.toRoman(Menu.Pages.Progress.data.nextLvlRoman);
+        ::Menu.Pages.Progress.data.lvlRoman = RomanConverter.toRoman(::Menu.Pages.Progress.data.lvlRoman);
+        ::Menu.Pages.Progress.data.nextLvlRoman = RomanConverter.toRoman(::Menu.Pages.Progress.data.nextLvlRoman);
 
         $ratio_100 := $xp * 100 / $xpToNext;
         $ratio_15 := $xp * 15 / $xpToNext;
@@ -63,7 +63,7 @@ class Menu.Pages.Progress {
                     ::Menu.Pages.Progress.data.slot = $slot;
                     ::Menu.Pages.Progress.data.lvlTest = $lvlStart;
                     ::Menu.Pages.Progress.data.lvlTestRoman = $lvlStart;
-                    RomanConverter.toRoman(lvlRoman, Menu.Pages.Progress.data);
+                    ::Menu.Pages.Progress.data = RomanConverter.toRoman(::Menu.Pages.Progress.data);
 
                     // Claimed ?
                     ::Menu.Pages.Progress.data.lvlClaimTest = $lvlStart;
@@ -129,10 +129,10 @@ class Menu.Pages.Progress {
             } with ::Menu.Pages.Progress.data;
         }
 
-        Je ne sais pas a quoi ca sert
+        // Just max level
         else if ($lvlStart == 100) {
             execute run {
-                // $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" }]']];
+                $item replace entity @s container.$(slot) with minecraft:charcoal[custom_data = { __namespace__: 1b }, custom_name = '{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ', lore = ['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]', '[""]', '["", { "text":"You cannot claim this!", "italic":false, "color":"red" }]']];
 
             } with ::Menu.Pages.Progress.data;
         }
@@ -196,7 +196,7 @@ class Menu.Pages.Progress {
         Hardcode.repeatLists(
             [ "[start]", "[end]" ],
             () => {
-                for ($slot = [ start ]; $slot < [ end ]; $slot++) {
+                for ($slot = [start]; $slot < [end]; $slot++) {
                     if ($lvlstart > 100) { return 0; }
                     ::Menu.Pages.Progress.data.slot = $slot;
                     ::Menu.Pages.Progress.data.lvl = $lvlstart;

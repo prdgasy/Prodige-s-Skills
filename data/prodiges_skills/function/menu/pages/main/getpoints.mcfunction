@@ -1,0 +1,1 @@
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Main.points int 1 run scoreboard players get @p prodiges.points

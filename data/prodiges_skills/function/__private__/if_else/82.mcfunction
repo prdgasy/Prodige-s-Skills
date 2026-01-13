@@ -1,0 +1,3 @@
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Shop.pointBoosterDuration int 1 run scoreboard players get $pointBoosterDuration skills.__variable__
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Shop.pointBoosterPower int 1 run scoreboard players get @p prodiges_skills.pointBooster.power
+function prodiges_skills:__private__/anonymous/79 with storage prodiges_skills:prodiges_skills Menu.Pages.Shop

@@ -1,0 +1,1 @@
+$execute if entity @p[tag=!prodiges_skills.ability.$(name)] run data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.ability set value '§c§l❌'

@@ -1,0 +1,1 @@
+$item replace entity @s container.$(slot) with minecraft:charcoal[custom_data={skillsLIB:1b},custom_name='{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ',lore=['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]','["", { "text":"This is the maximum level", "italic":false, "color":"red" }]']]

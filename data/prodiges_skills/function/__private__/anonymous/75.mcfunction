@@ -1,0 +1,1 @@
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Tasks.item set from storage prodiges_skills:prodiges_skills Config.Skills.$(name).item

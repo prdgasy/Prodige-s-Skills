@@ -1,0 +1,1 @@
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.crateState set value '§7You are still on a cooldown! ($(crateCooldown) minute(s))'

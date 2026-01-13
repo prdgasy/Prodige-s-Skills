@@ -1,0 +1,8 @@
+function prodiges_skills:menu/masks/gray
+item replace entity @s container.21 with arrow[custom_data={skillsLIB:1b},custom_name='{ "text":"Go Back", "color":"gray", "italic":false } ']
+item replace entity @s container.23 with barrier[custom_data={skillsLIB:1b},custom_name='{ "text":"Close", "color":"red", "italic":false } ']
+item replace entity @s container.22 with player_head[profile={id:[I;1434832075,-102998962,-1229628019,1369636598],properties:[{name:"textures",value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0="}]},custom_data={skillsLIB:1b},custom_name='["", { "text":"Shop", "italic":false, "color":"green" } ]',lore=['["", { "text":"Buy ", "italic":false, "color":"white" }, { "text":"boosters", "italic":false, "color":"gold" }, { "text":", ", "italic":false, "color":"white" }, { "text":"XP", "italic":false, "color":"gold" }, { "text":", ", "italic":false, "color":"white" }, { "text":"prestige", "italic":false, "color":"gold" }, { "text":", and", "italic":false, "color":"white" } ]','["", { "text":"more! Unlock exclusive perks to", "italic":false, "color":"white" } ]','["", { "text":"enhance your gameplay experience!", "italic":false, "color":"white" } ]']]
+function prodiges_skills:menu/pages/shop/activeboosters
+function prodiges_skills:menu/pages/shop/customitemsbutton
+function prodiges_skills:menu/pages/shop/crates
+function prodiges_skills:menu/pages/shop/boostersbutton

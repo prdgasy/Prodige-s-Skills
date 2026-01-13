@@ -1,4 +1,4 @@
-class Menu.ItemShop {
+class Menu.Pages.ItemShop {
     function setParam() {
         $::Menu.Pages.ItemShop.type = ::Config.Shop.specialItems[$(index)].type;
         $::Menu.Pages.ItemShop.itemName = ::Config.Shop.specialItems[$(index)].itemName;

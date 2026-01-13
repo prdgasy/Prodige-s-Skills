@@ -1,0 +1,2 @@
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Main.skillsIndex int 1 run scoreboard players get $skillsIndex skills.__variable__
+function prodiges_skills:__private__/anonymous/43 with storage prodiges_skills:prodiges_skills Menu.Pages.Main

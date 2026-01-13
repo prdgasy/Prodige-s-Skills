@@ -1,0 +1,1 @@
+$item replace entity @s container.$(slot) with $(item_repr)[custom_data={skillsLIB:1b},custom_name='{"text":"$(item_name) §b+$(xp) xp","color":"gray","italic":false}',!attribute_modifiers]

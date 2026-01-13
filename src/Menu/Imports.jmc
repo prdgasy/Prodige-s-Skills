@@ -1,0 +1,12 @@
+import 'Pages/Main.jmc';
+import 'Pages/Progress.jmc';
+import 'Pages/Tasks.jmc';
+import 'Pages/Preferences.jmc';
+import 'Pages/Shop.jmc';
+import 'Pages/Prestige.jmc';
+import 'Pages/ItemShop.jmc';
+import 'Pages/Boosters.jmc';
+
+import 'Pages.jmc';
+import 'Clicks.jmc';
+import 'Masks.jmc';

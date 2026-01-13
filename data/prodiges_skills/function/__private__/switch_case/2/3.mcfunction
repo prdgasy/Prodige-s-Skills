@@ -1,0 +1,1 @@
+data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.itemShopModel set value 'minecraft:golden_chestplate'

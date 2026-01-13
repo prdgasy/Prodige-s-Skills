@@ -1,0 +1,1 @@
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Tasks merge from storage prodiges_skills:prodiges_skills Menu.Pages.Tasks.tab[$(index)]

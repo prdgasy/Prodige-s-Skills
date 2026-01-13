@@ -1,0 +1,1 @@
+data modify storage prodiges_skills:prodiges_skills temp.Player.ability.foraging.type set value 'dark_oak_sapling'

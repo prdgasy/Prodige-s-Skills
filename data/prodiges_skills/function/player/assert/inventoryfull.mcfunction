@@ -1,0 +1,2 @@
+tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"Inventory full! Free up some space.","color":"red","type":"text"}]
+playsound minecraft:entity.enderman.teleport ambient @p[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 1

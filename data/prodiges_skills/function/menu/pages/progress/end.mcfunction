@@ -1,0 +1,2 @@
+item replace entity @s container.26 with map[custom_data={skillsLIB:1b},custom_name='{ "text":"Next Page »", "color":"gray", "italic":false } ']
+item replace entity @s container.8 with paper[custom_data={skillsLIB:1b},custom_name='{ "text":"« Previous Page", "color":"yellow", "italic":false, "bold":true } ']

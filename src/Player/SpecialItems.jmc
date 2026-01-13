@@ -1,0 +1,24 @@
+class Player.SpecialItems {
+    function give() {
+        $give @p $(itemRepr)[custom_data = { prodiges_skills:{ specialItem: 1b } }, custom_name = '{"text":"$(itemName)","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(lore1)","italic":true,"color":"light_purple"}]', '[{"text":"$(lore2)","italic":true,"color":"light_purple"}]'], enchantments = { $(enchantName0):$(enchantLevel0), $(enchantName1):$(enchantLevel1) } ];
+    }
+
+    function giveFromId() {
+        $::Player.SpecialItem.give = ::Config.Shop.specialItems[$(id)];
+        ::Player.SpecialItem.give.enchantName0 = ::Player.SpecialItem.give.Enchants[0].name;
+        ::Player.SpecialItem.give.enchantLevel0 = ::Player.SpecialItem.give.Enchants[0].level;
+        ::Player.SpecialItem.give.enchantName1 = ::Player.SpecialItem.give.Enchants[1].name;
+        ::Player.SpecialItem.give.enchantLevel1 = ::Player.SpecialItem.give.Enchants[1].level;
+        Player.SpecialItems.give() with ::Player.SpecialItem.give;
+    }
+
+    function giveRandom() {
+        $id = random value 0..21;
+        ::Player.SpecialItem.id = $id;
+        execute run {
+            $::Player.SpecialItem.itemRepr = ::Config.Shop.specialItems[$(id)].itemName;
+        } with ::Player.SpecialItem;
+
+        Player.SpecialItems.giveFromId() with ::Player.SpecialItem;
+    }
+}

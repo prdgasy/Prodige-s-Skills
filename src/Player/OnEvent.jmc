@@ -51,11 +51,8 @@ class Player.OnEvent {
         $data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.currentXp int 1 set from score @s prodiges_skills.$(name).xp;
         $data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.lvl int 1 set from score @s prodiges_skills.$(name).lvl;
         $data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.xpToNext int 1 set from score @s prodiges_skills.$(name).xpToNext;
-        // $::Player.OnEvent.showComponents.currentXp = prodiges_skills.$(name).xp:@s;
-        // $::Player.OnEvent.showComponents.currentLvl = prodiges_skills.$(name).lvl:@s;
-        // $::Player.OnEvent.showComponents.xpToNext = prodiges_skills.$(name).xpToNext:@s;
 
-        RomanConverter.toRoman(Player.OnEvent.showComponents.romanLvl, Player.OnEvent.showComponents.currentLvl);
+        :: Player.OnEvent.showComponents.romanLvl = RomanConverter.toRoman(::Player.OnEvent.showComponents.currentLvl);
 
         // Get percentage %
 
@@ -115,7 +112,7 @@ class Player.OnEvent {
             // $::Player.OnEvent.showComponents.currentXp = prodiges_skills.$(name).xpToNext:@s;
             // $::Player.OnEvent.showComponents.xpToNext = prodiges_skills.$(name).xpToNext:@s;
             // $::Player.OnEvent.showComponents.currentLvl = prodiges_skills.$(name).lvl:@s;
-            RomanConverter.toRoman(Player.OnEvent.showComponents.currentLvl, Player.OnEvent.showComponents.currentLvl);
+            ::Player.OnEvent.showComponents.currentLvl = RomanConverter.toRoman(::Player.OnEvent.showComponents.currentLvl);
             execute as @s[tag = prodiges_skills.pref.lvlNotif] run Player.OnEvent.xpNotif() with ::Player.OnEvent.showComponents;
 
             // -- THEN PROCESS LEVEL UP -- //
@@ -151,9 +148,9 @@ class Player.OnEvent {
             ::Player.OnEvent.lvlUp.name = ::Player.OnEvent.showComponents.name;
 
             // Roman conversion
-            RomanConverter.toRoman(Player.OnEvent.lvlUp.nextLvl, ::Player.OnEvent.lvlUp.nextLvl);
-            RomanConverter.toRoman(Player.OnEvent.lvlUp.previousLvl, ::Player.OnEvent.lvlUp.previousLvl);
-            RomanConverter.toRoman(Player.OnEvent.lvlUp.currentLvl, ::Player.OnEvent.lvlUp.currentLvl);
+            ::Player.OnEvent.lvlUp.nextLvl = RomanConverter.toRoman(::Player.OnEvent.lvlUp.nextLvl);
+            ::Player.OnEvent.lvlUp.previousLvl = RomanConverter.toRoman(::Player.OnEvent.lvlUp.previousLvl);
+            ::Player.OnEvent.lvlUp.currentLvl = RomanConverter.toRoman(::Player.OnEvent.lvlUp.currentLvl);
 
             // Set max xp bar
             // ::Player.OnEvent.lvlUp.bar = ::Consts.Bars.15;

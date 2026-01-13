@@ -1,0 +1,3 @@
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.itemName set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(id)].itemName
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.cost set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(id)].cost
+function prodiges_skills:menu/pages/itemshop/buy with storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop

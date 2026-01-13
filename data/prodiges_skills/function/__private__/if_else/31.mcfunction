@@ -1,0 +1,2 @@
+execute if score $lvl skills.__variable__ matches ..87 run function prodiges_skills:__private__/if_else/30
+execute if score __if_else__ skills.__variable__ matches 0 if score $lvl skills.__variable__ matches ..100 run scoreboard players set @s prodiges_skills.Menu.progressPage 5

@@ -1,12 +1,11 @@
 class RomanConverter {
     @lazy function toRoman(path) {
-        ::romanConverter.number = ::$path;
+        ::romanConverter.number = $path;
         execute run {
-            $data modify storage prodiges_skills:prodiges_skills $path set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number);
+            $$path = ::romanConverter.Numbers.$(number);
         } with ::romanConverter;
     }
 }
-
 ::romanConverter.Numbers = {
     0: "§c-",
     1: "I",

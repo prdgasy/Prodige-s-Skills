@@ -1,0 +1,196 @@
+class Menu.Clicks {
+    function Main() {
+        // Parse through skills to find which one was clicked
+        $slot = 11;
+        $break = false;
+        for ($index = 0; $index < __skillsLength__ && !$break; $index++) {
+            ::Menu.Pages.Main.slot = $slot;
+            ::Menu.Pages.Main.index = $index;
+            Menu.Pages.Main.isProgressPage() with ::Menu.Pages.Main;
+            $slot++;
+        }
+
+        // Preferences
+        if (!data entity @s Items[{ Slot:4b } ]) {
+            Gui.switchPage(Preferences);
+        }
+        // ?
+        else if (!data entity @s Items[{ Slot:8b } ]) {
+            Gui.switchPage(6);
+        }
+        // Boosters
+        else if (!data entity @s Items[{ Slot:22b } ]) {
+            // prodiges_skills.Menu.booster.type:@s = 1;
+            // prodiges_skills.Menu.booster.power:@s = 1;
+            // prodiges_skills.Menu.booster.duration:@s = 1;
+
+            playsound minecraft:block.amethyst_block.place ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
+            Gui.switchPage(Boosters);
+        }
+        // Discord
+        else if (!data entity @s Items[{ Slot:26b } ]) {
+            tellraw @p [ "", { "text":"Skills \u2666 ", "bold":true, "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"Click ", "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"here", "bold":true, "underlined":true, "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":" to join the ", "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"Discord", "bold":true, "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } }, { "text":"!", "color":"#4593cd", "clickEvent":{ "action":"open_url", "value":"https://discord.gg/b2hkD4Fn43" } } ];
+            Gui.Constructor.close();
+        }
+        // Prestige
+        else if (!data entity @s Items[{ Slot:21b } ]) {
+            playsound minecraft:block.ender_chest.open ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
+            Gui.switchPage(Prestige);
+        }
+        // Close
+        else if (!data entity @s Items[{ Slot:23b } ]) {
+            Gui.Constructor.close();
+        }
+
+        Gui.refresh();
+    }
+
+    function Progress() {
+        // Back
+        if (!data entity @s Items[{ Slot:0b } ]) {
+            Gui.switchPage(Main);
+        }
+        // Prestige
+        else if (!data entity @s Items[{ Slot:9b } ]) {
+            playsound minecraft:block.ender_chest.open ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
+            Gui.switchPage(Prestige);
+        }
+        // Tasks
+        else if (!data entity @s Items[{ Slot:17b } ]) {
+            prodiges_skills.Menu.taskPage:@s = 0;
+            Gui.switchPage(Tasks);
+        }
+        // Ability switch
+        else if (!data entity @s Items[{ Slot:18b } ]) {
+            Menu.Pages.Progress.abilitySwitch();
+        }
+        // All levels
+        else {
+            // Get name
+            ::Menu.Pages.Progress.index = prodiges_skills.Menu.index:@s;
+            execute run { $::Menu.Pages.Progress.name = ::Consts.Skills.$(index); } with ::Menu.Pages.Progress;
+
+            // Get data
+            execute run {
+                $::Menu.Pages.Progress.data = ::Config.Skills.$(name);
+            } with ::Menu.Pages.Progress;
+
+            // Set range
+            switch(prodiges_skills.Menu.progressPage:@s) {
+                case 1: $lvlstart = 1; $lvlend = 21;
+                case 2: $lvlstart = 22; $lvlend = 43;
+                case 3: $lvlstart = 44; $lvlend = 65;
+                case 4: $lvlstart = 66; $lvlend = 87;
+                case 5: $lvlstart = 88; $lvlend = 100;
+            }
+
+            Menu.Pages.Progress.levels();
+        }
+
+        Menu.Pages.Progress.sliders();
+
+        Gui.refresh();
+    }
+
+    function Tasks() {
+        if (!data entity @s Items[{ Slot:0b } ]) {
+            Gui.switchPage(Progress);
+        } else if (!data entity @s Items[{ Slot:18b } ]) {
+            Gui.Constructor.close();
+        }
+
+        Menu.Pages.Tasks.sliders();
+
+        Gui.refresh();
+    }
+
+    function Preferences() {
+        if (!data entity @s Items[{ Slot:21b } ]) {
+            Gui.switchPage(Main);
+        } else if (!data entity @s Items[{ Slot:11b } ]) {
+            Menu.Pages.Preferences.togglePref(lvlBroadcast);
+        } else if (!data entity @s Items[{ Slot:12b } ]) {
+            Menu.Pages.Preferences.togglePref(xpNotif);
+        } else if (!data entity @s Items[{ Slot:13b } ]) {
+            Menu.Pages.Preferences.togglePref(lvlNotif);
+        } else if (!data entity @s Items[{ Slot:14b } ]) {
+            Menu.Pages.Preferences.togglePref(sound);
+        } else if (!data entity @s Items[{ Slot:15b } ]) {
+            Menu.Pages.Preferences.togglePref(skillProgression);
+        } else if (!data entity @s Items[{ Slot:23b } ]) {
+            Gui.Constructor.close();
+        }
+        Gui.refresh();
+    }
+
+    function Shop() {
+        if (!data entity @s Items[{ Slot:21b } ]) {
+            Gui.switchPage(Main);
+        }
+        // Item Shop
+        else if (!data entity @s Items[{ Slot:11b } ]) {
+            playsound minecraft:item.armor.equip_iron ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 2 1;
+            Gui.switchPage(ItemShop);
+        }
+        // Crate
+        else if (!data entity @s Items[{ Slot:13b } ]) {
+            Player.Crate.open();
+        }
+        // Boosters
+        else if (!data entity @s Items[{ Slot:15b } ]) {
+            playsound minecraft:item.bottle.fill ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 2 1;
+            Gui.switchPage(Boosters);
+        } else if (!data entity @s Items[{ Slot:23b } ]) {
+            Gui.Constructor.close();
+        }
+
+        Gui.refresh();
+    }
+
+    function Prestige() {
+        $slot = 11;
+        for ($index = 0; $index < __skillsLength__; $index++) {
+            ::Menu.Pages.Prestige.slot = $slot;
+            ::Menu.Pages.Prestige.index = $index;
+            execute run {
+                $execute unless data entity @s Items[{ Slot:$(slot)b } ] run {
+                    ::Menu.Pages.Prestige.index = $index;
+                    execute run { $::Menu.Pages.Prestige.name = ::Consts.Skills.$(index); } with ::Menu.Pages.Prestige;
+
+                    Menu.Pages.Prestige.click() with ::Menu.Pages.Prestige;
+
+                    $index = __skillsLength__; // <= Break loop
+                } with ::Menu.Pages.Prestige;
+
+            } with ::Menu.Pages.Prestige;
+            $slot++;
+        }
+        if (!data entity @s Items[{ Slot:21b } ]) {
+            Gui.switchPage(Main);
+        } else if (!data entity @s Items[{ Slot:23b } ]) {
+            Gui.Constructor.close();
+        }
+        Gui.refresh();
+    }
+
+    function ItemShop() {
+        Menu.Pages.ItemShop.click();
+        if (!data entity @s Items[{ Slot:0b } ]) {
+            Gui.switchPage(Shop);
+        } else if (!data entity @s Items[{ Slot:18b } ]) {
+            Gui.Constructor.close();
+        }
+
+        Gui.refresh();
+    }
+
+    function Boosters() {
+        if (!data entity @s Items[{ Slot:21b } ]) {
+            Gui.switchPage(Shop);
+        } else if (!data entity @s Items[{ Slot:23b } ]) {
+            Gui.Constructor.close();
+        }
+        Menu.Pages.Boosters.click();
+        Gui.refresh();
+    }
+}

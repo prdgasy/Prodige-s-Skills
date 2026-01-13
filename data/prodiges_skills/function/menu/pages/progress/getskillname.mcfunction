@@ -1,0 +1,2 @@
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Progress.index int 1 run scoreboard players get @s prodiges_skills.Menu.index
+function prodiges_skills:__private__/anonymous/44 with storage prodiges_skills:prodiges_skills Menu.Pages.Progress

@@ -1,7 +1,7 @@
 class Player.Crate {
     function open() {
         // as menu
-        len_inv($invlen);
+        $invlen = Arrays.playerInv_length(@p);
         if (skills.crate.cooldown:@p > 0) {
             // Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You are still on a cooldown (&<skills.crate.cooldown:@p> minute(s))."); // SOUCIS DE QUOTES MALFORMEE
             playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
@@ -12,7 +12,7 @@ class Player.Crate {
             playsound minecraft:block.chest.open ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
             playsound minecraft:entity.wind_charge.wind_burst ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 0;
             skills.crate.cooldown:@p = 60;
-            len_array($len_crate, DB.Shop.crate);
+            $crateLength = Arrays.length(::Config.Shop.crate);
             $len_crate -= 1;
             ::temp.gui.crate.len = $len_crate;
             execute run { $::temp.gui.crate.i = random value 0..$(len); } with ::temp.gui.crate;
@@ -38,5 +38,7 @@ class Player.Crate {
             } with ::temp.gui.crate;
         }
     }
+
+
 
 }

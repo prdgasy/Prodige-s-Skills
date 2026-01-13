@@ -95,23 +95,24 @@ class Menu.Pages.Main {
 
         $scoreboard players operation $prestigeLvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).prestige;
         ::Menu.Pages.Main.prestigeLvl = $prestigeLvl;
-        RomanConverter.toRoman(Menu.Pages.Main.prestigeLvl);
+        ::Menu.Pages.Main.prestigeLvl = RomanConverter.toRoman(::Menu.Pages.Main.prestigeLvl);
 
-        ::Menu.Pages.Main.abilityPower := $prestigeLvl * 5;
+
+        ::Menu.Pages.Main.abilityPower = $abilityPower := $prestigeLvl * 5;
 
         // Get scores
-        $scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(name).xp;
+        JMC.put('$scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(name).xp');
         $scoreboard players operation $xpToNext prodiges_skills.__variable__ = @p prodiges_skills.$(name).xpToNext;
         $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
         $nextLvl := $lvl + 1;
 
         ::Menu.Pages.Main.xp = $xp;
         ::Menu.Pages.Main.xpToNext = $xpToNext;
-        ::Menu.Pages.Main.lvlBaseInt = $lvl;
-        ::Menu.Pages.Main.lvlBaseRoman = $lvl;
+        ::Menu.Pages.Main.lvl = $lvl;
+        ::Menu.Pages.Main.lvlRoman = $lvl;
         ::Menu.Pages.Main.nextLvl = $nextLvl;
-        RomanConverter.toRoman(Menu.Pages.Main.lvlBaseRoman);
-        RomanConverter.toRoman(Menu.Pages.Main.nextLvl);
+        ::Menu.Pages.Main.lvlRoman = RomanConverter.toRoman(::Menu.Pages.Main.lvlRoman);
+        ::Menu.Pages.Main.nextLvl = RomanConverter.toRoman(::Menu.Pages.Main.nextLvl);
 
         $ratio_100 := $xp * 100 / $xpToNext;
         $ratio_15 := $xp * 15 / $xpToNext;

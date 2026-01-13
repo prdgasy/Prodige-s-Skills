@@ -1,0 +1,1 @@
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data.bar set from storage prodiges_skills:prodiges_skills Consts.Bars.$(ratio_15)

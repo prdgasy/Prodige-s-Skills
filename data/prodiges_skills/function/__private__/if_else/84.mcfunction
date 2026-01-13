@@ -1,0 +1,3 @@
+data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.crateState set value '§eClick to open!'
+data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.crateColor set value 'light_purple'
+data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.headTexture set value {id:[I;1747670542,-1865006816,-1902654712,1202578603],properties:[{name:"textures",value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2MxYjJmNTkyY2ZjOGQzNzJkY2Y1ZmQ0NGVlZDY5ZGRkYzY0NjAxZDc4NDZkNzI2MTlmNzA1MTFkODA0M2E4OSJ9fX0="}]}

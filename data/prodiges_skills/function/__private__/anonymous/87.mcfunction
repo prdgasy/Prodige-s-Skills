@@ -1,0 +1,1 @@
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.name set from storage prodiges_skills:prodiges_skills Consts.Skils.$(index)
