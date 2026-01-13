@@ -1,0 +1,2 @@
+execute store success score $playerClicked skills.__variable__ run clear @p *[custom_data={skillsLIB:1b}]
+execute if score $playerClicked skills.__variable__ matches 1.. run function prodiges_skills:__private__/if_else/1

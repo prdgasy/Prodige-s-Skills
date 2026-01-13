@@ -1,1 +1,0 @@
-$execute if score @s[tag=prodiges_skills.pref.skillProgression] prodiges_skills.$(name).task.$(task) matches 1.. run function prodiges_skills:__private__/anonymous/12 with storage prodiges_skills:prodiges_skills Player.OnEvent.taskData

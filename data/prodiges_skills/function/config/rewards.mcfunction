@@ -1,1 +1,0 @@
-data modify storage prodiges_skills:prodiges_skills Config.Rewards set value {1:{command:"function prodiges_skills:rewards/basic",show:"§7+Basic Loot",point:50},2:{command:"function prodiges_skills:rewards/advanced",show:"§a+Advanced Loot",point:100},3:{command:"function prodiges_skills:rewards/elite",show:"§b+Elite Loot",point:300}}

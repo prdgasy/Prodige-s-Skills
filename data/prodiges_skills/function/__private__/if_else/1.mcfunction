@@ -1,3 +1,2 @@
-data modify storage prodiges_skills:prodiges_skills Player.OnEvent.taskData.name set from storage prodiges_skills:prodiges_skills Config.Skills.Foraging.name
-data modify storage prodiges_skills:prodiges_skills Player.OnEvent.taskData.lowerCaseName set from storage prodiges_skills:prodiges_skills Config.Skills.Foraging.nameLower
-function prodiges_skills:player/onevent/istasking with storage prodiges_skills:prodiges_skills Player.OnEvent.taskData
+function prodiges_skills:gui/scoretopage
+function prodiges_skills:__private__/anonymous/3 with storage prodiges_skills:prodiges_skills Gui.scoreToPage

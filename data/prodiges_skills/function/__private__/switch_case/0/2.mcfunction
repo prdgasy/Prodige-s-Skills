@@ -1,1 +1,0 @@
-data modify storage prodiges_skills:prodiges_skills temp.Player.ability.foraging.type set value 'acacia_sapling'

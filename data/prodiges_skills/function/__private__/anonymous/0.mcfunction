@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills exploitFilter.id set from storage prodiges_skills:prodiges_skills exploitFilter.Objects[$(i)]
+$data modify storage prodiges_skills:prodiges_skills Gui.pageToScore.name set from storage prodiges_skills:prodiges_skills Gui.Pages[$(pageScore)]

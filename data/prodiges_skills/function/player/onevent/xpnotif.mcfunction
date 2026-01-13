@@ -1,1 +1,0 @@
-$say name: $(name), currentLvl: $(currentLvl), currentXp: $(currentXp), xpToNext: $(xpToNext), progress: $(progress_100)

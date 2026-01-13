@@ -1,2 +1,0 @@
-execute if entity @s[tag=prodiges_skills.pref.sound] at @s run playsound minecraft:entity.player.levelup ambient @s[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 0
-$say Leveled up $(name) from $(previousLvl) to $(currentLvl)! Rewards: $(show), +$(point) SP

@@ -1,0 +1,2 @@
+function prodiges_skills:gui/constructor/findgui
+function prodiges_skills:gui/main

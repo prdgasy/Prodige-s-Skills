@@ -12,7 +12,7 @@ class Arrays {
         for ($forEach.index = 0; $forEach.index < $forEach.length; $forEach.index++) {
             ::Arrays.forEach.index = $forEach.index;
             execute run { $::Arrays.forEach.$out = $array[$(index)]; }
-            execute run $func with ::Arrays.forEach;
+            $func with ::Arrays.forEach;
         }
     }
 }

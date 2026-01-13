@@ -1,1 +1,0 @@
-effect give @s haste 60 4

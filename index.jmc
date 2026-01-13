@@ -1,34 +1,32 @@
-
-
 // -- Imports -- //
 import 'libs/Arrays.jmc';
 import 'libs/Gui.jmc';
 
-import 'src/ExploitFilter.jmc';
-import 'src/Config.jmc';
+// import 'src/ExploitFilter.jmc';
+// import 'src/Config.jmc';
 import 'src/RomanConverter.jmc';
 import 'src/Player/Init.jmc';
 
-import 'src/Player/Ability.jmc';
-import 'src/Player/OnEvent.jmc';
-import 'src/Player/Schedule.jmc';
+// import 'src/Player/Ability.jmc';
+// import 'src/Player/OnEvent.jmc';
+// import 'src/Player/Schedule.jmc';
 
-import 'src/Menu/Pages.jmc';
+// import 'src/Menu/Pages.jmc';
 
 // Initialize Exploit Filter
-ExploitFilter.createScore();
+// ExploitFilter.createScore();
 
-// Load data
-Config.Skills();
-Config.Rewards();
-Config.specialItems();
-Config.Crate();
+// // Load data
+// Config.Skills();
+// Config.Rewards();
+// Config.specialItems();
+// Config.Crate();
 
-// Launch scheduled functions
-Player.Schedule.wait1s();
-Player.Schedule.wait5s();
-Player.Schedule.wait10s();
-Player.Schedule.wait1m();
+// // Launch scheduled functions
+// Player.Schedule.wait1s();
+// Player.Schedule.wait5s();
+// Player.Schedule.wait10s();
+// Player.Schedule.wait1m();
 
 // First join setup
 Player.firstJoin(() => {

@@ -1,1 +1,0 @@
-effect give @s strength 60 4

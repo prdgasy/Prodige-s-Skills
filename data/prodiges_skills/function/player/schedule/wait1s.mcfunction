@@ -1,1 +1,0 @@
-schedule function prodiges_skills:player/schedule/wait1s 1s

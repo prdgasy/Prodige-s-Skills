@@ -1,1 +1,0 @@
-execute if score @p skills.crate.cooldown matches 0.. run scoreboard players remove @p skills.crate.cooldown 1

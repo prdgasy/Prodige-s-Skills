@@ -1,3 +1,0 @@
-data modify storage prodiges_skills:prodiges_skills Player.OnEvent.taskData.name set from storage prodiges_skills:prodiges_skills Config.Skills.Excavation.name
-data modify storage prodiges_skills:prodiges_skills Player.OnEvent.taskData.lowerCaseName set from storage prodiges_skills:prodiges_skills Config.Skills.Excavation.nameLower
-function prodiges_skills:player/onevent/istasking with storage prodiges_skills:prodiges_skills Player.OnEvent.taskData
