@@ -1,2 +1,2 @@
 execute at @s anchored eyes run loot spawn ^ ^ ^1.5 loot {"pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:golden_apple"}]}]}
-execute at @s run function prodiges_skills:__private__/anonymous/10
+execute at @s run function prodiges_skills:__private__/anonymous/11

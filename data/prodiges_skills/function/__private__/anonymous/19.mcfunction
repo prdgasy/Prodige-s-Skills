@@ -1,1 +1,1 @@
-$tag @s add skills.toClaim.$(name).$(previousLvl)
+$data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.currentLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

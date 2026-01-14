@@ -1,1 +1,11 @@
-$execute as @p run loot replace entity @n[type=chest_minecart,tag=skillsLIB] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{__namespace__: 1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"\u00a78\u00a7l\u2666 \u00a7rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"\u00a78\u2022 $(booster_xp)","italic":false},{"text":"\u00a78\u2022 $(booster_sp)","italic":false},{"text":""},{"text":"Click to view!","color":"yellow","italic":false}],"mode":"append"}],"conditions":[]}]}]}
+$scoreboard players set @s prodiges_skills.Menu.index $(index)
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Main.index int 1 run scoreboard players get @s prodiges_skills.Menu.index
+function prodiges_skills:__private__/anonymous/33 with storage prodiges_skills:prodiges_skills Menu.Pages.Main
+function prodiges_skills:__private__/anonymous/34 with storage prodiges_skills:prodiges_skills Menu.Pages.Main
+scoreboard players set __if_else__ skills.__variable__ 0
+execute if score $lvl skills.__variable__ matches ..21 run function prodiges_skills:__private__/if_else/27
+execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/33
+function prodiges_skills:gui/pagetoscore {pageName:Progress}
+execute store result score @s prodiges_skills.page run data get storage prodiges_skills:prodiges_skills Gui.pageToScore.index
+function prodiges_skills:gui/click
+scoreboard players set $break skills.__variable__ 1

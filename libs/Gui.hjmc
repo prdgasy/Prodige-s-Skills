@@ -1,6 +1,6 @@
 #define __packID__ 930005
 #define __userFile__ Menu
-#define __namespace__ skillsLIB
+#define __namespace__ isnamespace
 #define __triggerCommand__ Skills
 
 #define __shulkerBox__ [__packID_, 0, __packID__]::Items

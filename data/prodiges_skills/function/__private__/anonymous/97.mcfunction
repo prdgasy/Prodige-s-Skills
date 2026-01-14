@@ -1,2 +1,1 @@
-execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.id int 1 run scoreboard players get $itemsLength skills.__variable__
-function prodiges_skills:menu/pages/itemshop/clickedonitem with storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1 set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

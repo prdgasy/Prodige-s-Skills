@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.skillName set from storage prodiges_skills:prodiges_skills Consts.Skills.$(skillsIndex)
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.nextLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

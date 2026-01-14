@@ -1,3 +1,3 @@
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Main.xpBoosterDuration int 1 run scoreboard players get $xpBoosterDuration skills.__variable__
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Main.xpBoosterPower int 1 run scoreboard players get @p prodiges_skills.xpBooster.power
-function prodiges_skills:__private__/anonymous/36 with storage prodiges_skills:prodiges_skills Menu.Pages.Main
+function prodiges_skills:__private__/anonymous/37 with storage prodiges_skills:prodiges_skills Menu.Pages.Main

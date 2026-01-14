@@ -1,1 +1,1 @@
-$tellraw @p ["",{"text":"\n \u2666 ","bold":true,"color":"aqua"},{"text":"Skill Crate","bold":true,"color":"gold"},{"text":" \u2666\n","bold":true,"color":"aqua"},{"text":"\n \u00a7l\u25ba \u00a7eRewards:\n","bold":false,"color":"yellow"},{"text":"   \u25cf ","color":"gray"},{"text":"$(repr)"}]
+$$(command)

@@ -1,0 +1,1 @@
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.pointBooster set value '§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left'

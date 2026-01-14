@@ -1,2 +1,3 @@
+tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"You are still on a cooldown (","color":"red","type":"text"},{"score":{"name":"@p","objective":"skills.crate.cooldown"},"color":"red","type":"score"},{"text":" minute(s)).","color":"red"}]
 playsound minecraft:entity.enderman.teleport ambient @p[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 1
 scoreboard players set __if_else__ skills.__variable__ 1

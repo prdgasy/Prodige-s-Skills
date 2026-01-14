@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.prestigeNextLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.prestigeLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

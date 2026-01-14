@@ -1,1 +1,1 @@
-$execute if entity @p[tag=prodiges_skills.toClaim.$(name).$(lvlClaimTest)] run scoreboard players set $toClaim skills.__variable__ 1
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

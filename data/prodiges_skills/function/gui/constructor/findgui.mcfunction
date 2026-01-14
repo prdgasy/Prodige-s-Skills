@@ -1,1 +1,1 @@
-execute as @a at @s as @e[type=__guiEntity__,tag=skillsLIB] if score @p __namespace__.id = @s __namespace__.id run function prodiges_skills:gui/constructor/loop
+execute as @a at @s as @e[type=chest_minecart,tag=prodiges_skills] if score @p prodiges_skills.id = @s prodiges_skills.id run function prodiges_skills:gui/constructor/loop

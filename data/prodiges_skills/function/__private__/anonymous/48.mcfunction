@@ -1,2 +1,1 @@
-$execute if entity @p[tag=prodiges_skills.ability.$(name)] run return run tag @p remove prodiges_skills.ability.$(name)
-$tag @p add prodiges_skills.ability.$(name)
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data.bar set from storage prodiges_skills:prodiges_skills Consts.Bars.$(ratio_15)

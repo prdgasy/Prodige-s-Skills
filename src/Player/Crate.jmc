@@ -3,7 +3,7 @@ class Player.Crate {
         // as menu
         $invlen = Arrays.playerInv_length(@p);
         if (skills.crate.cooldown:@p > 0) {
-            // Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You are still on a cooldown (&<skills.crate.cooldown:@p> minute(s))."); // SOUCIS DE QUOTES MALFORMEE
+            Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>You are still on a cooldown (&<skills.crate.cooldown:@p> minute(s))."); // SOUCIS DE QUOTES MALFORMEE
             playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
         } else if ($invlen > 34) {
             Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Inventory is full.");

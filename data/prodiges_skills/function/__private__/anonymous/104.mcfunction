@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Boosters.booster_xp set value '§bx$(xpBoosterPower) XP Booster §7- $(xpBoosterDuration) minute(s) left'
+$tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"Not enough SP to buy $(item_name)","color":"red","type":"text"},{"text":".","color":"red","type":"text"}]

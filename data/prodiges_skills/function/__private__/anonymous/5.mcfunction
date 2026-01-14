@@ -1,1 +1,1 @@
-$scoreboard objectives add prodiges_skills.exploitfilter.$(id) used:$(id)
+$data modify storage prodiges_skills:prodiges_skills exploitFilter.id set from storage prodiges_skills:prodiges_skills exploitFilter.Objects[$(i)]

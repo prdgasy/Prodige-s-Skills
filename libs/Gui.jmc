@@ -1,29 +1,30 @@
-Scoreboard.add(__namespace__.id);
-Scoreboard.add(__namespace__.page);
+Scoreboard.add(prodiges_skills.id);
+Scoreboard.add(prodiges_skills.page);
 
-Scoreboard.add(_:triggerCommand:, trigger);
-forceload add __packID__ __packID__;
-setblock __packID__ 0 __packID__ yellow_shulker_box;
+Scoreboard.add(Skills, trigger);
+forceload add 930005 930005;
+setblock 930005 0 930005 yellow_shulker_box;
 
 new loot_table(minecraft.blocks.yellow_shulker_box) {
     "type":"minecraft:block", "pools":[{ "rolls":1, "bonus_rolls":0, "entries":[{ "type":"minecraft:item", "name":"minecraft:yellow_shulker_box", "functions":[{ "function":"minecraft:copy_components", "source":"block_entity", "include":[ "minecraft:custom_name", "minecraft:container", "minecraft:lock", "minecraft:container_loot" ] } ] } ], "conditions":[{ "condition":"minecraft:inverted", "term":{ "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } } ] }, { "rolls":1, "bonus_rolls":0, "entries":[{ "type":"minecraft:dynamic", "name":"minecraft:contents" } ], "conditions":[{ "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } ] } ], "random_sequence":"minecraft:blocks/yellow_shulker_box", "__smithed__":{ "priority":{ "stage":"early" }, "rules":[{ "type":"append", "target":"pools[0].conditions", "source":{ "type":"reference", "path":"pools[0].conditions[0]" } }, { "type":"append", "target":"pools", "source":{ "type":"reference", "path":"pools[1]" } } ] }
 }
 
-::Gui.Pages = __pageList__;
+::Gui.Pages = ["main", "progress", "boosters", "skills", "tasks", "itemshop", "prestige", "preferences", "shop", "tasks"];
+::Gui.PagesNumber = 10;
 
 class Gui {
     @lazy function switchPage(pageName) {
         Gui.pageToScore({ pageName: $pageName }); // ::Gui.pageToScore.index;
-        __namespace__.page:@s = ::Gui.pageToScore.index;
+        prodiges_skills.page:@s = ::Gui.pageToScore.index;
         Gui.click();
     }
 
     function scoreToPage() {
-        ::Gui.scoreToPage.pageScore = __namespace__.page:@s;
+        ::Gui.scoreToPage.pageScore = prodiges_skills.page:@s;
         execute run { $::Gui.pageToScore.name = ::Gui.Pages[$(pageScore)]; } with ::Gui.scoreToPage;
 
         // Add path
-        ::Gui.scoreToPage.name >> "function __namespace__:__userFile__/pages/";
+        execute run { $::Gui.scoreToPage.name = "function prodiges_skills:menu/pages/$(name)"; } with ::Gui.pageToScore;
     }
 
     function pageToScore() {
@@ -34,7 +35,7 @@ class Gui {
         Arrays.forEach(page, ::Gui.Pages, Gui.findName());
 
         // Add path
-        ::Gui.scoreToPage.index >> "function __namespace__:__userFile__/pages/";
+        // ::Gui.scoreToPage.index >> "function prodiges_skills:menu/pages/";
     }
 
     function findName() {
@@ -49,15 +50,15 @@ class Gui {
         @add(__tick__) function findGUI() {
             // Find the GUI minecart linked to the player
             // At the player, as the GUI
-            execute as @a at @s as @e[type = __guiEntity__, tag = __namespace__] run {
-                if (__namespace__.id:@p == __namespace__.id:@s) {
+            execute as @a at @s as @e[type = chest_minecart, tag = prodiges_skills] run {
+                if (prodiges_skills.id:@p == prodiges_skills.id:@s) {
                     Gui.Constructor.loop();
                 }
             }
         }
 
         function close() {
-            __namespace__.id:@p = 0;
+            prodiges_skills.id:@p = 0;
             tp @s ~ ~-1000 ~;
             kill @s;
         }
@@ -65,7 +66,7 @@ class Gui {
         function loop() {
             // Executed each tick when the GUI is active and linked to a player
             execute at @s run {
-                if (!entity @p[ distance = ..1 ]) {
+                if (!entity @p[distance = ..1]) {
                     // Close the GUI if the player is too far
                     Gui.Constructor.close();
                 }
@@ -78,42 +79,42 @@ class Gui {
         function summon() {
             // Create the GUI minecart near the player
             // Unique ID management
-            if (!entity @e[ type = __guiEntity__, tag = __namespace__, distance = ..1 ] && block ~ ~ ~ air && block ~ ~1 ~ air) {
+            if (!entity @e[type = chest_minecart, tag = prodiges_skills, distance = ..1] && block ~ ~ ~ air && block ~ ~1 ~ air) {
                 // Summon entity
-                summon __guiEntity__ ~ ~1 ~ { Tags:[ __namespace__, this ], NoGravity:1b, Silent:1b, Invulnerable:1b };
+                summon chest_minecart ~ ~1 ~ { Tags:[ prodiges_skills, this ], NoGravity:1b, Silent:1b, Invulnerable:1b };
 
                 // ID management
-                __namespace__.id:global.id += 1;
-                __namespace__.id:__newGUI__ = __namespace__.id:global.id;
-                __namespace__.id:@s = __namespace__.id:global.id;
+                prodiges_skills.id:global.id += 1;
+                prodiges_skills.id:@e[type = chest_minecart, tag = prodiges_skills, tag = this] = prodiges_skills.id:global.id;
+                prodiges_skills.id:@s = prodiges_skills.id:global.id;
 
                 // Init page
-                __namespace__.page:__newGUI__ = 0;
-                execute as __newGUI__ run {
+                prodiges_skills.page:@e[type = chest_minecart, tag = prodiges_skills, tag = this] = 0;
+                execute as @e[type = chest_minecart, tag = prodiges_skills, tag = this] run {
                     tag @s remove this;
                     Gui.refresh();
                 }
             } else {
-                Text.actionbar(@p, "&<red, bold>_:triggerCommand:: ♦ &<red>GUI already active or there is no free space!");
+                Text.actionbar(@p, "&<red, bold>Skills: ♦ &<red>GUI already active or there is no free space!");
             }
         }
     }
 
     @add(__tick__) function main() {
         // Clear dropped MENU items on the ground every tick
-        kill @e[type = item, nbt = { Item:{ components:{ "minecraft:custom_data":{ __namespace__: 1b } } } } ];
+        kill @e[type = item, nbt = { Item:{ components:{ "minecraft:custom_data":{ prodiges_skills: 1b } } } } ];
 
         // Trigger detect
-        execute as @a[scores = { _:triggerCommand: = 1.. } ] at @s run Gui.Constructor.summon();
-        _:triggerCommand::@a = 0;
-        scoreboard players enable @a _:triggerCommand:;
+        execute as @a[scores = { Skills = 1.. } ] at @s run Gui.Constructor.summon();
+        Skills:@a = 0;
+        scoreboard players enable @a Skills;
     }
 
     function returnItems() {
-        __shulkerBox__ = @s::Items;
-        __shulkerBox__[{ components:{ "minecraft:custom_data":{ __namespace__: 1b } } } ].del();
+        [930005, 0, 930005]::Items = @s::Items;
+        [930005, 0, 930005]::Items[{ components:{ "minecraft:custom_data":{ prodiges_skills: 1b } } } ].del();
 
-        $foreignItem = loot give @p mine __packID__ 0 __packID__ stick[custom_data = { drop_contents: 1b } ];
+        $foreignItem = loot give @p mine 930005 0 930005 stick[custom_data = { drop_contents: 1b } ];
 
         if ($foreignItem) { Gui.refresh(); }
 
@@ -124,14 +125,12 @@ class Gui {
         @s::Items.del();
         Gui.scoreToPage(); // ::Gui.scoreToPage.name;
         execute run {
-            $$(name)(); // __userFile__.Pages.$(name)
+            $$(name)(); // menu.Pages.$(name)
         } with ::Gui.scoreToPage;
     }
 
-
-
     function click() {
-        playsound minecraft:block.stone.break ambient @p[ tag = __namespace__.pref.sound ] ~ ~ ~ .5;
+        playsound minecraft:block.stone.break ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ .5;
         Gui.refresh();
     }
 
@@ -139,7 +138,7 @@ class Gui {
         // Detect missing items in the menu
         // According to the page, the positions of the items change
 
-        $playerClicked ?= clear @p *[custom_data = { __namespace__: 1b } ];
+        $playerClicked ?= clear @p *[custom_data = { prodiges_skills: 1b } ];
 
         if ($playerClicked) {
             Gui.scoreToPage(); // ::Gui.scoreToPage.name;

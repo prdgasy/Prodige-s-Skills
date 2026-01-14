@@ -25,7 +25,7 @@ class Menu.Pages.ItemShop {
 
     function setItem() {
         // set avec param
-        $item replace entity @s container.$(slot) with $(itemRepr)[custom_data = { __namespace__: 1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(pointsColor)$(cost) SP","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(lore1)","italic":true,"color":"light_purple"}]', '[{"text":"$(lore2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]'], enchantments = { $(enchantName0):$(enchantLevel0), $(enchantName1):$(enchantLevel1) } ];
+        $item replace entity @s container.$(slot) with $(itemRepr)[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(pointsColor)$(cost) SP","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(lore1)","italic":true,"color":"light_purple"}]', '[{"text":"$(lore2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]'], enchantments = { $(enchantName0):$(enchantLevel0), $(enchantName1):$(enchantLevel1) } ];
     }
 
     function click() {
@@ -63,7 +63,7 @@ class Menu.Pages.ItemShop {
         $scoreboard players set $cost prodiges_skills.__variable__ $(cost);
         $leninv = Arrays.playerInv_length(@p);
         if ($points < $cost) {
-            // execute run { $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Not enough SP to buy $(item_name)&<red>."); } with ::Menu.Pages.ItemShop;
+            execute run { $Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Not enough SP to buy $(item_name)&<red>."); } with ::Menu.Pages.ItemShop;
             playsound minecraft:entity.enderman.teleport ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 1;
         } else if ($leninv > 34) {
             Text.tellraw(@p, "&<red, bold>Skills ♦ &<red>Inventory is full.");
@@ -71,7 +71,7 @@ class Menu.Pages.ItemShop {
         } else {
             execute run {
                 $Player.specialItems.giveFromId({ id: $(id) });
-                // $Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You bought $(item_name) &<green>for &<gold>&<$cost> SP&<green>.");
+                $Text.tellraw(@p, "&<green, bold>Skills ♦ &<green>You bought $(item_name) &<green>for &<gold>&<$cost> SP&<green>.");
             } with ::Menu.Pages.ItemShop;
             playsound minecraft:block.note_block.pling ambient @p[tag = prodiges_skills.pref.sound] ~ ~ ~ 1 2;
             PPoints:@p -= $cost;

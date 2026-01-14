@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.name set from storage prodiges_skills:prodiges_skills Consts.Skils.$(index)
+$tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"You cannot Prestige in ","color":"red","type":"text"},{"text":"$(name) ","color":"gold","type":"text"},{"text":"any anymore.","color":"red","type":"text"}]

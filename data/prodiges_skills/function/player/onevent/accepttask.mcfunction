@@ -4,7 +4,7 @@ $data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponen
 $data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.lvl int 1 set from score @s prodiges_skills.$(name).lvl
 $data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.xpToNext int 1 set from score @s prodiges_skills.$(name).xpToNext
 execute store result storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.romanLvl int 1 run data modify storage prodiges_skills:prodiges_skills romanConverter.number set from storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.currentLvl
-function prodiges_skills:__private__/anonymous/17 with storage prodiges_skills:prodiges_skills romanConverter
+function prodiges_skills:__private__/anonymous/18 with storage prodiges_skills:prodiges_skills romanConverter
 $scoreboard players operation .xp prodiges_skills.__variable__ = @s skills.$(name).xp
 $scoreboard players operation .xpToNNext prodiges_skills.__variable__ = @s skills.$(name).xpToNext
 scoreboard players operation $progress_100 skills.__variable__ = .xp prodiges_skills.__variable__

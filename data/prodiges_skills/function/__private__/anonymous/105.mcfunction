@@ -1,1 +1,2 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Boosters.booster_sp set value '§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left'
+$function prodiges_skills:player/specialitems/givefromid {id:$(id)}
+$tellraw @p ["",{"text":"Skills \u2666 ","color":"green","bold":true,"type":"text"},{"text":"You bought $(item_name) ","color":"green","type":"text"},{"text":"for ","color":"green","type":"text"},{"color":"gold","type":"score","score":{"name":"$cost","objective":"skills.__variable__"}},{"text":" SP","color":"gold"},{"text":".","color":"green","type":"text"}]

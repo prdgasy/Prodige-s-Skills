@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.xpBooster set value '§bx$(xpBoosterPower) XP Booster §7- $(xpBoosterDuration) minute(s) left'
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Tasks.tab set from storage prodiges_skills:prodiges_skills Config.Skills.$(name).Tasks

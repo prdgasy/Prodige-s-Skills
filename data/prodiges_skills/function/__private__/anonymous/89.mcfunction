@@ -1,1 +1,2 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.lvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$execute if score @p prodiges_skills.$(name).prestige matches ..4 run function prodiges_skills:menu/pages/prestige/setitem with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige
+$execute if score @p prodiges_skills.$(name).prestige matches 5 run function prodiges_skills:menu/pages/prestige/setitemmax with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige

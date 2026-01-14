@@ -1,1 +1,1 @@
-$execute store result storage prodiges_skills:prodiges_skills temp.gui.crate.i int 1 run random value 0..$(len)
+$data modify storage prodiges_skills:prodiges_skills Player.SpecialItem.itemRepr set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(id)].itemName

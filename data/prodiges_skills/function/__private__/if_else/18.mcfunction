@@ -1,2 +1,2 @@
 execute if score $type skills.__variable__ matches 2 if score @s skills.booster.2.duration matches 2.. run function prodiges_skills:__private__/if_else/17
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/anonymous/26 with storage prodiges_skills:prodiges_skills temp.Booster.use
+execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/anonymous/27 with storage prodiges_skills:prodiges_skills temp.Booster.use

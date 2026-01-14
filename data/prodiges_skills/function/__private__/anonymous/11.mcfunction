@@ -1,2 +1,6 @@
-$execute store success score $taskExist skills.__variable__ run data modify storage prodiges_skills:prodiges_skills Player.OnEvent.taskData set from storage prodiges_skills:prodiges_skills Config.Skills.Mining.Tasks[$(i)]
-execute if score $taskExist skills.__variable__ matches 1.. run function prodiges_skills:__private__/if_else/2
+playsound minecraft:entity.arrow.shoot ambient @s ~ ~ ~ 1 0
+particle minecraft:happy_villager ~ ~ ~ 1 1 1 1 100
+execute store result score $r skills.__variable__ run random value 0..2
+execute store result storage prodiges_skills:skills.__storage__ switch_key int 1 run scoreboard players get $r skills.__variable__
+function prodiges_skills:__private__/switch_case/0/select with storage prodiges_skills:skills.__storage__
+function prodiges_skills:__private__/anonymous/10 with storage prodiges_skills:prodiges_skills temp.Player.ability.foraging

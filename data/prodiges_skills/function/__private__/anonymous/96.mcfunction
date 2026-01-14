@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1 set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel0 set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

@@ -1,1 +1,1 @@
-$function prodiges_skills:player/specialitems/givefromid {id:$(id)}
+$execute unless data entity @s Items[{Slot:$(slot)b}] run function prodiges_skills:__private__/anonymous/102

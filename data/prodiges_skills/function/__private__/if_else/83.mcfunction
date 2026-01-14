@@ -1,4 +1,4 @@
-function prodiges_skills:__private__/anonymous/82 with storage prodiges_skills:prodiges_skills Menu.Pages.Shop
+function prodiges_skills:__private__/anonymous/83 with storage prodiges_skills:prodiges_skills Menu.Pages.Shop
 data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.crateColor set value 'red'
 data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.headTexture set value {id:[I;-1082168181,1071530784,-1128679516,-2846883],properties:[{name:"textures",value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWJjZGYwZmYwNzEyYWUzZGU1NTRjMzcyNjA3NzYxMDAwZDNiMGI2Yjg2MTNiOGEyYzZkZGEwMGNkMTBkNzhkOCJ9fX0="}]}
 scoreboard players set __if_else__ skills.__variable__ 1

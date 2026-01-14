@@ -6,9 +6,9 @@ $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchant
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantName1 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].Enchants[1].name
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].Enchants[1].level
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel0 int 1 run data modify storage prodiges_skills:prodiges_skills romanConverter.number set from storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel0
-function prodiges_skills:__private__/anonymous/95 with storage prodiges_skills:prodiges_skills romanConverter
-execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1 int 1 run data modify storage prodiges_skills:prodiges_skills romanConverter.number set from storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1
 function prodiges_skills:__private__/anonymous/96 with storage prodiges_skills:prodiges_skills romanConverter
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1 int 1 run data modify storage prodiges_skills:prodiges_skills romanConverter.number set from storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1
+function prodiges_skills:__private__/anonymous/97 with storage prodiges_skills:prodiges_skills romanConverter
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.lore1 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].lore1
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.lore2 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].lore2
 $execute store result score $cost skills.__variable__ run data get storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].cost

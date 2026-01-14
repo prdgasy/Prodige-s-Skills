@@ -20,3 +20,8 @@ class Player.Init {
         );
     }
 }
+
+Player.Schedule.wait1s();
+Player.Schedule.wait5s();
+Player.Schedule.wait10s();
+Player.Schedule.wait1m();

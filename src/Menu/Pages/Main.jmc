@@ -22,12 +22,12 @@ class Menu.Pages.Main {
         } with ::Menu.Pages.Main;
     }
 
-    function profileAndPreferences() {
+    function preferences() {
         Menu.Pages.Main.getPoints();
         Menu.Pages.Main.getBoosters();
 
         execute run {
-            $execute as @p run loot replace entity @n[type = chest_minecart, tag = skillsLIB] container.4 loot { "type":"minecraft:command", "pools":[{ "rolls":1, "entries":[{ "type":"minecraft:item", "name":"minecraft:player_head", "functions":[{ "function":"minecraft:set_name", "entity":"this", "target":"custom_name", "name":{ "text":"Profile", "color":"light_purple", "italic":false } }, { "function":"minecraft:fill_player_head", "entity":"this" }, { "function":"minecraft:set_custom_data", "tag":"{__namespace__: 1b}" }, { "function":"minecraft:set_lore", "entity":"this", "lore":[{ "text":"" }, { "text":"§8§l♦ §rPoints: ", "type":"text", "extra":[{ "text":"$(sp) SP", "type":"text", "color":"gold", "italic":false } ], "color":"#A888B5", "italic":false }, { "text":"" }, { "text":"Active Boosters:", "color":"yellow", "italic":false }, { "text":"§8• $(booster_xp)", "italic":false }, { "text":"§8• $(booster_sp)", "italic":false }, { "text":"" }, { "text":"Click to view!", "color":"yellow", "italic":false } ], "mode":"append" } ], "conditions":[] } ] } ] };
+            $execute as @p run loot replace entity @n[type = chest_minecart, tag = skillsLIB] container.4 loot { "type":"minecraft:command", "pools":[{ "rolls":1, "entries":[{ "type":"minecraft:item", "name":"minecraft:player_head", "functions":[{ "function":"minecraft:set_name", "entity":"this", "target":"custom_name", "name":{ "text":"Profile", "color":"light_purple", "italic":false } }, { "function":"minecraft:fill_player_head", "entity":"this" }, { "function":"minecraft:set_custom_data", "tag":"{prodiges_skills: 1b}" }, { "function":"minecraft:set_lore", "entity":"this", "lore":[{ "text":"" }, { "text":"§8§l♦ §rPoints: ", "type":"text", "extra":[{ "text":"$(sp) SP", "type":"text", "color":"gold", "italic":false } ], "color":"#A888B5", "italic":false }, { "text":"" }, { "text":"Active Boosters:", "color":"yellow", "italic":false }, { "text":"§8• $(booster_xp)", "italic":false }, { "text":"§8• $(booster_sp)", "italic":false }, { "text":"" }, { "text":"Click to view!", "color":"yellow", "italic":false } ], "mode":"append" } ], "conditions":[] } ] } ] };
         } with ::Menu.Pages.Main;
     }
 
@@ -60,7 +60,8 @@ class Menu.Pages.Main {
 
     function skills() {
         $slot = 11;
-        for ($skillsIndex = 0; $skillsIndex < __skillsLength__; $skillsIndex++) {
+        $pagesNumber = ::Gui.PagesNumber;
+        for ($skillsIndex = 0; $skillsIndex < $pagesNumber; $skillsIndex++) {
             Menu.Pages.Main.getSkillName();
 
             execute run {
@@ -136,7 +137,7 @@ class Menu.Pages.Main {
 
     function setSkillItem() {
         $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
+            custom_data = { prodiges_skills: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
             lore = [
                 '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
                 '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',
@@ -159,7 +160,7 @@ class Menu.Pages.Main {
 
     function setSkillItemLvlMax() {
         $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { __namespace__: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
+            custom_data = { prodiges_skills: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
             lore = [
                 '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
                 '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',

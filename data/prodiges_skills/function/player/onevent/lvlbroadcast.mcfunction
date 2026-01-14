@@ -1,1 +1,2 @@
 say @s BROADCAST LEVEL UP
+$tellraw @a[ tag = prodiges_skills.pref.lvl_broadcast ] ["",{"text":"Skills \u2666 ","color":"yellow","bold":true,"type":"text"},{"color":"light_purple","type":"selector","selector":"@s"},{"text":" ","color":"light_purple"},{"text":"has reached ","color":"yellow","type":"text"},{"text":"$(name) ","color":"#A888B5","type":"text"},{"text":"$(roman_lvl)","color":"#EFB6C8","bold":true,"type":"text"},{"text":"!","color":"yellow","type":"text"}]

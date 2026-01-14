@@ -7,7 +7,7 @@ import 'src/ExploitFilter.jmc';
 ExploitFilter.createScore();
 
 import 'src/Config.jmc';
-// // Load data
+// Load data
 Config.Skills();
 Config.Rewards();
 Config.specialItems();
@@ -20,14 +20,10 @@ import 'src/Player/Imports.jmc';
 
 import 'src/Menu/Imports.jmc';
 
-// // Launch scheduled functions
-Player.Schedule.wait1s();
-Player.Schedule.wait5s();
-Player.Schedule.wait10s();
-Player.Schedule.wait1m();
-
 // First join setup
 Player.firstJoin(() => {
     // Initialize skills data for first join players
     execute as @a run Player.Init.initData();
 });
+
+say "Loaded";

@@ -1,1 +1,1 @@
-$scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.name set from storage prodiges_skills:prodiges_skills Consts.Skils.$(index)

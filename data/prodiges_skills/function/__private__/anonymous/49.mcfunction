@@ -1,1 +1,2 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$execute if entity @p[tag=prodiges_skills.ability.$(name)] run return run tag @p remove prodiges_skills.ability.$(name)
+$tag @p add prodiges_skills.ability.$(name)

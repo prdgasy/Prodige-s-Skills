@@ -1,0 +1,1 @@
+$tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"You need to be Level C (100) in ","color":"red","type":"text"},{"text":"$(name) ","color":"gold","type":"text"},{"text":"to Prestige.","color":"red","type":"text"}]

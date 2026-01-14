@@ -1,3 +1,2 @@
-execute if entity @s[tag=!prodiges_skills.exploitfilter] run function prodiges_skills:player/onevent/accepttask with storage prodiges_skills:prodiges_skills Player.OnEvent.taskData
-$execute if entity @s[tag=prodiges_skills.ability.$(name)] run function prodiges_skills:player/ability/main with storage prodiges_skills:prodiges_skills Player.OnEvent.taskData
-$scoreboard players reset @s prodiges_skills.$(name).task.$(task)
+$execute store success score $taskExist skills.__variable__ run data modify storage prodiges_skills:prodiges_skills Player.OnEvent.taskData set from storage prodiges_skills:prodiges_skills Config.Skills.Farming.Tasks[$(i)]
+execute if score $taskExist skills.__variable__ matches 1.. run function prodiges_skills:__private__/if_else/6

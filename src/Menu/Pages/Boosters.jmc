@@ -1,6 +1,6 @@
 class Menu.Pages.Boosters {
     function setItem() {
-        $item replace entity @s container.$(slot) with $(item)[custom_data = { __namespace__: 1b }, custom_name = '{"text":"x$(power) $(type) Booster §7- $(duration) min §8§l♦ $(pointColor)$(cost) SP","color":$(color),"italic":false}', lore = ['[{"text":"Skills","color":"blue","italic":false}]', '[""]', '[{"text":"Click to buy!","color":"yellow","italic":false}]'], enchantment_glint_override = $(glint)];
+        $item replace entity @s container.$(slot) with $(item)[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"x$(power) $(type) Booster §7- $(duration) min §8§l♦ $(pointColor)$(cost) SP","color":$(color),"italic":false}', lore = ['[{"text":"Skills","color":"blue","italic":false}]', '[""]', '[{"text":"Click to buy!","color":"yellow","italic":false}]'], enchantment_glint_override = $(glint)];
     }
 
     function click() {
@@ -55,7 +55,7 @@ class Menu.Pages.Boosters {
         }
 
         execute run {
-            // JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skillsLIB] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{__namespace__: 1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
+            // JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skillsLIB] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{prodiges_skills: 1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
         } with ::Menu.Pages.Boosters;
     }
 

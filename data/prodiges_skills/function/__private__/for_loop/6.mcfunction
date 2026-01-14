@@ -2,10 +2,10 @@ execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Progress
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data.lvlTest int 1 run scoreboard players get $lvlStart skills.__variable__
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data.lvlTestRoman int 1 run scoreboard players get $lvlStart skills.__variable__
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data int 1 run data modify storage prodiges_skills:prodiges_skills romanConverter.number set from storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data
-function prodiges_skills:__private__/anonymous/53 with storage prodiges_skills:prodiges_skills romanConverter
+function prodiges_skills:__private__/anonymous/54 with storage prodiges_skills:prodiges_skills romanConverter
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data.lvlClaimTest int 1 run scoreboard players get $lvlStart skills.__variable__
 scoreboard players set $toClaim skills.__variable__ 0
-function prodiges_skills:__private__/anonymous/54 with storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data
+function prodiges_skills:__private__/anonymous/55 with storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data
 scoreboard players operation $mod skills.__variable__ = $lvlStart skills.__variable__
 scoreboard players operation $mod skills.__variable__ %= 10 skills.__int__
 scoreboard players set __if_else__ skills.__variable__ 0

@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills temp.gui.crate set from storage prodiges_skills:prodiges_skills DB.Shop.crate[$(i)]
+$execute store result storage prodiges_skills:prodiges_skills temp.gui.crate.i int 1 run random value 0..$(len)
