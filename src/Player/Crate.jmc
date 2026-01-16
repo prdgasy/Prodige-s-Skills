@@ -28,12 +28,12 @@ class Player.Crate {
             execute run {
                 $tellraw @p [
                     "",
-                    { "text":"\n ♦ ", "bold":true, "color":"aqua" },
-                    { "text":"Skill Crate", "bold":true, "color":"gold" },
-                    { "text":" ♦\n", "bold":true, "color":"aqua" },
-                    { "text":"\n §l\u25BA §eRewards:\n", "bold":false, "color":"yellow" },
-                    { "text":" \u0020 \u25CF ", "color":"gray" },
-                    { "text":"$(repr)" }
+                    { text:"\n ♦ ", bold:true, color:"aqua" },
+                    { text:"Skill Crate", bold:true, color:"gold" },
+                    { text:" ♦\n", bold:true, color:"aqua" },
+                    { text:"\n §l\u25BA §eRewards:\n", bold:false, color:"yellow" },
+                    { text:" \u0020 \u25CF ", color:"gray" },
+                    { text:"$(repr)" }
                 ];
             } with ::temp.gui.crate;
         }

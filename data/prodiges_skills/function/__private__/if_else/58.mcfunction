@@ -1,3 +1,3 @@
 tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"You cannot claim this reward yet.","color":"red","type":"text"}]
 execute at @p run playsound minecraft:entity.enderman.teleport ambient @p[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 1
-scoreboard players set __if_else__ skills.__variable__ 1
+scoreboard players set __if_else__ prodiges_skills.__variable__ 1

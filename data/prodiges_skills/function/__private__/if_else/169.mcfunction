@@ -1,2 +1,2 @@
-execute unless data entity @s Items[{Slot:13b}] run function prodiges_skills:__private__/if_else/162
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/168
+execute unless data entity @s Items[{Slot:11b}] run function prodiges_skills:__private__/if_else/156
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/168

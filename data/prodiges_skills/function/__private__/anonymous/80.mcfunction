@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.pointBooster set value '§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left'
+$execute if entity @p[tag=!prodiges_skills.toClaim.$(name).$(lvl)] run scoreboard players set $claimed prodiges_skills.__variable__ 1

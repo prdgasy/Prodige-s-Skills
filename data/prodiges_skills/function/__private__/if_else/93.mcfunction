@@ -1,2 +1,2 @@
-execute if score $leninv skills.__variable__ matches 35.. run function prodiges_skills:__private__/if_else/91
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/92
+execute if score $leninv prodiges_skills.__variable__ matches 35.. run function prodiges_skills:__private__/if_else/91
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/92

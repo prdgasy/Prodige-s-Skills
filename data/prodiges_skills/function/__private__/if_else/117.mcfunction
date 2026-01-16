@@ -1,2 +1,2 @@
-execute if score $invlen skills.__variable__ matches 35.. run function prodiges_skills:__private__/if_else/115
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/116
+execute if score $invlen prodiges_skills.__variable__ matches 35.. run function prodiges_skills:__private__/if_else/115
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/116

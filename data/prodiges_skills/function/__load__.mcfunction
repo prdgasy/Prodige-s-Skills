@@ -1,20 +1,22 @@
-scoreboard objectives add skills.__variable__ dummy
-scoreboard objectives add skills.__int__ dummy
-scoreboard players set 2 skills.__int__ 2
-scoreboard players set 100 skills.__int__ 100
-scoreboard players set 5 skills.__int__ 5
-scoreboard players set 4 skills.__int__ 4
-scoreboard players set 10 skills.__int__ 10
-scoreboard players set 12 skills.__int__ 12
-scoreboard players set 15 skills.__int__ 15
-scoreboard players set 21 skills.__int__ 21
+scoreboard objectives add prodiges_skills.__variable__ dummy
+scoreboard objectives add prodiges_skills.__int__ dummy
+scoreboard players set 2 prodiges_skills.__int__ 2
+scoreboard players set 100 prodiges_skills.__int__ 100
+scoreboard players set 5 prodiges_skills.__int__ 5
+scoreboard players set 4 prodiges_skills.__int__ 4
+scoreboard players set 10 prodiges_skills.__int__ 10
+scoreboard players set 12 prodiges_skills.__int__ 12
+scoreboard players set 15 prodiges_skills.__int__ 15
+scoreboard players set 21 prodiges_skills.__int__ 21
 scoreboard objectives add prodiges_skills.id dummy
 scoreboard objectives add prodiges_skills.page dummy
 scoreboard objectives add Skills trigger
 forceload add 930005 930005
 setblock 930005 0 930005 yellow_shulker_box
 data modify storage prodiges_skills:prodiges_skills Gui.Pages set value ["main","progress","boosters","skills","tasks","itemshop","prestige","preferences","shop","tasks"]
-data modify storage prodiges_skills:prodiges_skills Gui.PagesNumber set value 10
+data modify storage prodiges_skills:prodiges_skills Gui.SkillsNumber set value 4
+data modify storage prodiges_skills:prodiges_skills Consts.Skills set value {0:Mining,1:Foraging,2:Excavation,3:Combat,4:Farming}
+data modify storage prodiges_skills:prodiges_skills Consts.Bars set value {0:"§r----------------",1:"§a-§r---------------",2:"§a--§r--------------",3:"§a---§r-------------",4:"§a----§r------------",5:"§a-----§r-----------",6:"§a------§r----------",7:"§a-------§r---------",8:"§a--------§r--------",9:"§a---------§r--------",10:"§a----------§r------",11:"§a-----------§r-----",12:"§a------------§r----",13:"§a-------------§r---",14:"§a--------------§r--",15:"§a---------------§r"}
 data modify storage prodiges_skills:prodiges_skills exploitFilter.Objects set value ["sand","gravel","clay","dirt","coarse_dirt","podzol","mud","rooted_dirt","grass_block","mycelium","soul_sand","soul_soil","stone","granite","andesite","diorite","tuff","deepslate","sandstone","red_sandstone","dripstone_block","calcite","blackstone","basalt","netherrack","end_stone","sculk","sculk_vein","sculk_catalyst","sculk_shrieker","sculk_sensor","coal_ore","deepslate_coal_ore","iron_ore","deepslate_iron_ore","copper_ore","deepslate_copper_ore","gold_ore","deepslate_gold_ore","redstone_ore","deepslate_redstone_ore","lapis_ore","deepslate_lapis_ore","diamond_ore","deepslate_diamond_ore","emerald_ore","deepslate_emerald_ore","nether_quartz_ore","nether_gold_ore","ancient_debris","wheat","carrot","potato","beetroot","melon","pumpkin","sweet_berry_bush","mushroom","cocoa_beans","melon_slice","apple","oak_log","birch_log","spruce_log","jungle_log","acacia_log","dark_oak_log","crimson_stem","warped_stem"]
 function prodiges_skills:exploitfilter/createscore
 function prodiges_skills:config/skills

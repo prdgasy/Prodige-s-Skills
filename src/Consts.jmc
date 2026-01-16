@@ -32,7 +32,7 @@ class Consts {
         $::$(storage) = ::Consts.name;
     }
 
-    function initSkills {
+    function initSkills() {
         for ($skillIndex = 0; $skillIndex < 7; $skillIndex++) {
             ::Consts.initSkills.i = $skillIndex;
             execute run { $::Consts.initSkills.name = ::Consts.Skills.$(skillIndex); } with ::Consts.initSkills;

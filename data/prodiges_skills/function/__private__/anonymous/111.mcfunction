@@ -1,1 +1,2 @@
-$item replace entity @s container.18 with minecraft:redstone_torch[custom_data={prodiges_skills:1b},custom_name='[{ "text":"Ability Toggle ", "italic":false, "color":"yellow" }, { "text":"§7[$(ability)§7]", "italic":false } ]',lore=['[{ "text":"Enable or disable this", "italic":false, "color":"gray" } ]','[{ "text":"ability.", "italic":false, "color":"gray" } ]','[""]','{ "text":"Click to toggle!", "color":"yellow", "italic":false } ']]
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.id int 1 run scoreboard players get $itemsLength prodiges_skills.__variable__
+function prodiges_skills:menu/pages/itemshop/clickedonitem with storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop

@@ -1,1 +1,2 @@
-$data modify storage prodiges_skills:prodiges_skills Player.OnEvent.lvlUp.nextLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$execute store success score $taskExist prodiges_skills.__variable__ run data modify storage prodiges_skills:prodiges_skills Player.OnEvent.taskData set from storage prodiges_skills:prodiges_skills Config.Skills.Mining.Tasks[$(i)]
+execute if score $taskExist prodiges_skills.__variable__ matches 1.. run function prodiges_skills:__private__/if_else/2

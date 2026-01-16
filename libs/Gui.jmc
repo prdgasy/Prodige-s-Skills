@@ -10,21 +10,31 @@ new loot_table(minecraft.blocks.yellow_shulker_box) {
 }
 
 ::Gui.Pages = ["main", "progress", "boosters", "skills", "tasks", "itemshop", "prestige", "preferences", "shop", "tasks"];
-::Gui.PagesNumber = 10;
+::Gui.SkillsNumber = 4;
 
 class Gui {
     @lazy function switchPage(pageName) {
+        say 'switched to page $pageName';
         Gui.pageToScore({ pageName: $pageName }); // ::Gui.pageToScore.index;
         prodiges_skills.page:@s = ::Gui.pageToScore.index;
         Gui.click();
     }
 
-    function scoreToPage() {
+    function scoreToPageClicksPath() {
         ::Gui.scoreToPage.pageScore = prodiges_skills.page:@s;
-        execute run { $::Gui.pageToScore.name = ::Gui.Pages[$(pageScore)]; } with ::Gui.scoreToPage;
+        execute run { $::Gui.scoreToPage.name = ::Gui.Pages[$(pageScore)]; } with ::Gui.scoreToPage;
 
         // Add path
-        execute run { $::Gui.scoreToPage.name = "function prodiges_skills:menu/pages/$(name)"; } with ::Gui.pageToScore;
+        say 'added click path';
+        execute run { $::Gui.scoreToPage.name = "function prodiges_skills:menu/clicks/$(name)"; } with ::Gui.scoreToPage;
+    }
+
+    function scoreToPagePagesPath() {
+        ::Gui.scoreToPage.pageScore = prodiges_skills.page:@s;
+        execute run { $::Gui.scoreToPage.name = ::Gui.Pages[$(pageScore)]; } with ::Gui.scoreToPage;
+
+        // Add path
+        execute run { $::Gui.scoreToPage.name = "function prodiges_skills:menu/pages/$(name)"; } with ::Gui.scoreToPage;
     }
 
     function pageToScore() {
@@ -33,14 +43,11 @@ class Gui {
         $index = 0;
 
         Arrays.forEach(page, ::Gui.Pages, Gui.findName());
-
-        // Add path
-        // ::Gui.scoreToPage.index >> "function prodiges_skills:menu/pages/";
     }
 
     function findName() {
         $::Gui.pageToScore.name = $(page);
-        if (Object.isEqual("Gui.pageToScore", "name", "Gui.pageToScore", "pageNameToCompare")) {
+        if (Object.isEqual("prodiges_skills:prodiges_skills", "Gui.pageToScore.name", "prodiges_skills:prodiges_skills", "Gui.pageToScore.pageNameToCompare")) {
             ::Gui.pageToScore.index = $index;
         }
         $index++;
@@ -123,9 +130,10 @@ class Gui {
     function refresh() {
         // Refresh items from the menu
         @s::Items.del();
-        Gui.scoreToPage(); // ::Gui.scoreToPage.name;
+        Gui.scoreToPagePagesPath(); // ::Gui.scoreToPage.name;
         execute run {
-            $$(name)(); // menu.Pages.$(name)
+            $say "$(name)";
+            $$(name);
         } with ::Gui.scoreToPage;
     }
 
@@ -141,8 +149,8 @@ class Gui {
         $playerClicked ?= clear @p *[custom_data = { prodiges_skills: 1b } ];
 
         if ($playerClicked) {
-            Gui.scoreToPage(); // ::Gui.scoreToPage.name;
-            execute run { $$(index)(); } with ::Gui.scoreToPage;
+            Gui.scoreToPageClicksPath(); // ::Gui.scoreToPage.name;
+            execute run { $$(name); } with ::Gui.scoreToPage;
         }
     }
 }

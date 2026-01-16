@@ -1,1 +1,2 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.name set from storage prodiges_skills:prodiges_skills Consts.Skills.$(index)
+$function prodiges_skills:player/specialitems/givefromid {id:$(id)}
+$tellraw @p ["",{"text":"Skills \u2666 ","color":"green","bold":true,"type":"text"},{"text":"You bought $(item_name) ","color":"green","type":"text"},{"text":"for ","color":"green","type":"text"},{"color":"gold","type":"score","score":{"name":"$cost","objective":"prodiges_skills.__variable__"}},{"text":" SP","color":"gold"},{"text":".","color":"green","type":"text"}]

@@ -1,2 +1,2 @@
-$execute if score @s prodiges_skills.$(name).lvl matches ..98 run function prodiges_skills:__private__/anonymous/24 with storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents
-$execute if score @s prodiges_skills.$(name).lvl matches 99 run function prodiges_skills:__private__/anonymous/25 with storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents
+$execute if score @s prodiges_skills.$(name).lvl matches ..98 run function prodiges_skills:__private__/anonymous/33 with storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents
+$execute if score @s prodiges_skills.$(name).lvl matches 99 run function prodiges_skills:__private__/anonymous/34 with storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents

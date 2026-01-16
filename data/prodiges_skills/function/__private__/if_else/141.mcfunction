@@ -1,3 +1,6 @@
-tellraw @p ["",{"text":"Skills \u2666 ","bold":true,"color":"#4593cd","clickEvent":{"action":"open_url","value":"https://discord.gg/b2hkD4Fn43"}},{"text":"Click ","color":"#4593cd","clickEvent":{"action":"open_url","value":"https://discord.gg/b2hkD4Fn43"}},{"text":"here","bold":true,"underlined":true,"color":"#4593cd","clickEvent":{"action":"open_url","value":"https://discord.gg/b2hkD4Fn43"}},{"text":" to join the ","color":"#4593cd","clickEvent":{"action":"open_url","value":"https://discord.gg/b2hkD4Fn43"}},{"text":"Discord","bold":true,"color":"#4593cd","clickEvent":{"action":"open_url","value":"https://discord.gg/b2hkD4Fn43"}},{"text":"!","color":"#4593cd","clickEvent":{"action":"open_url","value":"https://discord.gg/b2hkD4Fn43"}}]
-function prodiges_skills:gui/constructor/close
-scoreboard players set __if_else__ skills.__variable__ 1
+playsound minecraft:block.ender_chest.open ambient @p[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 0
+say switched to page prestige
+function prodiges_skills:gui/pagetoscore {pageName:prestige}
+execute store result score @s prodiges_skills.page run data get storage prodiges_skills:prodiges_skills Gui.pageToScore.index
+function prodiges_skills:gui/click
+scoreboard players set __if_else__ prodiges_skills.__variable__ 1

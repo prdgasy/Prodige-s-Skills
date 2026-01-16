@@ -1,3 +1,3 @@
-scoreboard players set __if_else__ skills.__variable__ 0
+scoreboard players set __if_else__ prodiges_skills.__variable__ 0
 execute if score @s prodiges_skills.Menu.progressPage matches ..4 unless data entity @s Items[{Slot:26b}] run function prodiges_skills:__private__/if_else/77
-execute if score __if_else__ skills.__variable__ matches 0 if score @s prodiges_skills.Menu.progressPage matches 2.. unless data entity @s Items[{Slot:8b}] run function prodiges_skills:__private__/if_else/78
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 if score @s prodiges_skills.Menu.progressPage matches 2.. unless data entity @s Items[{Slot:8b}] run function prodiges_skills:__private__/if_else/78

@@ -1,1 +1,1 @@
-$$(index)()
+$data modify storage prodiges_skills:prodiges_skills Arrays.forEach.page set from storage prodiges_skills:prodiges_skills Gui.Pages[$(index)]

@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.nextLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl

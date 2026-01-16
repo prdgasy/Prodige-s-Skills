@@ -6,14 +6,14 @@ $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchant
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantName1 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].Enchants[1].name
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].Enchants[1].level
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel0 int 1 run data modify storage prodiges_skills:prodiges_skills romanConverter.number set from storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel0
-function prodiges_skills:__private__/anonymous/96 with storage prodiges_skills:prodiges_skills romanConverter
+function prodiges_skills:__private__/anonymous/105 with storage prodiges_skills:prodiges_skills romanConverter
 execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1 int 1 run data modify storage prodiges_skills:prodiges_skills romanConverter.number set from storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.enchantLevel1
-function prodiges_skills:__private__/anonymous/97 with storage prodiges_skills:prodiges_skills romanConverter
+function prodiges_skills:__private__/anonymous/106 with storage prodiges_skills:prodiges_skills romanConverter
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.lore1 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].lore1
 $data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.lore2 set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].lore2
-$execute store result score $cost skills.__variable__ run data get storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].cost
-execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.cost int 1 run scoreboard players get $cost skills.__variable__
-scoreboard players operation $points skills.__variable__ = @p prodiges_skills.PPoints
-scoreboard players set __if_else__ skills.__variable__ 0
-execute if score $cost skills.__variable__ > $points skills.__variable__ run function prodiges_skills:__private__/if_else/89
-execute if score __if_else__ skills.__variable__ matches 0 run data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.pointsColor set value '§6'
+$execute store result score $cost prodiges_skills.__variable__ run data get storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(index)].cost
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.cost int 1 run scoreboard players get $cost prodiges_skills.__variable__
+scoreboard players operation $points prodiges_skills.__variable__ = @p prodiges_skills.PPoints
+scoreboard players set __if_else__ prodiges_skills.__variable__ 0
+execute if score $cost prodiges_skills.__variable__ > $points prodiges_skills.__variable__ run function prodiges_skills:__private__/if_else/89
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run data modify storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.pointsColor set value '§6'

@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.lvlRoman set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.name set from storage prodiges_skills:prodiges_skills Consts.Skils.$(index)

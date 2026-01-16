@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.bar set from storage prodiges_skills:prodiges_skills Config.Progress.$(ratio_15)
+$data modify storage prodiges_skills:prodiges_skills temp.gui.crate set from storage prodiges_skills:prodiges_skills DB.Shop.crate[$(i)]

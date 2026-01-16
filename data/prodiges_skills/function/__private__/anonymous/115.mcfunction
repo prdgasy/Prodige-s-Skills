@@ -1,4 +1,1 @@
-execute store result storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.index int 1 run scoreboard players get $index skills.__variable__
-function prodiges_skills:__private__/anonymous/114 with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige
-function prodiges_skills:menu/pages/prestige/click with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige
-scoreboard players set $index skills.__variable__ 5
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Boosters.booster_xp set value '§bx$(xpBoosterPower) XP Booster §7- $(xpBoosterDuration) minute(s) left'

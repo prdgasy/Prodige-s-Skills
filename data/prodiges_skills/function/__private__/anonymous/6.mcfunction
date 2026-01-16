@@ -1,1 +1,2 @@
-$scoreboard objectives add prodiges_skills.exploitfilter.$(id) used:$(id)
+$say $(name)
+$$(name)

@@ -1,1 +1,1 @@
-$$(command)
+$data modify storage prodiges_skills:prodiges_skills Player.OnEvent.lvlUp.previousLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

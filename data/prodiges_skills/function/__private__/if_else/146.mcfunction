@@ -1,2 +1,6 @@
-execute unless data entity @s Items[{Slot:8b}] run function prodiges_skills:__private__/if_else/139
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/145
+playsound minecraft:block.ender_chest.open ambient @p[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 0
+say switched to page prestige
+function prodiges_skills:gui/pagetoscore {pageName:prestige}
+execute store result score @s prodiges_skills.page run data get storage prodiges_skills:prodiges_skills Gui.pageToScore.index
+function prodiges_skills:gui/click
+scoreboard players set __if_else__ prodiges_skills.__variable__ 1

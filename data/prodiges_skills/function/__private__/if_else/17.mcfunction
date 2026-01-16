@@ -1,2 +1,2 @@
 title @s actionbar ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"You already have an active ","color":"red","type":"text"},{"text":"SP Booster","color":"gold","type":"text"},{"text":"!","color":"red","type":"text"}]
-scoreboard players set __if_else__ skills.__variable__ 1
+scoreboard players set __if_else__ prodiges_skills.__variable__ 1

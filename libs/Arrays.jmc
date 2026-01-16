@@ -1,17 +1,17 @@
 class Arrays {
     @lazy function length(array) {
-        return run $array;
+        execute run $array;
     }
 
     @lazy function playerInv_length(selector) {
-        return run $selector::Inventory;
+        execute run $selector::Inventory;
     }
 
     @lazy function forEach(out, array, func) {
         $forEach.length = Arrays.length($array);
         for ($forEach.index = 0; $forEach.index < $forEach.length; $forEach.index++) {
             ::Arrays.forEach.index = $forEach.index;
-            execute run { $::Arrays.forEach.$out = $array[$(index)]; }
+            execute run { $::Arrays.forEach.$out = $array[$(index)]; } with ::Arrays.forEach;
             $func with ::Arrays.forEach;
         }
     }

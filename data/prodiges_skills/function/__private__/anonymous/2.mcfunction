@@ -1,2 +1,1 @@
-tag @s remove this
-function prodiges_skills:gui/refresh
+$data modify storage prodiges_skills:prodiges_skills Gui.scoreToPage.name set from storage prodiges_skills:prodiges_skills Gui.Pages[$(pageScore)]

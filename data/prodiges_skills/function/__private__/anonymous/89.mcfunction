@@ -1,2 +1,1 @@
-$execute if score @p prodiges_skills.$(name).prestige matches ..4 run function prodiges_skills:menu/pages/prestige/setitem with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige
-$execute if score @p prodiges_skills.$(name).prestige matches 5 run function prodiges_skills:menu/pages/prestige/setitemmax with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.pointBooster set value '§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left'

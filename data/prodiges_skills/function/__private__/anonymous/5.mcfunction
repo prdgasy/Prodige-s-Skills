@@ -1,1 +1,2 @@
-$data modify storage prodiges_skills:prodiges_skills exploitFilter.id set from storage prodiges_skills:prodiges_skills exploitFilter.Objects[$(i)]
+tag @s remove this
+function prodiges_skills:gui/refresh

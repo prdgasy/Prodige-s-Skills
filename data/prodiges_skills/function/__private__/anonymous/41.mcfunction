@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.prestigeLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$tellraw @p ["",{text:"\n ♦ ",bold:true,color:"aqua"},{text:"Skill Crate",bold:true,color:"gold"},{text:" ♦\n",bold:true,color:"aqua"},{text:"\n §l► §eRewards:\n",bold:false,color:"yellow"},{text:"   ● ",color:"gray"},{text:"$(repr)"}]

@@ -17,7 +17,7 @@ class Menu.Pages.Main {
             else if ($lvl <= 100) { prodiges_skills.Menu.progressPage:@s = 5; }
 
 
-            Gui.switchPage(Progress);
+            Gui.switchPage(progress);
             $break = true;
         } with ::Menu.Pages.Main;
     }
@@ -27,7 +27,7 @@ class Menu.Pages.Main {
         Menu.Pages.Main.getBoosters();
 
         execute run {
-            $execute as @p run loot replace entity @n[type = chest_minecart, tag = skillsLIB] container.4 loot { "type":"minecraft:command", "pools":[{ "rolls":1, "entries":[{ "type":"minecraft:item", "name":"minecraft:player_head", "functions":[{ "function":"minecraft:set_name", "entity":"this", "target":"custom_name", "name":{ "text":"Profile", "color":"light_purple", "italic":false } }, { "function":"minecraft:fill_player_head", "entity":"this" }, { "function":"minecraft:set_custom_data", "tag":"{prodiges_skills: 1b}" }, { "function":"minecraft:set_lore", "entity":"this", "lore":[{ "text":"" }, { "text":"§8§l♦ §rPoints: ", "type":"text", "extra":[{ "text":"$(sp) SP", "type":"text", "color":"gold", "italic":false } ], "color":"#A888B5", "italic":false }, { "text":"" }, { "text":"Active Boosters:", "color":"yellow", "italic":false }, { "text":"§8• $(booster_xp)", "italic":false }, { "text":"§8• $(booster_sp)", "italic":false }, { "text":"" }, { "text":"Click to view!", "color":"yellow", "italic":false } ], "mode":"append" } ], "conditions":[] } ] } ] };
+            $execute as @p run loot replace entity @n[type = chest_minecart, tag = skillsLIB] container.4 loot { "type":"minecraft:command", "pools":[{ "rolls":1, "entries":[{ "type":"minecraft:item", "name":"minecraft:player_head", "functions":[{ "function":"minecraft:set_name", "entity":"this", "target":"custom_name", "name":{ text:"Profile", color:"light_purple", italic:false } }, { "function":"minecraft:fill_player_head", "entity":"this" }, { "function":"minecraft:set_custom_data", "tag":"{prodiges_skills: 1b}" }, { "function":"minecraft:set_lore", "entity":"this", "lore":[{ text:"" }, { text:"§8§l♦ §rPoints: ", "type":text, "extra":[{ text:"$(sp) SP", "type":text, color:"gold", italic:false } ], color:"#A888B5", italic:false }, { text:"" }, { text:"Active Boosters:", color:"yellow", italic:false }, { text:"§8• $(booster_xp)", italic:false }, { text:"§8• $(booster_sp)", italic:false }, { text:"" }, { text:"Click to view!", color:"yellow", italic:false } ], "mode":"append" } ], "conditions":[] } ] } ] };
         } with ::Menu.Pages.Main;
     }
 
@@ -60,41 +60,38 @@ class Menu.Pages.Main {
 
     function skills() {
         $slot = 11;
-        $pagesNumber = ::Gui.PagesNumber;
-        for ($skillsIndex = 0; $skillsIndex < $pagesNumber; $skillsIndex++) {
+        $skillsNumber = ::Gui.SkillsNumber;
+        for ($skillIndex = 0; $skillIndex < $skillsNumber; $skillIndex++) {
             Menu.Pages.Main.getSkillName();
 
-            execute run {
-                ::Menu.Pages.Main.slot = $slot;
+            ::Menu.Pages.Main.slot = $slot;
 
-                // Get infos
-                Menu.Pages.Main.getSkillInfos() with ::Menu.Pages.Main;
+            // Get infos
+            Menu.Pages.Main.getSkillInfos() with ::Menu.Pages.Main;
 
-                // Set item
-                if ($lvl < 100) {
-                    execute run { $::Menu.Pages.Main.bar = ::Config.Progress.$(ratio_15); } with ::Menu.Pages.Main;
-                    Menu.Pages.main.setSkillItem() with ::Menu.Pages.Main;
-                } else {
-                    Menu.Pages.main.setSkillItemLvlMax() with ::Menu.Pages.Main;
-                }
+            // Set item
+            if ($lvl < 100) {
+                execute run { $::Menu.Pages.Main.bar = ::Config.Progress.$(ratio_15); } with ::Menu.Pages.Main;
+                Menu.Pages.main.setSkillItem() with ::Menu.Pages.Main;
+            } else {
+                Menu.Pages.main.setSkillItemLvlMax() with ::Menu.Pages.Main;
+            }
 
-
-            } with ::temp.init;
             $slot++;
         }
     }
 
     function getSkillInfos() {
-        $::Menu.Pages.Main.name = ::Config.Skills.$(name).name;
-        $::Menu.Pages.Main.item = ::Config.Skills.$(name).item;
-        $::Menu.Pages.Main.lore1 = ::Config.Skills.$(name).lore1;
-        $::Menu.Pages.Main.lore2 = ::Config.Skills.$(name).lore2;
+        $::Menu.Pages.Main.name = ::Config.Skills.$(skillName).name;
+        $::Menu.Pages.Main.item = ::Config.Skills.$(skillName).item;
+        $::Menu.Pages.Main.lore1 = ::Config.Skills.$(skillName).lore1;
+        $::Menu.Pages.Main.lore2 = ::Config.Skills.$(skillName).lore2;
 
-        $::Menu.Pages.Main.prestigeLore1 = ::Config.Skills.$(name).prestige.lore1;
-        $::Menu.Pages.Main.prestigeLore2 = ::Config.Skills.$(name).prestige.lore2;
-        $::Menu.Pages.Main.ability = ::Config.Skills.$(name).prestige.ability;
+        $::Menu.Pages.Main.prestigeLore1 = ::Config.Skills.$(skillName).Prestige.lore1;
+        $::Menu.Pages.Main.prestigeLore2 = ::Config.Skills.$(skillName).Prestige.lore2;
+        $::Menu.Pages.Main.ability = ::Config.Skills.$(skillName).Prestige.ability;
 
-        $scoreboard players operation $prestigeLvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).prestige;
+        $scoreboard players operation $prestigeLvl prodiges_skills.__variable__ = @p prodiges_skills.$(skillName).Prestige;
         ::Menu.Pages.Main.prestigeLvl = $prestigeLvl;
         ::Menu.Pages.Main.prestigeLvl = RomanConverter.toRoman(::Menu.Pages.Main.prestigeLvl);
 
@@ -102,9 +99,9 @@ class Menu.Pages.Main {
         ::Menu.Pages.Main.abilityPower = $abilityPower := $prestigeLvl * 5;
 
         // Get scores
-        JMC.put('$scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(name).xp');
-        $scoreboard players operation $xpToNext prodiges_skills.__variable__ = @p prodiges_skills.$(name).xpToNext;
-        $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl;
+        JMC.put('$scoreboard players operation $xp prodiges_skills.__variable__ = @p prodiges_skills.$(skillName).xp');
+        $scoreboard players operation $xpToNext prodiges_skills.__variable__ = @p prodiges_skills.$(skillName).xpToNext;
+        $scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(skillName).lvl;
         $nextLvl := $lvl + 1;
 
         ::Menu.Pages.Main.xp = $xp;
@@ -117,66 +114,34 @@ class Menu.Pages.Main {
 
         $ratio_100 := $xp * 100 / $xpToNext;
         $ratio_15 := $xp * 15 / $xpToNext;
-        $100ratio = $xp;
-        $10ratio = $xp;
+        $ratio_100 = $xp;
+        $ratio_15 = $xp;
 
-        $100ratio *= 100;
-        $100ratio /= $xpToNext;
-        $10ratio *= 15;
-        $10ratio /= $xpToNext;
+        $ratio_100 *= 100;
+        $ratio_100 /= $xpToNext;
+        $ratio_15 *= 15;
+        $ratio_15 /= $xpToNext;
 
 
         ::Menu.Pages.Main.ratio_100 = $ratio_100;
         ::Menu.Pages.Main.ratio_15 = $ratio_15;
+
+        execute run {
+            say 'got bar';
+            $::Menu.Pages.Main.bar = ::Consts.Bars.$(ratio_15);
+        } with ::Menu.Page.Main;
     }
 
     function getSkillName() {
-        ::Menu.Pages.Main.skillsIndex = $skillsIndex;
-        execute run { $::Menu.Pages.Main.skillName = ::Consts.Skills.$(skillsIndex); } with ::Menu.Pages.Main;
+        ::Menu.Pages.Main.skillIndex = $skillIndex;
+        execute run { $::Menu.Pages.Main.skillName = ::Consts.Skills.$(skillIndex); } with ::Menu.Pages.Main;
     }
 
     function setSkillItem() {
-        $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { prodiges_skills: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
-            lore = [
-                '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
-                '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',
-                '["",{"text":"$(desc2) ","italic":false,"color":"white"},{"text":" ","italic":false}]',
-                '[""]',
-                '["",{"text":"Progress to ","italic":false,"color":"gray"},{"text":"$(name) ","italic":false,"color":"yellow"},{"text":"$(nextLvl)","italic":false,"color":"yellow","bold":true},{"text":":","italic":false,"color":"gray"},{"text":" ","italic":false},{"text":"$(100ratio)%","italic":false,"color":"gray"}]',
-                '["",{"text":" ","italic":false,"color":"gray"},{"text":"$(bar)","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"$(xp)","italic":false,"color":"#efb6c8"},{"text":"/","italic":false,"color":"#a888b5"},{"text":"$(xpToNext)","italic":false,"color":"#efb6c8"}]',
-                '[""]',
-                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Prestige:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"$(name) §8§l♦ §8[§c§l$(prestige_lvl)§8]","italic":false,"color":"#efb6c8"}]',
-                '[""]',
-                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Ability:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"§l$(ability)","italic":false,"color":"#efb6c8"}]',
-                '["",{"text":"  ","italic":false},{"text":"$(ability_desc1)  ","italic":false,"color":"#efb6c8"}]',
-                '["",{"text":"  $(ability_desc2)","italic":false,"color":"#efb6c8"}]',
-                '["",{"text":"  ","italic":false,"color":"yellow","bold":true},{"text":"→","italic":false,"bold":true,"color":"dark_gray"},{"text":" $(power)%","italic":false,"bold":true,"color":"red"}]',
-                '[""]',
-                '["",{"text":"Click to view!","italic":false,"color":"yellow"}]'
-            ], !minecraft:attribute_modifiers
-        ];
+        $item replace entity @s container.$(slot) with $(item)[custom_data = { prodiges_skills: 1b }, custom_name = [{ text:"$(skillName) ", italic:false, color:"#A888B5" }, { text:"$(lvlRoman)", italic:false, color:"#EFB6C8", bold:true } ], lore = [[{ text:"Level $(lvl)", italic:false, color:"blue" } ], ["", { text:"$(lore1)  ", italic:false, color:"white" } ], ["", { text:"$(lore2) ", italic:false, color:"white" }, { text:" ", italic:false } ], [""], ["", { text:"Progress to ", italic:false, color:"gray" }, { text:"$(name) ", italic:false, color:"yellow" }, { text:"$(nextLvl)", italic:false, color:"yellow", bold:true }, { text:":", italic:false, color:"gray" }, { text:" ", italic:false }, { text:"$(ratio_100)%", italic:false, color:"gray" } ], ["", { text:" ", italic:false, color:"gray" }, { text:"$(bar)", italic:false, color:"white" }, { text:" ", italic:false, color:"gray" }, { text:"$(xp)", italic:false, color:"#efb6c8" }, { text:"/", italic:false, color:"#a888b5" }, { text:"$(xpToNext)", italic:false, color:"#efb6c8" } ], [""], [{ text:"♦", italic:false, bold:true, color:"dark_gray" }, { text:" ", italic:false }, { text:"Prestige:", italic:false, color:"#a888b5" }, { text:" ", italic:false }, { text:"$(name) §8§l♦ §8[§c§l$(prestigeLvl)§8]", italic:false, color:"#efb6c8" } ], [""], [{ text:"♦", italic:false, bold:true, color:"dark_gray" }, { text:" ", italic:false }, { text:"Ability:", italic:false, color:"#a888b5" }, { text:" ", italic:false }, { text:"§l$(ability)", italic:false, color:"#efb6c8" } ], ["", { text:"  ", italic:false }, { text:"$(prestigeLore1)  ", italic:false, color:"#efb6c8" } ], [{ text:"  $(prestigeLore2)", italic:false, color:"#efb6c8" } ], [{ text:"  ", italic:false, color:"yellow", bold:true }, { text:"→", italic:false, bold:true, color:"dark_gray" }, { text:" $(abilityPower)%", italic:false, bold:true, color:"red" } ], [""], [{ text:"Click to view!", italic:false, color:"yellow" } ]], !minecraft:attribute_modifiers];
     }
 
     function setSkillItemLvlMax() {
-        $item replace entity @s container.$(slot) with $(item)[
-            custom_data = { prodiges_skills: 1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"$(lvl)","italic":false,"color":"#EFB6C8","bold":true}]',
-            lore = [
-                '[{"text":"Level $(lvl_int)","italic":false,"color":"blue"}]',
-                '["",{"text":"$(desc1)  ","italic":false,"color":"white"}]',
-                '["",{"text":"$(desc2) ","italic":false,"color":"white"},{"text":" ","italic":false}]',
-                '[""]',
-                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Prestige:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"$(name) §8§l♦ §8[§c§l$(prestige_lvl)§8]","italic":false,"color":"#efb6c8"}]',
-                '[""]',
-                '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Ability:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"§l$(ability)","italic":false,"color":"#efb6c8"}]',
-                '["",{"text":"  ","italic":false},{"text":"$(ability_desc1)  ","italic":false,"color":"#efb6c8"}]',
-                '["",{"text":"  $(ability_desc2)","italic":false,"color":"#efb6c8"}]',
-                '["",{"text":"  ","italic":false,"color":"yellow","bold":true},{"text":"→","italic":false,"bold":true,"color":"dark_gray"},{"text":" $(power)%","italic":false,"bold":true,"color":"red"}]',
-                '[""]',
-                '["",{"text":"Click to view!","italic":false,"color":"yellow"}]'
-            ], !minecraft:attribute_modifiers, enchantment_glint_override = true
-        ];
+        $item replace entity @s container.$(slot) with $(item)[custom_data = { prodiges_skills: 1b }, custom_name = ["", { text:"$(name) ", italic:false, color:"#A888B5" }, { text:"$(lvl)", italic:false, color:"#EFB6C8", bold:true } ], lore = [[{ text:"Level $(lvl_int)", italic:false, color:"blue" } ], ["", { text:"$(desc1)  ", italic:false, color:"white" } ], ["", { text:"$(desc2) ", italic:false, color:"white" }, { text:" ", italic:false } ], [""], ["", { text:"♦", italic:false, bold:true, color:"dark_gray" }, { text:" ", italic:false }, { text:"Prestige:", italic:false, color:"#a888b5" }, { text:" ", italic:false }, { text:"$(name) §8§l♦ §8[§c§l$(prestige_lvl)§8]", italic:false, color:"#efb6c8" } ], [""], ["", { text:"♦", italic:false, bold:true, color:"dark_gray" }, { text:" ", italic:false }, { text:"Ability:", italic:false, color:"#a888b5" }, { text:" ", italic:false }, { text:"§l$(ability)", italic:false, color:"#efb6c8" } ], ["", { text:"  ", italic:false }, { text:"$(ability_desc1)  ", italic:false, color:"#efb6c8" } ], ["", { text:"  $(ability_desc2)", italic:false, color:"#efb6c8" } ], ["", { text:"  ", italic:false, color:"yellow", bold:true }, { text:"→", italic:false, bold:true, color:"dark_gray" }, { text:" $(power)%", italic:false, bold:true, color:"red" } ], [""], ["", { text:"Click to view!", italic:false, color:"yellow" } ]], !minecraft:attribute_modifiers, enchantment_glint_override = true];
     }
-
-
 }

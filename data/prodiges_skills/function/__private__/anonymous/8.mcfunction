@@ -1,2 +1,1 @@
-tag @s add prodiges_skills.exploitfilter
-$scoreboard players reset @s prodiges_skills.exploitfilter.$(id)
+$data modify storage prodiges_skills:prodiges_skills Consts.name set from storage prodiges_skills:prodiges_skills Consts.Skills.$(index)

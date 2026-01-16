@@ -22,7 +22,7 @@ class Menu.Pages.Tasks {
     }
 
     function setTaskItem() {
-        $item replace entity @s container.$(slot) with $(item_repr)[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"$(item_name) §b+$(xp) xp","color":"gray","italic":false}', !attribute_modifiers];
+        $item replace entity @s container.$(slot) with $(item_repr)[custom_data = { prodiges_skills: 1b }, custom_name = { text:"$(item_name) §b+$(xp) xp", color:"gray", italic:false }, !attribute_modifiers];
     }
 
     function setSkillItem() {
@@ -30,7 +30,7 @@ class Menu.Pages.Tasks {
         execute run { $::Menu.Pages.Tasks.name = ::Consts.Skils.$(index); } with ::Menu.Pages.Tasks;
         execute run { $::Menu.Pages.Tasks.item = ::Config.Skills.$(name).item; } with ::Menu.Pages.Tasks;
         execute run {
-            $item replace entity @s container.9 with $(item)[custom_data = { prodiges_skills: 1b }, custom_name = '["",{"text":"$(name) Task Rewards","italic":false,"color":"yellow"}]', lore = ['["",{"text":"Here, you can find all ","italic":false,"color":"white"},{"text":"actions","italic":false,"color":"gold"}]', '["",{"text":"that grant ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"aqua"},{"text":". Check how much","italic":false,"color":"white"}]', '["",{"text":"each ","italic":false,"color":"white"},{"text":"task rewards you","italic":false,"color":"dark_purple"},{"text":". Use this","italic":false,"color":"white"}]', '["",{"text":"to optimize your skill","italic":false,"color":"white"}]', '["",{"text":"progression!","italic":false,"color":"white"}]'], !attribute_modifiers, enchantment_glint_override = true];
+            $item replace entity @s container.9 with $(item)[custom_data = { prodiges_skills: 1b }, custom_name = ["", { text:"$(name) Task Rewards", italic:false, color:"yellow" } ], lore = [["", { text:"Here, you can find all ", italic:false, color:"white" }, { text:"actions", italic:false, color:"gold" } ], ["", { text:"that grant ", italic:false, color:"white" }, { text:"XP", italic:false, color:"aqua" }, { text:". Check how much", italic:false, color:"white" } ], ["", { text:"each ", italic:false, color:"white" }, { text:"task rewards you", italic:false, color:"dark_purple" }, { text:". Use this", italic:false, color:"white" } ], ["", { text:"to optimize your skill", italic:false, color:"white" } ], ["", { text:"progression!", italic:false, color:"white" } ]], !attribute_modifiers, enchantment_glint_override = true];
         } with ::Menu.Pages.Tasks;
     }
 
@@ -52,14 +52,14 @@ class Menu.Pages.Tasks {
     }
 
     function setSliders() {
-        item replace entity @s container.26 with paper[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"Next Page »","color":"yellow","italic":false, "bold":true}'];
-        item replace entity @s container.8 with paper[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"« Previous Page","color":"yellow","italic":false, "bold":true}'];
+        item replace entity @s container.26 with paper[custom_data = { prodiges_skills: 1b }, custom_name = { text:"Next Page »", color:"yellow", italic:false, bold:true } ];
+        item replace entity @s container.8 with paper[custom_data = { prodiges_skills: 1b }, custom_name = { text:"« Previous Page", color:"yellow", italic:false, bold:true } ];
 
         if (prodiges_skills.Menu.pageTasks:@s == $pageNumber) {
-            item replace entity @s container.26 with paper[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"Next Page »","color":"gray","italic":false}'];
+            item replace entity @s container.26 with paper[custom_data = { prodiges_skills: 1b }, custom_name = { text:"Next Page »", color:"gray", italic:false } ];
         }
         if (prodiges_skills.Menu.pageTasks:@s == 0) {
-            item replace entity @s container.8 with paper[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"« Previous Page","color":"gray","italic":false}'];
+            item replace entity @s container.8 with paper[custom_data = { prodiges_skills: 1b }, custom_name = { text:"« Previous Page", color:"gray", italic:false } ];
         }
     }
 

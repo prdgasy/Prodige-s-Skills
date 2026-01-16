@@ -1,0 +1,1 @@
+$data modify storage prodiges_skills:prodiges_skills Consts.initSkills.name set from storage prodiges_skills:prodiges_skills Consts.Skills.$(skillIndex)

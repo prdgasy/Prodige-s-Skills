@@ -6,7 +6,7 @@ Scoreboard.add(prodiges_skills.crate.cooldown);
 
 class Player.Booster {
     function give() {
-        $give @p stone_pickaxe[custom_data = { prodiges_skills:{ power:$(power), type_int:$(type_int)b, type:$(type), duration:$(duration), booster_color:$(booster_color) } }, custom_name = '{"text":"x$(power) $(type) Booster §7- $(duration) min §8§l♦ §eClick","color":$(booster_color),"italic":false}', lore = ['[{"text":"Skills","color":"blue","italic":false}]', '[{"text":"Click to use!","color":"gray","italic":false}]'], !attribute_modifiers, item_model = "minecraft:$(model)", enchantment_glint_override = true, consumable = { consume_seconds:930004 }, food = { nutrition:0, saturation:0, can_always_eat:true }, max_stack_size = 16, !tool, !max_damage ];
+        $give @p stone_pickaxe[custom_data = { prodiges_skills:{ power:$(power), type_int:$(type_int)b, type:$(type), duration:$(duration), booster_color:$(booster_color) } }, custom_name = { text:"x$(power) $(type) Booster §7- $(duration) min §8§l♦ §eClick", color:$(booster_color), italic:false }, lore = [[{ text:"Skills", color:"blue", italic:false } ], [{ text:"Click to use!", color:"gray", italic:false } ]], !attribute_modifiers, item_model = "minecraft:$(model)", enchantment_glint_override = true, consumable = { consume_seconds:930004 }, food = { nutrition:0, saturation:0, can_always_eat:true }, max_stack_size = 16, !tool, !max_damage ];
     }
 
     function use() {
@@ -26,7 +26,7 @@ class Player.Booster {
                 $scoreboard players set @s skills.booster.$(type_int).duration $(duration);
                 $scoreboard players set @s skills.booster.$(type_int).power $(power);
 
-                $tellraw @p [ { "text":"§a§lSkills ♦ §aYou enabled a" }, { "text":" [x$(power) $(type) Booster] §afor §7$(duration) minutes§a.", "color":"$(booster_color)" } ];
+                $tellraw @p [ { text:"§a§lSkills ♦ §aYou enabled a" }, { text:" [x$(power) $(type) Booster] §afor §7$(duration) minutes§a.", color:"$(booster_color)" } ];
 
                 playsound entity.player.levelup ambient @s ~ ~ ~ 1 2;
             } with ::temp.Booster.use;

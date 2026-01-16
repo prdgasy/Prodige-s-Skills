@@ -1,2 +1,1 @@
-$tellraw @p ["",{"text":"Skills \u2666 ","color":"#8174A0","bold":true,"type":"text"},{"text":"You Prestiged ","color":"green","type":"text"},{"text":"$(name)","color":"gold","type":"text"},{"text":".","color":"green","type":"text"}]
-$tellraw @p ["",{"text":"You unlocked \u00a7l$(ability) $(lvl):","color":"green"},{"text":"\n $(ability_desc1)\n $(ability_desc2)\n "},{"text":"\u2192 ","bold":true,"color":"dark_gray"},{"text":"+$(power)%","bold":true,"color":"red"}]
+$tellraw @p ["",{"text":"Skills \u2666 ","color":"red","bold":true,"type":"text"},{"text":"You need to be Level C (100) in ","color":"red","type":"text"},{"text":"$(name) ","color":"gold","type":"text"},{"text":"to Prestige.","color":"red","type":"text"}]

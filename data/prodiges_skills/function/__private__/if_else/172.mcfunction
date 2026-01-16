@@ -1,4 +1,2 @@
-function prodiges_skills:gui/pagetoscore {pageName:Main}
-execute store result score @s prodiges_skills.page run data get storage prodiges_skills:prodiges_skills Gui.pageToScore.index
-function prodiges_skills:gui/click
-scoreboard players set __if_else__ skills.__variable__ 1
+function prodiges_skills:player/crate/open
+scoreboard players set __if_else__ prodiges_skills.__variable__ 1

@@ -1,1 +1,1 @@
-$item replace entity @s container.$(slot) with minecraft:charcoal[custom_data={prodiges_skills:1b},custom_name='{ "text":"$(name) §4§l$(lvlTestRoman)", "color":"red", "italic":false } ',lore=['[{ "text":"Level $(lvlTest)", "italic":false, "color":"blue" }]','[""]','["", { "text":"You cannot claim this!", "italic":false, "color":"red" }]']]
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

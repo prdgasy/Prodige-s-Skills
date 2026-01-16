@@ -1,1 +1,2 @@
-$fill ~-2 ~-1 ~-2 ~2 ~ ~2 $(type) keep
+$data modify storage prodiges_skills:prodiges_skills Consts.initSkills.criteria set from storage prodiges_skills:prodiges_skills Config.Skills.$(name).Tasks[$(taskIndex)].criteria
+$data modify storage prodiges_skills:prodiges_skills Consts.initSkills.task set from storage prodiges_skills:prodiges_skills Config.Skills.$(name).Tasks[$(taskIndex)].task

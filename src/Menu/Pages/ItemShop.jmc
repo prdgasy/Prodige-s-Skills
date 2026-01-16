@@ -25,7 +25,7 @@ class Menu.Pages.ItemShop {
 
     function setItem() {
         // set avec param
-        $item replace entity @s container.$(slot) with $(itemRepr)[custom_data = { prodiges_skills: 1b }, custom_name = '{"text":"$(item_name) §8§l♦ $(pointsColor)$(cost) SP","italic":false}', lore = ['[{"text":"Skills - $(type)","italic":false,"color":"blue"}]', '[{"text":"$(rarity)","italic":false,"color":"blue"}]', '[""]', '[{"text":"$(lore1)","italic":true,"color":"light_purple"}]', '[{"text":"$(lore2)","italic":true,"color":"light_purple"}]', '[""]', '["",{"text":"Click to buy!","italic":false,"color":"yellow"}]'], enchantments = { $(enchantName0):$(enchantLevel0), $(enchantName1):$(enchantLevel1) } ];
+        $item replace entity @s container.$(slot) with $(itemRepr)[custom_data = { prodiges_skills: 1b }, custom_name = { text:"$(item_name) §8§l♦ $(pointsColor)$(cost) SP", italic:false }, lore = [[{ text:"Skills - $(type)", italic:false, color:"blue" } ], [{ text:"$(rarity)", italic:false, color:"blue" } ], [""], [{ text:"$(lore1)", italic:true, color:"light_purple" } ], [{ text:"$(lore2)", italic:true, color:"light_purple" } ], [""], ["", { text:"Click to buy!", italic:false, color:"yellow" } ]], enchantments = { $(enchantName0):$(enchantLevel0), $(enchantName1):$(enchantLevel1) } ];
     }
 
     function click() {

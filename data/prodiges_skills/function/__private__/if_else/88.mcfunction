@@ -1,2 +1,2 @@
-execute if score $p_lvl skills.__variable__ matches 5 run function prodiges_skills:__private__/if_else/87
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:menu/pages/prestige/success with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige
+execute if score $p_lvl prodiges_skills.__variable__ matches 5 run function prodiges_skills:__private__/if_else/87
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run function prodiges_skills:menu/pages/prestige/success with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige

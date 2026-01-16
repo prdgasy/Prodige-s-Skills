@@ -1,2 +1,2 @@
-execute if score $lvl skills.__variable__ > $lvlStart skills.__variable__ if score $claimed skills.__variable__ matches 1.. run function prodiges_skills:__private__/if_else/50
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/56
+execute if score $lvl prodiges_skills.__variable__ > $lvlStart prodiges_skills.__variable__ if score $claimed prodiges_skills.__variable__ matches 1.. run function prodiges_skills:__private__/if_else/50
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/56

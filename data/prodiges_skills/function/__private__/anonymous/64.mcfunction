@@ -1,1 +1,1 @@
-$tellraw @p ["",{"text":"Skills \u2666 ","color":"yellow","bold":true,"type":"text"},{"text":"$(name) $(lvl) ","color":"gold","type":"text"},{"text":"is still in progress.","color":"yellow","type":"text"}]
+$execute if entity @p[tag=prodiges_skills.toClaim.$(name).$(lvlClaimTest)] run scoreboard players set $toClaim prodiges_skills.__variable__ 1

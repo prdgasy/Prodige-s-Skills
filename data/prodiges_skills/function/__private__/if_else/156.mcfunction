@@ -1,4 +1,5 @@
-function prodiges_skills:gui/pagetoscore {pageName:Main}
-execute store result score @s prodiges_skills.page run data get storage prodiges_skills:prodiges_skills Gui.pageToScore.index
-function prodiges_skills:gui/click
-scoreboard players set __if_else__ skills.__variable__ 1
+scoreboard players set __if_else__ prodiges_skills.__variable__ 0
+execute if entity @p[tag=prodiges_skills.pref.lvlBroadcast] run function prodiges_skills:__private__/if_else/155
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run tag @p add prodiges_skills.pref.lvlBroadcast
+playsound minecraft:entity.arrow.hit_player ambient @p[tag=prodiges_skills.pref.sound] ~ ~ ~ 1 0
+scoreboard players set __if_else__ prodiges_skills.__variable__ 1

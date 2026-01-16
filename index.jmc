@@ -2,6 +2,8 @@
 import 'libs/Arrays.jmc';
 import 'libs/Gui.jmc';
 
+import 'src/Consts.jmc';
+
 import 'src/ExploitFilter.jmc';
 // Initialize Exploit Filter
 ExploitFilter.createScore();

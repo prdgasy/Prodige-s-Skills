@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.name set from storage prodiges_skills:prodiges_skills Consts.Skills.$(index)
+$execute unless data entity @s Items[{Slot:$(slot)b}] run function prodiges_skills:__private__/anonymous/111

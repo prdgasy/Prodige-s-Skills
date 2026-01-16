@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Progress.data.nextLvlRoman set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Main.pointBooster set value '§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left'

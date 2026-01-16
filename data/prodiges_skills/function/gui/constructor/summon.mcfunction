@@ -1,3 +1,3 @@
-scoreboard players set __if_else__ skills.__variable__ 0
+scoreboard players set __if_else__ prodiges_skills.__variable__ 0
 execute unless entity @e[type=chest_minecart,tag=prodiges_skills,distance=..1] if block ~ ~ ~ air if block ~ ~1 ~ air run function prodiges_skills:__private__/if_else/0
-execute if score __if_else__ skills.__variable__ matches 0 run title @p actionbar ["",{"text":"Skills: \u2666 ","color":"red","bold":true,"type":"text"},{"text":"GUI already active or there is no free space!","color":"red","type":"text"}]
+execute if score __if_else__ prodiges_skills.__variable__ matches 0 run title @p actionbar ["",{"text":"Skills: \u2666 ","color":"red","bold":true,"type":"text"},{"text":"GUI already active or there is no free space!","color":"red","type":"text"}]

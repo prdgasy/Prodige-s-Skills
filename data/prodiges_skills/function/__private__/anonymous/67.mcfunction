@@ -1,1 +1,1 @@
-$execute if entity @p[tag=!prodiges_skills.toClaim.$(name).$(lvl)] run scoreboard players set $claimed skills.__variable__ 1
+$item replace entity @s container.$(slot) with quartz[custom_data={prodiges_skills:1b},custom_name={text:"$(name) §8§l$(lvlTestRoman)",color:"gray",italic:false},lore=[[{text:"Level $(lvlTest)",italic:false,color:"blue"}],[{text:"Rewards:",italic:false,color:"yellow"}],[{text:"§8- $(show)"}],[{text:"§8- §6+$(point) Prodige Points (PPoints)"}],[""],["",{text:"You already claimed this!",italic:false,color:"green"}]]]

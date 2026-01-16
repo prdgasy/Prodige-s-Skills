@@ -1,6 +1,6 @@
 LOAD=__load__
 TICK=__tick__
 PRIVATE=__private__
-VAR=skills.__variable__
-INT=skills.__int__
-STORAGE=skills.__storage__
+VAR=prodiges_skills.__variable__
+INT=prodiges_skills.__int__
+STORAGE=__storage__

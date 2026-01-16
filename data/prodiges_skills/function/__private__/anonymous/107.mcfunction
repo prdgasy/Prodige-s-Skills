@@ -1,1 +1,2 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Boosters.booster_sp set value '§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left'
+execute store result storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop.id int 1 run scoreboard players get $itemsLength prodiges_skills.__variable__
+function prodiges_skills:menu/pages/itemshop/clickedonitem with storage prodiges_skills:prodiges_skills Menu.Pages.ItemShop

@@ -1,1 +1,1 @@
-$execute unless data entity @s Items[{Slot:$(slot)b}] run function prodiges_skills:__private__/anonymous/115 with storage prodiges_skills:prodiges_skills Menu.Pages.Prestige
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Boosters.booster_sp set value '§6x$(pointBoosterPower) Skill Point Booster §7- $(pointBoosterDuration) minute(s) left'

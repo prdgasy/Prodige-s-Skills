@@ -1,1 +1,1 @@
-$$(name)()
+$data modify storage prodiges_skills:prodiges_skills Gui.scoreToPage.name set value 'function prodiges_skills:menu/pages/$(name)'

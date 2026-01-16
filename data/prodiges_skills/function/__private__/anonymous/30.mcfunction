@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills temp.gui.crate set from storage prodiges_skills:prodiges_skills DB.Shop.crate[$(i)]
+$data modify storage prodiges_skills:prodiges_skills Player.OnEvent.lvlUp.nextLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)

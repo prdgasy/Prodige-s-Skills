@@ -1,4 +1,1 @@
-$scoreboard players operation $lvl prodiges_skills.__variable__ = @p prodiges_skills.$(name).lvl
-scoreboard players set __if_else__ skills.__variable__ 0
-execute if score $lvl skills.__variable__ < $lvlstart skills.__variable__ run function prodiges_skills:__private__/if_else/58
-execute if score __if_else__ skills.__variable__ matches 0 run function prodiges_skills:__private__/if_else/64
+$item replace entity @s container.$(slot) with minecraft:charcoal[custom_data={prodiges_skills:1b},custom_name={text:"$(name) §4§l$(lvlRoman)",color:"red",italic:false},lore=[[{text:"Level $(lvlTest)",italic:false,color:"blue"}],[{text:"Rewards:",italic:false,color:"yellow"}],[{text:"§8- $(show)"}],[{text:"§8- §6+$(point) Prodige Points (PPoints)"}],[""],["",{text:"You cannot claim this!",italic:false,color:"red"}]]]

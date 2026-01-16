@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Prestige.name set from storage prodiges_skills:prodiges_skills Consts.Skils.$(index)
+$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Shop.xpBooster set value '§bx$(xpBoosterPower) XP Booster §7- $(xpBoosterDuration) minute(s) left'

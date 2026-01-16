@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Menu.Pages.Tasks merge from storage prodiges_skills:prodiges_skills Menu.Pages.Tasks.tab[$(index)]
+$tellraw @p ["",{"text":"Skills \u2666 ","color":"yellow","bold":true,"type":"text"},{"text":"$(name) $(lvl) ","color":"gold","type":"text"},{"text":"is still in progress.","color":"yellow","type":"text"}]

@@ -1,1 +1,1 @@
-$data modify storage prodiges_skills:prodiges_skills Player.SpecialItem.itemRepr set from storage prodiges_skills:prodiges_skills Config.Shop.specialItems[$(id)].itemName
+$data modify storage prodiges_skills:prodiges_skills Player.OnEvent.showComponents.currentLvl set from storage prodiges_skills:prodiges_skills romanConverter.Numbers.$(number)
