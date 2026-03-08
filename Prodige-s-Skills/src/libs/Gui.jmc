@@ -1,0 +1,156 @@
+Scoreboard.add(prodiges_skills.id);
+Scoreboard.add(prodiges_skills.page);
+
+Scoreboard.add(Skills, trigger);
+forceload add 930005 930005;
+setblock 930005 0 930005 yellow_shulker_box;
+
+new loot_table(minecraft.blocks.yellow_shulker_box) {
+    "type":"minecraft:block", "pools":[{ "rolls":1, "bonus_rolls":0, "entries":[{ "type":"minecraft:item", "name":"minecraft:yellow_shulker_box", "functions":[{ "function":"minecraft:copy_components", "source":"block_entity", "include":[ "minecraft:custom_name", "minecraft:container", "minecraft:lock", "minecraft:container_loot" ] } ] } ], "conditions":[{ "condition":"minecraft:inverted", "term":{ "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } } ] }, { "rolls":1, "bonus_rolls":0, "entries":[{ "type":"minecraft:dynamic", "name":"minecraft:contents" } ], "conditions":[{ "condition":"minecraft:match_tool", "predicate":{ "predicates":{ "minecraft:custom_data":{ "drop_contents":1 } } } } ] } ], "random_sequence":"minecraft:blocks/yellow_shulker_box", "__smithed__":{ "priority":{ "stage":"early" }, "rules":[{ "type":"append", "target":"pools[0].conditions", "source":{ "type":"reference", "path":"pools[0].conditions[0]" } }, { "type":"append", "target":"pools", "source":{ "type":"reference", "path":"pools[1]" } } ] }
+}
+
+::Gui.Pages = ["main", "progress", "boosters", "skills", "tasks", "itemshop", "prestige", "preferences", "shop", "tasks"];
+::Gui.SkillsNumber = 4;
+
+class Gui {
+    @lazy function switchPage(pageName) {
+        say 'switched to page $pageName';
+        Gui.pageToScore({ pageName: $pageName }); // ::Gui.pageToScore.index;
+        prodiges_skills.page:@s = ::Gui.pageToScore.index;
+        Gui.click();
+    }
+
+    function scoreToPageClicksPath() {
+        ::Gui.scoreToPage.pageScore = prodiges_skills.page:@s;
+        execute run { $::Gui.scoreToPage.name = ::Gui.Pages[$(pageScore)]; } with ::Gui.scoreToPage;
+
+        // Add path
+        say 'added click path';
+        execute run { $::Gui.scoreToPage.name = "function prodiges_skills:menu/clicks/$(name)"; } with ::Gui.scoreToPage;
+    }
+
+    function scoreToPagePagesPath() {
+        ::Gui.scoreToPage.pageScore = prodiges_skills.page:@s;
+        execute run { $::Gui.scoreToPage.name = ::Gui.Pages[$(pageScore)]; } with ::Gui.scoreToPage;
+
+        // Add path
+        execute run { $::Gui.scoreToPage.name = "function prodiges_skills:menu/pages/$(name)"; } with ::Gui.scoreToPage;
+    }
+
+    function pageToScore() {
+        // Find index based page name
+        $::Gui.pageToScore.pageNameToCompare = $(pageName);
+        $index = 0;
+
+        Arrays.forEach(page, ::Gui.Pages, Gui.findName());
+    }
+
+    function findName() {
+        $::Gui.pageToScore.name = $(page);
+        if (Object.isEqual("prodiges_skills:prodiges_skills", "Gui.pageToScore.name", "prodiges_skills:prodiges_skills", "Gui.pageToScore.pageNameToCompare")) {
+            ::Gui.pageToScore.index = $index;
+        }
+        $index++;
+    }
+
+    class Constructor {
+        @add(__tick__) function findGUI() {
+            // Find the GUI minecart linked to the player
+            // At the player, as the GUI
+            execute as @a at @s as @e[type = chest_minecart, tag = prodiges_skills] run {
+                if (prodiges_skills.id:@p == prodiges_skills.id:@s) {
+                    Gui.Constructor.loop();
+                }
+            }
+        }
+
+        function close() {
+            prodiges_skills.id:@p = 0;
+            tp @s ~ ~-1000 ~;
+            kill @s;
+        }
+
+        function loop() {
+            // Executed each tick when the GUI is active and linked to a player
+            execute at @s run {
+                if (!entity @p[distance = ..1]) {
+                    // Close the GUI if the player is too far
+                    Gui.Constructor.close();
+                }
+            }
+
+            Gui.returnItems();
+            Gui.clickDetection();
+        }
+
+        function summon() {
+            // Create the GUI minecart near the player
+            // Unique ID management
+            if (!entity @e[type = chest_minecart, tag = prodiges_skills, distance = ..1] && block ~ ~ ~ air && block ~ ~1 ~ air) {
+                // Summon entity
+                summon chest_minecart ~ ~1 ~ { Tags:[ prodiges_skills, this ], NoGravity:1b, Silent:1b, Invulnerable:1b };
+
+                // ID management
+                prodiges_skills.id:global.id += 1;
+                prodiges_skills.id:@e[type = chest_minecart, tag = prodiges_skills, tag = this] = prodiges_skills.id:global.id;
+                prodiges_skills.id:@s = prodiges_skills.id:global.id;
+
+                // Init page
+                prodiges_skills.page:@e[type = chest_minecart, tag = prodiges_skills, tag = this] = 0;
+                execute as @e[type = chest_minecart, tag = prodiges_skills, tag = this] run {
+                    tag @s remove this;
+                    Gui.refresh();
+                }
+            } else {
+                Text.actionbar(@p, "&<red, bold>Skills: ♦ &<red>GUI already active or there is no free space!");
+            }
+        }
+    }
+
+    @add(__tick__) function main() {
+        // Clear dropped MENU items on the ground every tick
+        kill @e[type = item, nbt = { Item:{ components:{ "minecraft:custom_data":{ prodiges_skills: 1b } } } } ];
+
+        // Trigger detect
+        execute as @a[scores = { Skills = 1.. } ] at @s run Gui.Constructor.summon();
+        Skills:@a = 0;
+        scoreboard players enable @a Skills;
+    }
+
+    function returnItems() {
+        [930005, 0, 930005]::Items = @s::Items;
+        [930005, 0, 930005]::Items[{ components:{ "minecraft:custom_data":{ prodiges_skills: 1b } } } ].del();
+
+        $foreignItem = loot give @p mine 930005 0 930005 stick[custom_data = { drop_contents: 1b } ];
+
+        if ($foreignItem) { Gui.refresh(); }
+
+    }
+
+    function refresh() {
+        // Refresh items from the menu
+        @s::Items.del();
+        Gui.scoreToPagePagesPath(); // ::Gui.scoreToPage.name;
+        execute run {
+            $say "$(name)";
+            $$(name);
+        } with ::Gui.scoreToPage;
+    }
+
+    function click() {
+        playsound minecraft:block.stone.break ambient @p[ tag = prodiges_skills.pref.sound ] ~ ~ ~ .5;
+        Gui.refresh();
+    }
+
+    function clickDetection() {
+        // Detect missing items in the menu
+        // According to the page, the positions of the items change
+
+        $playerClicked ?= clear @p *[custom_data = { prodiges_skills: 1b } ];
+
+        if ($playerClicked) {
+            Gui.scoreToPageClicksPath(); // ::Gui.scoreToPage.name;
+            execute run { $$(name); } with ::Gui.scoreToPage;
+        }
+    }
+}
