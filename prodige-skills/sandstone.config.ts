@@ -1,7 +1,7 @@
 import type { DatapackConfig, ResourcePackConfig, SandstoneConfig } from 'sandstone'
 
 export default {
-  name: 'Prodige-s-Skills',
+  name: 'prodige-skills',
   packs: {
     datapack: {
       description: [ 'A ', { text: 'Sandstone', color: 'gold' }, ' datapack.' ],
@@ -15,8 +15,8 @@ export default {
   onConflict: {
     default: 'warn',
   },
-  namespace: 'Prodige-s-Skills',
-  packUid: 'L0DJOh__',
+  namespace: 'prodige-skills',
+  packUid: '46EQ989V',
   mcmeta: 'latest',
   saveOptions: { clientPath: 'C:\\Users\\TOSHIBA\\AppData\\Roaming\\ModrinthApp\\profiles\\Data_Resource Pack Modpack', world: 'MAIN' },
 } as SandstoneConfig
