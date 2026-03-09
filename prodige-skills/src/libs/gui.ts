@@ -124,4 +124,3 @@ export class GUI {
     this.pageData.push(page.buttons)
   }
 }
-
