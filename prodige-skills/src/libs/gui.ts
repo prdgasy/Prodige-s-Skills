@@ -1,15 +1,15 @@
-import { _, Data, execute, Label, MCFunction, Objective, rel, sandstonePack, Score, scoreboard, Selector, summon, tellraw, Macro as $, DataArray, say, item } from 'sandstone'
+import { _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard, Selector, summon, tellraw, Macro as $, DataArray, Variable, functionCmd } from 'sandstone'
 import { DataPointClass } from 'sandstone/variables'
 
-type Button = {
+export type Button = {
   item: string
   slot: number
-  name: string
-  lore: string[]
-  actions: any[]
+  name?: string
+  lore?: string[]
+  actions?: any[]
 }
 
-type GUIPage = {
+export type GUIPage = {
   name: string
   buttons: Button[]
 }
@@ -19,7 +19,10 @@ export class GUI {
   pageId: Score
   Pages: GUIPage[]
   pageData: ReturnType<typeof DataArray>
-
+  getButton: any
+  setItem: any
+  buttonList = Data('storage', 'prodiges_skills:gui', 'buttonList')
+  button = Data('storage', 'prodiges_skills:gui', 'button')
 
   constructor(name: string, triggerCommand: string, pages?: GUIPage[]) {
     this.name = name
@@ -48,7 +51,16 @@ export class GUI {
       })
     }, {
       runEveryTick: true
-    })()
+    })
+
+    // -- Macro functions -- 
+    this.getButton = MCFunction(`__gui/${this.name}/getbutton`, (_loop: any, index: Score) => {
+      this.button.set(this.buttonList.select($`[${index}]`))
+    })
+
+    this.setItem = MCFunction(`__gui/${this.name}/setitem`, (_loop: any, item: DataPointClass, slot: DataPointClass) => {
+      $.item.replace.entity('@s', $`container.${slot}`).with(item)
+    })
   }
 
   /**
@@ -91,15 +103,20 @@ export class GUI {
     MCFunction(`__gui/${this.name}/refresh`, () => {
       Data('entity', '@s').select('Items').remove()
 
-      const items = this.pageData.get(this.pageId)
-      this.fillItems(items)
-    }, {
-      runEveryTick: true
-    })
+      const buttons = this.pageData.get(this.pageId)
+      this.buttonList.set(buttons)
+      this.fillItems(buttons)
+    })()
   }
 
-  fillItems(items: DataPointClass) {
-    item.replace.entity('@s', 'container.0')
+  fillItems(buttons: DataPointClass) {
+    this.getButton(Variable(222))
+
+    const itemId = this.button.select('item')
+    const slot = this.button.select('slot')
+    this.setItem(itemId, slot)
+
+    tellraw('@s', [this.button, 'cool text'])
   }
 
   pushPage(page: GUIPage) {
