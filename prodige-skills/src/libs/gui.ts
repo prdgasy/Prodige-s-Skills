@@ -1,4 +1,4 @@
-import { _, Data, execute, Label, MCFunction, Objective, rel, sandstonePack, Score, scoreboard, Selector, summon, tellraw, Macro as $, DataArray, say } from 'sandstone'
+import { _, Data, execute, Label, MCFunction, Objective, rel, sandstonePack, Score, scoreboard, Selector, summon, tellraw, Macro as $, DataArray, say, item } from 'sandstone'
 import { DataPointClass } from 'sandstone/variables'
 
 type Button = {
@@ -36,20 +36,19 @@ export class GUI {
     }
 
     MCFunction(`__gui/${this.name}/trigger`, () => {
-      say('hello')
       execute.as('@a').run(() => {
         const triggerScore = Objective.create(triggerCommand, 'trigger')
 
         _.if(triggerScore('@s')['>='](1), () => {
           triggerScore('@s').reset()
-          scoreboard.players.enable('@s', triggerScore)
-
           this.trigger()
         })
+
+        scoreboard.players.enable('@s', triggerScore)
       })
     }, {
       runEveryTick: true
-    })
+    })()
   }
 
   /**
@@ -62,7 +61,7 @@ export class GUI {
     const tag = Label(`${this.name}.gui`)
     const newGui = Label('newGui')
 
-    _.if(_.not(_.and(Selector('@e', { type: 'chest_minecart', tag: [tag] }), isfree)), () => {
+    _.if(_.and(Selector('@e', { type: 'chest_minecart', tag: [tag] }), _.not(isfree)), () => {
       summon('chest_minecart', rel(0, 1, 0), { Tags: [tag, newGui], Silent: true, Invulnerable: true, NoGravity: true })
 
       // ID
@@ -100,7 +99,7 @@ export class GUI {
   }
 
   fillItems(items: DataPointClass) {
-
+    item.replace.entity('@s', 'container.0')
   }
 
   pushPage(page: GUIPage) {

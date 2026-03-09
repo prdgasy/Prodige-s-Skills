@@ -6,17 +6,23 @@
   "module": "src/index.ts",
   "scripts": {
     "dev:watch": "sand watch",
-    "dev:build": "sand build"
+    "dev:build": "sand build",
+    "watch-copy": "tsx scripts/watch-copy.ts"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
     "@types/bun": "latest",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^25.3.5",
     "sandstone-cli": "^2.3.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "chokidar": "^5.0.0",
+    "fs-extra": "^11.3.4",
     "sandstone": "^1.0.0-beta.3"
   }
 }

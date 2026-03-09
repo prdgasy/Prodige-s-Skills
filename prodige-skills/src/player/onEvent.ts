@@ -1,6 +1,7 @@
-import { _, Objective, MCFunction, tellraw, Score, Data } from 'sandstone'
+import { _, Objective, MCFunction, tellraw, Score, Data, say, execute } from 'sandstone'
 import { Skills } from '../database.ts'
 import { gainXp } from './statsHandler.ts'
+
 type EventEntry = {
   score: Score,
   callback: (value: Score) => void
@@ -32,7 +33,7 @@ function registerEvents() {
   Object.values(Skills).forEach(skill => {
     skill.onEvents.forEach(event => {
       onEvent(event.name, event.criteria, value => {
-        gainXp(skill.name, value, event.gain)
+        gainXp(skill.name, value, event.gain, event.name)
       })
     })
   })
@@ -41,17 +42,18 @@ function registerEvents() {
 /**
  * Runs the onEvents's tests from **eventList**
  */
-function processEvents() {
+export function processEvents() {
   registerEvents()
   MCFunction('__onevent/processevents', () => {
-    eventList.forEach(event => {
-      _.if(event.score, () => {
-        event.callback(event.score)
-        event.score.reset()
+    execute.as('@a').run(() => {
+      eventList.forEach(event => {
+        _.if(event.score['>='](1), () => {
+          event.callback(event.score)
+          event.score.reset()
+        })
       })
     })
   }, {
     runEvery: '5s'
   })
 }
-export { processEvents }

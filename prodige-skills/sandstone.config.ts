@@ -4,18 +4,18 @@ export default {
   name: 'prodige-skills',
   packs: {
     datapack: {
-      description: [ 'A ', { text: 'Sandstone', color: 'gold' }, ' datapack.' ],
+      description: ['A ', { text: 'Sandstone', color: 'gold' }, ' datapack.'],
       packFormat: 98,
     } as DatapackConfig,
     resourcepack: {
-      description: [ 'A ', { text: 'Sandstone', color: 'gold' }, ' resource pack.' ],
+      description: ['A ', { text: 'Sandstone', color: 'gold' }, ' resource pack.'],
       packFormat: 79,
     } as ResourcePackConfig
   },
   onConflict: {
     default: 'warn',
   },
-  namespace: 'prodige-skills',
+  namespace: 'prodige_skills',
   packUid: '46EQ989V',
   mcmeta: 'latest',
   saveOptions: { clientPath: 'C:\\Users\\TOSHIBA\\AppData\\Roaming\\ModrinthApp\\profiles\\Data_Resource Pack Modpack', world: 'MAIN' },
