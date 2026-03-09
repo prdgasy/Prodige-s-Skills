@@ -28,32 +28,19 @@ export class GUI {
     this.name = name
     this.pageId = Objective.create(`${this.name}.gui.page`)('@s')
     this.pageData = DataArray([])
+    this.Pages = pages ?? []
 
-    if (pages) {
-      this.Pages = pages
-      pages.forEach(page => {
-        this.pushPage(page)
-      })
-    } else {
-      this.Pages = []
-    }
+    if (pages) this.initPages(pages)
 
-    MCFunction(`__gui/${this.name}/trigger`, () => {
-      execute.as('@a').run(() => {
-        const triggerScore = Objective.create(triggerCommand, 'trigger')
+    this.triggerCommand(triggerCommand)
 
-        _.if(triggerScore('@s')['>='](1), () => {
-          triggerScore('@s').reset()
-          this.trigger()
-        })
+    this.initMacroFunctions()
+  }
 
-        scoreboard.players.enable('@s', triggerScore)
-      })
-    }, {
-      runEveryTick: true
-    })
-
-    // -- Macro functions -- 
+  /**
+   * Macros functions that cannot be ran inline
+   */
+  initMacroFunctions() {
     this.getButton = MCFunction(`__gui/${this.name}/getbutton`, (_loop: any, index: Score) => {
       this.button.set(this.buttonList.select($`[${index}]`))
     })
@@ -64,9 +51,47 @@ export class GUI {
   }
 
   /**
+   * GUI custom command handler
+   * @param triggerCommand Command name
+   */
+  triggerCommand(triggerCommand: string) {
+    MCFunction(`__gui/${this.name}/trigger`, () => {
+      execute.as('@a').run(() => {
+        const triggerScore = Objective.create(triggerCommand, 'trigger')
+
+        _.if(triggerScore('@s')['>='](1), () => {
+          triggerScore('@s').reset()
+          this.summonEntity()
+        })
+
+        scoreboard.players.enable('@s', triggerScore)
+      })
+    }, {
+      runEveryTick: true
+    })
+  }
+
+  /**
+   * Initializes and pushes every pages into place
+   * @param pages Page list
+   */
+  initPages(pages: GUIPage[]) {
+    this.Pages = pages
+    pages.forEach(page => {
+      this.pushPage(page)
+    })
+  }
+
+  pushPage(page: GUIPage) {
+    this.Pages.push(page)
+    this.pageData.push(page.buttons)
+  }
+
+
+  /**
    * Summons the minecart GUI and inits the page to 0
    */
-  trigger() {
+  summonEntity() {
     // Create the GUI minecart near the player
     // Unique ID management
     const isfree = _.block(rel(0, 0, 0), 'air')
@@ -119,8 +144,5 @@ export class GUI {
     tellraw('@s', [this.button, 'cool text'])
   }
 
-  pushPage(page: GUIPage) {
-    this.Pages.push(page)
-    this.pageData.push(page.buttons)
-  }
+
 }
