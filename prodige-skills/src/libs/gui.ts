@@ -14,6 +14,7 @@ export type GUIPage = {
   buttons: Button[]
 }
 
+type MCFunctionType = ReturnType<typeof MCFunction>
 export class GUI {
   name: string
   pageIdScore: Score
@@ -23,29 +24,30 @@ export class GUI {
   setItem: any
   Ids: ObjectiveClass
   GUILabel: LabelClass
+  refresh: MCFunctionType
+  triggerCmd: string
 
-  constructor(name: string, triggerCommand: string, pages?: GUIPage[]) {
+  constructor(name: string, triggerCmd: string, pages?: GUIPage[]) {
     this.name = name
     this.pageIdScore = Objective.create(`${this.name}.gui.page`)('@s')
     this.Pages = pages ?? []
     this.Ids = Objective.create(`${this.name}.gui.id`)
     this.GUILabel = Label(`${this.name}.gui`)
-
+    this.triggerCmd = triggerCmd
 
     if (pages) this.initPages(pages)
 
-    this.triggerCommand(triggerCommand)
-
-
-
-    this.findObjs()
+    this.defineTrigger()
+    this.defineFindObjs()
+    this.refresh = this.defineRefresh()
   }
+
 
   /**
    * Link the gui entity to the player having the same score ID
    */
-  findObjs() {
-    MCFunction('findobjs', () => {
+  defineFindObjs(): MCFunctionType {
+    return MCFunction('findobjs', () => {
       execute.as('@a').at('@s').as(Selector('@e', { type: 'chest_minecart', tag: [this.GUILabel] })).run(() => {
         _.if(this.Ids('@p')['=='](this.Ids('@s')), () => {
           this.main()
@@ -60,12 +62,11 @@ export class GUI {
 
   /**
    * GUI custom command handler
-   * @param triggerCommand Command name
    */
-  triggerCommand(triggerCommand: string) {
-    MCFunction(`__gui/${this.name}/trigger`, () => {
+  defineTrigger(): MCFunctionType {
+    return MCFunction(`__gui/${this.name}/trigger`, () => {
       execute.as('@a').run(() => {
-        const triggerScore = Objective.create(triggerCommand, 'trigger')
+        const triggerScore = Objective.create(this.triggerCmd, 'trigger')
 
         _.if(triggerScore('@s')['>='](1), () => {
           triggerScore('@s').reset()
@@ -90,13 +91,13 @@ export class GUI {
     })
   }
 
-  pushPage(page: GUIPage) {
+  pushPage(page: GUIPage): MCFunctionType {
     this.Pages.push(page)
 
-    MCFunction(`__gui/${this.name}/pages/${this.pageId++}`, () => {
+    return MCFunction(`__gui/${this.name}/pages/${this.pageId++}`, () => {
 
       page.buttons.forEach(button => {
-        item.replace.entity('@s', `${button.slot}`).with(button.item as any)
+        item.replace.entity('@s', `container.${button.slot}`).with(button.item as any)
       })
     })
   }
@@ -139,8 +140,8 @@ export class GUI {
   /**
    * Refresh items positions, and modified data to originale state
    */
-  refresh() { // Changer en parametre pour etre appelé correctement.
-    MCFunction(`__gui/${this.name}/refresh`, () => {
+  defineRefresh(): MCFunctionType {
+    return MCFunction(`__gui/${this.name}/refresh`, () => {
       Data('entity', '@s').select('Items').remove()
 
       Data('storage', 'prodiges_skills:env', 'pageId').set(this.pageIdScore)

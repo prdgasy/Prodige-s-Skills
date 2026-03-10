@@ -6,8 +6,7 @@
   "module": "src/index.ts",
   "scripts": {
     "dev:watch": "sand watch",
-    "dev:build": "sand build",
-    "watch-copy": "tsx scripts/watch-copy.ts"
+    "dev:build": "sand build"
   },
   "keywords": [],
   "author": "",
