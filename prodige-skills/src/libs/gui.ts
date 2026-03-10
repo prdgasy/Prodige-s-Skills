@@ -1,5 +1,5 @@
-import { _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard, Selector, summon, tellraw, Macro as $, DataArray, Variable, functionCmd } from 'sandstone'
-import { DataPointClass } from 'sandstone/variables'
+import { _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard, Selector, summon, tellraw, functionCmd, Macro as $, item, raw } from 'sandstone'
+import { DataPointClass, LabelClass, ObjectiveClass } from 'sandstone/variables'
 
 export type Button = {
   item: string
@@ -16,38 +16,46 @@ export type GUIPage = {
 
 export class GUI {
   name: string
-  pageId: Score
+  pageIdScore: Score
   Pages: GUIPage[]
-  pageData: ReturnType<typeof DataArray>
+  pageId: number = 0
   getButton: any
   setItem: any
-  buttonList = Data('storage', 'prodiges_skills:gui', 'buttonList')
-  button = Data('storage', 'prodiges_skills:gui', 'button')
+  Ids: ObjectiveClass
+  GUILabel: LabelClass
 
   constructor(name: string, triggerCommand: string, pages?: GUIPage[]) {
     this.name = name
-    this.pageId = Objective.create(`${this.name}.gui.page`)('@s')
-    this.pageData = DataArray([])
+    this.pageIdScore = Objective.create(`${this.name}.gui.page`)('@s')
     this.Pages = pages ?? []
+    this.Ids = Objective.create(`${this.name}.gui.id`)
+    this.GUILabel = Label(`${this.name}.gui`)
+
 
     if (pages) this.initPages(pages)
 
     this.triggerCommand(triggerCommand)
 
-    this.initMacroFunctions()
+
+
+    this.findObjs()
   }
 
   /**
-   * Macros functions that cannot be ran inline
+   * Link the gui entity to the player having the same score ID
    */
-  initMacroFunctions() {
-    this.getButton = MCFunction(`__gui/${this.name}/getbutton`, (_loop: any, index: Score) => {
-      this.button.set(this.buttonList.select($`[${index}]`))
-    })
+  findObjs() {
+    MCFunction('findobjs', () => {
+      execute.as('@a').at('@s').as(Selector('@e', { type: 'chest_minecart', tag: [this.GUILabel] })).run(() => {
+        _.if(this.Ids('@p')['=='](this.Ids('@s')), () => {
+          this.main()
+        })
+      })
+    }, { runEveryTick: true })
+  }
 
-    this.setItem = MCFunction(`__gui/${this.name}/setitem`, (_loop: any, item: DataPointClass, slot: DataPointClass) => {
-      $.item.replace.entity('@s', $`container.${slot}`).with(item)
-    })
+  main() {
+
   }
 
   /**
@@ -84,9 +92,18 @@ export class GUI {
 
   pushPage(page: GUIPage) {
     this.Pages.push(page)
-    this.pageData.push(page.buttons)
+
+    MCFunction(`__gui/${this.name}/pages/${this.pageId++}`, () => {
+
+      page.buttons.forEach(button => {
+        item.replace.entity('@s', `${button.slot}`).with(button.item as any)
+      })
+    })
   }
 
+  convertButtons(buttons: Button[]) {
+
+  }
 
   /**
    * Summons the minecart GUI and inits the page to 0
@@ -95,19 +112,17 @@ export class GUI {
     // Create the GUI minecart near the player
     // Unique ID management
     const isfree = _.block(rel(0, 0, 0), 'air')
-    const tag = Label(`${this.name}.gui`)
     const newGui = Label('newGui')
 
-    _.if(_.and(Selector('@e', { type: 'chest_minecart', tag: [tag] }), _.not(isfree)), () => {
-      summon('chest_minecart', rel(0, 1, 0), { Tags: [tag, newGui], Silent: true, Invulnerable: true, NoGravity: true })
+    _.if(_.and(Selector('@e', { type: 'chest_minecart', tag: [this.GUILabel] }), _.not(isfree)), () => {
+      summon('chest_minecart', rel(0, 1, 0), { Tags: [this.GUILabel, newGui], Silent: true, Invulnerable: true, NoGravity: true })
 
       // ID
-      const id = Objective.create(`${this.name}.gui.id`)
-      const globalId = id('.global')['+='](1)
-      const playerId = id('@s')
+      const globalId = this.Ids('.global')['+='](1)
+      const playerId = this.Ids('@s')
 
-      const guiEntity = Selector('@e', { limit: 1, tag: [tag, newGui] })
-      const guiEntityId = id(guiEntity)
+      const guiEntity = Selector('@e', { limit: 1, tag: [this.GUILabel, newGui] })
+      const guiEntityId = this.Ids(guiEntity)
 
       playerId.set(guiEntityId.set(globalId))
 
@@ -124,25 +139,14 @@ export class GUI {
   /**
    * Refresh items positions, and modified data to originale state
    */
-  refresh() {
+  refresh() { // Changer en parametre pour etre appelé correctement.
     MCFunction(`__gui/${this.name}/refresh`, () => {
       Data('entity', '@s').select('Items').remove()
 
-      const buttons = this.pageData.get(this.pageId)
-      this.buttonList.set(buttons)
-      this.fillItems(buttons)
-    })()
+      Data('storage', 'prodiges_skills:env', 'pageId').set(this.pageIdScore)
+      functionCmd(MCFunction(`__gui/${this.name}/findpage/`, () => {
+        raw('$function __gui/menu/pages/$(pageId)')
+      }), 'with', 'storage', 'prodiges_skills:env', 'pageId')
+    })
   }
-
-  fillItems(buttons: DataPointClass) {
-    this.getButton(Variable(222))
-
-    const itemId = this.button.select('item')
-    const slot = this.button.select('slot')
-    this.setItem(itemId, slot)
-
-    tellraw('@s', [this.button, 'cool text'])
-  }
-
-
 }

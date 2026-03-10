@@ -8,23 +8,25 @@ MCFunction('main', () => {
   processEvents()
 
   const diamond: Button = {
-    item: 'diamond',
+    item: 'minecrat:diamond',
     slot: 5,
     name: 'diamondItem',
   }
 
   const stone: Button = {
     item: 'stone',
-    slot: 5,
+    slot: 6,
     name: 'stoneItem',
   }
 
   const buttonList: Button[] = [diamond, stone]
+
   const PageMenu: GUIPage = {
-    name: 'menu',
+    name: 'menuPage',
     buttons: buttonList,
   }
 
   const menu = new GUI('menu', 'open')
   menu.pushPage(PageMenu)
+
 })
