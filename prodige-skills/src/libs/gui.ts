@@ -1,5 +1,5 @@
-import { _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard, Selector, summon, tellraw, functionCmd, Macro as $, item, raw, say } from 'sandstone'
-import { DataPointClass, LabelClass, ObjectiveClass } from 'sandstone/variables'
+import { _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard, Selector, summon, tellraw, functionCmd, raw, say, kill, tp, abs, forceload, loot, Variable, clear } from 'sandstone'
+import { LabelClass, ObjectiveClass } from 'sandstone/variables'
 import { ITEMS, MCFunctionType } from './types'
 import { Item } from './item'
 
@@ -12,25 +12,26 @@ export class Button {
   slot: number
   count?: number
   onClick?: MCFunctionType
-  toPage?: GUIPage
   name?: string
   lore?: string[]
   components?: string[]
   macroArgs?: macroArg[]
   isMacro?: boolean
+  isFiller?: boolean
 
-  constructor(id: ITEMS, slot: number, count?: number, onClick?: MCFunctionType, toPage?: GUIPage, name?: string, lore?: string[], components?: string[], macroArgs?: macroArg[], isMacro?: boolean) {
+  constructor(id: ITEMS, slot: number, count?: number, onClick?: MCFunctionType, name?: string, lore?: string[], components?: string[], macroArgs?: macroArg[], isMacro?: boolean, isFiller?: boolean) {
     this.id = id
     this.slot = slot
     this.count = count ?? 1
     this.onClick = onClick
-    this.toPage = toPage
     this.name = name ?? id
     this.lore = lore
     this.components = components
 
     this.macroArgs = macroArgs
     this.isMacro = isMacro
+
+    this.isFiller = isFiller ?? false
   }
 
   toString(): string {
@@ -55,6 +56,7 @@ export class GUI {
   GUILabel: LabelClass
   refresh: MCFunctionType
   triggerCmd: string
+  clickFinder: MCFunctionType
 
   constructor(name: string, triggerCmd: string, pages?: GUIPage[]) {
     this.name = name
@@ -67,15 +69,17 @@ export class GUI {
     if (pages) this.initPages(pages)
 
     this.defineTrigger()
-    this.defineFindObjs()
+    this.findObjs()
     this.refresh = this.defineRefresh()
+    this.clickFinder = this.defineClickFinder()
+    forceload.add([930005, 930005])
   }
 
 
   /**
    * Link the gui entity to the player having the same score ID
    */
-  defineFindObjs(): MCFunctionType {
+  findObjs(): MCFunctionType {
     return MCFunction('findobjs', () => {
       execute.as('@a').at('@s').as(Selector('@e', { type: 'chest_minecart', tag: [this.GUILabel] })).run(() => {
         _.if(this.Ids('@p')['=='](this.Ids('@s')), () => {
@@ -86,7 +90,44 @@ export class GUI {
   }
 
   main() {
+    _.if(_.not(Selector('@p', { distance: [1] })), () => {
+      this.close()
+    })
 
+    this.returnItems()
+    this.clickDetection()
+  }
+
+  /**
+   * Returns outside items without the gui tag to the player
+   */
+  returnItems() {
+    const copiedItems = Data('block', abs(930005, 0, 930005), 'Items')
+    const guiItems = Data('entity', '@s', 'Items')
+    copiedItems.set(guiItems)
+    copiedItems.select('[{components: {"minecraft:custom_data": {prodiges_skills: 1b}}}]').remove()
+
+    const returnedItem = Variable(0)
+    execute.store.result(returnedItem).run(() => { loot.give('@p').mine(abs(930005, 0, 930005), 'stick[custom_data = {drop_contents: 1b}]') })
+    _.if(returnedItem, () => {
+      this.refresh()
+    })
+  }
+
+  clickDetection() {
+    const clicked = Variable(0)
+    execute.store.success(clicked).run(() => { clear('@p', '*[custom_data={prodiges_skills:1b}') })
+
+    _.if(clicked, () => {
+      this.clickFinder()
+    })
+
+  }
+
+  close() {
+    this.Ids('@p').reset()
+    tp(rel(0, -1000, 0))
+    kill('@s')
   }
 
   /**
@@ -120,25 +161,46 @@ export class GUI {
     })
   }
 
-  pushPage(page: GUIPage): MCFunctionType {
+  pushPage(page: GUIPage) {
     this.Pages.push(page)
     let macroId = 0
     const newPageId = this.pageId++
-    return MCFunction(`__gui/${this.name}/pages/${newPageId}`, () => {
+    this.filler(page, macroId, newPageId)
+    this.clicker(page, macroId, newPageId)
+  }
 
+  filler(page: GUIPage, macroId: number, newPageId: number): MCFunctionType {
+    return MCFunction(`__gui/${this.name}/pages/fill/${newPageId}`, () => {
+      // Loop through every buttons
       page.buttons.forEach(button => {
+        // Emit string
         const buttonString = new Item(button.id, button.name, button.lore, button.components).toString()
-        if (button.isMacro) {
-          this.setMacroArgs(button)
-          functionCmd(MCFunction(`__gui/${this.name}/pages/${newPageId}/macro_${macroId++}`, () => {
 
+        if (button.isMacro) {
+          // Resolve macro arguments
+          this.setMacroArgs(button)
+          functionCmd(MCFunction(`__gui/${this.name}/pages/fill/${newPageId}/macro_${macroId++}`, () => {
             raw(`$item replace entity @s container.${button.slot} with ${buttonString}`)
           }), 'with', 'storage', 'prodiges_skills:gui', 'pushPage')
-
         } else {
+          // Normal emit
           raw(`item replace entity @s container.${button.slot} with ${buttonString}`)
         }
+      })
+    })
+  }
 
+  clicker(page: GUIPage, macroId: number, newPageId: number): MCFunctionType {
+    return MCFunction(`__gui/${this.name}/pages/click/${newPageId}`, () => {
+      // Loop through every buttons
+      page.buttons.forEach(button => {
+        // Test if button is filler
+        if (!button.isFiller) {
+          // Test if button is on it's slot
+          _.if(_.not(_.data(Data('entity', '@s', `Items[{slot:${button.slot}b}]`))), () => {
+            if (button.onClick) button.onClick()
+          })
+        }
       })
     })
   }
@@ -188,10 +250,20 @@ export class GUI {
     return MCFunction(`__gui/${this.name}/refresh`, () => {
       Data('entity', '@s').select('Items').remove()
 
-      Data('storage', 'prodiges_skills:env', 'pageId').set(this.pageIdScore)
-      functionCmd(MCFunction(`__gui/${this.name}/findpage/`, () => {
-        raw('$function __gui/menu/pages/$(pageId)')
-      }), 'with', 'storage', 'prodiges_skills:env', 'pageId')
+      Data('storage', 'prodiges_skills:gui', 'pageId').set(this.pageIdScore)
+      functionCmd(MCFunction(`__gui/${this.name}/pages/fillfindpage`, () => {
+        raw('$function prodiges_skills:__gui/menu/pages/fill/$(pageId)')
+      }), 'with', 'storage', 'prodiges_skills:gui', 'pageId')
+    })
+  }
+
+  defineClickFinder(): MCFunctionType {
+    return MCFunction(`__gui/${this.name}/clickfinder`, () => {
+
+      Data('storage', 'prodiges_skills:gui', 'pageId').set(this.pageIdScore)
+      functionCmd(MCFunction(`__gui/${this.name}/pages/clickfindpage`, () => {
+        raw('$function prodiges_skills:__gui/menu/pages/click/$(pageId)')
+      }), 'with', 'storage', 'prodiges_skills:gui', 'pageId')
     })
   }
 }
