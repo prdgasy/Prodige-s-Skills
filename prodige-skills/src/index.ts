@@ -24,14 +24,7 @@ MCFunction('main', () => {
       { key: 'count', value: Objective.get('a')('@p') }
     ],
     isMacro: true,
-    onClick: MCFunction('hello', () => { say('clicked on stone') })
-  }
-
-  const back: Button = {
-    id: 'minecrat:arrow',
-    slot: 0,
-    name: 'Go back',
-    lore: ['Click to back']
+    onClick: MCFunction('hello', () => { say('clicked on stone'); gui.toPage(Shop) })
   }
 
   const Menu: GUIPage = {
@@ -39,11 +32,17 @@ MCFunction('main', () => {
     buttons: [diamond, stone],
   }
 
+  const back: Button = {
+    id: 'minecrat:arrow',
+    slot: 0,
+    name: 'Go back',
+    lore: ['Click to back'],
+    onClick: MCFunction('back', () => { gui.toPage(Menu) })
+  }
   const Shop: GUIPage = {
     name: 'Shop',
     buttons: [diamond, back]
   }
 
   const gui = new GUI('gui', 'open', [Menu, Shop])
-
 })

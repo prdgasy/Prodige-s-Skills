@@ -42,6 +42,7 @@ export class Button {
 export type GUIPage = {
   name: string
   buttons: Button[]
+  id?: number
 }
 
 
@@ -162,9 +163,11 @@ export class GUI {
   }
 
   pushPage(page: GUIPage) {
-    this.Pages.push(page)
     let macroId = 0
     const newPageId = this.pageId++
+    page.id = newPageId
+
+    this.Pages.push(page)
     this.filler(page, macroId, newPageId)
     this.clicker(page, macroId, newPageId)
   }
@@ -265,5 +268,11 @@ export class GUI {
         raw('$function prodiges_skills:__gui/menu/pages/click/$(pageId)')
       }), 'with', 'storage', 'prodiges_skills:gui', 'pageId')
     })
+  }
+
+  public toPage(page: GUIPage) {
+    // if (!page.id) throw Error('This page has not been added yet')
+    this.pageIdScore.set(page.id as number)
+    this.refresh()
   }
 }
