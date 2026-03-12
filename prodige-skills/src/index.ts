@@ -46,4 +46,5 @@ MCFunction('main', () => {
   }
 
   const gui = new GUI('gui', 'open', [Menu, Shop])
+  const another = new GUI('abc', 'openup', [Shop])
 })

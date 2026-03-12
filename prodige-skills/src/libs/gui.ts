@@ -146,7 +146,7 @@ export class GUI {
    */
   findObjs(): MCFunctionType {
 
-    return MCFunction('findobjs', () => {
+    return MCFunction(`__gui/${this.name}/findobjs`, () => {
 
       execute
         .as('@a')
@@ -202,7 +202,7 @@ export class GUI {
     const clicked = Variable(0)
 
     execute.store.success(clicked).run(() => {
-      clear('@p', '*[custom_data={prodiges_skills:1b}')
+      clear('@p', '*[custom_data={prodiges_skills:1b}]')
     })
 
     _.if(clicked, () => {
