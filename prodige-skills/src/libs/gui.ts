@@ -1,12 +1,41 @@
-import { _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard, Selector, summon, tellraw, functionCmd, Macro as $, item, raw } from 'sandstone'
+import { _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard, Selector, summon, tellraw, functionCmd, Macro as $, item, raw, say } from 'sandstone'
 import { DataPointClass, LabelClass, ObjectiveClass } from 'sandstone/variables'
+import { ITEMS, MCFunctionType } from './types'
+import { Item } from './item'
 
-export type Button = {
-  item: string
+type macroArg = {
+  key: string,
+  value: any
+}
+export class Button {
+  id: ITEMS
   slot: number
+  count?: number
+  onClick?: MCFunctionType
+  toPage?: GUIPage
   name?: string
   lore?: string[]
-  actions?: any[]
+  components?: string[]
+  macroArgs?: macroArg[]
+  isMacro?: boolean
+
+  constructor(id: ITEMS, slot: number, count?: number, onClick?: MCFunctionType, toPage?: GUIPage, name?: string, lore?: string[], components?: string[], macroArgs?: macroArg[], isMacro?: boolean) {
+    this.id = id
+    this.slot = slot
+    this.count = count ?? 1
+    this.onClick = onClick
+    this.toPage = toPage
+    this.name = name ?? id
+    this.lore = lore
+    this.components = components
+
+    this.macroArgs = macroArgs
+    this.isMacro = isMacro
+  }
+
+  toString(): string {
+    return new Item(this.id, this.name, this.lore, this.components).toString()
+  }
 }
 
 export type GUIPage = {
@@ -14,7 +43,7 @@ export type GUIPage = {
   buttons: Button[]
 }
 
-type MCFunctionType = ReturnType<typeof MCFunction>
+
 export class GUI {
   name: string
   pageIdScore: Score
@@ -93,17 +122,32 @@ export class GUI {
 
   pushPage(page: GUIPage): MCFunctionType {
     this.Pages.push(page)
-
-    return MCFunction(`__gui/${this.name}/pages/${this.pageId++}`, () => {
+    let macroId = 0
+    const newPageId = this.pageId++
+    return MCFunction(`__gui/${this.name}/pages/${newPageId}`, () => {
 
       page.buttons.forEach(button => {
-        item.replace.entity('@s', `container.${button.slot}`).with(button.item as any)
+        const buttonString = new Item(button.id, button.name, button.lore, button.components).toString()
+        if (button.isMacro) {
+          this.setMacroArgs(button)
+          functionCmd(MCFunction(`__gui/${this.name}/pages/${newPageId}/macro_${macroId++}`, () => {
+
+            raw(`$item replace entity @s container.${button.slot} with ${buttonString}`)
+          }), 'with', 'storage', 'prodiges_skills:gui', 'pushPage')
+
+        } else {
+          raw(`item replace entity @s container.${button.slot} with ${buttonString}`)
+        }
+
       })
     })
   }
 
-  convertButtons(buttons: Button[]) {
-
+  setMacroArgs(button: Button) {
+    if (!button.macroArgs) { throw Error('No macro arguments given') }
+    button.macroArgs.forEach(argument => {
+      Data('storage', 'prodiges_skills:gui', 'pushPage').select(argument.key).set(argument.value)
+    })
   }
 
   /**

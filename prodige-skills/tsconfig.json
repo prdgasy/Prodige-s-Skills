@@ -15,6 +15,12 @@
     "forceConsistentCasingInFileNames": true,
     "allowImportingTsExtensions": true,
   },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".sandstone"
+  ],
   "include": [
     "sandstone.config.ts",
     "src"

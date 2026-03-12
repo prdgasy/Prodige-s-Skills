@@ -1,29 +1,32 @@
-import { _, execute, MCFunction, Objective, say, scoreboard, tellraw, Macro as $, DataPointClass, DataArray, Variable, Score } from 'sandstone'
+import { _, execute, MCFunction, Objective, say, scoreboard, tellraw, Macro as $, DataPointClass, DataArray, Variable, Score, item, give, raw } from 'sandstone'
 import { GUI, Button, GUIPage } from './libs/gui.ts'
-import { processEvents } from './player/onEvent.ts'
-import { xpHandler } from './player/statsHandler.ts'
+
 
 MCFunction('main', () => {
-  xpHandler()
-  processEvents()
 
   const diamond: Button = {
-    item: 'minecrat:diamond',
+    id: 'minecrat:diamond',
     slot: 5,
-    name: 'diamondItem',
+    name: 'diamondItem $(param)',
+    macroArgs: [{ key: 'param', value: '1b' }],
+    isMacro: true
   }
 
   const stone: Button = {
-    item: 'stone',
-    slot: 6,
-    name: 'stoneItem',
+    id: 'minecrat:diamond',
+    slot: 5,
+    name: 'diamondItem $(namer)',
+    lore: ['this is $(count)'],
+    macroArgs: [
+      { key: 'namer', value: '1b' },
+      { key: 'count', value: Objective.get('a')('@p') }
+    ],
+    isMacro: true
   }
-
-  const buttonList: Button[] = [diamond, stone]
 
   const PageMenu: GUIPage = {
     name: 'menuPage',
-    buttons: buttonList,
+    buttons: [diamond, stone],
   }
 
   const menu = new GUI('menu', 'open')

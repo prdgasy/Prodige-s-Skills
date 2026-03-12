@@ -20,6 +20,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@sandstone-mc/block": "^0.1.4",
     "chokidar": "^5.0.0",
     "fs-extra": "^11.3.4",
     "sandstone": "^1.0.0-beta.3"
