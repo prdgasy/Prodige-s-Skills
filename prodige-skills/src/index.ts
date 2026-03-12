@@ -36,9 +36,10 @@ MCFunction('main', () => {
     id: 'minecrat:arrow',
     slot: 0,
     name: 'Go back',
-    lore: ['Click to back'],
+    lore: ['Click to go back'],
     onClick: MCFunction('back', () => { gui.toPage(Menu) })
   }
+
   const Shop: GUIPage = {
     name: 'Shop',
     buttons: [diamond, back]
