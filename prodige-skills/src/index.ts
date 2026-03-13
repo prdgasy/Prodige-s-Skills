@@ -6,7 +6,7 @@ MCFunction('main', () => {
 
 
   const diamond: Button = {
-    id: 'minecrat:diamond',
+    id: 'minecraft:diamond',
     slot: 5,
     name: 'diamondItem $(param)',
     macroArgs: [{ key: 'param', value: '1b' }],
@@ -15,7 +15,7 @@ MCFunction('main', () => {
   }
 
   const stone: Button = {
-    id: 'minecrat:diamond',
+    id: 'minecraft:diamond',
     slot: 5,
     name: 'diamondItem $(namer)',
     lore: ['this is $(count)'],
@@ -33,7 +33,7 @@ MCFunction('main', () => {
   }
 
   const back: Button = {
-    id: 'minecrat:arrow',
+    id: 'minecraft:arrow',
     slot: 0,
     name: 'Go back',
     lore: ['Click to go back'],
@@ -46,5 +46,4 @@ MCFunction('main', () => {
   }
 
   const gui = new GUI('gui', 'open', [Menu, Shop])
-  const another = new GUI('abc', 'openup', [Shop])
 })

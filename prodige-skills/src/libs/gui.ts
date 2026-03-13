@@ -1,7 +1,7 @@
 import {
   _, Data, execute, Label, MCFunction, Objective, rel, Score, scoreboard,
   Selector, summon, tellraw, functionCmd, raw, kill, tp, abs,
-  forceload, loot, Variable, clear
+  forceload, loot, Variable, clear, LootTable, say
 } from 'sandstone'
 
 import { LabelClass, ObjectiveClass } from 'sandstone/variables'
@@ -14,11 +14,10 @@ import { Item } from './item'
 /*                                   TYPES                                    */
 /* -------------------------------------------------------------------------- */
 
-type MacroArg = {
+export type MacroArg = {
   key: string
   value: any
 }
-
 
 /**
  * Represents a clickable GUI button.
@@ -87,7 +86,7 @@ export type GUIPage = {
 }
 
 
-
+LootTable('minecraft:blocks/yellow_shulker_box', { type: "minecraft:block", pools: [{ rolls: 1, bonus_rolls: 0, entries: [{ type: "minecraft:item", name: "minecraft:yellow_shulker_box", functions: [{ function: "minecraft:copy_components", source: "block_entity", include: ["minecraft:custom_name", "minecraft:container", "minecraft:lock", "minecraft:container_loot"] }] }], conditions: [{ condition: "minecraft:inverted", term: { condition: "minecraft:match_tool", predicate: { predicates: { "minecraft:custom_data": { drop_contents: 1 } } } } }] }, { rolls: 1, bonus_rolls: 0, entries: [{ type: "minecraft:dynamic", name: "minecraft:contents" }], conditions: [{ condition: "minecraft:match_tool", predicate: { predicates: { "minecraft:custom_data": { drop_contents: 1 } } } }] }], random_sequence: "minecraft:blocks/yellow_shulker_box", __smithed__: { priority: { stage: "early" }, rules: [{ type: "append", target: "pools[0].conditions", source: { type: "reference", path: "pools[0].conditions[0]" } }, { type: "append", target: "pools", source: { type: "reference", path: "pools[1]" } }] } } as any)
 /* -------------------------------------------------------------------------- */
 /*                                   GUI                                      */
 /* -------------------------------------------------------------------------- */
@@ -168,9 +167,10 @@ export class GUI {
    * Main GUI loop.
    */
   main() {
-
-    _.if(_.not(Selector('@p', { distance: [1] })), () => {
-      this.close()
+    execute.at('@s').run(() => {
+      _.if(_.not(Selector('@p', { distance: [0, 1] })), () => {
+        this.close()
+      })
     })
 
     this.returnItems()
@@ -366,25 +366,15 @@ export class GUI {
    * Creates the trigger command handler.
    */
   defineTrigger(): MCFunctionType {
-
     return MCFunction(`__gui/${this.name}/trigger`, () => {
-
-      execute.as('@a').run(() => {
-
+      execute.as('@a').at('@s').run(() => {
         const triggerScore = Objective.create(this.triggerCmd, 'trigger')
-
         _.if(triggerScore('@s'), () => {
-
           triggerScore('@s').reset()
-
           this.summonEntity()
-
         })
-
         scoreboard.players.enable('@s', triggerScore)
-
       })
-
     }, { runEveryTick: true })
   }
 
@@ -399,8 +389,8 @@ export class GUI {
 
     _.if(
       _.and(
-        Selector('@e', { type: 'chest_minecart', tag: [this.GUILabel] }),
-        _.not(isfree)
+        _.not(Selector('@e', { type: 'chest_minecart', tag: [this.GUILabel] })),
+        isfree
       ),
       () => {
 
@@ -410,7 +400,7 @@ export class GUI {
           { Tags: [this.GUILabel, newGui], Silent: true, Invulnerable: true, NoGravity: true }
         )
 
-        const globalId = this.Ids('.global')
+        const globalId = this.Ids('.global')['++']
         const playerId = this.Ids('@s')
 
         const guiEntity = Selector('@e', { limit: 1, tag: [this.GUILabel, newGui] })
@@ -418,7 +408,9 @@ export class GUI {
 
         playerId.set(guiEntityId.set(globalId))
 
-        Objective.get(`a.${this.name}.gui.page`)(guiEntity).set(0)
+        execute.as(guiEntity).run(() => {
+          this.pageIdScore.set(0)
+        })
 
         execute.as(guiEntity).run(() => {
           this.refresh()
@@ -448,17 +440,17 @@ export class GUI {
 
       Data('entity', '@s').select('Items').remove()
 
-      Data('storage', 'prodiges_skills:gui', 'pageId')
+      Data('storage', 'prodiges_skills:gui', 'refresh').select('pageId')
         .set(this.pageIdScore)
 
       functionCmd(
         MCFunction(`__gui/${this.name}/pages/fillfindpage`, () => {
-          raw('$function prodiges_skills:__gui/menu/pages/fill/$(pageId)')
+          raw(`$function prodige_skills:__gui/${this.name}/pages/fill/$(pageId)`)
         }),
         'with',
         'storage',
         'prodiges_skills:gui',
-        'pageId'
+        'refresh'
       )
 
     })
@@ -472,17 +464,17 @@ export class GUI {
 
     return MCFunction(`__gui/${this.name}/clickfinder`, () => {
 
-      Data('storage', 'prodiges_skills:gui', 'pageId')
+      Data('storage', 'prodiges_skills:gui', 'clickFinder').select('pageId')
         .set(this.pageIdScore)
 
       functionCmd(
         MCFunction(`__gui/${this.name}/pages/clickfindpage`, () => {
-          raw('$function prodiges_skills:__gui/menu/pages/click/$(pageId)')
+          raw(`$function prodige_skills:__gui/${this.name}/pages/click/$(pageId)`)
         }),
         'with',
         'storage',
         'prodiges_skills:gui',
-        'pageId'
+        'clickFinder'
       )
 
     })
