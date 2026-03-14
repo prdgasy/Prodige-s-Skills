@@ -22,7 +22,7 @@ export type MacroArg = {
 /**
  * Represents a clickable GUI button.
  */
-export class Button {
+export type Button = {
 
   id: ITEMS
   slot: number
@@ -31,50 +31,13 @@ export class Button {
   name?: string
   lore?: string[]
   components?: string[]
+  customDataComponentAdded?: boolean
 
   onClick?: MCFunctionType
 
   macroArgs?: MacroArg[]
-  isMacro?: boolean
   isFiller?: boolean
-
-  constructor(
-    id: ITEMS,
-    slot: number,
-    count?: number,
-    onClick?: MCFunctionType,
-    name?: string,
-    lore?: string[],
-    components?: string[],
-    macroArgs?: MacroArg[],
-    isMacro?: boolean,
-    isFiller?: boolean
-  ) {
-
-    this.id = id
-    this.slot = slot
-    this.count = count ?? 1
-
-    this.onClick = onClick
-
-    this.name = name ?? id
-    this.lore = lore
-    this.components = components
-
-    this.macroArgs = macroArgs
-    this.isMacro = isMacro
-
-    this.isFiller = isFiller ?? false
-  }
-
-  /**
-   * Converts the button into a valid Minecraft item string.
-   */
-  toString(): string {
-    return new Item(this.id, this.name, this.lore, this.components).toString()
-  }
 }
-
 
 /**
  * Represents a GUI page.
@@ -135,6 +98,12 @@ export class GUI {
     forceload.add([930005, 930005])
   }
 
+  /**
+ * Converts the button into a valid Minecraft item string.
+ */
+  static buttonToString(button: Button): string {
+    return new Item(button.id, button.name, button.lore, button.components).toString()
+  }
 
   /* -------------------------------------------------------------------------- */
   /*                             ENTITY MANAGEMENT                              */
@@ -202,7 +171,7 @@ export class GUI {
     const clicked = Variable(0)
 
     execute.store.success(clicked).run(() => {
-      clear('@p', '*[custom_data={prodiges_skills:1b}]')
+      clear('@p', `*[custom_data={${this.name}:1b}]`)
     })
 
     _.if(clicked, () => {
@@ -222,7 +191,7 @@ export class GUI {
     copiedItems.set(guiItems)
 
     copiedItems
-      .select('[{components: {"minecraft:custom_data": {prodiges_skills: 1b}}}]')
+      .select(`[{components: {"minecraft:custom_data": {${this.name}: 1b}}}]`)
       .remove()
 
     const returnedItem = Variable(0)
@@ -279,14 +248,14 @@ export class GUI {
 
       page.buttons.forEach(button => {
 
-        const buttonString = new Item(
-          button.id,
-          button.name,
-          button.lore,
-          button.components
-        ).toString()
+        if (!button.customDataComponentAdded) {
+          button.components = button.components ?? []
+          if (button.components) button.components.push(`custom_data={${this.name}: 1b}`)
+          button.customDataComponentAdded = true
+        }
+        const buttonString = GUI.buttonToString(button)
 
-        if (button.isMacro) {
+        if (button.macroArgs) {
 
           this.setMacroArgs(button)
 
@@ -320,18 +289,18 @@ export class GUI {
     return MCFunction(`__gui/${this.name}/pages/click/${newPageId}`, () => {
 
       page.buttons.forEach(button => {
-
-        if (!button.isFiller) {
-
-          _.if(_.not(_.data(Data('entity', '@s', `Items[{slot:${button.slot}b}]`))), () => {
-
-            if (button.onClick) {
-              button.onClick()
-            }
-
+        if (!button.isFiller && button.onClick) {
+          _.if(_.not(_.data(Data('entity', '@s', `Items[{Slot:${button.slot}b}]`))), () => {
+            if (button.onClick) { button.onClick(); this.refresh() }
           })
-
+        } else if (button.isFiller && button.onClick) {
+          throw Error(`Button: ${button.id} (${button}) is marked as filler but has an onClick function`)
+        } else {
+          _.if(_.not(_.data(Data('entity', '@s', `Items[{Slot:${button.slot}b}]`))), () => {
+            this.refresh()
+          })
         }
+
 
       })
 

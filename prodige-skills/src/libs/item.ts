@@ -18,7 +18,7 @@ export class Item {
     const loreEmit: string[] = []
     if (this.lore) {
       this.lore.forEach(line => {
-        loreEmit.push(`'{"text":"${line}"}'`)
+        loreEmit.push(`{text:"${line}"}`)
       })
     }
     return loreEmit
@@ -27,9 +27,9 @@ export class Item {
   toString() {
     const loreEmit = this.convertLore()
     if (this.components) {
-      return `${this.id}[${this.components.toString()},custom_name='{"text":"${this.name}"}', lore=[${loreEmit.toString()}]]`
+      return `${this.id}[${this.components.toString()},custom_name={text:"${this.name}"}, lore=[${loreEmit.toString()}]]`
     } else {
-      return `${this.id}[custom_name='{"text":"${this.name}"}', lore=[${loreEmit.toString()}]]`
+      return `${this.id}[custom_name={text:"${this.name}"}, lore=[${loreEmit.toString()}]]`
     }
 
   }

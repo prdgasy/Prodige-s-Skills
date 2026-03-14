@@ -10,20 +10,18 @@ MCFunction('main', () => {
     slot: 5,
     name: 'diamondItem $(param)',
     macroArgs: [{ key: 'param', value: '1b' }],
-    isMacro: true,
     isFiller: true
   }
 
   const stone: Button = {
-    id: 'minecraft:diamond',
-    slot: 5,
+    id: 'minecraft:stone',
+    slot: 6,
     name: 'diamondItem $(namer)',
     lore: ['this is $(count)'],
     macroArgs: [
       { key: 'namer', value: '1b' },
       { key: 'count', value: Objective.get('a')('@p') }
     ],
-    isMacro: true,
     onClick: MCFunction('hello', () => { say('clicked on stone'); gui.toPage(Shop) })
   }
 
@@ -46,4 +44,6 @@ MCFunction('main', () => {
   }
 
   const gui = new GUI('gui', 'open', [Menu, Shop])
+
+  const a = new Map()
 })
