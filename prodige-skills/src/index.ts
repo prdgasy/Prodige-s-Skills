@@ -2,7 +2,6 @@ import { _, execute, MCFunction, Objective, say, scoreboard, tellraw, Macro as $
 import { GUI } from '@prodigelib/gui'
 import { SkillList, Skill } from './skills'
 import { ItemType } from './types'
-import test from 'node:test';
 
 MCFunction('main', () => {
   const depth = Objective.create('prodiges_skills.progress_depth')('@s');
