@@ -2,6 +2,10 @@ import { _, execute, MCFunction, Objective, say, scoreboard, tellraw, Macro as $
 import { GUI } from '@prodigelib/gui'
 import { SkillList, Skill } from './skills'
 import { ItemType } from './types'
+import { networkInterfaces } from 'node:os';
+
+
+
 
 MCFunction('main', () => {
   const depth = Objective.create('prodiges_skills.progress_depth')('@s');
@@ -13,7 +17,7 @@ MCFunction('main', () => {
 
   const menu = new GUI.Init('haichan', 'cmd')
 
-  const goBackButton = (previousPage: GUI.Page): GUI.Button => {
+  const goBack = (previousPage: GUI.Page): GUI.Button => {
     return {
       id: 'arrow',
       slot: 17,
@@ -21,10 +25,18 @@ MCFunction('main', () => {
       onClick: () => { menu.toPage(previousPage); }
     }
   }
-  const pageRecord: Record<string, { progress: GUI.Page, onEvent: GUI.Page }> = {};
+  const goMain = (): GUI.Button => {
+    return {
+      id: 'arrow',
+      slot: 17,
+      name: { text: 'Go main', color: 'yellow' },
+      onClick: () => { menu.toPage(mainPage); }
+    }
+  }
+  const pageRecord: Record<string, { progress: GUI.Page, onEvent: GUI.Page[] }> = {};
 
   const mainPage = defMainPage();
-  const skillPage = defSkillPages(mainPage);
+  const skillPage = defSkillPages();
 
   function defMainPage(): GUI.Page {
     const Main: GUI.Page = {
@@ -68,15 +80,15 @@ MCFunction('main', () => {
     return Main;
   }
 
-  function defSkillPages(mainPage: GUI.Page) {
+  function defSkillPages() {
     SkillList.map(skill => {
       pageRecord[skill.name] = {
         progress: { name: skill.name + ' progress' },
-        onEvent: { name: skill.name + ' onEvent' }
+        onEvent: [{ name: skill.name + ' onEvent' }]
       };
 
-      defProgressPages(skill, mainPage);
-      defOnEventPages(skill, mainPage);
+      defProgressPages(skill);
+      defOnEventPages(skill);
     });
   }
 
@@ -86,7 +98,7 @@ MCFunction('main', () => {
    * @param pageRecord Dictionnary of stored pages
    * @param menu Controller
    */
-  function defProgressPages(skill: Skill, mainPage: GUI.Page) {
+  function defProgressPages(skill: Skill) {
     const levelNotReachedButton = (skillName: string, slot: Score, level: Score): GUI.Button => {
       return {
         id: 'red_stained_glass_pane',
@@ -156,13 +168,13 @@ MCFunction('main', () => {
     const toOnEvent: GUI.Button = {
       id: 'book',
       slot: 20,
-      name: { text: 'Progress page', color: 'green' },
-      onClick: () => { menu.toPage(pageRecord[skill.name].onEvent) }
+      name: { text: 'onEvent page', color: 'green' },
+      onClick: () => { menu.toPage(pageRecord[skill.name].onEvent[0]) }
     }
 
     const page: GUI.Page = {
       name: skill.name + ' progress',
-      Buttons: [goBackButton(mainPage), addDepth, removeDepth, toOnEvent]
+      Buttons: [goBack(mainPage), addDepth, removeDepth, toOnEvent]
     }
 
     menu.pushInstruction(page, {
@@ -184,16 +196,47 @@ MCFunction('main', () => {
    * @param pageRecord Dictionnary of stored pages
    * @param menu Controller
    */
-  function defOnEventPages(skill: Skill, mainPage: GUI.Page) {
-    const page: GUI.Page = {
-      name: skill.name + ' onEvent',
-      Buttons: [goBackButton(pageRecord[skill.name].progress)]
-    };
+  function defOnEventPages(skill: Skill) {
+    const pages: GUI.Page[] = [];
 
-    pageRecord[skill.name].onEvent = page;
-    menu.pushPage(page);
+    for (let i = 0; i < skill.onEvents.length / 18; i++) {
+      const page = {
+        name: skill.name + ' onEvent ' + i,
+        Buttons: [goBack(pageRecord[skill.name].progress), goMain()]
+      }
+
+      pages.push(page);
+    }
+
+    for (let i = 0; i < skill.onEvents.length / 18; i++) {
+      const index = i;
+
+      const next: GUI.Button = {
+        id: 'paper',
+        slot: 10,
+        name: { text: 'Next onEvents' },
+        onClick: () => {
+          // say(JSON.stringify(pages[index + 1]));
+          if (index + 1 < skill.onEvents.length / 18) menu.toPage(pages[index + 1]);
+        }
+      };
+
+      const prev: GUI.Button = {
+        id: 'paper',
+        slot: 9,
+        name: { text: 'previous onEvents' },
+        onClick: () => {
+          if (index - 1 >= 0) menu.toPage(pages[index - 1]);
+        }
+      };
+
+      // ADD HERE ONEVENTS
+      const buttonToPush: GUI.Button[] = [next, prev];
+      pages[index].Buttons?.push(...buttonToPush);
+      menu.pushPage(pages[index]);
+      pageRecord[skill.name].onEvent.push(pages[index]);
+    }
   }
-
 });
 
 
