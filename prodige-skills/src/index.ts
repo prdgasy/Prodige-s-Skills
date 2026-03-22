@@ -26,8 +26,6 @@ MCFunction('main', () => {
   const mainPage = defMainPage();
   const skillPage = defSkillPages(mainPage);
 
-
-
   function defMainPage(): GUI.Page {
     const Main: GUI.Page = {
       name: 'Menu',
@@ -72,9 +70,13 @@ MCFunction('main', () => {
 
   function defSkillPages(mainPage: GUI.Page) {
     SkillList.map(skill => {
-      pageRecord[skill.name] = { progress: undefined as any, onEvent: undefined as any };
-      const progressPage = defProgressPages(skill, Scores[skill.name], mainPage);
-      defOnEventPages(skill, progressPage);
+      pageRecord[skill.name] = {
+        progress: { name: skill.name + ' progress' },
+        onEvent: { name: skill.name + ' onEvent' }
+      };
+
+      defProgressPages(skill, mainPage);
+      defOnEventPages(skill, mainPage);
     });
   }
 
@@ -84,7 +86,7 @@ MCFunction('main', () => {
    * @param pageRecord Dictionnary of stored pages
    * @param menu Controller
    */
-  function defProgressPages(skill: Skill, playerLevel: Score, mainPage: GUI.Page): GUI.Page {
+  function defProgressPages(skill: Skill, mainPage: GUI.Page) {
     const levelNotReachedButton = (skillName: string, slot: Score, level: Score): GUI.Button => {
       return {
         id: 'red_stained_glass_pane',
@@ -114,6 +116,8 @@ MCFunction('main', () => {
         macroArgs: [{ 'level': level }, { 'slot': slot }]
       };
     }
+
+    const playerLevel = Scores[skill.name]
 
     const fillInstruction = () => {
       _.for([0, 18], 'iterate', (i) => {
@@ -149,9 +153,16 @@ MCFunction('main', () => {
       onClick: () => { depth['-='](1); }
     }
 
+    const toOnEvent: GUI.Button = {
+      id: 'book',
+      slot: 20,
+      name: { text: 'Progress page', color: 'green' },
+      onClick: () => { menu.toPage(pageRecord[skill.name].onEvent) }
+    }
+
     const page: GUI.Page = {
       name: skill.name + ' progress',
-      Buttons: [goBackButton(mainPage), addDepth, removeDepth]
+      Buttons: [goBackButton(mainPage), addDepth, removeDepth, toOnEvent]
     }
 
     menu.pushInstruction(page, {
@@ -165,7 +176,6 @@ MCFunction('main', () => {
 
     pageRecord[skill.name].progress = page;
     menu.pushPage(page);
-    return page;
   }
 
   /**
@@ -174,15 +184,14 @@ MCFunction('main', () => {
    * @param pageRecord Dictionnary of stored pages
    * @param menu Controller
    */
-  function defOnEventPages(skill: Skill, progressPage: GUI.Page): GUI.Page {
+  function defOnEventPages(skill: Skill, mainPage: GUI.Page) {
     const page: GUI.Page = {
       name: skill.name + ' onEvent',
-      Buttons: [goBackButton(progressPage)]
+      Buttons: [goBackButton(pageRecord[skill.name].progress)]
     };
 
     pageRecord[skill.name].onEvent = page;
     menu.pushPage(page);
-    return page;
   }
 
 });
