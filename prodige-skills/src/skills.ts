@@ -1,4 +1,4 @@
-import { ItemType } from "./types"
+import { ItemType } from "./types.ts"
 
 type Event = {
   name: string,
@@ -20,25 +20,7 @@ const Mining: Skill = {
   startingXp: 15,
   onEvents: [
     { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }, { name: 'diamond_ore', item: 'diamond', criteria: 'mined:diamond_ore', gain: 7 },
-    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 },
+    { name: 'stone', item: 'stone', criteria: 'mined:stone', gain: 1 }
   ]
 }
 

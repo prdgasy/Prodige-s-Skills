@@ -1,8 +1,7 @@
-import { _, execute, MCFunction, Objective, say, scoreboard, tellraw, Macro as $, DataPointClass, DataArray, Variable, Score, item, give, raw, Data } from 'sandstone'
-import { GUI } from '@prodigelib/gui'
-import { SkillList, Skill } from './skills'
-import { ItemType } from './types'
-import { networkInterfaces } from 'node:os';
+import { _, execute, MCFunction, Objective, say, scoreboard, tellraw, Macro as $, DataPointClass, DataArray, Variable, Score, item, give, raw, Data } from 'sandstone';
+import { GUI } from '@prodigelib/gui';
+import { SkillList, Skill } from './skills.ts';
+import { ItemType } from './types.ts';
 
 
 
@@ -232,6 +231,16 @@ MCFunction('main', () => {
 
       // ADD HERE ONEVENTS
       const buttonToPush: GUI.Button[] = [next, prev];
+      for (let j = 0; (j < 18) && ((j + index * 18) < skill.onEvents.length); j++) {
+        const event = skill.onEvents[(j + index * 18)];
+        buttonToPush.push({
+          id: event.item,
+          slot: j,
+          name: { text: `${event.name} (${event.gain} xp)`, color: 'yellow' },
+          lore: [{ text: `<lore.onEvent.buttonToPush>` }]
+        })
+      }
+
       pages[index].Buttons?.push(...buttonToPush);
       menu.pushPage(pages[index]);
       pageRecord[skill.name].onEvent.push(pages[index]);
