@@ -1,250 +1,243 @@
-import { _, execute, MCFunction, Objective, say, scoreboard, tellraw, Macro as $, DataPointClass, DataArray, Variable, Score, item, give, raw, Data } from 'sandstone';
+import { _, MCFunction, Objective, say, Variable, Score } from 'sandstone';
 import { GUI } from '@prodigelib/gui';
 import { SkillList } from './skills';
 import type { pageRecordType, Skill, ItemType } from "./types";
 
+/**
+ * Main entry point for the GUI system.
+ * Initializes scores, menu, and all pages.
+ */
 MCFunction('menu', () => {
   const depth = Objective.create('prodiges_skills.progress_depth')('@s');
+
+  /** Stores player level scores per skill */
   const Scores: Record<string, Score> = {};
   SkillList.forEach(skill => {
     Scores[skill.name] = Objective.create(`prodige_skills.${skill.name}.level`)('@p');
   });
 
-  const menu = new GUI.Init('haichan', 'cmd');
+  const menu = new GUI.Init('hayichan', 'cmd');
 
-  const goBack = (previousPage: GUI.Page): GUI.Button => {
-    return {
-      id: 'arrow',
-      slot: 17,
-      name: { text: 'Go back', color: 'red' },
-      onClick: () => { menu.toPage(previousPage); }
-    }
-  };
+  /**
+   * Navigate back to a given page
+   */
+  const goBack = (previousPage: GUI.Page): GUI.Button => ({
+    id: 'arrow',
+    slot: 17,
+    name: { text: 'Go back', color: 'red' },
+    onClick: () => menu.toPage(previousPage)
+  });
 
-  const goMain = (): GUI.Button => {
-    return {
-      id: 'arrow',
-      slot: 17,
-      name: { text: 'Go main', color: 'yellow' },
-      onClick: () => { menu.toPage(mainPage); }
-    }
-  };
+  /**
+   * Navigate to main menu
+   */
+  const goMain = (): GUI.Button => ({
+    id: 'arrow',
+    slot: 17,
+    name: { text: 'Go main', color: 'yellow' },
+    onClick: () => menu.toPage(mainPage)
+  });
 
+  /** Stores all generated pages */
   const pageRecord: pageRecordType = {};
 
-  const mainPage = defMainPage();
-  const skillPage = defSkillPages();
+  const mainPage = createMainPage();
+  createSkillPages();
 
-  function defMainPage(): GUI.Page {
-    const Main: GUI.Page = {
+  /**
+   * Creates the main menu page
+   */
+  function createMainPage(): GUI.Page {
+    const page: GUI.Page = {
       name: 'Menu',
       Buttons: [{ id: 'stick', slot: 0 }]
-    }
+    };
 
-    const skillButton = (id: ItemType, slot: number, name: string, playerLevel: Score): GUI.Button => {
-      return {
-        id: id,
-        slot: slot,
-        name: { text: name, color: 'yellow' },
-        lore: [{ text: `${name} $(level)` }],
-        onClick: () => {
-          depth.set(playerLevel['/='](18));
-          menu.toPage(pageRecord[name].progress);
-        },
-        macroArgs: [{ key: 'level', value: '<level>' }]
-      }
-    }
-    menu.pushInstruction(Main, {
+    /**
+     * Creates a skill button displayed in main menu
+     */
+    const skillButton = (
+      id: ItemType,
+      slot: number,
+      name: string,
+      playerLevel: Score
+    ): GUI.Button => ({
+      id,
+      slot,
+      name: { text: name, color: 'yellow' },
+      lore: [{ text: `${name} $(level)` }],
+      onClick: () => {
+        depth.set(playerLevel['/='](18));
+        menu.toPage(pageRecord[name].progress);
+      },
+      macroArgs: [{ key: 'level', value: '<level>' }]
+    });
+
+    menu.pushInstruction(page, {
       fill: () => {
-        for (let i = 0; i < SkillList.length; i++) {
-          const skill = SkillList[i];
-          const id = skill.item;
-          const name = skill.name;
-          menu.placeItem(skillButton(id, 10 + i, name, Scores[skill.name]));
-        }
+        SkillList.forEach((skill, i) => {
+          menu.placeItem(skillButton(skill.item, 10 + i, skill.name, Scores[skill.name]));
+        });
       },
       click: () => {
-        for (let i = 0; i < SkillList.length; i++) {
-          const skill = SkillList[i];
-          const id = skill.item;
-          const name = skill.name;
-          menu.detectClick(skillButton(id, 10 + i, name, Scores[skill.name]));
-        }
+        SkillList.forEach((skill, i) => {
+          menu.detectClick(skillButton(skill.item, 10 + i, skill.name, Scores[skill.name]));
+        });
       }
     });
 
-    menu.pushPage(Main);
-    return Main;
+    menu.pushPage(page);
+    return page;
   }
 
-  function defSkillPages() {
-    SkillList.map(skill => {
+  /**
+   * Generates all skill-related pages
+   */
+  function createSkillPages() {
+    SkillList.forEach(skill => {
       pageRecord[skill.name] = {
         progress: { name: skill.name + ' progress' },
         onEvent: [{ name: skill.name + ' onEvent' }]
       };
 
-      defProgressPages(skill);
-      defOnEventPages(skill);
+      createProgressPage(skill);
+      createOnEventPages(skill);
     });
   }
 
   /**
-   * Push progress pages to see progress
-   * @param skill Skill
-   * @param pageRecord Dictionnary of stored pages
-   * @param menu Controller
+   * Creates the progress page for a given skill
    */
-  function defProgressPages(skill: Skill) {
-    const levelNotReachedButton = (skillName: string, slot: Score, level: Score): GUI.Button => {
-      return {
-        id: 'red_stained_glass_pane',
-        slot: '$(slot)',
-        name: { text: `Level $(level)`, color: 'red' },
-        onClick: () => { say('This level has not been reached yet'); },
-        macroArgs: [{ 'level': level }, { 'slot': slot }]
-      };
-    }
+  function createProgressPage(skill: Skill) {
+    const playerLevel = Scores[skill.name];
 
-    const levelReachingButton = (skillName: string, slot: Score, level: Score): GUI.Button => {
-      return {
-        id: 'yellow_stained_glass_pane',
-        slot: '$(slot)',
-        name: { text: `Level $(level)`, color: 'yellow' },
-        onClick: () => { say('in progress'); },
-        macroArgs: [{ 'level': level }, { 'slot': slot }]
-      };
-    }
+    /**
+     * Factory for level state buttons
+     */
+    const createLevelButton = (
+      color: string,
+      message: string,
+      slot: Score,
+      level: Score
+    ): GUI.Button => ({
+      id: `${color}_stained_glass_pane` as ItemType,
+      slot: '$(slot)',
+      name: { text: `Level $(level)`, color },
+      onClick: () => say(message),
+      macroArgs: [
+        { key: 'level', value: level },
+        { key: 'slot', value: slot }
+      ]
+    });
 
-    const levelReachedButton = (skillName: string, slot: Score, level: Score): GUI.Button => {
-      return {
-        id: 'green_stained_glass_pane',
-        slot: '$(slot)',
-        name: { text: `Level $(level)`, color: 'green' },
-        onClick: () => { say('level reached'); },
-        macroArgs: [{ 'level': level }, { 'slot': slot }]
-      };
-    }
-
-    const playerLevel = Scores[skill.name]
-
-    const fillInstruction = () => {
-      _.for([0, 18], 'iterate', (i) => {
-        const testLevel = Variable(i)['+='](depth['*='](18));
+    const fill = () => {
+      _.for([0, 18], 'iterate', i => {
         const slot = Variable(i);
-
-        _.if(playerLevel['<'](testLevel), () => { menu.placeItem(levelNotReachedButton(skill.name, slot, testLevel)); })
-          .elseIf(playerLevel['=='](testLevel), () => { menu.placeItem(levelReachingButton(skill.name, slot, testLevel)); })
-          .else(() => { menu.placeItem(levelReachedButton(skill.name, slot, testLevel)); })
-      })
-    }
-
-    const clickInstruction = () => {
-      _.for([0, 18], 'iterate', (i) => {
         const testLevel = Variable(i)['+='](depth['*='](18));
+
+        _.if(playerLevel['<'](testLevel), () => {
+          menu.placeItem(createLevelButton('red', 'Not reached', slot, testLevel));
+        })
+          .elseIf(playerLevel['=='](testLevel), () => {
+            menu.placeItem(createLevelButton('yellow', 'In progress', slot, testLevel));
+          })
+          .else(() => {
+            menu.placeItem(createLevelButton('green', 'Reached', slot, testLevel));
+          });
+      });
+    };
+
+    const click = () => {
+      _.for([0, 18], 'iterate', i => {
         const slot = Variable(i);
+        const testLevel = Variable(i)['+='](depth['*='](18));
 
-        _.if(playerLevel['<'](testLevel), () => { menu.detectClick(levelNotReachedButton(skill.name, slot, testLevel)); })
-          .elseIf(playerLevel['=='](testLevel), () => { menu.detectClick(levelReachingButton(skill.name, slot, testLevel)); })
-          .else(() => { menu.detectClick(levelReachedButton(skill.name, slot, testLevel)); })
-      })
-    }
-
-
-    const addDepth: GUI.Button = {
-      id: 'paper',
-      slot: 19,
-      onClick: () => { depth['+='](1); }
-    }
-    const removeDepth: GUI.Button = {
-      id: 'paper',
-      slot: 17,
-      onClick: () => { depth['-='](1); }
-    }
-
-    const toOnEvent: GUI.Button = {
-      id: 'book',
-      slot: 20,
-      name: { text: 'onEvent page', color: 'green' },
-      onClick: () => { menu.toPage(pageRecord[skill.name].onEvent[0]) }
-    }
+        _.if(playerLevel['<'](testLevel), () => {
+          menu.detectClick(createLevelButton('red', 'Not reached', slot, testLevel));
+        })
+          .elseIf(playerLevel['=='](testLevel), () => {
+            menu.detectClick(createLevelButton('yellow', 'In progress', slot, testLevel));
+          })
+          .else(() => {
+            menu.detectClick(createLevelButton('green', 'Reached', slot, testLevel));
+          });
+      });
+    };
 
     const page: GUI.Page = {
       name: skill.name + ' progress',
-      Buttons: [goBack(mainPage), addDepth, removeDepth, toOnEvent]
-    }
+      Buttons: [
+        goBack(mainPage),
+        { id: 'paper', slot: 19, onClick: () => depth['+='](1) },
+        { id: 'paper', slot: 17, onClick: () => depth['-='](1) },
+        {
+          id: 'book',
+          slot: 20,
+          name: { text: 'onEvent page', color: 'green' },
+          onClick: () => menu.toPage(pageRecord[skill.name].onEvent[0])
+        }
+      ]
+    };
 
-    menu.pushInstruction(page, {
-      fill: () => {
-        fillInstruction();
-      },
-      click: () => {
-        clickInstruction();
-      }
-    })
-
+    menu.pushInstruction(page, { fill, click });
     pageRecord[skill.name].progress = page;
     menu.pushPage(page);
   }
 
   /**
-   * Push onEvent pages to see every action and xp
-   * @param skill Skill
-   * @param pageRecord Dictionnary of stored pages
-   * @param menu Controller
+   * Creates paginated onEvent pages for a skill
    */
-  function defOnEventPages(skill: Skill) {
+  function createOnEventPages(skill: Skill) {
     const pages: GUI.Page[] = [];
+    const pageCount = Math.ceil(skill.onEvents.length / 18);
 
-    for (let i = 0; i < skill.onEvents.length / 18; i++) {
-      const page = {
-        name: skill.name + ' onEvent ' + i,
+    for (let i = 0; i < pageCount; i++) {
+      const page: GUI.Page = {
+        name: `${skill.name} onEvent ${i}`,
         Buttons: [goBack(pageRecord[skill.name].progress), goMain()]
-      }
-
+      };
       pages.push(page);
     }
 
-    for (let i = 0; i < skill.onEvents.length / 18; i++) {
-      const index = i;
+    pages.forEach((page, index) => {
+      const buttons: GUI.Button[] = [];
 
-      const next: GUI.Button = {
-        id: 'paper',
-        slot: 10,
-        name: { text: 'Next onEvents' },
-        onClick: () => {
-          // say(JSON.stringify(pages[index + 1]));
-          if (index + 1 < skill.onEvents.length / 18) menu.toPage(pages[index + 1]);
-        }
-      };
+      // Navigation
+      if (index > 0) {
+        buttons.push({
+          id: 'paper',
+          slot: 9,
+          name: { text: 'Previous' },
+          onClick: () => menu.toPage(pages[index - 1])
+        });
+      }
 
-      const prev: GUI.Button = {
-        id: 'paper',
-        slot: 9,
-        name: { text: 'previous onEvents' },
-        onClick: () => {
-          if (index - 1 >= 0) menu.toPage(pages[index - 1]);
-        }
-      };
+      if (index < pages.length - 1) {
+        buttons.push({
+          id: 'paper',
+          slot: 10,
+          name: { text: 'Next' },
+          onClick: () => menu.toPage(pages[index + 1])
+        });
+      }
 
-      // ADD HERE ONEVENTS
-      const buttonToPush: GUI.Button[] = [next, prev];
-      for (let j = 0; (j < 18) && ((j + index * 18) < skill.onEvents.length); j++) {
-        const event = skill.onEvents[(j + index * 18)];
-        buttonToPush.push({
+      // Events
+      for (let j = 0; j < 18; j++) {
+        const eventIndex = j + index * 18;
+        if (eventIndex >= skill.onEvents.length) break;
+
+        const event = skill.onEvents[eventIndex];
+        buttons.push({
           id: event.item,
           slot: j,
           name: { text: `${event.name} (${event.gain} xp)`, color: 'yellow' },
-          lore: [{ text: `<lore.onEvent.buttonToPush>` }]
-        })
+          lore: [{ text: `<lore.onEvent>` }]
+        });
       }
 
-      pages[index].Buttons?.push(...buttonToPush);
-      menu.pushPage(pages[index]);
-      pageRecord[skill.name].onEvent.push(pages[index]);
-    }
+      page.Buttons?.push(...buttons);
+      menu.pushPage(page);
+      pageRecord[skill.name].onEvent.push(page);
+    });
   }
-}, {
-  runOnLoad: true
-})
-
+}, { runOnLoad: true });
