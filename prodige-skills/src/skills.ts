@@ -1,18 +1,4 @@
-import { ItemType } from "./types.ts"
-
-type Event = {
-  name: string,
-  item: ItemType,
-  criteria: string,
-  gain: number
-}
-
-type Skill = {
-  name: string,
-  item: ItemType,
-  startingXp: number,
-  onEvents: Event[]
-}
+import { Skill } from "./types"
 
 const Mining: Skill = {
   name: 'Mining',
@@ -36,4 +22,4 @@ const Foraging: Skill = {
 
 const SkillList: Skill[] = [Mining, Foraging]
 
-export { SkillList, Skill }
+export { SkillList }
