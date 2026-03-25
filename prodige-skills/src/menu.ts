@@ -2,30 +2,32 @@ import { _, MCFunction, Objective, say, Variable, Score } from 'sandstone';
 import { GUI } from '@prodigelib/gui';
 import { SkillList } from './skills';
 import type { pageRecordType, Skill, ItemType } from "./types";
+import { Errors } from './errors';
+
+const depth = Objective.create('prodiges_skills.progress_depth')('@s');
+/** Stores player level scores per skill */
+const Scores: Record<string, Score> = {};
+SkillList.forEach(skill => {
+  Scores[skill.name] = Objective.create(`prodige_skills.${skill.name}.level`)('@p');
+});
 
 /**
  * Main entry point for the GUI system.
  * Initializes scores, menu, and all pages.
  */
 MCFunction('menu', () => {
-  const depth = Objective.create('prodiges_skills.progress_depth')('@s');
 
-  /** Stores player level scores per skill */
-  const Scores: Record<string, Score> = {};
-  SkillList.forEach(skill => {
-    Scores[skill.name] = Objective.create(`prodige_skills.${skill.name}.level`)('@p');
-  });
 
-  const menu = new GUI.Init('hayichan', 'cmd');
+  const Menu = new GUI.Init('hayichan', 'cmd');
 
   /**
    * Navigate back to a given page
    */
-  const goBack = (previousPage: GUI.Page): GUI.Button => ({
+  const goBack = (previousPage: GUI.Page | string): GUI.Button => ({
     id: 'arrow',
     slot: 17,
     name: { text: 'Go back', color: 'red' },
-    onClick: () => menu.toPage(previousPage)
+    onClick: () => Menu.toPage(previousPage)
   });
 
   /**
@@ -35,21 +37,34 @@ MCFunction('menu', () => {
     id: 'arrow',
     slot: 17,
     name: { text: 'Go main', color: 'yellow' },
-    onClick: () => menu.toPage(mainPage)
+    onClick: () => Menu.toPage('main')
   });
 
-  /** Stores all generated pages */
-  const pageRecord: pageRecordType = {};
+  const progressPage = (skillName: string): string => {
+    return `progress_${skillName}`;
+  }
+  const onEventPage = (skillName: string, index: number): string => {
+    return `onEvent_${skillName}_${index}`;
+  }
+  const mainPage = 'main';
+  const prestigePage = 'prestige';
 
-  const mainPage = createMainPage();
+
+
+  createMainPage();
   createSkillPages();
+  createPrestigePage();
+  say('a');
 
+  function createPrestigePage() {
+
+  }
   /**
    * Creates the main menu page
    */
   function createMainPage(): GUI.Page {
     const page: GUI.Page = {
-      name: 'Menu',
+      name: mainPage,
       Buttons: [{ id: 'stick', slot: 0 }]
     };
 
@@ -68,25 +83,35 @@ MCFunction('menu', () => {
       lore: [{ text: `${name} $(level)` }],
       onClick: () => {
         depth.set(playerLevel['/='](18));
-        menu.toPage(pageRecord[name].progress);
+        Menu.toPage(progressPage(name));
       },
       macroArgs: [{ key: 'level', value: '<level>' }]
     });
 
-    menu.pushInstruction(page, {
+    const prestigeButton: GUI.Button = {
+      id: 'netherite_scrap',
+      slot: 20,
+      name: { text: 'Prestige' },
+      lore: [Errors.notImplemented],
+      onClick: () => { Menu.toPage(prestigePage) }
+    }
+
+    Menu.pushInstruction(page, {
       fill: () => {
         SkillList.forEach((skill, i) => {
-          menu.placeItem(skillButton(skill.item, 10 + i, skill.name, Scores[skill.name]));
+          Menu.placeItem(skillButton(skill.item, 10 + i, skill.name, Scores[skill.name]));
         });
       },
       click: () => {
         SkillList.forEach((skill, i) => {
-          menu.detectClick(skillButton(skill.item, 10 + i, skill.name, Scores[skill.name]));
+          Menu.detectClick(skillButton(skill.item, 10 + i, skill.name, Scores[skill.name]));
         });
       }
     });
 
-    menu.pushPage(page);
+    page.Buttons?.push(prestigeButton);
+
+    Menu.pushPage(page);
     return page;
   }
 
@@ -95,11 +120,6 @@ MCFunction('menu', () => {
    */
   function createSkillPages() {
     SkillList.forEach(skill => {
-      pageRecord[skill.name] = {
-        progress: { name: skill.name + ' progress' },
-        onEvent: [{ name: skill.name + ' onEvent' }]
-      };
-
       createProgressPage(skill);
       createOnEventPages(skill);
     });
@@ -136,13 +156,13 @@ MCFunction('menu', () => {
         const testLevel = Variable(i)['+='](depth['*='](18));
 
         _.if(playerLevel['<'](testLevel), () => {
-          menu.placeItem(createLevelButton('red', 'Not reached', slot, testLevel));
+          Menu.placeItem(createLevelButton('red', 'Not reached', slot, testLevel));
         })
           .elseIf(playerLevel['=='](testLevel), () => {
-            menu.placeItem(createLevelButton('yellow', 'In progress', slot, testLevel));
+            Menu.placeItem(createLevelButton('yellow', 'In progress', slot, testLevel));
           })
           .else(() => {
-            menu.placeItem(createLevelButton('green', 'Reached', slot, testLevel));
+            Menu.placeItem(createLevelButton('green', 'Reached', slot, testLevel));
           });
       });
     };
@@ -153,71 +173,64 @@ MCFunction('menu', () => {
         const testLevel = Variable(i)['+='](depth['*='](18));
 
         _.if(playerLevel['<'](testLevel), () => {
-          menu.detectClick(createLevelButton('red', 'Not reached', slot, testLevel));
+          Menu.detectClick(createLevelButton('red', 'Not reached', slot, testLevel));
         })
           .elseIf(playerLevel['=='](testLevel), () => {
-            menu.detectClick(createLevelButton('yellow', 'In progress', slot, testLevel));
+            Menu.detectClick(createLevelButton('yellow', 'In progress', slot, testLevel));
           })
           .else(() => {
-            menu.detectClick(createLevelButton('green', 'Reached', slot, testLevel));
+            Menu.detectClick(createLevelButton('green', 'Reached', slot, testLevel));
           });
       });
     };
 
     const page: GUI.Page = {
-      name: skill.name + ' progress',
+      name: progressPage(skill.name),
       Buttons: [
-        goBack(mainPage),
+        goBack('main'),
         { id: 'paper', slot: 19, onClick: () => depth['+='](1) },
         { id: 'paper', slot: 17, onClick: () => depth['-='](1) },
         {
           id: 'book',
           slot: 20,
           name: { text: 'onEvent page', color: 'green' },
-          onClick: () => menu.toPage(pageRecord[skill.name].onEvent[0])
+          onClick: () => Menu.toPage(onEventPage(skill.name, 0))
         }
       ]
     };
 
-    menu.pushInstruction(page, { fill, click });
-    pageRecord[skill.name].progress = page;
-    menu.pushPage(page);
+    Menu.pushInstruction(page, { fill, click });
+    Menu.pushPage(page);
   }
 
   /**
    * Creates paginated onEvent pages for a skill
    */
   function createOnEventPages(skill: Skill) {
-    const pages: GUI.Page[] = [];
     const pageCount = Math.ceil(skill.onEvents.length / 18);
 
     for (let i = 0; i < pageCount; i++) {
+      const index = i;
       const page: GUI.Page = {
-        name: `${skill.name} onEvent ${i}`,
-        Buttons: [goBack(pageRecord[skill.name].progress), goMain()]
+        name: onEventPage(skill.name, index),
+        Buttons: [goBack(progressPage(skill.name)), goMain()]
       };
-      pages.push(page);
-    }
-
-    pages.forEach((page, index) => {
-      const buttons: GUI.Button[] = [];
 
       // Navigation
       if (index > 0) {
-        buttons.push({
+        page.Buttons?.push({
           id: 'paper',
           slot: 9,
           name: { text: 'Previous' },
-          onClick: () => menu.toPage(pages[index - 1])
+          onClick: () => Menu.toPage(onEventPage(skill.name, index - 1))
         });
       }
-
-      if (index < pages.length - 1) {
-        buttons.push({
+      if (index < pageCount - 1) {
+        page.Buttons?.push({
           id: 'paper',
           slot: 10,
           name: { text: 'Next' },
-          onClick: () => menu.toPage(pages[index + 1])
+          onClick: () => Menu.toPage(onEventPage(skill.name, index + 1))
         });
       }
 
@@ -227,17 +240,17 @@ MCFunction('menu', () => {
         if (eventIndex >= skill.onEvents.length) break;
 
         const event = skill.onEvents[eventIndex];
-        buttons.push({
+        page.Buttons?.push({
           id: event.item,
           slot: j,
           name: { text: `${event.name} (${event.gain} xp)`, color: 'yellow' },
-          lore: [{ text: `<lore.onEvent>` }]
+          lore: [Errors.notImplemented]
         });
       }
 
-      page.Buttons?.push(...buttons);
-      menu.pushPage(page);
-      pageRecord[skill.name].onEvent.push(page);
-    });
+      Menu.pushPage(page);
+    }
+
+
   }
 }, { runOnLoad: true });

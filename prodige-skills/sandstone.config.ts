@@ -13,7 +13,7 @@ export default {
     } as ResourcePackConfig
   },
   onConflict: {
-    default: 'warn',
+    default: 'rename',
   },
   namespace: 'prodige_skills',
   packUid: '46EQ989V',
