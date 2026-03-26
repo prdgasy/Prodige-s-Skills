@@ -8,12 +8,6 @@ import { GUI } from '@prodigelib/gui';
 export type ItemType = Parameters<typeof give>[1];
 
 /**
- * record of pages for skills and events.
- * Keys are skill/event names, values contain progress and event pages.
- */
-export type pageRecordType = Record<string, { progress: GUI.Page, onEvent: GUI.Page[] }>;
-
-/**
  * event that can trigger skill progression.
  */
 export type Event = {
@@ -38,5 +32,9 @@ export type Skill = {
   /** The initial experience points a player starts with for this skill */
   startingXp: number
   /** Array of events that can trigger progression in this skill */
-  onEvents: Event[]
+  onEvents: Event[];
+
+  customItems: [{ name: string, item: ItemType }];
+
+  titles: [{ name: string }]
 };

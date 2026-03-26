@@ -5,10 +5,10 @@
     "": {
       "name": "sandstone-template",
       "dependencies": {
+        "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
         "@sandstone-mc/block": "^0.1.4",
         "chokidar": "^5.0.0",
         "fs-extra": "^11.3.4",
-        "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
         "sandstone": "^1.0.0-beta.3",
       },
       "devDependencies": {
@@ -146,7 +146,7 @@
 
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.5.6", "", { "os": "win32", "cpu": "x64" }, "sha512-hbQlYcCq5dlAX9Qx+kFb0FHue6vbjlf0FrNzSKdYK2APUf7tGfGxQCk2ihEREmbR6ZMc0MVAD5RIX/41gpUzTw=="],
 
-    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#c407002", { "dependencies": { "sandstone": "^1.0.0-beta.3" } }, "prdgasy-prodigelib-gui-c407002"],
+    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#de21164", { "dependencies": { "sandstone": "^1.0.0-beta.3" } }, "prdgasy-prodigelib-gui-de21164"],
 
     "@sandstone-mc/block": ["@sandstone-mc/block@0.1.4", "", { "dependencies": { "sandstone": "1.0.0-beta.0" } }, "sha512-qWK9oEwywEqG7w0qDLizIt5/L1CpOa7HZ4ggC69Rz7XZ9qYmXouN/Mcmfy+X9nv6tIH3qVy+vVODHpA+h2f8Kg=="],
 
