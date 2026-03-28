@@ -9,8 +9,8 @@ const depth = Objective.create('prodiges_skills.progress_depth')('@s');
 const Scores: Record<string, { progress: Score, prestige: Score }> = {};
 SkillList.forEach(skill => {
   Scores[skill.name] = {
-    progress: Objective.create(`prodige_skills.${skill.name}.level`)('@p'),
-    prestige: Objective.create(`prodige_skills.${skill.name}.prestige`)('@p')
+    progress: Objective.create(`${skill.name}.level`)('@p'),
+    prestige: Objective.create(`${skill.name}.prestige`)('@p')
   }
 });
 
@@ -46,7 +46,7 @@ MCFunction('menu', () => {
    */
   const goBack = (previousPage: GUI.Page | string): GUI.Button => ({
     id: 'arrow',
-    slot: 17,
+    slot: 21,
     name: { text: 'Go back', color: 'red' },
     onClick: () => Menu.toPage(previousPage)
   });
@@ -117,7 +117,7 @@ MCFunction('menu', () => {
   function createBoosterPage() {
     const page: GUI.Page = {
       name: shopBoosterPage,
-      Buttons: [goBack(shopPage)]
+      Buttons: [goBack(shopPage), { id: 'stone_button', slot: 5, name: { text: 'testbutton' } }]
     }
 
     for (let i = 0; i < 5; i++) {
@@ -195,10 +195,8 @@ MCFunction('menu', () => {
 
     Menu.pushPage(page);
   }
-  /**
-   * Creates the main menu page
-   */
-  function createMainPage(): GUI.Page {
+
+  function createMainPage() {
     const page: GUI.Page = {
       name: mainPage,
       Buttons: []
@@ -216,7 +214,7 @@ MCFunction('menu', () => {
         depth.set(playerLevel['/='](18));
         Menu.toPage(progressPage(name));
       },
-      // macroArgs: [Errors.macroArgumentNotImplemented]
+      macroArgs: [Errors.macroArgumentNotImplemented('level')]
     });
 
 
@@ -226,6 +224,12 @@ MCFunction('menu', () => {
       name: { text: 'Prestige' },
       lore: [Errors.textNotImplemented()],
       onClick: () => { Menu.toPage(prestigePage) }
+    }
+    const shopButton: GUI.Button = {
+      id: 'emerald',
+      slot: 22,
+      name: { text: 'Shop', color: 'green' },
+      onClick: () => { Menu.toPage(shopPage); }
     }
 
     Menu.pushInstruction(page, {
@@ -241,15 +245,11 @@ MCFunction('menu', () => {
       }
     });
 
-    page.Buttons?.push(prestigeButton);
+    page.Buttons?.push(prestigeButton, shopButton);
 
     Menu.pushPage(page);
-    return page;
   }
 
-  /**
-   * Generates all skill-related pages
-   */
   function createSkillPages() {
     SkillList.forEach(skill => {
       createProgressPage(skill);
@@ -276,8 +276,8 @@ MCFunction('menu', () => {
         name: { text: `Level $(level)`, color },
         onClick: () => say(message),
         macroArgs: [
-          { key: 'level', value: level },
-          { key: 'slot', value: slot }
+          { 'level': level },
+          { 'slot': slot }
         ]
       });
 
@@ -319,7 +319,7 @@ MCFunction('menu', () => {
         name: progressPage(skill.name),
         Buttons: [
           goBack('main'),
-          { id: 'paper', slot: 19, onClick: () => depth['+='](1) },
+          { id: 'paper', slot: 8, onClick: () => depth['+='](1) },
           { id: 'paper', slot: 17, onClick: () => depth['-='](1) },
           {
             id: 'book',
@@ -344,7 +344,7 @@ MCFunction('menu', () => {
         const index = i;
         const page: GUI.Page = {
           name: onEventPage(skill.name, index),
-          Buttons: [goBack(progressPage(skill.name)), goBack('Main')]
+          Buttons: [goBack(progressPage(skill.name)), goBack(progressPage(skill.name))]
         };
 
         // Navigation
@@ -385,8 +385,6 @@ MCFunction('menu', () => {
 
     }
   }
-
-
 }, { runOnLoad: true });
 
 

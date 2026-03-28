@@ -56,6 +56,6 @@ export namespace Errors {
 
   export const macroArgumentNotImplemented = (key: string) => {
     const warning = logWarning('macroArgumentNotImplemented');
-    return { key: key, value: warning };
+    return { [key]: warning };
   }
 }
