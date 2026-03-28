@@ -1,8 +1,6 @@
 import { _, MCFunction, say, tellraw } from 'sandstone';
 import { GUI } from '@prodigelib/gui';
 
-import { PageNames, ProgressPageIndex } from './const';
-
 import { initMainPage } from './pages/main';
 import { initProgressPage } from './pages/progress';
 import { initOnEventPages } from './pages/onEvent';
@@ -16,7 +14,7 @@ import { initItemPage } from './pages/item';
  * Initializes scores, menu, and all pages.
  */
 MCFunction('menu', () => {
-  say('loaded');
+  tellraw('@p', { text: "[Skills-Menu] Loaded", color: 'yellow' });
 
   const Menu = new GUI.Init('hayichan', 'cmd');
 
