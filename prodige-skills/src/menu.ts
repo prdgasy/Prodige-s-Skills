@@ -1,4 +1,4 @@
-import { _, MCFunction, Objective, say, Variable, Score, ObjectiveClass } from 'sandstone';
+import { _, MCFunction, Objective, say, Variable, Score, ObjectiveClass, tellraw } from 'sandstone';
 import { GUI } from '@prodigelib/gui';
 import { SkillList } from './skills';
 import type { Skill, ItemType } from "./types";
@@ -32,12 +32,13 @@ function boosterItem(type: 'xp' | 'point', multiplier: number) {
 }
 
 
+const totalContentSlots = 17;
 /**
  * Main entry point for the GUI system.
  * Initializes scores, menu, and all pages.
  */
 MCFunction('menu', () => {
-
+  say('loaded');
 
   const Menu = new GUI.Init('hayichan', 'cmd');
 
@@ -211,7 +212,7 @@ MCFunction('menu', () => {
       name: { text: name, color: 'yellow' },
       lore: [{ text: `${name} $(level)` }],
       onClick: () => {
-        depth.set(playerLevel['/='](18));
+        depth.set(playerLevel['/'](18));
         Menu.toPage(progressPage(name));
       },
       macroArgs: [Errors.macroArgumentNotImplemented('level')]
@@ -265,7 +266,7 @@ MCFunction('menu', () => {
       /**
        * Factory for level state buttons
        */
-      const createLevelButton = (
+      const levelButton = (
         color: string,
         message: string,
         slot: Score,
@@ -281,52 +282,53 @@ MCFunction('menu', () => {
         ]
       });
 
-      const fill = () => {
-        _.for([0, 18], 'iterate', i => {
-          const slot = Variable(i);
-          const testLevel = Variable(i)['+='](depth['*='](18));
+      const onEventButton: GUI.Button = {
+        id: 'book',
+        slot: 20,
+        name: { text: 'onEvent page', color: 'green' },
+        onClick: () => Menu.toPage(onEventPage(skill.name, 0))
+      };
 
+      const fill = () => {
+        _.for([0, totalContentSlots], 'iterate', i => {
+          const slot = i;
+          const testLevel = i['+'](depth['*'](totalContentSlots));
           _.if(playerLevel['<'](testLevel), () => {
-            Menu.placeItem(createLevelButton('red', 'Not reached', slot, testLevel));
+            Menu.placeItem(levelButton('red', 'Not reacheddd', slot, testLevel));
           })
             .elseIf(playerLevel['=='](testLevel), () => {
-              Menu.placeItem(createLevelButton('yellow', 'In progress', slot, testLevel));
+              tellraw('@p', ["slot in progress:", testLevel, " playerlevel: ", playerLevel]);
+              Menu.placeItem(levelButton('yellow', 'In progress', slot, testLevel));
             })
             .else(() => {
-              Menu.placeItem(createLevelButton('green', 'Reached', slot, testLevel));
+              Menu.placeItem(levelButton('green', 'Reached', slot, testLevel));
             });
-        });
+        })
       };
 
       const click = () => {
-        _.for([0, 18], 'iterate', i => {
-          const slot = Variable(i);
-          const testLevel = Variable(i)['+='](depth['*='](18));
-
+        _.for([0, totalContentSlots], 'iterate', i => {
+          const slot = i;
+          const testLevel = Variable(i)['+='](depth['*'](totalContentSlots));
           _.if(playerLevel['<'](testLevel), () => {
-            Menu.detectClick(createLevelButton('red', 'Not reached', slot, testLevel));
+            Menu.detectClick(levelButton('red', 'Not reacheddd', slot, testLevel));
           })
             .elseIf(playerLevel['=='](testLevel), () => {
-              Menu.detectClick(createLevelButton('yellow', 'In progress', slot, testLevel));
+              Menu.detectClick(levelButton('yellow', 'In progress', slot, testLevel));
             })
             .else(() => {
-              Menu.detectClick(createLevelButton('green', 'Reached', slot, testLevel));
+              Menu.detectClick(levelButton('green', 'Reached', slot, testLevel));
             });
-        });
+        })
       };
 
       const page: GUI.Page = {
         name: progressPage(skill.name),
         Buttons: [
           goBack('main'),
-          { id: 'paper', slot: 8, onClick: () => depth['+='](1) },
-          { id: 'paper', slot: 17, onClick: () => depth['-='](1) },
-          {
-            id: 'book',
-            slot: 20,
-            name: { text: 'onEvent page', color: 'green' },
-            onClick: () => Menu.toPage(onEventPage(skill.name, 0))
-          }
+          { id: 'paper', slot: 25, onClick: () => depth['--'] },
+          { id: 'paper', slot: 26, onClick: () => depth['++'] },
+          onEventButton
         ]
       };
 
