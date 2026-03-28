@@ -3,45 +3,57 @@ import { goBack, PageNames } from "../const";
 import { Errors } from "../../errors";
 
 export function initProfilePage(Menu: GUI.Init) {
-  // --- Buttons Definitions ---
-  const activeBoostersBtn: GUI.Button = {
-    id: 'clock',
+  // --- Info Buttons ---
+  const statsBtn: GUI.Button = {
+    id: 'gold_block',
     slot: 10,
-    name: { text: 'Active Boosters', color: 'light_purple' },
-    lore: [{ text: 'No active boosters', color: 'gray' }]
+    name: { text: 'Your Statistics', color: 'gold' },
+    lore: [
+      { text: 'Total Power: ', color: 'gray' }, { text: '1,240', color: 'yellow' },
+      { text: '' },
+      { text: 'Global Rank: ', color: 'gray' }, { text: '#142', color: 'aqua' }
+    ]
   };
 
-  const globalStatsBtn: GUI.Button = {
-    id: 'gold_block',
+  const activeBoostersBtn: GUI.Button = {
+    id: 'clock',
     slot: 12,
-    name: { text: 'Global Statistics', color: 'gold' },
-    lore: [{ text: 'Loading stats...', color: 'gray' }]
+    name: { text: 'Active Boosters', color: 'light_purple' },
+    lore: [{ text: 'No active multipliers.', color: 'gray' }]
   };
 
   const favoriteSkillBtn: GUI.Button = {
     id: 'nether_star',
     slot: 14,
-    name: { text: 'Favorite Skill', color: 'aqua' },
-    lore: [{ text: 'Most played: Mining', color: 'gray' }]
+    name: { text: 'Most Played Skill', color: 'aqua' },
+    lore: [{ text: 'Mining (Level 42)', color: 'gray' }]
+  };
+
+  // --- Utility Buttons ---
+  const settingsBtn: GUI.Button = {
+    id: 'comparator',
+    slot: 22,
+    name: { text: 'Settings', color: 'red' },
+    lore: [{ text: 'Toggle particles and sounds', color: 'gray' }],
+    onClick: () => Menu.toPage(PageNames.settings)
   };
 
   const leaderboardBtn: GUI.Button = {
     id: 'writable_book',
     slot: 16,
-    name: { text: 'Leaderboard', color: 'yellow' },
-    onClick: () => { Errors.functionNotImplemented() }
+    name: { text: 'Leaderboards', color: 'yellow' },
+    onClick: () => Errors.functionNotImplemented()
   };
 
-
-  // --- Page Assembly ---
   const page: GUI.Page = {
-    name: 'profile',
+    name: PageNames.profile,
     Buttons: [
       goBack(Menu, PageNames.main),
+      statsBtn,
       activeBoostersBtn,
-      globalStatsBtn,
       favoriteSkillBtn,
-      leaderboardBtn
+      leaderboardBtn,
+      settingsBtn
     ]
   };
 

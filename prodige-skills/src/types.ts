@@ -33,8 +33,6 @@ export type Skill = {
   startingXp: number
   /** Array of events that can trigger progression in this skill */
   onEvents: Event[];
-
-  customItems: [{ name: string, item: ItemType }];
-
-  titles: [{ name: string }]
+  customItems: { name: string, item: ItemType }[];
+  titles: { name: string }[]
 };

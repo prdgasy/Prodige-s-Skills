@@ -12,6 +12,7 @@ import { initItemPage } from './pages/item';
 import { initQuestPages } from './pages/quest';
 import { SkillList } from '../skills';
 import { initProfilePage } from './pages/profile';
+import { initSettingsPage } from './pages/settings';
 /**
  * Main entry point for the GUI system.
  * Initializes scores, menu, and all pages.
@@ -29,6 +30,7 @@ MCFunction('menu', () => {
   initItemPage(Menu);
   initTitlePage(Menu);
   initProfilePage(Menu);
+  initSettingsPage(Menu);
   SkillList.forEach(skill => {
     initProgressPages(Menu, skill);
     initOnEventPages(Menu, skill);

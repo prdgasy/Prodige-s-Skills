@@ -18,6 +18,7 @@ const PageNames = {
   title: 'title',
   profile: 'profile',
   crate: 'crate',
+  settings: 'settings',
   quest: (skillName: string): string => { return `quest_${skillName}`; },
   progress: (skillName: string): string => { return `progress_${skillName}`; },
   onEvent: (skillName: string, index: number): string => { return `onEvent_${skillName}_${index}`; },
