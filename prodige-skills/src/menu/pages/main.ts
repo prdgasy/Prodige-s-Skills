@@ -60,7 +60,19 @@ export function initMainPage(Menu: GUI.Init) {
     name: { text: 'Profile', color: 'aqua' },
     onClick: () => { Menu.toPage(PageNames.profile); }
   };
-  page.Buttons?.push(prestigeButton, shopButton, profileButton);
+  const dailyTaskBtn: GUI.Button = {
+    id: 'wheat',
+    slot: 0,
+    name: { text: 'Daily Tasks', color: 'green' },
+    onClick: () => { Menu.toPage(PageNames.dailyTask); }
+  };
+  const leaderboardBtn: GUI.Button = {
+    id: 'arrow',
+    slot: 1,
+    name: { text: 'Leaderboard', color: 'green' },
+    onClick: () => { Menu.toPage(PageNames.dailyTask); }
+  };
+  page.Buttons?.push(prestigeButton, shopButton, profileButton, dailyTaskBtn, leaderboardBtn);
 
   Menu.pushPage(page);
 }

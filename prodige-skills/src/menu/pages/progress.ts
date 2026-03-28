@@ -66,13 +66,21 @@ export function initProgressPages(Menu: GUI.Init, skill: Skill) {
     })
   };
 
+  const abilityBtn: GUI.Button = {
+    id: 'gold_nugget',
+    slot: 26,
+    name: { text: 'ability' },
+    onClick: () => { Menu.toPage(PageNames.ability) }
+  }
+
   const page: GUI.Page = {
     name: PageNames.progress(skill.name),
     Buttons: [
       goBack(Menu, PageNames.main),
       { id: 'paper', slot: 25, onClick: () => ProgressPageIndex['--'] },
       { id: 'paper', slot: 26, onClick: () => ProgressPageIndex['++'] },
-      onEventButton
+      onEventButton,
+      abilityBtn
     ]
   };
 
