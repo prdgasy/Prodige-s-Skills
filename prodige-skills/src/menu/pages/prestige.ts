@@ -1,5 +1,6 @@
 import { GUI } from "@prodigelib/gui";
-import { goBack, PageNames, PrestigeLevelScore } from "../const";
+import { goBack, PageNames } from "../const";
+import { PrestigeScore } from "../../player/scores";
 import { ItemType } from "../../types";
 import { Score } from "sandstone";
 import { Errors } from "../../errors";
@@ -23,7 +24,7 @@ export function initPrestigePage(Menu: GUI.Init) {
   });
 
   SkillList.forEach((skill, index) => {
-    page.Buttons?.push(skillPrestigeButton(skill.item, index + 10, skill.name, PrestigeLevelScore[skill.name]))
+    page.Buttons?.push(skillPrestigeButton(skill.item, index + 10, skill.name, PrestigeScore[skill.name]))
   })
 
   Menu.pushPage(page);

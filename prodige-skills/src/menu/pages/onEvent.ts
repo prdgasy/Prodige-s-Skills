@@ -8,7 +8,7 @@ import { Skill } from "../../types";
  * Creates paginated onEvent pages for a skill
  */
 export function initOnEventPages(Menu: GUI.Init, skill: Skill) {
-  const pageCount = Math.ceil(skill.onEvents.length / 18);
+  const pageCount = Math.ceil(skill.Events.length / 18);
 
   for (let i = 0; i < pageCount; i++) {
     const index = i;
@@ -38,9 +38,9 @@ export function initOnEventPages(Menu: GUI.Init, skill: Skill) {
     // Events
     for (let j = 0; j < 18; j++) {
       const eventIndex = j + index * 18;
-      if (eventIndex >= skill.onEvents.length) break;
+      if (eventIndex >= skill.Events.length) break;
 
-      const event = skill.onEvents[eventIndex];
+      const event = skill.Events[eventIndex];
       page.Buttons?.push({
         id: event.item,
         slot: j,

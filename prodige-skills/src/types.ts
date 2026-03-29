@@ -1,4 +1,4 @@
-import { give } from "sandstone";
+import { give, Objective } from "sandstone";
 import { GUI } from '@prodigelib/gui';
 
 /**
@@ -6,7 +6,7 @@ import { GUI } from '@prodigelib/gui';
  * This is derived from the parameters of the 'give' function from sandstone.
  */
 export type ItemType = Parameters<typeof give>[1];
-
+export type Criteria = Parameters<typeof Objective.create>[1];
 /**
  * event that can trigger skill progression.
  */
@@ -16,9 +16,10 @@ export type Event = {
   /** The item representation assiociated with this event */
   item: ItemType
   /** The Minecraft advancement criteria that triggers this event */
-  criteria: string
+  criteria: Criteria
   /** The amount of experience points gained when this event occurs */
-  gain: number
+  xp: number,
+  point: number
 };
 
 /**
@@ -32,7 +33,7 @@ export type Skill = {
   /** The initial experience points a player starts with for this skill */
   startingXp: number
   /** Array of events that can trigger progression in this skill */
-  onEvents: Event[];
+  Events: Event[];
   customItems: { name: string, item: ItemType }[];
   titles: { name: string }[]
 };

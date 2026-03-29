@@ -1,7 +1,7 @@
 import { GUI } from "@prodigelib/gui";
-import { goBack, PageNames } from "../const";
-import { Errors } from "../../errors";
-import { ItemType } from "../../types";
+import { goBack, PageNames } from "../../const";
+import { Errors } from "../../../errors";
+import { ItemType } from "../../../types";
 
 
 function boosterItem(type: 'xp' | 'point', multiplier: number) {

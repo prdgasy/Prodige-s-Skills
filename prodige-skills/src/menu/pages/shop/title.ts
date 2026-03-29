@@ -1,7 +1,7 @@
 import { GUI } from "@prodigelib/gui";
-import { Errors } from "../../errors";
-import { SkillList } from "../../skills";
-import { goBack, PageNames } from "../const";
+import { Errors } from "../../../errors";
+import { SkillList } from "../../../skills";
+import { goBack, PageNames } from "../../const";
 
 export function initTitlePage(Menu: GUI.Init) {
   const page: GUI.Page = {

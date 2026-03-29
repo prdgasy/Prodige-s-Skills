@@ -1,11 +1,12 @@
 import { _, say, Score, tellraw } from "sandstone";
 import { SkillList } from "../../skills";
-import { goBack, PageNames, ProgressPageIndex, SkillLevelScore, totalSlots } from "../const";
+import { goBack, PageNames, ProgressPageIndex, totalSlots } from "../const";
+import { SkillScore } from '../../player/scores';
 import { GUI } from "@prodigelib/gui";
 import { ItemType, Skill } from "../../types";
 
 export function initProgressPages(Menu: GUI.Init, skill: Skill) {
-  const playerLevel = SkillLevelScore[skill.name];
+  const playerLevel = SkillScore[skill.name].level;
 
   /**
    * Factory for level state buttons

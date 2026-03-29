@@ -2,7 +2,8 @@ import { GUI } from "@prodigelib/gui";
 import { Score } from "sandstone";
 import { ItemType } from "../../types";
 import { Errors } from "../../errors";
-import { PageNames, ProgressPageIndex, SkillLevelScore } from '../const';
+import { PageNames, ProgressPageIndex } from '../const';
+import { SkillScore } from "../../player/scores";
 import { SkillList } from "../../skills";
 
 export function initMainPage(Menu: GUI.Init) {
@@ -44,12 +45,12 @@ export function initMainPage(Menu: GUI.Init) {
   Menu.pushInstruction(page, {
     fill: () => {
       SkillList.forEach((skill, i) => {
-        Menu.placeItem(skillButton(skill.item, 10 + i, skill.name, SkillLevelScore[skill.name]));
+        Menu.placeItem(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
       });
     },
     click: () => {
       SkillList.forEach((skill, i) => {
-        Menu.detectClick(skillButton(skill.item, 10 + i, skill.name, SkillLevelScore[skill.name]));
+        Menu.detectClick(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
       });
     }
   });
