@@ -1,5 +1,4 @@
 import { GUI } from "@prodigelib/gui";
-import { SkillList } from "../../skills";
 import { goBack, PageNames } from "../const";
 import { Errors } from "../../errors";
 import { Skill } from "../../types";
@@ -44,7 +43,7 @@ export function initOnEventPages(Menu: GUI.Init, skill: Skill) {
       page.Buttons?.push({
         id: event.item,
         slot: j,
-        name: { text: `${event.name} (${event.gain} xp)`, color: 'yellow' },
+        name: { text: `${event.name} (${event.xp} xp)`, color: 'yellow' },
         lore: [Errors.textNotImplemented()]
       });
     }

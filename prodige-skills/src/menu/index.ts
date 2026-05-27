@@ -28,22 +28,22 @@ MCFunction('menu', () => {
 
   initMainPage(Menu);
 
-  initPrestigePage(Menu);
-  initShopPage(Menu);
-  initBoosterPage(Menu);
-  initItemPage(Menu);
-  initTitlePage(Menu);
-  initProfilePage(Menu);
-  initSettingsPage(Menu);
-  initMilestonesPage(Menu);
-  initDailyTasksPage(Menu);
+  // initPrestigePage(Menu);
+  // initShopPage(Menu);
+  // initBoosterPage(Menu);
+  // initItemPage(Menu);
+  // initTitlePage(Menu);
+  // initProfilePage(Menu);
+  // initSettingsPage(Menu);
+  // initMilestonesPage(Menu);
+  // initDailyTasksPage(Menu);
 
-  SkillList.forEach(skill => {
-    initProgressPages(Menu, skill);
-    initOnEventPages(Menu, skill);
-    initQuestPages(Menu, skill);
-    initAbilityPages(Menu, skill)
-  })
+  // SkillList.forEach(skill => {
+  //   initProgressPages(Menu, skill);
+  //   initOnEventPages(Menu, skill);
+  //   initQuestPages(Menu, skill);
+  //   initAbilityPages(Menu, skill)
+  // })
 
 
 }, { runOnLoad: true });

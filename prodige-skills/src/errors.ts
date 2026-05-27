@@ -1,4 +1,4 @@
-import { tellraw } from "sandstone";
+import { say, tellraw } from "sandstone";
 
 export namespace Errors {
   /**
@@ -42,7 +42,7 @@ export namespace Errors {
    * Retourne un objet de texte JSON pour Minecraft.
    */
   export const textNotImplemented = () => {
-    const warning = logWarning('textNotImplemented');
+    const warning = logWarning('textNotImplemented(chdange)');
     return { text: warning } as const;
   };
 

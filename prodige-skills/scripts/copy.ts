@@ -1,52 +1,95 @@
-import chokidar from "chokidar";
+import chokidar, { FSWatcher } from "chokidar";
 import fs from "fs-extra";
-import path from "path";
 import chalk from "chalk";
+import { spawn } from "child_process";
+import readline from "readline";
 
-const source = "C:/Users/TOSHIBA/Documents/Jeux/Minecraft/DATAPACKS/Prodige-s-Skills (sandstone)/prodige-skills/.sandstone/output/datapack";
-const destination = "C:/Users/TOSHIBA/AppData/Roaming/ModrinthApp/profiles/Data_Resource Pack Modpack/saves/MAIN/datapacks/prodige-skills";
+const source =
+  "C:/Users/TOSHIBA/Documents/Jeux/Minecraft/DATAPACKS/Prodige-s-Skills (sandstone)/prodige-skills/.sandstone/output/datapack";
 
-let isCopying = false;
-let timeout: Timer | null = null;
+const destination =
+  "C:/Users/TOSHIBA/AppData/Roaming/ModrinthApp/profiles/Data_Resource Pack Modpack/saves/FRIANDISE/datapacks/prodige-skills";
 
-async function fullSync() {
-  if (isCopying) return;
-  isCopying = true;
+let sand: any;
+let watcher: FSWatcher | null = null;
+let shuttingDown = false;
 
-  process.stdout.write(chalk.cyan(`\r🔄 Copying files... `));
+// clavier
+readline.emitKeypressEvents(process.stdin);
+process.stdin.setRawMode(true);
+process.stdin.resume();
 
-  try {
-    // On copie tout le dossier d'un coup, c'veut dire moins d'erreurs de stream
-    await fs.copy(source, destination, {
-      overwrite: true,
-      errorOnExist: false
-    });
-
-    // On attend un petit peu pour laisser le terminal respirer
-    if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      process.stdout.write(chalk.green(`\r✅ Datapack updated!              \n`));
-      isCopying = false;
-    }, 300);
-
-  } catch (err) {
-    process.stdout.write(chalk.red(`\r❌ Copy failed, retrying...       `));
-    setTimeout(fullSync, 500); // Relance en cas d'échec (fichier verrouillé)
-    isCopying = false;
+process.stdin.on("keypress", (_, key) => {
+  if (key.name === "q" || (key.ctrl && key.name === "c")) {
+    shutdown();
   }
+});
+
+function shutdown() {
+  if (shuttingDown) return;
+  shuttingDown = true;
+
+  console.log(chalk.yellow("\n👋 Shutting down..."));
+
+  if (watcher) watcher.close();
+
+  if (sand) sand.kill("SIGTERM");
+
+  process.exit(0);
 }
 
-console.log(chalk.bold.magenta("\n🚀 Watching Prodige's Packs output..."));
-console.log(chalk.dim("--------------------------------------------"));
+function startSand() {
+  if (shuttingDown) return;
 
-chokidar.watch(source, {
-  ignoreInitial: false, // On synchronise tout au lancement pour être sûr
-  persistent: true,
-  awaitWriteFinish: {
-    stabilityThreshold: 300,
-    pollInterval: 100
+  console.log(chalk.magenta("\n🚀 sand watch started\n"));
+
+  sand = spawn("sand", ["watch"], {
+    shell: true,
+    stdio: "inherit",
+  });
+
+  sand.on("exit", (code: number) => {
+    if (shuttingDown) return;
+
+    console.log(chalk.red(`\n❌ sand stopped (code ${code})`));
+
+    setTimeout(() => {
+      console.log(chalk.yellow("🔄 restarting sand watch...\n"));
+      startSand();
+    }, 1000);
+  });
+}
+
+let isCopying = false;
+
+async function fullSync() {
+  if (isCopying || shuttingDown) return;
+  isCopying = true;
+
+  try {
+    await fs.copy(source, destination, {
+      overwrite: true,
+      errorOnExist: false,
+    });
+
+    console.log(chalk.green("\n✔ files copied"));
+  } catch {
+    console.log(chalk.red("\n❌ copy failed"));
   }
-}).on("all", () => {
-  // Peu importe l'événement (ajout, change, suppr), on synchronise tout
-  fullSync();
-});
+
+  isCopying = false;
+}
+
+watcher = chokidar
+  .watch(source, {
+    ignoreInitial: false,
+    persistent: true,
+    awaitWriteFinish: {
+      stabilityThreshold: 300,
+      pollInterval: 100,
+    },
+  })
+  .on("all", () => fullSync());
+
+// start
+startSand();
