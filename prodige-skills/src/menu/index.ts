@@ -41,7 +41,7 @@ MCFunction('menu', () => {
     initProgressPages(Menu, skill);
     initOnEventPages(Menu, skill);
     initQuestPages(Menu, skill);
-    initAbilityPages(Menu, skill)
+    initAbilityPages(Menu, skill);
   })
 
 

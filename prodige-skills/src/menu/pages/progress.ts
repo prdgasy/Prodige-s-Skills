@@ -2,7 +2,7 @@ import { _, say, Score, tellraw } from "sandstone";
 import { SkillList } from "../../skills";
 import { goBack, PageNames, ProgressPageIndex, totalSlots } from "../const";
 import { Errors } from "../../errors"
-import { SkillScore } from '../../player/scores';
+import { PrestigeScore, SkillScore } from '../../player/scores';
 import { GUI } from "@prodigelib/gui";
 import { ItemType, Skill } from "../../types";
 
@@ -83,23 +83,20 @@ export function initProgressPages(Menu: GUI.Init, skill: Skill) {
   const prestigeBtn: GUI.Button = {
     id: "netherite_scrap",
     slot: 18,
-    name: { text: `${skill.name} Prestige`, color: "purple", bold: true },
+    name: { text: `${skill.name}: ${skill.Prestige.name} $(prestigeLvl)`, color: "purple", bold: true },
     lore: [
-      { text: "Current Prestige level: ", color: "gray" },
-      // On utilise ta lib pour les infos spéciales/dynamiques ici
-      Errors.textNotImplemented(),
-      { text: "Click to reset your skill level", color: "dark_purple" },
+      { text: "Reset your skill level", color: "dark_purple" },
       { text: "and unlock special abilities!", color: "dark_purple" },
-      { text: "Available Perks:", color: "blue" },
-      { text: "• Double resource drops", color: "aqua" },
-      { text: "• +15% Special Ability Damage", color: "aqua" }
+      { text: "Available Perk:", color: "blue" },
+      { text: `• +${skill.Prestige.powerPerLvl}% Special Ability Power`, color: "aqua" },
+      { text: "" },
+      { text: "Click to view!", color: "yellow" }
     ],
     onClick: () => {
-      Errors.functionNotImplemented();
+      Menu.toPage(PageNames.prestige);
     },
-    // On n'y met que des erreurs
     macroArgs: [
-      Errors.macroArgumentNotImplemented('prestigeObjective')
+      { prestigeLvl: PrestigeScore[skill.name] },
     ]
   };
 
