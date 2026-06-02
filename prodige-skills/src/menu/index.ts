@@ -24,26 +24,25 @@ import { initDailyTasksPage } from './pages/dailyTasks';
 MCFunction('menu', () => {
   tellraw('@p', { text: "[Skills-Menu] Loaded", color: 'yellow' });
 
-  const Menu = new GUI.Init('hayichan', 'cmd');
+  const Menu = new GUI.Init('hayichan', 'cmd', 930005);
 
   initMainPage(Menu);
+  initShopPage(Menu);
+  initBoosterPage(Menu);
+  initItemPage(Menu);
+  initTitlePage(Menu);
+  initProfilePage(Menu);
+  initSettingsPage(Menu);
+  initMilestonesPage(Menu);
+  initDailyTasksPage(Menu);
 
-  // initPrestigePage(Menu);
-  // initShopPage(Menu);
-  // initBoosterPage(Menu);
-  // initItemPage(Menu);
-  // initTitlePage(Menu);
-  // initProfilePage(Menu);
-  // initSettingsPage(Menu);
-  // initMilestonesPage(Menu);
-  // initDailyTasksPage(Menu);
-
-  // SkillList.forEach(skill => {
-  //   initProgressPages(Menu, skill);
-  //   initOnEventPages(Menu, skill);
-  //   initQuestPages(Menu, skill);
-  //   initAbilityPages(Menu, skill)
-  // })
+  SkillList.forEach(skill => {
+    initPrestigePage(Menu, skill);
+    initProgressPages(Menu, skill);
+    initOnEventPages(Menu, skill);
+    initQuestPages(Menu, skill);
+    initAbilityPages(Menu, skill)
+  })
 
 
 }, { runOnLoad: true });

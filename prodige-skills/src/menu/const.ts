@@ -31,4 +31,5 @@ const goBack = (Menu: GUI.Init, previousPage: GUI.Page | string): GUI.Button => 
   name: { text: 'Go back', color: 'red' },
   onClick: () => Menu.toPage(previousPage)
 });
+
 export { PageNames, ProgressPageIndex, totalSlots, goBack };

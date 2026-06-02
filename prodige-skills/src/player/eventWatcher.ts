@@ -4,7 +4,7 @@ import { SkillList } from "../skills";
 import { SkillScore, Event, BoosterScore, Point } from "./scores";
 import { levelUp } from "./levelUp";
 import { displayProgress } from "./displayProgress";
-export const eventWatcher = MCFunction('eventWatcher', () => {
+export const eventWatcher = MCFunction('event_watcher', () => {
   execute.as(Selector('@a', { tag: playerOption.progress })).at('@s').run(() => {
     SkillList.forEach(skill => {
       skill.Events.forEach(event => {

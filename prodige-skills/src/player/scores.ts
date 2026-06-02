@@ -21,7 +21,7 @@ SkillList.forEach(skill => {
 
   Event[skill.name] = {};
   skill.Events.forEach(event => {
-    Event[skill.name][event.name] = Objective.create(`${skill.name}.event.${event.name}`, event.criteria)('@p');
+    Event[skill.name][event.name] = Objective.create(`${skill.name}.event.${event.name.replace(' ', '')}`, event.criteria)('@p');
   });
 
 

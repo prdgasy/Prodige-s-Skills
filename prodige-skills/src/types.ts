@@ -35,5 +35,8 @@ export type Skill = {
   /** Array of events that can trigger progression in this skill */
   Events: Event[];
   customItems: { name: string, item: ItemType }[];
-  titles: { name: string }[]
+  titles: { name: string }[],
+  Prestige: {
+    name: string, powerPerLvl: number, func: null
+  }
 };

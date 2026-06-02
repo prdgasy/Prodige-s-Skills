@@ -32,7 +32,7 @@ export function initProfilePage(Menu: GUI.Init) {
   // --- Utility Buttons ---
   const settingsBtn: GUI.Button = {
     id: 'comparator',
-    slot: 22,
+    slot: 2,
     name: { text: 'Settings', color: 'red' },
     lore: [{ text: 'Toggle particles and sounds', color: 'gray' }],
     onClick: () => Menu.toPage(PageNames.settings)

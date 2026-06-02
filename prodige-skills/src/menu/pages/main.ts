@@ -1,5 +1,5 @@
 import { GUI } from "@prodigelib/gui";
-import { Score } from "sandstone";
+import { Score, tellraw } from "sandstone";
 import { ItemType } from "../../types";
 import { Errors } from "../../errors";
 import { PageNames, ProgressPageIndex } from '../const';
@@ -24,7 +24,7 @@ export function initMainPage(Menu: GUI.Init) {
       ProgressPageIndex.set(playerLevel['/'](18));
       Menu.toPage(PageNames.progress(name));
     },
-    macroArgs: [Errors.macroArgumentNotImplemented('level')]
+    macroArgs: [{ level: 3 }]
   });
 
 
@@ -37,7 +37,7 @@ export function initMainPage(Menu: GUI.Init) {
   }
   const shopButton: GUI.Button = {
     id: 'emerald',
-    slot: 22,
+    slot: 21,
     name: { text: 'Shop', color: 'green' },
     onClick: () => { Menu.toPage(PageNames.shop); }
   }
@@ -46,33 +46,37 @@ export function initMainPage(Menu: GUI.Init) {
     fill: () => {
       SkillList.forEach((skill, i) => {
         Menu.placeItem(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
+
       });
     },
     click: () => {
       SkillList.forEach((skill, i) => {
         Menu.detectClick(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
+
       });
     }
   });
 
   const profileButton: GUI.Button = {
     id: 'player_head',
-    slot: 19,
+    slot: 4,
     name: { text: 'Profile', color: 'aqua' },
     onClick: () => { Menu.toPage(PageNames.profile); }
   };
   const dailyTaskBtn: GUI.Button = {
     id: 'wheat',
-    slot: 0,
+    slot: 23,
     name: { text: 'Daily Tasks', color: 'green' },
     onClick: () => { Menu.toPage(PageNames.dailyTask); }
   };
+
   const leaderboardBtn: GUI.Button = {
-    id: 'arrow',
-    slot: 1,
+    id: 'book',
+    slot: 25,
     name: { text: 'Leaderboard', color: 'green' },
-    onClick: () => { Menu.toPage(PageNames.dailyTask); }
+    onClick: () => { Menu.toPage(PageNames.leaderboard); }
   };
+
   page.Buttons?.push(prestigeButton, shopButton, profileButton, dailyTaskBtn, leaderboardBtn);
 
   Menu.pushPage(page);

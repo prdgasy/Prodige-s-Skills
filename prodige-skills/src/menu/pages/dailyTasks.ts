@@ -39,7 +39,7 @@ export function initDailyTasksPage(Menu: GUI.Init) {
   const page: GUI.Page = {
     name: PageNames.dailyTask,
     Buttons: [
-      goBack(Menu, PageNames.profile),
+      goBack(Menu, PageNames.main),
       task1,
       task2,
       task3
