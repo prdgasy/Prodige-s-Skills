@@ -10,7 +10,7 @@ export type Criteria = Parameters<typeof Objective.create>[1];
 /**
  * event that can trigger skill progression.
  */
-export type Event = {
+export type SkillEvent = {
   /** The unique name identifier for this event */
   name: string
   /** The item representation assiociated with this event */
@@ -33,7 +33,7 @@ export type Skill = {
   /** The initial experience points a player starts with for this skill */
   startingXp: number
   /** Array of events that can trigger progression in this skill */
-  Events: Event[];
+  SkillEvents: SkillEvent[];
   customItems: { name: string, item: ItemType }[];
   titles: { name: string }[],
   Prestige: {

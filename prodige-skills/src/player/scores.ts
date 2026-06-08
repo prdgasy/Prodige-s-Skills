@@ -1,10 +1,9 @@
 import { Objective, Score } from "sandstone";
 import { SkillList } from "../skills";
 
-
 /** Stores player level scores per skill */
 export const SkillScore: Record<string, { level: Score, xp: Score, xpTarget: Score }> = {};
-export const Event: Record<string, Record<string, Score>> = {};
+export const EventScores: Record<string, Record<string, Score>> = {};
 export const PrestigeScore: Record<string, Score> = {};
 export const Point = Objective.create('point')('@p');
 export const BoosterScore: Record<string, Score> = {
@@ -19,9 +18,9 @@ SkillList.forEach(skill => {
     xpTarget: Objective.create(`${skill.name}.xpTarget`)('@p'),
   }
 
-  Event[skill.name] = {};
-  skill.Events.forEach(event => {
-    Event[skill.name][event.name] = Objective.create(`${skill.name}.event.${event.name.replace(' ', '')}`, event.criteria)('@p');
+  EventScores[skill.name] = {};
+  skill.SkillEvents.forEach(event => {
+    EventScores[skill.name][event.name] = Objective.create(`${skill.name}.event.${event.name.replace(' ', '')}`, event.criteria)('@p');
   });
 
 

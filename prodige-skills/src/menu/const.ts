@@ -1,7 +1,7 @@
 import { Score, Objective } from 'sandstone';
 import { SkillList } from '../skills';
 import { GUI } from '@prodigelib/gui';
-const ProgressPageIndex = Objective.create('prodiges_skills.progress_page_index')('@s');
+const ProgressPageIndex = Objective.create('progress_page_index')('@s');
 
 const PageNames = {
   main: 'main',
@@ -23,8 +23,8 @@ const PageNames = {
 }
 const totalSlots = 17;
 /**
-   * Navigate back to a given page
-   */
+ * Navigate back to a given page
+ */
 const goBack = (Menu: GUI.Init, previousPage: GUI.Page | string): GUI.Button => ({
   id: 'arrow',
   slot: 21,

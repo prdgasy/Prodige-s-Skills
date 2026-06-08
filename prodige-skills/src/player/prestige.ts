@@ -15,6 +15,5 @@ export function prestigeUp(skill: Skill) {
     .else(() => {
       prestigeLvl["++"];
       tellraw('@p', { text: "Prestiged up, now at ", prestigeLvl });
-
     })
 }

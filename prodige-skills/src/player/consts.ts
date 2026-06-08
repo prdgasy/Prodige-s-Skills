@@ -14,6 +14,6 @@ export const playerOption = {
  */
 export function Player(...labels: ReturnType<typeof Label>[]) {
   return Selector('@p', {
-    tag: labels.map(label => label.name)
+    tag: labels
   });
 }

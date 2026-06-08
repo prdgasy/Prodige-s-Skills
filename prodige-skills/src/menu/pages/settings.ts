@@ -1,7 +1,7 @@
 import { GUI } from "@prodigelib/gui";
 import { goBack, PageNames } from "../const";
 import { _ } from "sandstone";
-import { playerOption } from "../../player/const";
+import { playerOption } from "../../player/consts";
 
 export function initSettingsPage(Menu: GUI.Init) {
   const progress = {

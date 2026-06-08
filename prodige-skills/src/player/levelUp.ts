@@ -1,5 +1,5 @@
 import { Score, tellraw, Variable } from "sandstone";
-import { Player, playerOption } from "./const";
+import { Player, playerOption } from "./consts";
 import { SkillScore } from "./scores";
 
 
