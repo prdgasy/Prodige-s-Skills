@@ -1,6 +1,7 @@
 import { execute, Label, MCFunction, Selector } from "sandstone";
 import { playerOption } from "./consts";
-import { BoosterScore } from "./scores";
+import { BoosterScore, SkillScore } from "./scores";
+import { SkillList } from "../skills";
 
 MCFunction('player/first_join', () => {
   const firstJoin = Label('firstJoin');
@@ -9,6 +10,10 @@ MCFunction('player/first_join', () => {
       for (const label of Object.values(playerOption)) {
         label('@s').add();
       }
+
+      SkillList.forEach(skill => {
+        SkillScore[skill.name].xpTarget.set(skill.startingXp);
+      })
 
       BoosterScore.point.set(1);
       BoosterScore.xp.set(1);
