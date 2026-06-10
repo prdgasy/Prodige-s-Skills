@@ -1,13 +1,13 @@
 import { _, execute, MCFunction, Score, Selector, Variable, say } from "sandstone";
-import { playerOption } from "./consts";
+import { Options } from "./consts";
 import { SkillList } from "../skills";
 import { SkillScore, EventScores, BoosterScore, Point } from "./scores";
 import { levelUp } from "./levelUp";
-import { progress } from "./displays";
+import { Displays } from "./displays";
 import { SkillEvent } from "../types";
 
 MCFunction('event_watcher', () => {
-  execute.as(Selector('@a', { tag: playerOption.progress })).at('@s').run(() => {
+  execute.as(Selector('@a', { tag: Options.progress })).at('@s').run(() => {
     SkillList.forEach(skill => {
       skill.SkillEvents.forEach(event => {
         _.if(EventScores[skill.name][event.name][">"](0), () => {
@@ -29,7 +29,7 @@ function eventTriggered(skillName: string, eventScore: Score, event: SkillEvent)
     levelUp(skillName, score.level, score.xp, score.xpTarget);
   })
 
-  progress(skillName, score.level, score.xp, score.xpTarget, addedXp, addedPoint, event);
+  Displays.progress(skillName, score.level, score.xp, score.xpTarget, addedXp, addedPoint, event);
 
   eventScore.reset();
 }

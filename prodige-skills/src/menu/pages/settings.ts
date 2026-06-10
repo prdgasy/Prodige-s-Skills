@@ -1,11 +1,11 @@
 import { GUI } from "@prodigelib/gui";
 import { goBack, PageNames } from "../const";
 import { _ } from "sandstone";
-import { playerOption } from "../../player/consts";
+import { Options } from "../../player/consts";
 
 export function initSettingsPage(Menu: GUI.Init) {
   const progress = {
-    label: playerOption.progress,
+    label: Options.progress,
     button: (status: string, color: string): GUI.Button => {
       return {
         id: 'gold_nugget',
@@ -19,7 +19,7 @@ export function initSettingsPage(Menu: GUI.Init) {
   }
 
   const levelNotif = {
-    label: playerOption.levelNotif,
+    label: Options.levelNotif,
     button: (status: string, color: string): GUI.Button => {
       return {
         id: 'jukebox',

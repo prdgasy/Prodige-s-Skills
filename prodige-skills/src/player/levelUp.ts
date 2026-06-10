@@ -1,6 +1,7 @@
 import { Score, tellraw, Variable } from "sandstone";
-import { Player, playerOption } from "./consts";
+import { Player, Options } from "./consts";
 import { SkillScore } from "./scores";
+import { Displays } from "./displays";
 
 
 export function levelUp(skillName: string, level: Score, xp: Score, xpTarget: Score) {
@@ -9,5 +10,5 @@ export function levelUp(skillName: string, level: Score, xp: Score, xpTarget: Sc
   const nextLevel = currentLevel["+"](1);
 
   SkillScore[skillName].xp.set(0);
-  tellraw(Player(playerOption.levelNotif), [`${skillName} Level up ! `, previousLevel, ' => ', currentLevel, ' Next level: ', nextLevel]);
+  Displays.lvl(skillName, currentLevel, previousLevel, nextLevel, xp, xpTarget);
 }

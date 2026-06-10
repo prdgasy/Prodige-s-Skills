@@ -3,9 +3,9 @@ import { Selector, Label, SelectorClass } from "sandstone";
 /**
  * Player selector with custom tags, arguments
  */
-export const playerOption = {
-  progress: Label('playerOption.progress'),
-  levelNotif: Label('playerOption.levelNotif')
+export const Options = {
+  progress: Label('Options.progress'),
+  levelNotif: Label('Options.levelNotif')
 }
 
 /**

@@ -1,5 +1,5 @@
 import { execute, Label, MCFunction, Selector } from "sandstone";
-import { playerOption } from "./consts";
+import { Options } from "./consts";
 import { BoosterScore, SkillScore } from "./scores";
 import { SkillList } from "../skills";
 
@@ -7,7 +7,7 @@ MCFunction('player/first_join', () => {
   const firstJoin = Label('firstJoin');
   execute.as('@a').run(() => {
     execute.as(Selector('@s', { tag: [`!${firstJoin.fullName}`] })).run(() => {
-      for (const label of Object.values(playerOption)) {
+      for (const label of Object.values(Options)) {
         label('@s').add();
       }
 
