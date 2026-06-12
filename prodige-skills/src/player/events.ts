@@ -25,7 +25,7 @@ function eventTriggered(skillName: string, eventScore: Score, event: SkillEvent)
   const xpAfterEvent = Variable(score.xp["+="](addedXp));
   Point["+="](addedPoint);
 
-  _.if(xpAfterEvent[">="](score.xpTarget), () => {
+  _.if(_.and(xpAfterEvent[">="](score.xpTarget), score.level["<"](100)), () => {
     levelUp(skillName, score.level, score.xp, score.xpTarget);
   })
 

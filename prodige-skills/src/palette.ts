@@ -4,7 +4,7 @@ export namespace Palette {
     export const secondary = "§6";  // Or / Gold
     export const accent = "§b";     // Aqua / Cyan
     export const accentDark = "§3"; // Cyan foncé
-    export const reward = "§d";     // Violet clair
+    export const reward = "§d";     // Violet clair 
 
     // États et Retours Visuels
     export const success = "§a";    // Vert
