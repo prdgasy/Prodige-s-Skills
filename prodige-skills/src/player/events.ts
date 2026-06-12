@@ -29,7 +29,7 @@ function eventTriggered(skillName: string, eventScore: Score, event: SkillEvent)
     levelUp(skillName, score.level, score.xp, score.xpTarget);
   })
 
-  Displays.progress(skillName, score.level, score.xp, score.xpTarget, addedXp, addedPoint, event);
+  Displays.progress(skillName, score.level, score.xp, score.xpTarget, addedXp, addedPoint);
 
   eventScore.reset();
 }

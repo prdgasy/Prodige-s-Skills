@@ -1,8 +1,9 @@
-import { title, Score, say, Variable, tellraw } from "sandstone";
+import { title, Score, say, Variable, tellraw, _ } from "sandstone";
 import { Options, Player } from "./consts";
 import { SkillEvent } from "../types";
 import { Errors } from "../errors";
 import { Palette } from "../palette";
+import { BoosterScore } from "./scores";
 
 export namespace Displays {
   export function progress(
@@ -12,11 +13,11 @@ export namespace Displays {
     xpTarget: Score,
     xpGained: Score,
     pointGained: Score,
-    event: SkillEvent
   ) {
+    const xpBoosted = [`${Palette.codes.accent}(x`, { score: { name: BoosterScore.xp.target, objective: BoosterScore.xp.objective.name }, color: Palette.colors.accent }, `${Palette.codes.accent}) `];
+    const pointBoosted = [`${Palette.codes.reward}(x`, { score: { name: BoosterScore.point.target, objective: BoosterScore.point.objective.name }, color: Palette.colors.reward }, `${Palette.codes.reward}) `];
+
     title(Player(Options.levelNotif)).actionbar([
-
-
       // SKILL & NIVEAU : Nom du Skill en jaune vif, Niveau en Or
       `${Palette.codes.main}§l${skillName.toUpperCase()} §r${Palette.codes.secondary}LVL `,
       { score: { name: level.target, objective: level.objective.name }, color: Palette.colors.secondary },
@@ -31,10 +32,8 @@ export namespace Displays {
       ` §8│ `,
 
       // GAINS RÉCENTS : XP gagnée (Vert) · Points gagnés (Violet)
-      `${Palette.codes.accent}+`, { score: { name: xpGained.target, objective: xpGained.objective.name }, color: Palette.colors.accent }, `${Palette.codes.accent} XP`,
-      ` §8• ${Palette.codes.reward}+`, { score: { name: pointGained.target, objective: pointGained.objective.name }, color: Palette.colors.reward }, `${Palette.codes.reward} Point`,
-      // Event
-      ` §7(${event.name})`,
+      `${Palette.codes.accent}+`, { score: { name: xpGained.target, objective: xpGained.objective.name }, color: Palette.colors.accent }, `${Palette.codes.accent} XP `, xpBoosted,
+      `§8• ${Palette.codes.reward}+`, { score: { name: pointGained.target, objective: pointGained.objective.name }, color: Palette.colors.reward }, `${Palette.codes.reward} Point `, pointBoosted,
     ]);
   }
 
