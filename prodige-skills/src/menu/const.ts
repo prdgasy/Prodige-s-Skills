@@ -25,7 +25,7 @@ const totalSlots = 17;
 /**
  * Navigate back to a given page
  */
-const goBack = (Menu: GUI.Init, previousPage: GUI.Page | string): GUI.Button => ({
+const goBack = (Menu: GUI, previousPage: GUI.Page | string): GUI.Button => ({
   id: 'arrow',
   slot: 21,
   name: { text: 'Go back', color: 'red' },

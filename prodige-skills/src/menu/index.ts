@@ -24,7 +24,7 @@ import { initDailyTasksPage } from './pages/dailyTasks';
 MCFunction('menu', () => {
   tellraw('@p', { text: "[Skills-Menu] Loaded", color: 'yellow' });
 
-  const Menu = new GUI.Init('hayichan', 'cmd', 930005);
+  const Menu = new GUI('hayichan', 'cmd', 930005);
 
   initMainPage(Menu);
   initShopPage(Menu);

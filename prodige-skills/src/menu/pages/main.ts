@@ -1,4 +1,4 @@
-import { GUI } from "@prodigelib/gui";
+import { GUI, Page, Button, MacroArgument, ButtonClass } from "@prodigelib/gui";
 import { Score, tellraw } from "sandstone";
 import { ItemType } from "../../types";
 import { Errors } from "../../errors";
@@ -6,78 +6,67 @@ import { PageNames, ProgressPageIndex } from '../const';
 import { SkillScore } from "../../player/scores";
 import { SkillList } from "../../skills";
 
-export function initMainPage(Menu: GUI.Init) {
-  const page: GUI.Page = {
-    name: PageNames.main,
-    Buttons: []
+export function initMainPage(Menu: GUI) {
+  const page = Page(Menu, PageNames.main);
+
+  function skillButton(id: ItemType, slot: number, skill: string, playerLevel: Score): ButtonClass {
+    const level = MacroArgument(playerLevel);
+    return Button({
+      id: id,
+      slot: slot,
+      name: { text: skill, color: 'yellow' },
+      lore: [{ text: `${skill} ${level.call()}` }],
+      onClick: () => {
+        ProgressPageIndex.set(playerLevel['/'](18));
+        Menu.toPage(PageNames.progress(skill));
+      },
+      macroArgs: [level]
+    })
   };
 
-  /**
-   * Creates a skill button displayed in main menu
-   */
-  const skillButton = (id: ItemType, slot: number, name: string, playerLevel: Score): GUI.Button => ({
-    id: id,
-    slot: slot,
-    name: { text: name, color: 'yellow' },
-    lore: [{ text: `${name} $(level)` }],
-    onClick: () => {
-      ProgressPageIndex.set(playerLevel['/'](18));
-      Menu.toPage(PageNames.progress(name));
-    },
-    macroArgs: [{ level: 3 }]
-  });
-
-
-  const prestigeButton: GUI.Button = {
+  const prestigeButton = Button({
     id: 'netherite_scrap',
     slot: 20,
     name: { text: 'Prestige' },
     lore: [Errors.textNotImplemented()],
     onClick: () => { Menu.toPage(PageNames.prestige) }
-  }
-  const shopButton: GUI.Button = {
+  })
+
+  const shopButton = Button({
     id: 'emerald',
     slot: 21,
     name: { text: 'Shop', color: 'green' },
     onClick: () => { Menu.toPage(PageNames.shop); }
-  }
+  })
 
-  Menu.pushInstruction(page, {
-    fill: () => {
-      SkillList.forEach((skill, i) => {
-        Menu.placeItem(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
-
-      });
-    },
-    click: () => {
-      SkillList.forEach((skill, i) => {
-        Menu.detectClick(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
-
-      });
-    }
+  page.pushObject(() => {
+    SkillList.forEach((skill, i) => {
+      page.emitButton(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
+    });
   });
 
-  const profileButton: GUI.Button = {
+  const profileButton = Button({
     id: 'player_head',
     slot: 4,
     name: { text: 'Profile', color: 'aqua' },
     onClick: () => { Menu.toPage(PageNames.profile); }
-  };
-  const dailyTaskBtn: GUI.Button = {
+  });
+
+  const dailyTaskBtn = Button({
     id: 'wheat',
     slot: 23,
     name: { text: 'Daily Tasks', color: 'green' },
     onClick: () => { Menu.toPage(PageNames.dailyTask); }
-  };
+  });
 
-  const leaderboardBtn: GUI.Button = {
+  const leaderboardBtn = Button({
     id: 'book',
     slot: 25,
     name: { text: 'Leaderboard', color: 'green' },
     onClick: () => { Menu.toPage(PageNames.leaderboard); }
-  };
+  });
 
-  page.Buttons?.push(prestigeButton, shopButton, profileButton, dailyTaskBtn, leaderboardBtn);
+  page.pushObject(prestigeButton, shopButton, profileButton, dailyTaskBtn, leaderboardBtn);
 
-  Menu.pushPage(page);
+  page.build();
 }

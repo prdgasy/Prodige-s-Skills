@@ -1,9 +1,9 @@
-import { GUI } from "@prodigelib/gui";
+import { GUI, Page, Button } from "@prodigelib/gui";
 import { goBack, PageNames } from "../const";
 import { Errors } from "../../errors";
 
-export function initDailyTasksPage(Menu: GUI.Init) {
-  const task1: GUI.Button = {
+export function initDailyTasksPage(Menu: GUI) {
+  const task1 = Button({
     id: 'iron_sword',
     slot: 11,
     name: { text: 'Daily Slayer', color: 'red' },
@@ -12,9 +12,9 @@ export function initDailyTasksPage(Menu: GUI.Init) {
       { text: 'Progress: ', color: 'gray' }, { text: '12/50', color: 'yellow' }
     ],
     onClick: () => Errors.functionNotImplemented()
-  };
+  });
 
-  const task2: GUI.Button = {
+  const task2 = Button({
     id: 'wheat',
     slot: 13,
     name: { text: 'Grand Harvest', color: 'green' },
@@ -23,9 +23,9 @@ export function initDailyTasksPage(Menu: GUI.Init) {
       { text: 'Progress: ', color: 'gray' }, { text: '0/200', color: 'red' }
     ],
     onClick: () => Errors.functionNotImplemented()
-  };
+  });
 
-  const task3: GUI.Button = {
+  const task3 = Button({
     id: 'fishing_rod',
     slot: 15,
     name: { text: 'Ocean Hunter', color: 'aqua' },
@@ -34,17 +34,18 @@ export function initDailyTasksPage(Menu: GUI.Init) {
       { text: 'Progress: ', color: 'gray' }, { text: 'DONE', color: 'green', bold: true }
     ],
     onClick: () => Errors.functionNotImplemented()
-  };
+  });
 
-  const page: GUI.Page = {
-    name: PageNames.dailyTask,
-    Buttons: [
+  const page = Page(
+    Menu,
+    PageNames.dailyTask,
+    [
       goBack(Menu, PageNames.main),
       task1,
       task2,
       task3
     ]
-  };
+  );
 
-  Menu.pushPage(page);
+  page.build();
 }

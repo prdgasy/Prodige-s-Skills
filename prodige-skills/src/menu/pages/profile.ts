@@ -1,10 +1,10 @@
-import { GUI } from "@prodigelib/gui";
+import { GUI, Page, Button } from "@prodigelib/gui";
 import { goBack, PageNames } from "../const";
 import { Errors } from "../../errors";
 
-export function initProfilePage(Menu: GUI.Init) {
+export function initProfilePage(Menu: GUI) {
   // --- Info Buttons ---
-  const statsBtn: GUI.Button = {
+  const statsBtn = Button({
     id: 'gold_block',
     slot: 10,
     name: { text: 'Your Statistics', color: 'gold' },
@@ -13,41 +13,42 @@ export function initProfilePage(Menu: GUI.Init) {
       { text: '' },
       { text: 'Global Rank: ', color: 'gray' }, { text: '#142', color: 'aqua' }
     ]
-  };
+  });
 
-  const activeBoostersBtn: GUI.Button = {
+  const activeBoostersBtn = Button({
     id: 'clock',
     slot: 12,
     name: { text: 'Active Boosters', color: 'light_purple' },
     lore: [{ text: 'No active multipliers.', color: 'gray' }]
-  };
+  });
 
-  const favoriteSkillBtn: GUI.Button = {
+  const favoriteSkillBtn = Button({
     id: 'nether_star',
     slot: 14,
     name: { text: 'Most Played Skill', color: 'aqua' },
     lore: [{ text: 'Mining (Level 42)', color: 'gray' }]
-  };
+  });
 
   // --- Utility Buttons ---
-  const settingsBtn: GUI.Button = {
+  const settingsBtn = Button({
     id: 'comparator',
     slot: 2,
     name: { text: 'Settings', color: 'red' },
     lore: [{ text: 'Toggle particles and sounds', color: 'gray' }],
     onClick: () => Menu.toPage(PageNames.settings)
-  };
+  });
 
-  const leaderboardBtn: GUI.Button = {
+  const leaderboardBtn = Button({
     id: 'writable_book',
     slot: 16,
     name: { text: 'Leaderboards', color: 'yellow' },
     onClick: () => Errors.functionNotImplemented()
-  };
+  });
 
-  const page: GUI.Page = {
-    name: PageNames.profile,
-    Buttons: [
+  const page = Page(
+    Menu,
+    PageNames.profile,
+    [
       goBack(Menu, PageNames.main),
       statsBtn,
       activeBoostersBtn,
@@ -55,7 +56,7 @@ export function initProfilePage(Menu: GUI.Init) {
       leaderboardBtn,
       settingsBtn
     ]
-  };
+  );
 
-  Menu.pushPage(page);
+  page.build();
 }
