@@ -12,42 +12,43 @@ export function initOnEventPages(Menu: GUI, skill: Skill) {
   for (let i = 0; i < pageCount; i++) {
     const index = i;
     const page = Page(
-      name: PageNames.onEvent(skill.name, index),
+      Menu,
+      PageNames.onEvent(skill.name, index),
       [goBack(Menu, PageNames.progress(skill.name))]
-    };
+    );
 
-  // Navigation
-  if (index > 0) {
-    page.pushObject({
-      id: 'paper',
-      slot: 9,
-      name: { text: 'Previous' },
-      onClick: () => Menu.toPage(PageNames.onEvent(skill.name, index - 1))
-    });
+    // Navigation
+    if (index > 0) {
+      page.pushObject({
+        id: 'paper',
+        slot: 9,
+        name: { text: 'Previous' },
+        onClick: () => Menu.toPage(PageNames.onEvent(skill.name, index - 1))
+      });
+    }
+    if (index < pageCount - 1) {
+      page.pushObject({
+        id: 'paper',
+        slot: 10,
+        name: { text: 'Next' },
+        onClick: () => Menu.toPage(PageNames.onEvent(skill.name, index + 1))
+      });
+    }
+
+    // Events
+    for (let j = 0; j < 18; j++) {
+      const eventIndex = j + index * 18;
+      if (eventIndex >= skill.SkillEvents.length) break;
+
+      const event = skill.SkillEvents[eventIndex];
+      page.pushObject({
+        id: event.item,
+        slot: j,
+        name: { text: `${event.name} (${event.xp} xp)`, color: 'yellow' },
+        lore: [Errors.textNotImplemented()]
+      });
+    }
+
+    page.build();
   }
-  if (index < pageCount - 1) {
-    page.pushObject({
-      id: 'paper',
-      slot: 10,
-      name: { text: 'Next' },
-      onClick: () => Menu.toPage(PageNames.onEvent(skill.name, index + 1))
-    });
-  }
-
-  // Events
-  for (let j = 0; j < 18; j++) {
-    const eventIndex = j + index * 18;
-    if (eventIndex >= skill.SkillEvents.length) break;
-
-    const event = skill.SkillEvents[eventIndex];
-    page.pushObject({
-      id: event.item,
-      slot: j,
-      name: { text: `${event.name} (${event.xp} xp)`, color: 'yellow' },
-      lore: [Errors.textNotImplemented()]
-    });
-  }
-
-  page.build();
-}
 }
