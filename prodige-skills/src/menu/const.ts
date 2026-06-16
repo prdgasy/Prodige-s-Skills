@@ -1,6 +1,6 @@
 import { Score, Objective } from 'sandstone';
 import { SkillList } from '../skills';
-import { GUI } from '@prodigelib/gui';
+import { Button, ButtonClass, GUI, PageClass } from '@prodigelib/gui';
 const ProgressPageIndex = Objective.create('progress_page_index')('@s');
 
 const PageNames = {
@@ -25,11 +25,13 @@ const totalSlots = 17;
 /**
  * Navigate back to a given page
  */
-const goBack = (Menu: GUI, previousPage: GUI.Page | string): GUI.Button => ({
-  id: 'arrow',
-  slot: 21,
-  name: { text: 'Go back', color: 'red' },
-  onClick: () => Menu.toPage(previousPage)
-});
+const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass => {
+  return Button({
+    id: 'arrow',
+    slot: 21,
+    name: { text: 'Go back', color: 'red' },
+    onClick: () => Menu.toPage(previousPage)
+  })
+};
 
 export { PageNames, ProgressPageIndex, totalSlots, goBack };

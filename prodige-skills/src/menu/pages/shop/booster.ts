@@ -25,7 +25,7 @@ export function initBoosterPage(Menu: GUI) {
   const page = Page(
     Menu,
     PageNames.booster,
-    [goBack(Menu, PageNames.shop), { id: 'stone_button', slot: 5, name: { text: 'testbutton' } }]
+    [goBack(Menu, PageNames.shop), Button({ id: 'stone_button', slot: 5, name: { text: 'testbutton' } })]
   );
 
   for (let i = 0; i < 5; i++) {

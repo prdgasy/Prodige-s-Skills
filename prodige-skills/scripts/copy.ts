@@ -13,6 +13,7 @@ const destination =
 let sand: any;
 let watcher: FSWatcher | null = null;
 let shuttingDown = false;
+let copyTimeout: NodeJS.Timeout | null = null; // Pour gérer l'anti-rebond
 
 // clavier
 readline.emitKeypressEvents(process.stdin);
@@ -30,9 +31,8 @@ function shutdown() {
   shuttingDown = true;
 
   console.log(chalk.yellow("\n👋 Shutting down..."));
-
+  if (copyTimeout) clearTimeout(copyTimeout);
   if (watcher) watcher.close();
-
   if (sand) sand.kill("SIGTERM");
 
   process.exit(0);
@@ -67,29 +67,49 @@ async function fullSync() {
   isCopying = true;
 
   try {
+    // 1. On vide entièrement le dossier de destination pour remplacer proprement le datapack
+    if (await fs.pathExists(destination)) {
+      await fs.emptyDir(destination);
+    }
+
+    // 2. On copie le nouveau datapack fraîchement compilé
     await fs.copy(source, destination, {
       overwrite: true,
       errorOnExist: false,
     });
 
-    console.log(chalk.green("\n✔ files copied"));
-  } catch {
-    console.log(chalk.red("\n❌ copy failed"));
+    console.log(chalk.green(`\n✔ Datapack mis à jour avec succès ! (${new Date().toLocaleTimeString()})`));
+  } catch (err) {
+    console.log(chalk.red("\n❌ La copie a échoué :"), err);
   }
 
   isCopying = false;
 }
 
+// Déclencheur intelligent (Anti-rebond / Debounce)
+function triggerSync() {
+  if (shuttingDown) return;
+
+  // Tant que Sandstone modifie des fichiers, on repousse la copie à plus tard
+  if (copyTimeout) clearTimeout(copyTimeout);
+
+  // On attend 800ms de calme total avant d'ordonner la copie unique
+  copyTimeout = setTimeout(() => {
+    fullSync();
+  }, 800);
+}
+
 watcher = chokidar
   .watch(source, {
-    ignoreInitial: false,
+    ignoreInitial: true, // Évite de copier dès le lancement du script avant Sandstone
     persistent: true,
     awaitWriteFinish: {
-      stabilityThreshold: 300,
+      stabilityThreshold: 400, // Attend qu'un fichier soit stable avant de réagir
       pollInterval: 100,
     },
   })
-  .on("all", () => fullSync());
+  // On appelle triggerSync() qui va temporiser, plutôt que fullSync() en direct
+  .on("all", () => triggerSync());
 
 // start
 startSand();

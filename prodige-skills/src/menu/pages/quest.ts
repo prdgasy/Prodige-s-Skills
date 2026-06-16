@@ -1,6 +1,7 @@
 import { Button, GUI, Page } from "@prodigelib/gui";
 import { goBack, PageNames } from "../const";
 import { Skill } from "../../types";
+
 export function initQuestPages(Menu: GUI, skill: Skill) {
   const dailyQuestBtn = Button({
     id: 'map',

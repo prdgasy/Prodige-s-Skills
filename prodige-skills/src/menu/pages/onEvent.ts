@@ -19,20 +19,20 @@ export function initOnEventPages(Menu: GUI, skill: Skill) {
 
     // Navigation
     if (index > 0) {
-      page.pushObject({
+      page.pushObject(Button({
         id: 'paper',
         slot: 9,
         name: { text: 'Previous' },
         onClick: () => Menu.toPage(PageNames.onEvent(skill.name, index - 1))
-      });
+      }));
     }
     if (index < pageCount - 1) {
-      page.pushObject({
+      page.pushObject(Button({
         id: 'paper',
         slot: 10,
         name: { text: 'Next' },
         onClick: () => Menu.toPage(PageNames.onEvent(skill.name, index + 1))
-      });
+      }));
     }
 
     // Events
@@ -41,12 +41,12 @@ export function initOnEventPages(Menu: GUI, skill: Skill) {
       if (eventIndex >= skill.SkillEvents.length) break;
 
       const event = skill.SkillEvents[eventIndex];
-      page.pushObject({
+      page.pushObject(Button({
         id: event.item,
         slot: j,
         name: { text: `${event.name} (${event.xp} xp)`, color: 'yellow' },
         lore: [Errors.textNotImplemented()]
-      });
+      }));
     }
 
     page.build();

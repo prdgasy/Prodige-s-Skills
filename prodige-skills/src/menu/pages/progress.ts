@@ -13,6 +13,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   const playerLevel = SkillScore[skill.name].level;
   const rewardLevel = SkillScore[skill.name].rewardLevel;
   const name = skill.name;
+
   /**
    * Factory for level state Buttons
    */
@@ -78,12 +79,13 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   }
 
 
-
+  const test = MacroArgument("3");
   const abilityBtn = Button({
     id: 'gold_nugget',
     slot: 22,
     name: { text: 'ability' },
-    onClick: () => { Menu.toPage(PageNames.ability(skill.name)) }
+    onClick: () => { Menu.toPage(PageNames.ability(skill.name)); raw(`$say ${test.call()}`); },
+    macroArgs: [test]
   })
 
   const prestigeLvl = MacroArgument(PrestigeScore[skill.name]);
@@ -112,8 +114,8 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
     PageNames.progress(skill.name),
     [
       goBack(Menu, PageNames.main),
-      { id: 'paper', slot: 25, onClick: () => _.if(ProgressPageIndex['>'](0), () => ProgressPageIndex['--']) },
-      { id: 'paper', slot: 26, onClick: () => _.if(ProgressPageIndex['<'](5), () => ProgressPageIndex['++']) },
+      Button({ id: 'paper', slot: 25, onClick: () => _.if(ProgressPageIndex['>'](0), () => ProgressPageIndex['--']) }),
+      Button({ id: 'paper', slot: 26, onClick: () => _.if(ProgressPageIndex['<'](5), () => ProgressPageIndex['++']) }),
       onEventButton,
       abilityBtn,
       prestigeBtn
