@@ -104,8 +104,8 @@ watcher = chokidar
     ignoreInitial: true, // Évite de copier dès le lancement du script avant Sandstone
     persistent: true,
     awaitWriteFinish: {
-      stabilityThreshold: 400, // Attend qu'un fichier soit stable avant de réagir
-      pollInterval: 100,
+      stabilityThreshold: 200, // Attend qu'un fichier soit stable avant de réagir
+      pollInterval: 50,
     },
   })
   // On appelle triggerSync() qui va temporiser, plutôt que fullSync() en direct

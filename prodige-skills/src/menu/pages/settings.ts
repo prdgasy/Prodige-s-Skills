@@ -1,4 +1,4 @@
-import { Button, ButtonClass, GUI, MacroArgument, Page } from "@prodigelib/gui";
+import { Button, ButtonClass, GUI, Macro as $, Page } from "@prodigelib/gui";
 import { goBack, PageNames } from "../const";
 import { _ } from "sandstone";
 import { Options } from "../../player/consts";
@@ -8,19 +8,13 @@ export function initSettingsPage(Menu: GUI) {
   const progress = {
     label: Options.progress,
     button: (status: string, color: string): ButtonClass => {
-      // 1. Initialisation des arguments de macro intelligents (Value Objects)
-      const statusArg = MacroArgument(status);
-      const colorArg = MacroArgument(color);
-
       return Button({
         id: 'gold_nugget',
         slot: 13,
         name: { text: 'progress ', color: 'yellow' },
         // 2. Utilisation de la méthode .call() pour injecter les clés automatiquement
-        lore: [{ text: statusArg.call(), color: colorArg.call() }],
+        lore: [{ text: $(status), color: $(color) }],
         onClick: () => { progress.label('@p').toggle(); },
-        // 3. Passage des instances au tableau macroArgs
-        macroArgs: [statusArg, colorArg]
       });
     }
   };
@@ -28,19 +22,13 @@ export function initSettingsPage(Menu: GUI) {
   const levelNotif = {
     label: Options.levelNotif,
     button: (status: string, color: string): ButtonClass => {
-      // 1. Initialisation des arguments de macro intelligents
-      const statusArg = MacroArgument(status);
-      const colorArg = MacroArgument(color);
-
       return Button({
         id: 'jukebox',
         slot: 14,
         name: { text: 'level notif ', color: 'yellow' },
         // 2. Utilisation de la méthode .call()
-        lore: [{ text: statusArg.call(), color: colorArg.call() }],
+        lore: [{ text: $(status), color: $(color) }],
         onClick: () => { levelNotif.label('@p').toggle(); },
-        // 3. Passage des instances au tableau macroArgs
-        macroArgs: [statusArg, colorArg]
       });
     }
   };

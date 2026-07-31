@@ -1,4 +1,4 @@
-import { GUI, Page, Button, MacroArgument, ButtonClass } from "@prodigelib/gui";
+import { GUI, Page, Button, Macro as $, ButtonClass } from "@prodigelib/gui";
 import { Score, tellraw } from "sandstone";
 import { ItemType } from "../../types";
 import { Errors } from "../../errors";
@@ -10,18 +10,16 @@ export function initMainPage(Menu: GUI) {
   const page = Page(Menu, PageNames.main);
 
   function skillButton(id: ItemType, slot: number, skill: string, playerLevel: Score): ButtonClass {
-    const level = MacroArgument(playerLevel);
     return Button({
       id: id,
       slot: slot,
       name: { text: skill, color: 'yellow' },
-      lore: [{ text: `${skill} ${level.call()}` }],
+      lore: [{ text: `${skill} ${$(playerLevel)}` }],
       onClick: () => {
         ProgressPageIndex.set(playerLevel['/'](18));
         Menu.toPage(PageNames.progress(skill));
-      },
-      macroArgs: [level]
-    })
+      }
+    });
   };
 
   const prestigeButton = Button({

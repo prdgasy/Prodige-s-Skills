@@ -1,59 +1,48 @@
-import { _, DataIndexMap, raw, say, Score, tellraw, Variable, Macro as $, DataPointClass } from "sandstone";
+import { _, DataIndexMap, raw, say, Score, tellraw, Variable, DataPointClass } from "sandstone";
 import { SkillList } from "../../skills";
 import { goBack, PageNames, ProgressPageIndex, totalSlots } from "../const";
 import { Errors } from "../../errors";
 import { PrestigeScore, SkillScore } from '../../player/scores';
-import { GUI, Button, MacroArgument, Page, ButtonClass, Text } from "@prodigelib/gui";
+import { GUI, Button, Macro as $, Page, ButtonClass, Text } from "@prodigelib/gui";
 
 import { ItemType, Skill } from "../../types";
 import { Palette } from "../../palette";
 import { JSONTextComponent } from "sandstone/arguments";
+import { Indexer } from "../../indexer";
 
 /**
  * Génère une barre de progression sous forme de texte coloré (style Hypixel SkyBlock)
  */
-function renderProgressBar(progressRatio: Score, length: number = 20, motif: string = "-"): Text[] {
+function renderProgressBar(progressRatio: Score, xp: Score, xpTarget: Score, length: number = 10, motif: string = "-"): Text {
   // Calcul du nombre de segments remplis (0 à length)
   const filledLength = progressRatio["*"](length)["/"](100);
 
   // 1. On crée les DataIndexMaps pour stocker les chaînes pré-générées
-  const filledMap = DataIndexMap({});
-  const emptyMap = DataIndexMap({});
+
+  const bar = Indexer();
 
   // 2. Génération au BUILD TIME (JS/TS) des combinaisons de chaînes possibles
   for (let i = 0; i <= length; i++) {
-    filledMap[i] = motif.repeat(i);
-    emptyMap[i] = motif.repeat(length - i);
+    bar.set(i.toString(), `§a${motif.repeat(i)}§7${motif.repeat(length - i)}§r`);
   }
 
-  // 3. Récupération dynamique au RUNTIME via la Macro NBT
-  const greenText = filledMap[$`${filledLength}`];
-  const grayText = emptyMap[$`${filledLength}`];
 
   // 4. On retourne le composant Text[] prêt à être injecté dans le Lore
-  return [
-    { text: greenText, color: "green" },
-    { text: grayText, color: "dark_gray" },
-    { text: ` ${Macro`${progressRatio}`}%`, color: "yellow" }
-  ];
+  return {
+    text: `${$(bar.get(filledLength))} ${$(xp)}/${$(xpTarget)}`
+  };
 }
 
 /**
    * Factory for level state Buttons
    */
-function levelButton(name: string, item: ItemType, color: string, onClickText: JSONTextComponent, slot: Score, level: Score, lore: Text): ButtonClass {
-  const levelArg = MacroArgument(level);
-  const slotArg = MacroArgument(slot);
+function levelButton(name: string, item: ItemType, color: string, onClickText: JSONTextComponent, slot: Score, level: Score, lore: Text[]): ButtonClass {
   return Button({
     id: item,
-    slot: slotArg.call(),
-    name: { text: `${name} ${levelArg.call()}`, color: color },
+    slot: $(slot),
+    name: { text: `${name} ${$(level)}`, color: color },
     lore: lore,
-    onClick: () => raw(`$say level: ${levelArg.call()}, text: '${onClickText}'`),
-    macroArgs: [
-      levelArg,
-      slotArg
-    ]
+    onClick: () => raw(`$say level: ${$(level)}`)
   })
 }
 
@@ -70,7 +59,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   })
 
   const blueLevel = (level: Score): Text => {
-    return { text: `${name} ${MacroArgument(level).call()}`, color: "blue" }
+    return { text: `${name} ${$(level)}`, color: "blue" }
   }
 
   const notReachedButton = (slot: Score, processedLevel: Score) => {
@@ -78,16 +67,16 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   }
 
   const inProgressButton = (slot: Score, processedLevel: Score) => {
-    const progressRatio = Variable(SkillScore[skill.name].xp)["*"](100)["/"](SkillScore[skill.name].xpTarget);
+    const progressRatio = SkillScore[skill.name].xp["*"](SkillScore[skill.name].xpTarget)["/"](100);
+    const nextLevel = Variable(processedLevel)["++"];
 
     return levelButton(name, "quartz", "yellow", ["In progress"], slot, processedLevel, [
       blueLevel(processedLevel),
       { text: "" },
-      [
-        { text: `Progress to level ${MacroArgument(processedLevel["++"]).call()}:` },
-        { text: `${MacroArgument(progressRatio).call()}%` }
-      ],
-      renderProgressBar(progressRatio)
+
+      { text: `Progress to level ${$(nextLevel)}: ${$(progressRatio)}%` },
+
+      renderProgressBar(progressRatio, SkillScore[skill.name].xp, SkillScore[skill.name].xpTarget)
     ]);
   }
 
@@ -129,26 +118,26 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
     onClick: () => { Menu.toPage(PageNames.ability(skill.name)); },
   })
 
-  const prestigeLvl = MacroArgument(PrestigeScore[skill.name]);
-  const prestigeBtn = Button({
-    id: "netherite_scrap",
-    slot: 19,
-    name: { text: `${skill.name}: §l${skill.Prestige.name} ${prestigeLvl.call()}`, color: "light_purple" },
-    lore: [
-      { text: "Reset your skill level", color: "dark_purple" },
-      { text: "and unlock special abilities!", color: "dark_purple" },
-      { text: "Available Perk:", color: "blue" },
-      { text: ` §7• §r+${skill.Prestige.powerPerLvl}% Special Ability Power`, color: "aqua" },
-      { text: "" },
-      { text: "Click to view!", color: "yellow" }
-    ],
-    onClick: () => {
-      Menu.toPage(PageNames.prestige);
-    },
-    macroArgs: [
-      prestigeLvl
-    ]
-  });
+  // const prestigeLvl = $(PrestigeScore[skill.name]);
+  // const prestigeBtn = Button({
+  //   id: "netherite_scrap",
+  //   slot: 19,
+  //   name: { text: `${skill.name}: §l${skill.Prestige.name} ${prestigeLvl.call()}`, color: "light_purple" },
+  //   lore: [
+  //     { text: "Reset your skill level", color: "dark_purple" },
+  //     { text: "and unlock special abilities!", color: "dark_purple" },
+  //     { text: "Available Perk:", color: "blue" },
+  //     { text: ` §7• §r+${skill.Prestige.powerPerLvl}% Special Ability Power`, color: "aqua" },
+  //     { text: "" },
+  //     { text: "Click to view!", color: "yellow" }
+  //   ],
+  //   onClick: () => {
+  //     Menu.toPage(PageNames.prestige);
+  //   },
+  //   macroArgs: [
+  //     prestigeLvl
+  //   ]
+  // });
 
   const page = Page(
     Menu,
@@ -159,7 +148,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
       Button({ id: 'paper', slot: 26, onClick: () => _.if(ProgressPageIndex['<'](5), () => ProgressPageIndex['++']) }),
       onEventButton,
       abilityBtn,
-      prestigeBtn
+      // prestigeBtn
     ]
   );
 
