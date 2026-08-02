@@ -1,4 +1,4 @@
-import { say, tellraw } from "sandstone";
+import { tellraw } from "sandstone";
 
 export namespace Errors {
   /**
@@ -31,7 +31,7 @@ export namespace Errors {
       console.warn(
         `\x1b[33m[ERRORSLIB]\x1b[0m ` +   // texte jaune sans fond
         `\x1b[1m${message}\x1b[0m` +        // message en gras
-        ` \x1b[90m${link}\x1b[0m\n`        // lien en gris
+        ` \x1b[90m${link}\x1b[0m`        // lien en gris
       );
     };
 
@@ -42,7 +42,7 @@ export namespace Errors {
    * Retourne un objet de texte JSON pour Minecraft.
    */
   export const textNotImplemented = () => {
-    const warning = logWarning('textNotImplemented(chdange)');
+    const warning = logWarning('textNotImplemented');
     return { text: warning } as const;
   };
 

@@ -147,7 +147,7 @@
 
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.5.6", "", { "os": "win32", "cpu": "x64" }, "sha512-hbQlYcCq5dlAX9Qx+kFb0FHue6vbjlf0FrNzSKdYK2APUf7tGfGxQCk2ihEREmbR6ZMc0MVAD5RIX/41gpUzTw=="],
 
-    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#1ab5cdd", { "dependencies": { "sandstone": "^1.0.0-beta.5" } }, "prdgasy-prodigelib-gui-1ab5cdd", "sha512-ebl6mOvRGVSezha70BsTfDXsUsSuGpXqkOmnyuRgpHRQeJ6tLqlqMsEmltyyhkVrwXmovi2/dHg2SbM+SyTQsQ=="],
+    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#c20a0e9", { "dependencies": { "sandstone": "^1.0.0-beta.5" } }, "prdgasy-prodigelib-gui-c20a0e9", "sha512-u/0C5rNfi4Aj8Jfb11O+DUPXgioOsY2e3npE8J4+Fcrm+HSFkIcRBqepLYJWFMWmPYYWxNHnBkTws3RBee+s/g=="],
 
     "@sandstone-mc/block": ["@sandstone-mc/block@0.1.4", "", { "dependencies": { "sandstone": "1.0.0-beta.0" } }, "sha512-qWK9oEwywEqG7w0qDLizIt5/L1CpOa7HZ4ggC69Rz7XZ9qYmXouN/Mcmfy+X9nv6tIH3qVy+vVODHpA+h2f8Kg=="],
 
