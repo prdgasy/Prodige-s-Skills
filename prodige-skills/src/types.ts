@@ -1,5 +1,4 @@
 import { give, Objective } from "sandstone";
-import { GUI } from '@prodigelib/gui';
 
 /**
  * item that can be given to a player.
@@ -27,7 +26,8 @@ export type SkillEvent = {
  */
 export type Skill = {
   /** The unique name identifier for this skill */
-  name: string
+  name: string;
+  /** Description of the skills */
   /** The item representing this skill in the UI */
   item: ItemType
   /** The initial experience points a player starts with for this skill */

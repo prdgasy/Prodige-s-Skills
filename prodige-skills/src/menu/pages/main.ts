@@ -1,4 +1,4 @@
-import { Macro as $, Button, ButtonClass, GUI, Page } from "@prodigelib/gui";
+import { MacroArg as $, Button, ButtonClass, GUI, Page } from "@prodigelib/gui";
 import { Score } from "sandstone";
 import { Errors } from "../../errors";
 import { SkillScore } from "../../player/scores";
@@ -14,7 +14,7 @@ export function initMainPage(Menu: GUI) {
       id: id,
       slot: slot,
       name: { text: skill, color: 'yellow' },
-      lore: [{ text: `${skill} ${$(() => playerLevel)}` }],
+      lore: [{ text: `${skill} ${$(playerLevel)}` }],
       onClick: () => {
         ProgressPageIndex.set(playerLevel['/'](18));
         Menu.toPage(PageNames.progress(skill));

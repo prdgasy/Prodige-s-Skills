@@ -26,6 +26,6 @@
     "chokidar": "^5.0.0",
     "fs-extra": "^11.4.0",
     "node-pty": "^1.1.0",
-    "sandstone": "^1.2.4"
+    "sandstone": "^1.2.22"
   }
 }

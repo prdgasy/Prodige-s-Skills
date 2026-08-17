@@ -1,4 +1,4 @@
-import { Data, DataPointClass, MCFunction, Objective, Score, Macro as SM } from "sandstone";
+import { Macro as $, Data, DataPointClass, MCFunction, Objective, Score } from "sandstone";
 
 type BarType = Record<string, string>;
 
@@ -15,7 +15,7 @@ class IndexerClass {
 
     this.macroEnv = Data('storage', '__gui:simplemacro', 'arg');
     this.getMacro = MCFunction(`__indexer/macros/${this.indexId}`, (_loop: any, macroKey: Score) => {
-      SM.data.modify(this.dataPointer.select("0")).set.from(this.dataPointer.select(SM`${macroKey}`));
+      $.data.modify(this.dataPointer.select("0")).set.from(this.dataPointer.select($`${macroKey}`));
     });
   }
 
