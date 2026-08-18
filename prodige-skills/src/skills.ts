@@ -1,7 +1,28 @@
+import { Text } from "@prodigelib/gui";
 import { Skill } from "./types"
+
+function wrapText(rawText: string, wordsPerLine: number = 5): Text[] {
+  const words = rawText.split(' ');
+  const result: Text[] = [];
+  let currentLine: string[] = [];
+  let spaceAfterFirst = ''
+  words.forEach(word=>{
+    currentLine.push(word);
+    if (currentLine.length == wordsPerLine) {
+      result.push({text: spaceAfterFirst + currentLine.join(' ')});
+      spaceAfterFirst = ' '
+      currentLine = [];
+    }
+  });
+
+  if (currentLine.length > 0) result.push({text: spaceAfterFirst + currentLine.join(' ')});
+
+  return result;
+}
 
 const Mining: Skill = {
   name: 'Mining',
+  description: wrapText('Mine, mine, mien, very long too. Let s see how it goes'),
   item: 'diamond_pickaxe',
   startingXp: 15,
   SkillEvents: [
@@ -11,25 +32,9 @@ const Mining: Skill = {
   ],
   customItems: [{ name: 'Drill Prototype', item: 'golden_pickaxe' }],
   titles: [{ name: 'Deep Delver' }, { name: 'Mountain King' }],
-  Prestige: {
-    name: 'Miner', powerPerLvl: 3, func: null
-  }
-
-}
-
-const Foraging: Skill = {
-  name: 'Foraging',
-  item: 'diamond_axe',
-  startingXp: 15,
-  SkillEvents: [
-    { name: 'Oak Log', item: 'oak_log', criteria: 'minecraft.mined:minecraft.oak_log', xp: 2, point: 5 },
-    { name: 'Acacia Log', item: 'acacia_log', criteria: 'minecraft.mined:minecraft.acacia_log', xp: 3, point: 4 }
-  ],
-  customItems: [{ name: 'Lumberjack Blade', item: 'iron_axe' }],
-  titles: [{ name: 'Nature Guardian' }, { name: 'Forest Spirit' }],
-  Prestige: {
-    name: 'Berseker', powerPerLvl: 6, func: null
+  ability: {
+    name: 'Miner', description: wrapText('test description cool long. Very long actually')
   }
 }
 
-export const SkillList: Skill[] = [Mining, Foraging];
+export const SkillList: Skill[] = [Mining];
