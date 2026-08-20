@@ -13,6 +13,7 @@ MCFunction('player/first_join', () => {
 
       SkillList.forEach(skill => {
         SkillScore[skill.name].xpTarget.set(skill.startingXp);
+        SkillScore[skill.name].level.set(0);
       })
 
       BoosterScore.point.set(1);

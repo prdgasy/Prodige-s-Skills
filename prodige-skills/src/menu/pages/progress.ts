@@ -1,5 +1,5 @@
 import { MacroArg as $, Button, ButtonClass, GUI, Page, Text } from "@prodigelib/gui";
-import { _, raw, Score, tellraw, Variable } from "sandstone";
+import { _, raw, Score, Variable } from "sandstone";
 import { JSONTextComponent } from "sandstone/arguments";
 
 import { Indexer } from "../../indexer";
@@ -9,24 +9,24 @@ import { ItemType, Skill } from "../../types";
 import { goBack, PageNames, ProgressPageIndex, totalSlots } from "../const";
 
 /**
- * Creates and configures a standardized button representing a skill level state.
- *
- * @param name - The skill name.
- * @param item - The Minecraft item ID to display.
- * @param color - The primary color name for the button title.
- * @param onClickText - Unused/Legacy text component passed to click events.
- * @param slot - Score containing the inventory slot index.
- * @param level - Score containing the target skill level.
- * @param lore - Additional lore lines to append beneath the header.
- * @returns A new ButtonClass instance configured with macro arguments.
- */
+* Creates and configures a standardized button representing a skill level state.
+*
+* @param name - The skill name.
+* @param item - The Minecraft item ID to display.
+* @param color - The primary color name for the button title.
+* @param onClickText - Unused/Legacy text component passed to click events.
+* @param slot - Score containing the inventory slot index.
+* @param level - Score containing the target skill level.
+* @param lore - Additional lore lines to append beneath the header.
+* @returns A new ButtonClass instance configured with macro arguments.
+*/
 function levelButton(
   name: string,
   item: ItemType,
   color: string,
   onClickText: JSONTextComponent,
-  slot: Score,
-  level: Score,
+  slot: Score | number,
+  level: Score | number,
   lore: Text[]
 ): ButtonClass {
   return Button({
@@ -43,13 +43,13 @@ function levelButton(
 }
 
 /**
- * Renders a dynamic text-based progress bar given a ratio score.
- *
- * @param progressRatio - Current progress score scaled from 0 to 100.
- * @param length - Total number of segment characters in the bar (default: 10).
- * @param motif - Character used for each segment of the bar (default: "-").
- * @returns The formatted string corresponding to the current progress length.
- */
+* Renders a dynamic text-based progress bar given a ratio score.
+*
+* @param progressRatio - Current progress score scaled from 0 to 100.
+* @param length - Total number of segment characters in the bar (default: 10).
+* @param motif - Character used for each segment of the bar (default: "-").
+* @returns The formatted string corresponding to the current progress length.
+*/
 function renderProgressBar(
   progressRatio: Score,
   length: number = 10,
@@ -66,11 +66,11 @@ function renderProgressBar(
 }
 
 /**
- * Initializes and builds the progress GUI page for a specific skill.
- *
- * @param Menu - The parent GUI menu instance.
- * @param skill - The skill configuration object.
- */
+* Initializes and builds the progress GUI page for a specific skill.
+*
+* @param Menu - The parent GUI menu instance.
+* @param skill - The skill configuration object.
+*/
 export function initProgressPages(Menu: GUI, skill: Skill) {
   const name = skill.name;
 
@@ -84,52 +84,53 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   // --- Dynamic Level Button Factories ---
 
   /**
-   * Generates a button for a skill level that has not yet been reached.
-   */
-  const notReachedButton = (slot: Score, processedLevel: Score) => {
+  * Generates a button for a skill level that has not yet been reached.
+  */
+  const notReached = (slot: Score, processedLevel: Score) => {
     return levelButton(
       name,
-      "charcoal",
+      "red_stained_glass_pane",
       "red",
       [`${Palette.codes.danger}You are not here yet!`],
       slot,
       processedLevel,
       [
         { text: "Rewards:", color: "gray" },
-        { text: skill.ability.name, color: "yellow"},
+        { text: skill.ability.name, color: "yellow" },
         skill.ability.description
       ]
     );
   };
 
   /**
-   * Generates a button for the level currently in progress by the player.
-   */
-  const inProgressButton = (slot: Score, processedLevel: Score) => {
+  * Generates a button for the level currently in progress by the player.
+  */
+  const inProgress = (slot: Score | number, processedLevel: Score | number, item: ItemType = "yellow_stained_glass_pane", skillDescription: Text[] = []) => {
     const progressRatio = playerXp["*"](playerXpTarget)["/"](100);
     const nextLevel = Variable(processedLevel)["++"];
 
+    const progressInfo: Text[] = [
+      { text: $`§eProgress to level ${nextLevel}: ${progressRatio}%` },
+      { text: $`${() => renderProgressBar(progressRatio)} ${playerXp}/${playerXpTarget}` }
+    ];
     return levelButton(
       name,
-      "quartz",
+      item,
       "yellow",
       ["In progress"],
       slot,
       processedLevel,
-      [
-        { text: $`§eProgress to level ${nextLevel}: ${progressRatio}%` },
-        { text: $`${() => renderProgressBar(progressRatio)} ${playerXp}/${playerXpTarget}` }
-      ]
+      [...skillDescription, ...progressInfo]
     );
   };
 
   /**
-   * Generates a button for an unlocked level whose reward has not been claimed yet.
-   */
-  const notClaimedButton = (slot: Score, processedLevel: Score) => {
+  * Generates a button for an unlocked level whose reward has not been claimed yet.
+  */
+  const reached = (slot: Score, processedLevel: Score) => {
     return levelButton(
       name,
-      "amethyst_cluster",
+      "green_stained_glass_pane",
       "green",
       [`Claiming this`],
       slot,
@@ -140,46 +141,35 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
     );
   };
 
-  /**
-   * Generates a button for a level whose reward has already been claimed.
-   */
-  const claimedButton = (slot: Score, processedLevel: Score) => {
-    return levelButton(
-      name,
-      "medium_amethyst_bud",
-      "green",
-      [`Already claimed`],
-      slot,
-      processedLevel,
-      []
-    );
-  };
 
   // --- Loop & State Generator ---
 
   /**
-   * Iterates through all available inventory slots on the page, calculates the
-   * corresponding skill level, and emits the matching state button.
-   */
+  * Iterates through all available inventory slots on the page, calculates the
+  * corresponding skill level, and emits the matching state button.
+  */
   const levels = () => {
     _.for([0, totalSlots], 'iterate', i => {
       const slot = i;
       const processedLevel = i['+'](ProgressPageIndex['*'](totalSlots));
       processedLevel['+='](ProgressPageIndex);
 
-      _.if(playerLevel['<'](processedLevel), () => {
-        page.emitButton(notReachedButton(slot, processedLevel));
+      _.if(processedLevel.equals(0), () => {
+        _.if(playerLevel.equals(processedLevel), () => page.emitButton(inProgress(0, 0, skill.item)))
+          .else(() => inProgress(0, 0, skill.item, skill.description));
       })
+        .elseIf(playerLevel['<'](processedLevel), () => {
+          page.emitButton(notReached(slot, processedLevel));
+        })
+        .elseIf(playerLevel['>'](processedLevel), () => {
+          page.emitButton(reached(slot, processedLevel));
+        })
         .elseIf(playerLevel['=='](processedLevel), () => {
-          tellraw('@p', [processedLevel]);
-          page.emitButton(inProgressButton(slot, processedLevel));
-        })
-        .elseIf(rewardLevel["<"](processedLevel), () => {
-          page.emitButton(notClaimedButton(slot, processedLevel));
-        })
-        .else(() => {
-          page.emitButton(claimedButton(slot, processedLevel));
+          page.emitButton(inProgress(slot, processedLevel));
         });
+
+
+      _.if(playerLevel['>'](processedLevel), () => reached(slot, processedLevel));
     });
   };
 
