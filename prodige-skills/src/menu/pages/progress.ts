@@ -4,7 +4,7 @@ import { JSONTextComponent } from "sandstone/arguments";
 
 import { Indexer } from "../../indexer";
 import { Palette } from "../../palette";
-import { PrestigeScore, SkillScore } from '../../player/scores';
+import { SkillScore } from '../../player/scores';
 import { ItemType, Skill } from "../../types";
 import { goBack, PageNames, ProgressPageIndex, totalSlots } from "../const";
 
@@ -34,11 +34,10 @@ function levelButton(
     slot: $(slot),
     name: { text: $`${name} ${level}`, color: color },
     lore: [
-      { text: $`${name} ${level}`, color: "blue" },
+      { text: $`${name} ${$(level)}`, color: "blue" },
       { text: "" },
       ...lore
     ],
-    onClick: () => raw($`$say level: ${level}`)
   });
 }
 
@@ -65,12 +64,8 @@ function renderProgressBar(
   return bar.get(filledLength);
 }
 
-/**
-* Initializes and builds the progress GUI page for a specific skill.
-*
-* @param Menu - The parent GUI menu instance.
-* @param skill - The skill configuration object.
-*/
+
+
 export function initProgressPages(Menu: GUI, skill: Skill) {
   const name = skill.name;
 
@@ -78,8 +73,6 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   const playerLevel = SkillScore[name].level;
   const playerXp = SkillScore[name].xp;
   const playerXpTarget = SkillScore[name].xpTarget;
-  const rewardLevel = SkillScore[name].rewardLevel;
-  const prestigeLvl = PrestigeScore[name];
 
   // --- Dynamic Level Button Factories ---
 

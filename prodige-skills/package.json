@@ -7,7 +7,7 @@
   "scripts": {
     "dev:watch": "sand watch",
     "dev:build": "sand build",
-    "dev:copy": "bun scripts/copy.ts"
+    "dev:copy": "bun copy.ts"
   },
   "keywords": [],
   "author": "",
