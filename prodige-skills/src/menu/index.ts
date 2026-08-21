@@ -4,18 +4,19 @@ import { MCFunction, tellraw } from 'sandstone';
 import { SkillList } from '../skills';
 import { initMainPage } from './pages/main';
 import { initProgressPages } from './pages/progress';
+import { shopPage } from './pages/shop';
 
 /**
  * Main entry point for the GUI system.
  * Initializes scores, menu, and all pages.
  */
 MCFunction('menu', () => {
-  tellraw('@p', { text: "[Skills-Menu] Loaded", color: 'yellow' });
+  tellraw('@p', { text: "§e[Skills-Menu] Loaded" });
 
-  const Menu = new GUI('hayichan', 'cmd', 930005);
+  const Menu = new GUI('hayichan', 'cmd', 100107);
 
   initMainPage(Menu);
-  // initShopPage(Menu);
+  shopPage(Menu);
   // initBoosterPage(Menu);
   // initItemPage(Menu);
   // initTitlePage(Menu);
@@ -25,7 +26,6 @@ MCFunction('menu', () => {
   // initDailyTasksPage(Menu);
 
   SkillList.forEach(skill => {
-    // initPrestigePage(Menu, skill);
     initProgressPages(Menu, skill);
     // initOnEventPages(Menu, skill);
     // initQuestPages(Menu, skill);

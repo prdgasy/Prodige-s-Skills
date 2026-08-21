@@ -22,19 +22,12 @@ export function initMainPage(Menu: GUI) {
     });
   };
 
-  const prestigeButton = Button({
-    id: 'netherite_scrap',
-    slot: 20,
-    name: { text: 'Prestige' },
-    lore: [Errors.textNotImplemented()],
-    onClick: () => { Menu.toPage(PageNames.prestige) }
-  })
 
-  const shopButton = Button({
+  const shop = Button({
     id: 'emerald',
     slot: 21,
     name: { text: 'Shop', color: 'green' },
-    onClick: () => { Menu.toPage(PageNames.shop); }
+    onClick: () => Menu.toPage(PageNames.shop)
   })
 
   page.pushObject(() => {
@@ -43,28 +36,28 @@ export function initMainPage(Menu: GUI) {
     });
   });
 
-  const profileButton = Button({
+  const profile = Button({
     id: 'player_head',
     slot: 4,
     name: { text: 'Profile', color: 'aqua' },
-    onClick: () => { Menu.toPage(PageNames.profile); }
+    onClick: () => Menu.toPage(PageNames.profile)
   });
 
-  const dailyTaskBtn = Button({
+  const dailyTask = Button({
     id: 'wheat',
     slot: 23,
     name: { text: 'Daily Tasks', color: 'green' },
-    onClick: () => { Menu.toPage(PageNames.dailyTask); }
+    onClick: () => Menu.toPage(PageNames.dailyTask)
   });
 
-  const leaderboardBtn = Button({
+  const leaderboard = Button({
     id: 'book',
     slot: 25,
     name: { text: 'Leaderboard', color: 'green' },
-    onClick: () => { Menu.toPage(PageNames.leaderboard); }
+    onClick: () => Menu.toPage(PageNames.leaderboard)
   });
 
-  page.pushObject(prestigeButton, shopButton, profileButton, dailyTaskBtn, leaderboardBtn);
+  page.pushObject(shop, profile, dailyTask, leaderboard);
 
   page.build();
 }

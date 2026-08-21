@@ -6,7 +6,11 @@ import { Indexer } from "../../indexer";
 import { Palette } from "../../palette";
 import { SkillScore } from '../../player/scores';
 import { ItemType, Skill } from "../../types";
-import { goBack, PageNames, ProgressPageIndex, totalSlots } from "../const";
+import { goBack, PageNames, ProgressPageIndex } from "../const";
+import { Errors } from "../../errors";
+
+
+const totalSlots = 17;
 
 /**
 * Creates and configures a standardized button representing a skill level state.
@@ -24,7 +28,7 @@ function levelButton(
   name: string,
   item: ItemType,
   color: string,
-  onClickText: JSONTextComponent,
+  onClick: () => void,
   slot: Score | number,
   level: Score | number,
   lore: Text[]
@@ -38,6 +42,7 @@ function levelButton(
       { text: "" },
       ...lore
     ],
+    onClick: onClick
   });
 }
 
@@ -84,7 +89,9 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
       name,
       "red_stained_glass_pane",
       "red",
-      [`${Palette.codes.danger}You are not here yet!`],
+      () => {
+        Menu.toPage(PageNames.ability(name));
+      },
       slot,
       processedLevel,
       [
@@ -110,7 +117,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
       name,
       item,
       "yellow",
-      ["In progress"],
+      () => { Errors.functionNotImplemented(); },
       slot,
       processedLevel,
       [...skillDescription, ...progressInfo]
@@ -125,7 +132,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
       name,
       "green_stained_glass_pane",
       "green",
-      [`Claiming this`],
+      () => { Errors.functionNotImplemented(); },
       slot,
       processedLevel,
       [
@@ -143,6 +150,14 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   */
   const levels = () => {
     _.for([0, totalSlots], 'iterate', i => {
+      _.if(i['>'](100), () => {
+        page.emitButton(Button({
+          slot: $(i),
+          name: { text: '---' },
+          id: 'gray_stained_glass_pane'
+        }));
+      });
+
       const slot = i;
       const processedLevel = i['+'](ProgressPageIndex['*'](totalSlots));
       processedLevel['+='](ProgressPageIndex);

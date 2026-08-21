@@ -1,28 +1,11 @@
 import { Text } from "@prodigelib/gui";
 import { Skill } from "./types"
+import { textWrapper } from "../lib/textWrapper"
 
-function wrapText(rawText: string, wordsPerLine: number = 5): Text[] {
-  const words = rawText.split(' ');
-  const result: Text[] = [];
-  let currentLine: string[] = [];
-  let spaceAfterFirst = ''
-  words.forEach(word=>{
-    currentLine.push(word);
-    if (currentLine.length == wordsPerLine) {
-      result.push({text: spaceAfterFirst + currentLine.join(' ')});
-      spaceAfterFirst = ' '
-      currentLine = [];
-    }
-  });
-
-  if (currentLine.length > 0) result.push({text: spaceAfterFirst + currentLine.join(' ')});
-
-  return result;
-}
 
 const Mining: Skill = {
   name: 'Mining',
-  description: wrapText('Mine, mine, mien, very long too. Let s see how it goes'),
+  description: textWrapper({ text: 'Mine, mine, mien, very long too. Let s see how it goes' }),
   item: 'diamond_pickaxe',
   startingXp: 15,
   SkillEvents: [
@@ -33,7 +16,7 @@ const Mining: Skill = {
   customItems: [{ name: 'Drill Prototype', item: 'golden_pickaxe' }],
   titles: [{ name: 'Deep Delver' }, { name: 'Mountain King' }],
   ability: {
-    name: 'Miner', description: wrapText('test description cool long. Very long actually')
+    name: 'Miner', description: textWrapper({ text: 'test description cool long. Very long actually' })
   }
 }
 

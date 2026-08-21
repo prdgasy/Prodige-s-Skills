@@ -1,11 +1,10 @@
-import { Score, Objective } from 'sandstone';
-import { SkillList } from '../skills';
+import { Objective } from 'sandstone';
 import { Button, ButtonClass, GUI, PageClass } from '@prodigelib/gui';
-const ProgressPageIndex = Objective.create('progress_page_index')('@s');
 
-const PageNames = {
+export const ProgressPageIndex = Objective.create('progress_page_index')('@s');
+
+export const PageNames = {
   main: 'main',
-  prestige: 'prestige',
   shop: 'shop',
   booster: 'booster',
   item: 'item',
@@ -14,18 +13,18 @@ const PageNames = {
   crate: 'crate',
   settings: 'settings',
   leaderboard: 'leaderboard',
-  ability: (skillName: string): string => { return `ability_${skillName}`; },
+  ability: (skillName: string): string => `ability_${skillName}`,
   dailyTask: 'dailyTasks',
   milestone: 'milestone',
-  quest: (skillName: string): string => { return `quest_${skillName}`; },
-  progress: (skillName: string): string => { return `progress_${skillName}`; },
-  onEvent: (skillName: string, index: number): string => { return `onEvent_${skillName}_${index}`; },
+  quest: (skillName: string): string => `quest_${skillName}`,
+  progress: (skillName: string): string => `progress_${skillName}`,
+  onEvent: (skillName: string, index: number): string => `onEvent_${skillName}_${index}`,
 }
-const totalSlots = 17;
+
 /**
  * Navigate back to a given page
  */
-const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass => {
+export const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass => {
   return Button({
     id: 'arrow',
     slot: 21,
@@ -34,4 +33,3 @@ const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass => {
   })
 };
 
-export { PageNames, ProgressPageIndex, totalSlots, goBack };
