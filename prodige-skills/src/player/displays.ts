@@ -1,5 +1,5 @@
 import { title, Score, say, Variable, tellraw, _ } from "sandstone";
-import { Options, Player } from "../consts/consts";
+import { Options, Player } from "../consts/player";
 import { SkillEvent } from "../types";
 import { Errors } from "../errors";
 import { Palette } from "../palette";
@@ -32,8 +32,8 @@ export namespace Displays {
       ` §8│ `,
 
       // GAINS RÉCENTS : XP gagnée (Vert) · Points gagnés (Violet)
-      `${Palette.codes.accent}+`, { score: { name: xpGained.target, objective: xpGained.objective.name }, color: Palette.colors.accent }, `${Palette.codes.accent} XP `, xpBoosted,
-      `§8• ${Palette.codes.reward}+`, { score: { name: pointGained.target, objective: pointGained.objective.name }, color: Palette.colors.reward }, `${Palette.codes.reward} Point `, pointBoosted,
+      // `${Palette.codes.accent}+`, { score: { name: xpGained.target, objective: xpGained.objective.name }, color: Palette.colors.accent }, `${Palette.codes.accent} XP `, xpBoosted,
+      // `§8• ${Palette.codes.reward}+`, { score: { name: pointGained.target, objective: pointGained.objective.name }, color: Palette.colors.reward }, `${Palette.codes.reward} Point `, pointBoosted,
     ]);
   }
 

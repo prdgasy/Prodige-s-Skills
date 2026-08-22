@@ -5,6 +5,7 @@ import { SkillList } from '../consts/skills';
 import { initMainPage } from './pages/main';
 import { initProgressPages } from './pages/progress';
 import { shopPage } from './pages/shop';
+import { initItemPage } from './pages/item';
 
 /**
  * Main entry point for the GUI system.
@@ -18,7 +19,7 @@ MCFunction('menu', () => {
   initMainPage(Menu);
   shopPage(Menu);
   // initBoosterPage(Menu);
-  // initItemPage(Menu);
+  initItemPage(Menu);
   // initTitlePage(Menu);
   // initProfilePage(Menu);
   // initSettingsPage(Menu);

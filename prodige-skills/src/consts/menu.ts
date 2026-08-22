@@ -1,5 +1,6 @@
 import { Objective } from 'sandstone';
 import { Button, ButtonClass, GUI, PageClass } from '@prodigelib/gui';
+import { textWrapper } from '../../lib/textWrapper';
 
 export const ProgressPageIndex = Objective.create('progress_page_index')('@s');
 
@@ -33,9 +34,5 @@ export const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass
   })
 };
 
-/**
- * Items in the shop
- */
-export const Items: ButtonClass[] = [
 
-];
+

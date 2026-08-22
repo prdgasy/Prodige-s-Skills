@@ -1,5 +1,5 @@
 import { _, execute, MCFunction, Score, Selector, Variable, say } from "sandstone";
-import { Options } from "../consts/consts";
+import { Options } from "../consts/player";
 import { SkillList } from "../consts/skills";
 import { SkillScore, EventScores, BoosterScore, Point } from "./scores";
 import { levelUp } from "./levelUp";
