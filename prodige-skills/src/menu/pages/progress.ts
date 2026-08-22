@@ -6,7 +6,7 @@ import { Indexer } from "../../indexer";
 import { Palette } from "../../palette";
 import { SkillScore } from '../../player/scores';
 import { ItemType, Skill } from "../../types";
-import { goBack, PageNames, ProgressPageIndex } from "../const";
+import { goBack, PageNames, ProgressPageIndex } from "../../consts/menu";
 import { Errors } from "../../errors";
 
 

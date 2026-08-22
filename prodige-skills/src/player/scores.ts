@@ -1,5 +1,5 @@
 import { Objective, Score } from "sandstone";
-import { SkillList } from "../skills";
+import { SkillList } from "../consts/skills";
 
 /** Stores player level scores per skill */
 export const SkillScore: Record<string, { level: Score, rewardLevel: Score, xp: Score, xpTarget: Score }> = {};

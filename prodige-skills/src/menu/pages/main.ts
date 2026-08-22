@@ -2,9 +2,9 @@ import { MacroArg as $, Button, ButtonClass, GUI, Page } from "@prodigelib/gui";
 import { Score } from "sandstone";
 import { Errors } from "../../errors";
 import { SkillScore } from "../../player/scores";
-import { SkillList } from "../../skills";
+import { SkillList } from "../../consts/skills";
 import { ItemType } from "../../types";
-import { PageNames, ProgressPageIndex } from '../const';
+import { PageNames, ProgressPageIndex } from '../../consts/menu';
 
 export function initMainPage(Menu: GUI) {
   const page = Page(Menu, PageNames.main);

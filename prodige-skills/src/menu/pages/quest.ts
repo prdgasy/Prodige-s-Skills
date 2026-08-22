@@ -1,5 +1,5 @@
 import { Button, GUI, Page } from "@prodigelib/gui";
-import { goBack, PageNames } from "../const";
+import { goBack, PageNames } from "../../consts/menu";
 import { Skill } from "../../types";
 
 export function initQuestPages(Menu: GUI, skill: Skill) {

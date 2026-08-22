@@ -1,6 +1,6 @@
 import { _, execute, MCFunction, Score, Selector, Variable, say } from "sandstone";
-import { Options } from "./consts";
-import { SkillList } from "../skills";
+import { Options } from "../consts/consts";
+import { SkillList } from "../consts/skills";
 import { SkillScore, EventScores, BoosterScore, Point } from "./scores";
 import { levelUp } from "./levelUp";
 import { Displays } from "./displays";

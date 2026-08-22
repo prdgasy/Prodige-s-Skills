@@ -1,7 +1,7 @@
 import { execute, Label, MCFunction, Selector } from "sandstone";
-import { Options } from "./consts";
+import { Options } from "../consts/consts";
 import { BoosterScore, SkillScore } from "./scores";
-import { SkillList } from "../skills";
+import { SkillList } from "../consts/skills";
 
 MCFunction('player/first_join', () => {
   const firstJoin = Label('firstJoin');

@@ -1,5 +1,5 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames } from "../const";
+import { goBack, PageNames } from "../../consts/menu";
 import { Errors } from "../../errors";
 
 export function initMilestonesPage(Menu: GUI) {
@@ -44,5 +44,5 @@ export function initMilestonesPage(Menu: GUI) {
     ]
   );
 
-page.build();
+  page.build();
 }

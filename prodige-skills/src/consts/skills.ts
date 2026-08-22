@@ -1,6 +1,6 @@
 import { Text } from "@prodigelib/gui";
-import { Skill } from "./types"
-import { textWrapper } from "../lib/textWrapper"
+import { Skill } from "../types"
+import { textWrapper } from "../../lib/textWrapper"
 
 
 const Mining: Skill = {

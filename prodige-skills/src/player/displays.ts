@@ -1,5 +1,5 @@
 import { title, Score, say, Variable, tellraw, _ } from "sandstone";
-import { Options, Player } from "./consts";
+import { Options, Player } from "../consts/consts";
 import { SkillEvent } from "../types";
 import { Errors } from "../errors";
 import { Palette } from "../palette";

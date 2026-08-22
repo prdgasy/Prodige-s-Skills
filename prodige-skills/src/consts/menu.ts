@@ -33,3 +33,9 @@ export const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass
   })
 };
 
+/**
+ * Items in the shop
+ */
+export const Items: ButtonClass[] = [
+
+];

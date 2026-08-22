@@ -1,5 +1,5 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames } from "../const";
+import { goBack, PageNames } from "../../consts/menu";
 import { Skill } from "../../types";
 import { Errors } from "../../errors";
 
