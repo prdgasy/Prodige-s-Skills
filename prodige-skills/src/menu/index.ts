@@ -3,9 +3,10 @@ import { MCFunction, tellraw } from 'sandstone';
 
 import { SkillList } from '../consts/skills';
 import { initMainPage } from './pages/main';
-import { initProgressPages } from './pages/progress';
+import { initProgressPages } from './pages/skill/progress';
 import { shopPage } from './pages/shop';
 import { initItemPage } from './pages/item';
+import { initOnEventPages } from './pages/skill/onEvent';
 
 /**
  * Main entry point for the GUI system.
@@ -28,7 +29,7 @@ MCFunction('menu', () => {
 
   SkillList.forEach(skill => {
     initProgressPages(Menu, skill);
-    // initOnEventPages(Menu, skill);
+    initOnEventPages(Menu, skill);
     // initQuestPages(Menu, skill);
     // initAbilityPages(Menu, skill);
   })

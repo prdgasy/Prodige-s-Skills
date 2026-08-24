@@ -1,7 +1,7 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames } from "../../consts/menu";
-import { Skill } from "../../types";
-import { Errors } from "../../errors";
+import { goBack, PageNames } from "../../../consts/menu";
+import { Skill } from "../../../types";
+import { Errors } from "../../../errors";
 
 export function initAbilityPages(Menu: GUI, skill: Skill) {
   // --- Ability Definitions ---

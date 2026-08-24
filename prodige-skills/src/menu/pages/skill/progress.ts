@@ -2,12 +2,13 @@ import { MacroArg as $, Button, ButtonClass, GUI, Page, Text } from "@prodigelib
 import { _, raw, Score, Variable } from "sandstone";
 import { JSONTextComponent } from "sandstone/arguments";
 
-import { Indexer } from "../../indexer";
-import { Palette } from "../../palette";
-import { SkillScore } from '../../player/scores';
-import { ItemType, Skill } from "../../types";
-import { goBack, PageNames, ProgressPageIndex } from "../../consts/menu";
-import { Errors } from "../../errors";
+import { Indexer } from "../../../indexer";
+import { Palette } from "../../../palette";
+import { SkillScore } from '../../../player/scores';
+import { ItemType, Skill } from "../../../types";
+import { goBack, PageNames, ProgressPageIndex } from "../../../consts/menu";
+import { Errors } from "../../../errors";
+import { navbar } from "./navbar";
 
 
 const totalSlots = 17;
@@ -72,6 +73,7 @@ function renderProgressBar(
 
 
 export function initProgressPages(Menu: GUI, skill: Skill) {
+  const page = Page(Menu, PageNames.progress(skill.name));
   const name = skill.name;
 
   // Score references
@@ -97,7 +99,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
       [
         { text: "Rewards:", color: "gray" },
         { text: skill.ability.name, color: "yellow" },
-        skill.ability.description
+        ...skill.ability.description
       ]
     );
   };
@@ -151,7 +153,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   const levels = () => {
     _.for([0, totalSlots], 'iterate', i => {
       _.if(i['>'](100), () => {
-        page.emitButton(Button({
+        page.rawEmit(Button({
           slot: $(i),
           name: { text: '---' },
           id: 'gray_stained_glass_pane'
@@ -163,17 +165,17 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
       processedLevel['+='](ProgressPageIndex);
 
       _.if(processedLevel.equals(0), () => {
-        _.if(playerLevel.equals(processedLevel), () => page.emitButton(inProgress(0, 0, skill.item)))
+        _.if(playerLevel.equals(processedLevel), () => page.rawEmit(inProgress(0, 0, skill.item)))
           .else(() => inProgress(0, 0, skill.item, skill.description));
       })
         .elseIf(playerLevel['<'](processedLevel), () => {
-          page.emitButton(notReached(slot, processedLevel));
+          page.rawEmit(notReached(slot, processedLevel));
         })
         .elseIf(playerLevel['>'](processedLevel), () => {
-          page.emitButton(reached(slot, processedLevel));
+          page.rawEmit(reached(slot, processedLevel));
         })
         .elseIf(playerLevel['=='](processedLevel), () => {
-          page.emitButton(inProgress(slot, processedLevel));
+          page.rawEmit(inProgress(slot, processedLevel));
         });
 
 
@@ -183,19 +185,6 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
 
   // --- Navigation & Action Buttons ---
 
-  const onEventButton = Button({
-    id: 'book',
-    slot: 20,
-    name: { text: 'onEvent page', color: 'green' },
-    onClick: () => Menu.toPage(PageNames.onEvent(name, 0))
-  });
-
-  const abilityBtn = Button({
-    id: 'stone',
-    slot: 23,
-    name: { text: 'Ability' },
-    onClick: () => Menu.toPage(PageNames.ability(name))
-  });
 
   const prev = Button({
     id: 'paper',
@@ -213,18 +202,14 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
 
   // --- Page Registration & Build ---
 
-  const page = Page(
-    Menu,
-    PageNames.progress(name),
-    [
-      goBack(Menu, PageNames.main),
-      prev,
-      next,
-      onEventButton,
-      abilityBtn,
-    ]
+  page.pushObject(
+    goBack(Menu, PageNames.main),
+    prev,
+    next,
+    ...navbar(Menu, skill, PageNames.progress(name)),
+    levels
   );
 
-  page.pushObject(levels);
   page.build();
+
 }

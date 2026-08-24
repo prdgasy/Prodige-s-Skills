@@ -32,7 +32,7 @@ export function initMainPage(Menu: GUI) {
 
   page.pushObject(() => {
     SkillList.forEach((skill, i) => {
-      page.emitButton(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
+      page.rawEmit(skillButton(skill.item, 10 + i, skill.name, SkillScore[skill.name].level));
     });
   });
 

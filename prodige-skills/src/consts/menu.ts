@@ -19,7 +19,7 @@ export const PageNames = {
   milestone: 'milestone',
   quest: (skillName: string): string => `quest_${skillName}`,
   progress: (skillName: string): string => `progress_${skillName}`,
-  onEvent: (skillName: string, index: number): string => `onEvent_${skillName}_${index}`,
+  onEvent: (skillName: string): string => `onEvent_${skillName}`,
 }
 
 /**
@@ -28,7 +28,7 @@ export const PageNames = {
 export const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass => {
   return Button({
     id: 'arrow',
-    slot: 21,
+    slot: 18,
     name: { text: 'Go back', color: 'red' },
     onClick: () => Menu.toPage(previousPage)
   })

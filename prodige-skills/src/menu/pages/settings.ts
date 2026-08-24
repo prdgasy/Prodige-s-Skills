@@ -42,8 +42,8 @@ export function initSettingsPage(Menu: GUI) {
 
   const optionBtn = () => {
     buttons.forEach(button => {
-      _.if(button.label('@p'), () => { page.emitButton(button.button(enabledText, enabledColor)) })
-        .else(() => { page.emitButton(button.button(disabledText, disabledColor)) });
+      _.if(button.label('@p'), () => { page.rawEmit(button.button(enabledText, enabledColor)) })
+        .else(() => { page.rawEmit(button.button(disabledText, disabledColor)) });
     });
   };
 
