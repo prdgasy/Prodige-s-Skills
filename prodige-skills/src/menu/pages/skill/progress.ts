@@ -4,48 +4,16 @@ import { JSONTextComponent } from "sandstone/arguments";
 
 import { Indexer } from "../../../indexer";
 import { Palette } from "../../../palette";
-import { SkillScore } from '../../../player/scores';
-import { ItemType, Skill } from "../../../types";
+import { ItemType } from "../../../types";
 import { goBack, PageNames, ProgressPageIndex } from "../../../consts/menu";
 import { Errors } from "../../../errors";
 import { navbar } from "./navbar";
+import { SkillClass } from "../../../skill/skillClass";
 
 
 const totalSlots = 17;
 
-/**
-* Creates and configures a standardized button representing a skill level state.
-*
-* @param name - The skill name.
-* @param item - The Minecraft item ID to display.
-* @param color - The primary color name for the button title.
-* @param onClickText - Unused/Legacy text component passed to click events.
-* @param slot - Score containing the inventory slot index.
-* @param level - Score containing the target skill level.
-* @param lore - Additional lore lines to append beneath the header.
-* @returns A new ButtonClass instance configured with macro arguments.
-*/
-function levelButton(
-  name: string,
-  item: ItemType,
-  color: string,
-  onClick: () => void,
-  slot: Score | number,
-  level: Score | number,
-  lore: Text[]
-): ButtonClass {
-  return Button({
-    id: item,
-    slot: $(slot),
-    name: { text: $`${name} ${level}`, color: color },
-    lore: [
-      { text: $`${name} ${$(level)}`, color: "blue" },
-      { text: "" },
-      ...lore
-    ],
-    onClick: onClick
-  });
-}
+
 
 /**
 * Renders a dynamic text-based progress bar given a ratio score.
@@ -72,14 +40,40 @@ function renderProgressBar(
 
 
 
-export function initProgressPages(Menu: GUI, skill: Skill) {
+export function initProgress(Menu: GUI, skill: SkillClass) {
+  /**
+* Creates and configures a standardized button representing a skill level state.
+*
+* @param name - The skill name.
+* @param item - The Minecraft item ID to display.
+* @param color - The primary color name for the button title.
+* @param onClickText - Unused/Legacy text component passed to click events.
+* @param slot - Score containing the inventory slot index.
+* @param level - Score containing the target skill level.
+* @param lore - Additional lore lines to append beneath the header.
+* @returns A new ButtonClass instance configured with macro arguments.
+*/
+  function levelButton(
+    item: ItemType,
+    color: string,
+    onClick: () => void,
+    slot: Score | number,
+    level: Score | number,
+    lore: Text[]
+  ): ButtonClass {
+    return Button({
+      id: item,
+      slot: $(slot),
+      name: { text: $`${skill.name} ${level}`, color: color },
+      lore: [
+        { text: $`${skill.name} ${$(level)}`, color: "blue" },
+        { text: "" },
+        ...lore
+      ],
+      onClick: onClick
+    });
+  }
   const page = Page(Menu, PageNames.progress(skill.name));
-  const name = skill.name;
-
-  // Score references
-  const playerLevel = SkillScore[name].level;
-  const playerXp = SkillScore[name].xp;
-  const playerXpTarget = SkillScore[name].xpTarget;
 
   // --- Dynamic Level Button Factories ---
 
@@ -88,11 +82,10 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   */
   const notReached = (slot: Score, processedLevel: Score) => {
     return levelButton(
-      name,
       "red_stained_glass_pane",
       "red",
       () => {
-        Menu.toPage(PageNames.ability(name));
+        Menu.toPage(PageNames.ability(skill.name));
       },
       slot,
       processedLevel,
@@ -108,15 +101,14 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   * Generates a button for the level currently in progress by the player.
   */
   const inProgress = (slot: Score | number, processedLevel: Score | number, item: ItemType = "yellow_stained_glass_pane", skillDescription: Text[] = []) => {
-    const progressRatio = playerXp["*"](playerXpTarget)["/"](100);
+    const progressRatio = skill.xp["*"](skill.xpTarget)["/"](100);
     const nextLevel = Variable(processedLevel)["++"];
 
     const progressInfo: Text[] = [
       { text: $`§eProgress to level ${nextLevel}: ${progressRatio}%` },
-      { text: $`${() => renderProgressBar(progressRatio)} ${playerXp}/${playerXpTarget}` }
+      { text: $`${() => renderProgressBar(progressRatio)} ${skill.xp}/${skill.xpTarget}` }
     ];
     return levelButton(
-      name,
       item,
       "yellow",
       () => { Errors.functionNotImplemented(); },
@@ -131,7 +123,6 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
   */
   const reached = (slot: Score, processedLevel: Score) => {
     return levelButton(
-      name,
       "green_stained_glass_pane",
       "green",
       () => { Errors.functionNotImplemented(); },
@@ -165,26 +156,24 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
       processedLevel['+='](ProgressPageIndex);
 
       _.if(processedLevel.equals(0), () => {
-        _.if(playerLevel.equals(processedLevel), () => page.rawEmit(inProgress(0, 0, skill.item)))
-          .else(() => inProgress(0, 0, skill.item, skill.description));
+        _.if(skill.level.equals(processedLevel), () => page.rawEmit(inProgress(0, 0, skill.id)))
+          .else(() => inProgress(0, 0, skill.id, skill.description));
       })
-        .elseIf(playerLevel['<'](processedLevel), () => {
+        .elseIf(skill.level['<'](processedLevel), () => {
           page.rawEmit(notReached(slot, processedLevel));
         })
-        .elseIf(playerLevel['>'](processedLevel), () => {
+        .elseIf(skill.level['>'](processedLevel), () => {
           page.rawEmit(reached(slot, processedLevel));
         })
-        .elseIf(playerLevel['=='](processedLevel), () => {
+        .elseIf(skill.level['=='](processedLevel), () => {
           page.rawEmit(inProgress(slot, processedLevel));
         });
 
-
-      _.if(playerLevel['>'](processedLevel), () => reached(slot, processedLevel));
+      _.if(skill.level['>'](processedLevel), () => reached(slot, processedLevel));
     });
   };
 
   // --- Navigation & Action Buttons ---
-
 
   const prev = Button({
     id: 'paper',
@@ -206,7 +195,7 @@ export function initProgressPages(Menu: GUI, skill: Skill) {
     goBack(Menu, PageNames.main),
     prev,
     next,
-    ...navbar(Menu, skill, PageNames.progress(name)),
+    ...navbar(Menu, skill, PageNames.progress(skill.name)),
     levels
   );
 

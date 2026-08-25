@@ -1,4 +1,4 @@
-import { Tool, ToolClass } from "../tool/tool";
+import { Tool, ToolClass } from "../tool/toolClass";
 import { textWrapper } from "../../lib/textWrapper";
 
 export const NovicePickaxe = Tool({
@@ -11,9 +11,9 @@ export const NovicePickaxe = Tool({
   }),
   rarity: "§f§lCOMMON",
   durability: 250,
-  onUse: () => {},
-  onBreak: () => {},
-  onHold: () => {}
+  onUse: () => { },
+  onBreak: () => { },
+  onHold: () => { }
 });
 
 export const DeepDelverPickaxe = Tool({
@@ -26,9 +26,9 @@ export const DeepDelverPickaxe = Tool({
   }),
   rarity: "§9§lRARE",
   durability: 1000,
-  onUse: () => {},
-  onBreak: () => {},
-  onHold: () => {}
+  onUse: () => { },
+  onBreak: () => { },
+  onHold: () => { }
 });
 
 export const ToolList: ToolClass[] = [

@@ -1,21 +1,21 @@
 import { GUI, PaginatedPage, PaginatedButton } from "@prodigelib/gui";
 import { goBack, PageNames } from "../../../consts/menu";
-import { Skill } from "../../../types";
 import { Errors } from "../../../errors";
 import { navbar } from "./navbar";
+import { SkillClass } from "../../../skill/skillClass";
 
 /**
  * Creates paginated onEvent pages for a skill
  */
-export function initOnEventPages(Menu: GUI, skill: Skill) {
+export function initOnEvent(Menu: GUI, skill: SkillClass) {
   const paginatedOnEvent = PaginatedPage({
     parent: Menu,
     name: PageNames.onEvent(skill.name),
   });
 
-  for (const event of skill.SkillEvents) {
+  for (const event of skill.onEvents) {
     paginatedOnEvent.objects.push(PaginatedButton({
-      id: event.item,
+      id: event.id,
       name: { text: `${event.name} (${event.xp} xp)`, color: 'yellow' },
       onClick: () => Errors.functionNotImplemented()
     }));
@@ -25,7 +25,6 @@ export function initOnEventPages(Menu: GUI, skill: Skill) {
     goBack(Menu, PageNames.progress(skill.name)),
     ...navbar(Menu, skill, PageNames.onEvent(skill.name))
   )
-
 
   paginatedOnEvent.build();
 }

@@ -2,7 +2,7 @@ import { GUI, Page, Button } from "@prodigelib/gui";
 import { goBack, PageNames } from "../../consts/menu";
 import { Errors } from "../../errors";
 
-export function initDailyTasksPage(Menu: GUI) {
+export function initDailyTasks(Menu: GUI) {
   const task1 = Button({
     id: 'iron_sword',
     slot: 11,

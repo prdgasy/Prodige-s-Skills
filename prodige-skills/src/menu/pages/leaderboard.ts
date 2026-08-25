@@ -2,7 +2,7 @@ import { GUI, Page, Button } from "@prodigelib/gui";
 import { goBack, PageNames } from "../../consts/menu";
 import { SkillList } from "../../consts/skills";
 
-export function initLeaderboardPage(Menu: GUI) {
+export function initLeaderboard(Menu: GUI) {
   const globalTopBtn = Button({
     id: 'nether_star',
     slot: 4,
@@ -22,7 +22,7 @@ export function initLeaderboardPage(Menu: GUI) {
   // On ajoute un bouton pour chaque skill pour voir leur top spécifique
   SkillList.forEach((skill, i) => {
     page.pushObject(Button({
-      id: skill.item,
+      id: skill.id,
       slot: 10 + i,
       name: { text: `${skill.name} Rankings`, color: 'yellow' },
       onClick: () => { /* Logic to show top players for this skill */ }

@@ -1,9 +1,4 @@
-type Text = {
-  text: string;
-  color?: string;
-  italic?: boolean;
-  bold?: boolean;
-} | Text[]
+import type { Text } from "@prodigelib/gui";
 
 export function textWrapper({
   text,
@@ -11,7 +6,6 @@ export function textWrapper({
   italic = false,
   bold = false,
   wordsPerLine = 5,
-
 }: {
   text: string,
   color?: string,
@@ -22,17 +16,20 @@ export function textWrapper({
   const words = text.split(' ');
   const result: Text[] = [];
   let currentLine: string[] = [];
-  let spaceAfterFirst = ''
+  let spaceAfterFirst = '';
+
   words.forEach(word => {
     currentLine.push(word);
     if (currentLine.length == wordsPerLine) {
-      result.push({ text: spaceAfterFirst + currentLine.join(' '), color: color, italic: italic, bold: bold });
-      spaceAfterFirst = ' '
+      result.push({ text: spaceAfterFirst + currentLine.join(' '), color, italic, bold });
+      spaceAfterFirst = ' ';
       currentLine = [];
     }
   });
 
-  if (currentLine.length > 0) result.push({ text: spaceAfterFirst + currentLine.join(' '), color: color, italic: italic, bold: bold });
+  if (currentLine.length > 0) {
+    result.push({ text: spaceAfterFirst + currentLine.join(' '), color, italic, bold });
+  }
 
   return result;
 }

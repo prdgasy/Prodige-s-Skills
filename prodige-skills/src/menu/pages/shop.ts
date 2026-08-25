@@ -3,7 +3,7 @@ import { goBack, PageNames } from "../../consts/menu";
 import { Errors } from "../../errors";
 import { textWrapper } from "../../../lib/textWrapper";
 
-export function shopPage(Menu: GUI) {
+export function initShop(Menu: GUI) {
   const item = Button({
     id: 'emerald',
     slot: 10,

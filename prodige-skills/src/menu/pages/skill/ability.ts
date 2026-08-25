@@ -1,9 +1,11 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
 import { goBack, PageNames } from "../../../consts/menu";
-import { Skill } from "../../../types";
-import { Errors } from "../../../errors";
 
-export function initAbilityPages(Menu: GUI, skill: Skill) {
+import { Errors } from "../../../errors";
+import { SkillClass } from "../../../skill/skillClass";
+
+
+export function initAbility(Menu: GUI, skill: SkillClass) {
   // --- Ability Definitions ---
   const passivePerk = Button({
     id: 'enchanted_book',

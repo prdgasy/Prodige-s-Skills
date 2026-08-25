@@ -2,11 +2,12 @@ import { GUI } from '@prodigelib/gui';
 import { MCFunction, tellraw } from 'sandstone';
 
 import { SkillList } from '../consts/skills';
-import { initMainPage } from './pages/main';
-import { initProgressPages } from './pages/skill/progress';
-import { shopPage } from './pages/shop';
-import { initItemPage } from './pages/item';
-import { initOnEventPages } from './pages/skill/onEvent';
+import { initMain } from './pages/main';
+import { initProgress } from './pages/skill/progress';
+import { initShop } from './pages/shop';
+import { initItem } from './pages/item';
+import { initOnEvent } from './pages/skill/onEvent';
+import { initAchievement } from './pages/skill/achievement';
 
 /**
  * Main entry point for the GUI system.
@@ -17,21 +18,21 @@ MCFunction('menu', () => {
 
   const Menu = new GUI('hayichan', 'cmd', 100107);
 
-  initMainPage(Menu);
-  shopPage(Menu);
-  // initBoosterPage(Menu);
-  initItemPage(Menu);
-  // initTitlePage(Menu);
-  // initProfilePage(Menu);
-  // initSettingsPage(Menu);
-  // initMilestonesPage(Menu);
-  // initDailyTasksPage(Menu);
+  initMain(Menu);
+  initShop(Menu);
+  // initBooster(Menu);
+  initItem(Menu);
+  // initTitle(Menu);
+  // initProfile(Menu);
+  // initSettings(Menu);
+  // initMilestones(Menu);
+  // initDailyTasks(Menu);
 
   SkillList.forEach(skill => {
-    initProgressPages(Menu, skill);
-    initOnEventPages(Menu, skill);
-    // initQuestPages(Menu, skill);
-    // initAbilityPages(Menu, skill);
+    initProgress(Menu, skill);
+    initOnEvent(Menu, skill);
+    initAchievement(Menu, skill);
+    // initAbility(Menu, skill);
   })
 
 

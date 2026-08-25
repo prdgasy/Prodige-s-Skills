@@ -1,23 +1,41 @@
-import { Text } from "@prodigelib/gui";
-import { Skill } from "../types"
+import { Variable } from "sandstone";
 import { textWrapper } from "../../lib/textWrapper"
+import { Achievement } from "../skill/achievementClass";
+import { OnEvent } from "../skill/onEventClass";
+import { SkillClass, Skill } from "../skill/skillClass";
 
 
-const Mining: Skill = {
+const Mining = Skill({
   name: 'Mining',
   description: textWrapper({ text: 'Mine, mine, mien, very long too. Let s see how it goes' }),
-  item: 'diamond_pickaxe',
+  id: 'diamond_pickaxe',
   startingXp: 15,
-  SkillEvents: [
-    { name: 'Stone', item: 'stone', criteria: 'minecraft.mined:minecraft.stone', xp: 1, point: 5 },
-    { name: 'Coal Ore', item: 'coal_ore', criteria: 'minecraft.mined:minecraft.coal_ore', xp: 3, point: 5 },
-    { name: 'Iron Ore', item: 'iron_ore', criteria: 'minecraft.mined:minecraft.iron_ore', xp: 5, point: 5 }
-  ],
-  customItems: [{ name: 'Drill Prototype', item: 'golden_pickaxe' }],
-  titles: [{ name: 'Deep Delver' }, { name: 'Mountain King' }],
-  ability: {
-    name: 'Miner', description: textWrapper({ text: 'test description cool long. Very long actually' })
-  }
-}
+});
 
-export const SkillList: Skill[] = [Mining];
+Mining.onEvents.push(
+  OnEvent({ parent: Mining, name: 'Stone', id: 'stone', criteria: 'minecraft.mined:minecraft.stone', xp: 1, point: 5 }),
+  OnEvent({ parent: Mining, name: 'Coal Ore', id: 'coal_ore', criteria: 'minecraft.mined:minecraft.coal_ore', xp: 3, point: 5 }),
+  OnEvent({ parent: Mining, id: 'iron_ore' })
+);
+
+Mining.achievements.push(
+  Achievement({
+    id: 'stone',
+    name: 'Mine 1000 stone',
+    target: 1000,
+    current: Variable()
+  }),
+  Achievement({
+    id: 'stone',
+    name: 'Mine 1000 stone',
+    target: 1000,
+    current: Variable()
+  }),
+  Achievement({
+    id: 'stone',
+    name: 'Mine 1000 stone',
+    target: 1000,
+    current: Variable()
+  })
+);
+export const SkillList: SkillClass[] = [Mining];

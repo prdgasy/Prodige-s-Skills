@@ -17,7 +17,7 @@ export const PageNames = {
   ability: (skillName: string): string => `ability_${skillName}`,
   dailyTask: 'dailyTasks',
   milestone: 'milestone',
-  quest: (skillName: string): string => `quest_${skillName}`,
+  achievement: (skillName: string): string => `achievement_${skillName}`,
   progress: (skillName: string): string => `progress_${skillName}`,
   onEvent: (skillName: string): string => `onEvent_${skillName}`,
 }

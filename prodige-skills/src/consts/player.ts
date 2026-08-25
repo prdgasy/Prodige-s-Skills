@@ -5,6 +5,7 @@ import { Selector, Label, SelectorClass } from "sandstone";
  */
 export const Options = {
   progress: Label('Options.progress'),
+  progressNotif: Label('Options.progressNotif'),
   levelNotif: Label('Options.levelNotif')
 }
 

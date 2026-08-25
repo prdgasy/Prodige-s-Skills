@@ -3,7 +3,7 @@ import { ToolList } from "../../consts/tool";
 import { Errors } from "../../errors";
 import { GUI, Page, Button } from "@prodigelib/gui";
 
-export function initItemPage(Menu: GUI) {
+export function initItem(Menu: GUI) {
   const page = Page(
     Menu,
     PageNames.item,

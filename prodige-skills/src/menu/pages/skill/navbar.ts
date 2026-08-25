@@ -1,15 +1,16 @@
 import { Button, ButtonClass, GUI } from "@prodigelib/gui";
 
 import { PageNames } from "../../../consts/menu";
-import { Skill } from "../../../types";
+import { SkillClass } from "../../../skill/skillClass";
 
-export function navbar(Menu: GUI, skill: Skill, currentPage: string): ButtonClass[] {
+export function navbar(Menu: GUI, skill: SkillClass, currentPage: string): ButtonClass[] {
   const isProgress = currentPage === PageNames.progress(skill.name);
   const isOnEvent = currentPage === PageNames.onEvent(skill.name);
   const isAbility = currentPage === PageNames.ability(skill.name);
+  const isAchievement = currentPage === PageNames.achievement(skill.name);
 
   const progress = Button({
-    id: skill.item,
+    id: skill.id,
     slot: 20,
     name: { text: "See your progress", color: isProgress ? "gold" : "gray" },
     lore: [
@@ -35,5 +36,13 @@ export function navbar(Menu: GUI, skill: Skill, currentPage: string): ButtonClas
     components: isAbility ? [] : undefined
   });
 
-  return [progress, onEvent, ability];
+  const achievement = Button({
+    id: 'book',
+    slot: 23,
+    name: { text: 'Achievement', color: isAchievement ? "gold" : "gray" },
+    onClick: isAchievement ? undefined : () => Menu.toPage(PageNames.achievement(skill.name)),
+    components: isAchievement ? [] : undefined
+  });
+
+  return [progress, onEvent, ability, achievement];
 }
