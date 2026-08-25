@@ -1,8 +1,8 @@
 import { GUI, PaginatedPage, PaginatedButton } from "@prodigelib/gui";
-import { goBack, PageNames } from "../../../consts/menu";
-import { Errors } from "../../../errors";
+import { goBack, PageNames } from "../../consts/menu";
+import { Errors } from "../../errors";
 import { navbar } from "./navbar";
-import { SkillClass } from "../../../skill/skillClass";
+import { SkillClass } from "../../skill/skillClass";
 
 /**
  * Creates paginated onEvent pages for a skill

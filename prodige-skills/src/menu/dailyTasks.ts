@@ -1,6 +1,6 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames } from "../../consts/menu";
-import { Errors } from "../../errors";
+import { goBack, PageNames } from "../consts/menu";
+import { Errors } from "../errors";
 
 export function initDailyTasks(Menu: GUI) {
   const task1 = Button({

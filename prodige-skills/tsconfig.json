@@ -23,6 +23,7 @@
   ],
   "include": [
     "sandstone.config.ts",
-    "src"
+    "src",
+    "lib/indexer.ts"
   ]
 }

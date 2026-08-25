@@ -20,22 +20,22 @@ Mining.onEvents.push(
 
 Mining.achievements.push(
   Achievement({
+    parent: Mining,
     id: 'stone',
     name: 'Mine 1000 stone',
     target: 1000,
-    current: Variable()
   }),
   Achievement({
+    parent: Mining,
     id: 'stone',
     name: 'Mine 1000 stone',
     target: 1000,
-    current: Variable()
   }),
   Achievement({
+    parent: Mining,
     id: 'stone',
     name: 'Mine 1000 stone',
     target: 1000,
-    current: Variable()
   })
 );
 export const SkillList: SkillClass[] = [Mining];

@@ -1,7 +1,7 @@
 import { MacroArg as $, Button, ButtonClass, GUI, Page } from "@prodigelib/gui";
 import { _ } from "sandstone";
 import { Options } from "../../consts/consts";
-import { goBack, PageNames } from "../../consts/menu";
+import { goBack, PageNames } from "../consts/menu";
 
 export function initSettingsPage(Menu: GUI) {
 

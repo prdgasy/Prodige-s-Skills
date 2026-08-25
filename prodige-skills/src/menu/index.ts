@@ -2,12 +2,12 @@ import { GUI } from '@prodigelib/gui';
 import { MCFunction, tellraw } from 'sandstone';
 
 import { SkillList } from '../consts/skills';
-import { initMain } from './pages/main';
-import { initProgress } from './pages/skill/progress';
-import { initShop } from './pages/shop';
-import { initItem } from './pages/item';
-import { initOnEvent } from './pages/skill/onEvent';
-import { initAchievement } from './pages/skill/achievement';
+import { initMain } from './main';
+import { initProgress } from './skill/progress';
+import { initShop } from './shop';
+import { initItem } from './item';
+import { initOnEvent } from './skill/onEvent';
+import { initAchievement } from './skill/achievement';
 
 /**
  * Main entry point for the GUI system.

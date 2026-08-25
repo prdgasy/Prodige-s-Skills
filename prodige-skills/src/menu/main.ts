@@ -1,10 +1,10 @@
 import { MacroArg as $, Button, ButtonClass, GUI, Page } from "@prodigelib/gui";
 import { Score } from "sandstone";
-import { Errors } from "../../errors";
-import { SkillList } from "../../consts/skills";
-import { ItemType } from "../../types";
-import { PageNames, ProgressPageIndex } from '../../consts/menu';
-import { SkillClass } from "../../skill/skillClass";
+import { Errors } from "../errors";
+import { SkillList } from "../consts/skills";
+import { ItemType } from "../types";
+import { PageNames, ProgressPageIndex } from '../consts/menu';
+import { SkillClass } from "../skill/skillClass";
 
 function skillButton(Menu: GUI, skill: SkillClass, slot: number): ButtonClass {
   return Button({

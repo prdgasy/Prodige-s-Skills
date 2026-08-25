@@ -1,7 +1,7 @@
 import { Button, ButtonClass, GUI } from "@prodigelib/gui";
 
-import { PageNames } from "../../../consts/menu";
-import { SkillClass } from "../../../skill/skillClass";
+import { PageNames } from "../../consts/menu";
+import { SkillClass } from "../../skill/skillClass";
 
 export function navbar(Menu: GUI, skill: SkillClass, currentPage: string): ButtonClass[] {
   const isProgress = currentPage === PageNames.progress(skill.name);

@@ -38,6 +38,8 @@ export class SkillClass {
   xp: Score;
   xpTarget: Score;
 
+  currentAchievement: Score;
+
   constructor(skillOptions: SkillOptions) {
     this.name = skillOptions.name;
     this.description = skillOptions.description ?? [Errors.textNotImplemented()];
@@ -52,6 +54,8 @@ export class SkillClass {
     this.level = Objective.create(`${this.name}.level`)('@p');
     this.xp = Objective.create(`${this.name}.xp`)('@p');
     this.xpTarget = Objective.create(`${this.name}.xpTarget`)('@p');
+
+    this.currentAchievement = Objective.create(`${this.name}.currentAchievement`)('@p');
   }
 
   displayProgress(xpAdded: Score, pointAdded: Score) {
