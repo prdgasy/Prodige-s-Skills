@@ -1,5 +1,5 @@
 import { execute, MCFunction, Selector, tellraw, _, Label } from "sandstone";
-import { BoosterClass } from "./object/boosterClass";
+import { BoosterClass } from "./object/booster";
 import { SkillList } from "./skill/const";
 
 export const Booster = new BoosterClass();

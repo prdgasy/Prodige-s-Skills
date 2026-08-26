@@ -5,7 +5,7 @@ import { ItemType } from "../../types";
 import { goBack, Mask, PageNames, ProgressPageIndex } from "../const";
 import { Errors } from "../../../lib/errors";
 import { navbar } from "./navbar";
-import { SkillClass } from "../../skill/skillClass";
+import { SkillClass } from "../../skill/skill";
 import { ProgressBar } from "../../../lib/progressBar";
 
 const totalSlots = 17;

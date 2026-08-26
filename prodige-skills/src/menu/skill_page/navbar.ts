@@ -1,7 +1,7 @@
 import { Button, ButtonClass, GUI } from "@prodigelib/gui";
 
 import { PageNames } from "../const";
-import { SkillClass } from "../../skill/skillClass";
+import { SkillClass } from "../../skill/skill";
 import { getEnvironmentData } from "node:worker_threads";
 
 export function navbar(Menu: GUI, skill: SkillClass, currentPage: string): ButtonClass[] {

@@ -4,8 +4,9 @@ import { Errors } from "../../lib/errors";
 import { SkillList } from "../skill/const";
 import { ItemType } from "../types";
 import { Mask, PageNames, ProgressPageIndex } from './const';
-import { SkillClass } from "../skill/skillClass";
+import { SkillClass } from "../skill/skill";
 import { ProgressBar } from "../../lib/progressBar";
+import { RewardClass } from "../object/reward";
 
 export function initMain(Menu: GUI) {
   const page = Page(Menu, PageNames.main, Mask.gray());
@@ -17,33 +18,32 @@ export function initMain(Menu: GUI) {
     onClick: () => Menu.toPage(PageNames.shop)
   })
 
-  page.pushObject(() => {
-    SkillList.forEach((skill, i) => {
-      const percentage = skill.xp['/'](skill.xpTarget)['*'](100);
-      const nextLevel = skill.level['+'](1);
-      const bar = () => ProgressBar(percentage);
-      page.rawEmit(Button({
-        id: skill.itemId,
-        slot: i + 10,
-        name: { text: skill.name, color: 'green' },
-        lore: [
-          ...skill.description,
-          { text: '' },
-          { text: $`Progress to Level ${nextLevel}: §e${percentage}%` },
-          { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
-          { text: '' },
-          { text: $`Level ${nextLevel} Rewards:` },
-          { text: '' },
-          { text: "§eClick to view!" }
-        ],
-        onClick: () => {
-          ProgressPageIndex.set(skill.level['/'](18));
-          Menu.toPage(PageNames.progress(skill.name));
-        },
-        components: ['!attribute_modifiers']
-      }));
-    });
-  });
+  let slot = 10;
+  for (const skill of SkillList) {
+    const percentage = skill.xp['/'](skill.xpTarget)['*'](100);
+    const nextLevel = skill.level['+'](1);
+    const bar = () => ProgressBar(percentage);
+    page.pushObject(Button({
+      id: skill.itemId,
+      slot: slot++,
+      name: { text: skill.name, color: 'green' },
+      lore: [
+        ...skill.description,
+        { text: '' },
+        { text: $`Progress to Level ${nextLevel}: §e${percentage}%` },
+        { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
+        { text: '' },
+        { text: $`Level ${nextLevel} Rewards:` },
+        ...RewardClass.join(skill.rewards),
+        { text: "§eClick to view!" }
+      ],
+      onClick: () => {
+        ProgressPageIndex.set(skill.level['/'](18));
+        Menu.toPage(PageNames.progress(skill.name));
+      },
+      components: ['!attribute_modifiers']
+    }));
+  }
 
   const profile = Button({
     id: 'player_head',

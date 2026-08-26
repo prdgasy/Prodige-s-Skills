@@ -1,4 +1,4 @@
-import { Tool, ToolClass } from "./toolClass";
+import { Tool, ToolClass } from "./tool";
 import { textWrapper } from "../../lib/textWrapper";
 
 export const NovicePickaxe = Tool({

@@ -1,6 +1,6 @@
 import { Objective, Score, Variable, _ } from "sandstone";
 import { Criteria, ItemType } from "../types";
-import { SkillClass } from "./skillClass";
+import { SkillClass } from "./skill";
 import { BoosterScore } from "../player/scores";
 
 type OnEventOptions = {

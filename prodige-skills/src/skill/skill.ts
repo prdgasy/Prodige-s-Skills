@@ -1,13 +1,14 @@
 import { Text } from "@prodigelib/gui";
-import { ToolClass } from "../object/toolClass";
+import { ToolClass } from "../object/tool";
 import { ItemType } from "../types";
-import { OnEventClass } from "./onEventClass";
-import { TitleClass } from "./titleClass";
-import { Ability, AbilityClass } from "./abilityClass";
+import { OnEventClass } from "./onEvent";
+import { TitleClass } from "./title";
+import { Ability, AbilityClass } from "./ability";
 import { Errors } from "../../lib/errors";
 import { Objective, Score, tellraw, title, Variable, _ } from "sandstone";
-import { Player, Options } from "../consts/player";
-import { AchievementClass } from "./achievementClass";
+import { Player, Options } from "../player";
+import { AchievementClass } from "./achievement";
+import { RewardClass } from "../object/reward";
 
 type SkillOptions = {
   name: string;
@@ -20,6 +21,7 @@ type SkillOptions = {
   onEvents?: OnEventClass[];
   customItems?: ToolClass[];
   achievements?: AchievementClass[];
+  rewards?: RewardClass[];
 }
 
 export class SkillClass {
@@ -40,6 +42,8 @@ export class SkillClass {
 
   currentAchievement: Score;
 
+  rewards: RewardClass[];
+
   constructor(skillOptions: SkillOptions) {
     this.name = skillOptions.name;
     this.description = skillOptions.description ?? [Errors.textNotImplemented()];
@@ -56,6 +60,8 @@ export class SkillClass {
     this.xpTarget = Objective.create(`${this.name}.xpTarget`)('@p');
 
     this.currentAchievement = Objective.create(`${this.name}.currentAchievement`)('@p');
+
+    this.rewards = skillOptions.rewards ?? [];
   }
 
   displayProgress(xpAdded: Score, pointAdded: Score) {
@@ -85,6 +91,7 @@ export class SkillClass {
       'Next Level: ', this.name, this.level, this.xp, '/', this.xpTarget, '\n',
       '==============\n',
       'Rewards: \n',
+      ...RewardClass.join(this.rewards),
       '  §8• ', '\n',
       `§m-------------------------------------------------§r`
     ])
@@ -101,7 +108,8 @@ export function Skill({
   customItems,
   achievements,
   titles,
-  ability
+  ability,
+  rewards,
 }: SkillOptions) {
   return new SkillClass({
     name,
@@ -112,6 +120,7 @@ export function Skill({
     customItems,
     achievements,
     titles,
-    ability
+    ability,
+    rewards
   })
 }

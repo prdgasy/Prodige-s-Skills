@@ -3,7 +3,7 @@ import { _, Variable } from "sandstone";
 
 import { goBack, PageNames, Mask } from "../const";
 
-import { SkillClass } from "../../skill/skillClass";
+import { SkillClass } from "../../skill/skill";
 import { navbar } from "./navbar";
 import { ProgressBar } from "../../../lib/progressBar";
 
