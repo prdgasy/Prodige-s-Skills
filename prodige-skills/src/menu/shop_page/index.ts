@@ -1,5 +1,5 @@
 import { Button, GUI, Page } from "@prodigelib/gui";
-import { goBack, PageNames } from "../../consts/menu";
+import { goBack, PageNames } from "../const";
 import { textWrapper } from "../../../lib/textWrapper";
 
 export function initShop(Menu: GUI) {

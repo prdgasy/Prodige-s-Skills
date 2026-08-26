@@ -1,8 +1,8 @@
 import { Variable } from "sandstone";
 import { textWrapper } from "../../lib/textWrapper"
-import { Achievement } from "../skill/achievementClass";
-import { OnEvent } from "../skill/onEventClass";
-import { SkillClass, Skill } from "../skill/skillClass";
+import { Achievement } from "./achievementClass";
+import { OnEvent } from "./onEventClass";
+import { SkillClass, Skill } from "./skillClass";
 
 
 const Mining = Skill({

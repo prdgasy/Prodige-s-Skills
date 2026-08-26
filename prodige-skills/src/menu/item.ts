@@ -1,6 +1,6 @@
-import { goBack, PageNames } from "../consts/menu";
-import { ToolList } from "../consts/tool";
-import { Errors } from "../errors";
+import { goBack, PageNames } from "./const";
+import { ToolList } from "../object/const";
+import { Errors } from "../../lib/errors";
 import { GUI, Page, Button } from "@prodigelib/gui";
 
 export function initItem(Menu: GUI) {

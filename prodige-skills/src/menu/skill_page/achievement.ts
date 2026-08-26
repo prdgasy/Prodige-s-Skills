@@ -1,7 +1,7 @@
 import { Button, GUI, Page, MacroArg as $ } from "@prodigelib/gui";
 import { _, Variable } from "sandstone";
 
-import { goBack, PageNames, Mask } from "../../consts/menu";
+import { goBack, PageNames, Mask } from "../const";
 
 import { SkillClass } from "../../skill/skillClass";
 import { navbar } from "./navbar";

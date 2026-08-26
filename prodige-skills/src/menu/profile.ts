@@ -1,6 +1,6 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames } from "../consts/menu";
-import { Errors } from "../errors";
+import { goBack, PageNames } from "./const";
+import { Errors } from "../../lib/errors";
 
 export function initProfilePage(Menu: GUI) {
   // --- Info Buttons ---

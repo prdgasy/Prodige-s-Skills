@@ -1,6 +1,19 @@
-import { ToolRarity, ItemType, ToolOptions } from "../types";
-import { Button, Text } from "@prodigelib/gui";
+import { Text } from "@prodigelib/gui";
+import { ItemType } from "../types";
 
+export type ToolOptions = {
+  name: string;
+  item: ItemType;
+  price: number;
+  description: Text[];
+  rarity: ToolRarity;
+  durability: number;
+  onUse?: () => void;
+  onBreak?: () => void;
+  onHold?: () => void;
+};
+
+export type ToolRarity = "§f§lCOMMON" | "§9§lRARE" | "§d§lEPIC" | "§6§lLEGENDARY";
 export class ToolClass {
   name: string;
   item: ItemType;

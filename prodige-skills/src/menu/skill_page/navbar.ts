@@ -1,6 +1,6 @@
 import { Button, ButtonClass, GUI } from "@prodigelib/gui";
 
-import { PageNames } from "../../consts/menu";
+import { PageNames } from "../const";
 import { SkillClass } from "../../skill/skillClass";
 import { getEnvironmentData } from "node:worker_threads";
 

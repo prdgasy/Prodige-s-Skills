@@ -1,7 +1,7 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames, Mask } from "../../consts/menu";
+import { goBack, PageNames, Mask } from "../const";
 
-import { Errors } from "../../errors";
+import { Errors } from "../../../lib/errors";
 import { SkillClass } from "../../skill/skillClass";
 import { navbar } from "./navbar";
 import { MacroArg as $ } from "@prodigelib/gui";

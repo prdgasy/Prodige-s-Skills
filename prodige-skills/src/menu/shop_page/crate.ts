@@ -1,6 +1,6 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { Errors } from "../../errors";
-import { PageNames, goBack } from "../../consts/menu";
+import { Errors } from "../../../lib/errors";
+import { PageNames, goBack } from "../const";
 
 export function initCratesPage(Menu: GUI) {
   const commonCrate = Button({

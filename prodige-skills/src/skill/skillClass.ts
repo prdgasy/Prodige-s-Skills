@@ -1,10 +1,10 @@
 import { Text } from "@prodigelib/gui";
-import { ToolClass } from "../tool/toolClass";
+import { ToolClass } from "../object/toolClass";
 import { ItemType } from "../types";
 import { OnEventClass } from "./onEventClass";
 import { TitleClass } from "./titleClass";
 import { Ability, AbilityClass } from "./abilityClass";
-import { Errors } from "../errors";
+import { Errors } from "../../lib/errors";
 import { Objective, Score, tellraw, title, Variable, _ } from "sandstone";
 import { Player, Options } from "../consts/player";
 import { AchievementClass } from "./achievementClass";

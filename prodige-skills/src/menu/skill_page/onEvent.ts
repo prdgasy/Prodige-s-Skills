@@ -1,6 +1,6 @@
 import { GUI, PaginatedPage, PaginatedButton } from "@prodigelib/gui";
-import { goBack, Mask, PageNames } from "../../consts/menu";
-import { Errors } from "../../errors";
+import { goBack, Mask, PageNames } from "../const";
+import { Errors } from "../../../lib/errors";
 import { navbar } from "./navbar";
 import { SkillClass } from "../../skill/skillClass";
 

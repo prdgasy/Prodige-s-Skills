@@ -24,6 +24,7 @@
   "include": [
     "sandstone.config.ts",
     "src",
-    "lib/indexer.ts"
+    "lib/indexer.ts",
+    "lib/errors.ts"
   ]
 }

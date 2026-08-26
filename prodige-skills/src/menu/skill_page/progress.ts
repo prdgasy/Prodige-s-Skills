@@ -2,8 +2,8 @@ import { MacroArg as $, Button, ButtonClass, GUI, Page, Text } from "@prodigelib
 import { _, Score, Variable } from "sandstone";
 
 import { ItemType } from "../../types";
-import { goBack, Mask, PageNames, ProgressPageIndex } from "../../consts/menu";
-import { Errors } from "../../errors";
+import { goBack, Mask, PageNames, ProgressPageIndex } from "../const";
+import { Errors } from "../../../lib/errors";
 import { navbar } from "./navbar";
 import { SkillClass } from "../../skill/skillClass";
 import { ProgressBar } from "../../../lib/progressBar";
@@ -45,6 +45,8 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
       name: { text: $`${skill.name} ${skill.level}`, color: 'yellow' },
       slot: $(slot),
       lore: [
+        { text: "§7Rewards: " },
+        { text: "" },
         { text: $`Progress: §e${percentage}%`, color: "gray" },
         { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` }
       ],
@@ -67,13 +69,13 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
       processedLevel['+='](ProgressPageIndex);
 
       _.if(i["=="](0), () => { page.rawEmit(firstSlot); i["--"]; }) // skip first slot
-        .elseIf(skill.level['<'](processedLevel), () => {
+        .elseIf(nextLevel['<'](processedLevel), () => {
           page.rawEmit(notReached(i, processedLevel));
         })
-        .elseIf(skill.level['>'](processedLevel), () => {
+        .elseIf(nextLevel['>'](processedLevel), () => {
           page.rawEmit(reached(i, processedLevel));
         })
-        .elseIf(skill.level['=='](processedLevel), () => {
+        .elseIf(nextLevel['=='](processedLevel), () => {
           page.rawEmit(inProgress(i));
         });
     })

@@ -1,7 +1,7 @@
 import { GUI } from '@prodigelib/gui';
 import { MCFunction, tellraw } from 'sandstone';
 
-import { SkillList } from '../consts/skills';
+import { SkillList } from '../skill/const';
 import { initMain } from './main';
 import { initProgress } from './skill_page/progress';
 import { initShop } from './shop_page';
@@ -15,9 +15,9 @@ import { initAbility } from './skill_page/ability';
  * Initializes scores, menu, and all pages.
  */
 MCFunction('menu', () => {
-  tellraw('@p', { text: "§e[Skills-Menu] Loaded" });
+  tellraw('@p', { text: "§e[Skills/Menu] Loaded" });
 
-  const Menu = new GUI('hayichan', 'cmd', 100107);
+  const Menu = new GUI('prodige_skills', 'menu', 100107);
 
   initMain(Menu);
   initShop(Menu);

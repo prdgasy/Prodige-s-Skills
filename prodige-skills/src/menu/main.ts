@@ -1,24 +1,11 @@
 import { MacroArg as $, Button, ButtonClass, GUI, Page } from "@prodigelib/gui";
 import { Score } from "sandstone";
-import { Errors } from "../errors";
-import { SkillList } from "../consts/skills";
+import { Errors } from "../../lib/errors";
+import { SkillList } from "../skill/const";
 import { ItemType } from "../types";
-import { Mask, PageNames, ProgressPageIndex } from '../consts/menu';
+import { Mask, PageNames, ProgressPageIndex } from './const';
 import { SkillClass } from "../skill/skillClass";
-
-function skillButton(Menu: GUI, skill: SkillClass, slot: number): ButtonClass {
-  return Button({
-    id: skill.itemId,
-    slot: slot,
-    name: { text: skill.name, color: 'yellow' },
-    lore: [{ text: `${skill.name} ${$(skill.level)}` }],
-    onClick: () => {
-      ProgressPageIndex.set(skill.level['/'](18));
-      Menu.toPage(PageNames.progress(skill.name));
-    },
-    components: ['!attribute_modifiers']
-  });
-};
+import { ProgressBar } from "../../lib/progressBar";
 
 export function initMain(Menu: GUI) {
   const page = Page(Menu, PageNames.main, Mask.gray());
@@ -32,7 +19,29 @@ export function initMain(Menu: GUI) {
 
   page.pushObject(() => {
     SkillList.forEach((skill, i) => {
-      page.rawEmit(skillButton(Menu, skill, 10 + i));
+      const percentage = skill.xp['/'](skill.xpTarget)['*'](100);
+      const nextLevel = skill.level['+'](1);
+      const bar = () => ProgressBar(percentage);
+      page.rawEmit(Button({
+        id: skill.itemId,
+        slot: i + 10,
+        name: { text: skill.name, color: 'green' },
+        lore: [
+          ...skill.description,
+          { text: '' },
+          { text: $`Progress to Level ${nextLevel}: §e${percentage}%` },
+          { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
+          { text: '' },
+          { text: $`Level ${nextLevel} Rewards:` },
+          { text: '' },
+          { text: "§eClick to view!" }
+        ],
+        onClick: () => {
+          ProgressPageIndex.set(skill.level['/'](18));
+          Menu.toPage(PageNames.progress(skill.name));
+        },
+        components: ['!attribute_modifiers']
+      }));
     });
   });
 
