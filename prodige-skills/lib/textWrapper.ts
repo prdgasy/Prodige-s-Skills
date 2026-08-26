@@ -16,19 +16,17 @@ export function textWrapper({
   const words = text.split(' ');
   const result: Text[] = [];
   let currentLine: string[] = [];
-  let spaceAfterFirst = '';
 
   words.forEach(word => {
     currentLine.push(word);
     if (currentLine.length == wordsPerLine) {
-      result.push({ text: spaceAfterFirst + currentLine.join(' '), color, italic, bold });
-      spaceAfterFirst = ' ';
+      result.push({ text: currentLine.join(' '), color, italic, bold });
       currentLine = [];
     }
   });
 
   if (currentLine.length > 0) {
-    result.push({ text: spaceAfterFirst + currentLine.join(' '), color, italic, bold });
+    result.push({ text: currentLine.join(' '), color, italic, bold });
   }
 
   return result;

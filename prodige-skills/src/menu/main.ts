@@ -3,24 +3,25 @@ import { Score } from "sandstone";
 import { Errors } from "../errors";
 import { SkillList } from "../consts/skills";
 import { ItemType } from "../types";
-import { PageNames, ProgressPageIndex } from '../consts/menu';
+import { Mask, PageNames, ProgressPageIndex } from '../consts/menu';
 import { SkillClass } from "../skill/skillClass";
 
 function skillButton(Menu: GUI, skill: SkillClass, slot: number): ButtonClass {
   return Button({
-    id: skill.id,
+    id: skill.itemId,
     slot: slot,
     name: { text: skill.name, color: 'yellow' },
     lore: [{ text: `${skill.name} ${$(skill.level)}` }],
     onClick: () => {
       ProgressPageIndex.set(skill.level['/'](18));
       Menu.toPage(PageNames.progress(skill.name));
-    }
+    },
+    components: ['!attribute_modifiers']
   });
 };
 
 export function initMain(Menu: GUI) {
-  const page = Page(Menu, PageNames.main);
+  const page = Page(Menu, PageNames.main, Mask.gray());
 
   const shop = Button({
     id: 'emerald',

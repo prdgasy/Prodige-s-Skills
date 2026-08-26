@@ -22,7 +22,7 @@ export function initLeaderboard(Menu: GUI) {
   // On ajoute un bouton pour chaque skill pour voir leur top spécifique
   SkillList.forEach((skill, i) => {
     page.pushObject(Button({
-      id: skill.id,
+      id: skill.itemId,
       slot: 10 + i,
       name: { text: `${skill.name} Rankings`, color: 'yellow' },
       onClick: () => { /* Logic to show top players for this skill */ }

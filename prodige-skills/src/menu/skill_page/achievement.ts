@@ -1,7 +1,7 @@
 import { Button, GUI, Page, MacroArg as $ } from "@prodigelib/gui";
 import { _, Variable } from "sandstone";
 
-import { goBack, PageNames } from "../../consts/menu";
+import { goBack, PageNames, Mask } from "../../consts/menu";
 
 import { SkillClass } from "../../skill/skillClass";
 import { navbar } from "./navbar";
@@ -12,6 +12,7 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
     menu,
     PageNames.achievement(skill.name),
     [
+      ...Mask.navbar(),
       goBack(menu, PageNames.main),
       ...navbar(menu, skill, PageNames.achievement(skill.name))
     ]
@@ -21,18 +22,18 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
     const achievement = skill.achievements[slot];
     const ratio = achievement.progress["*"](100)["/"](achievement.target);
     const current = Button({
-      id: achievement.id,
+      id: achievement.itemId,
       slot,
-      name: { text: $`${achievement.name} ${achievement.progress}/${achievement.target} (${ratio}%)`, color: 'gold' },
+      name: { text: $`§b${achievement.name} §e${achievement.progress}§6/§e${achievement.target} §7(${ratio}%)` },
       lore: [
-        { text: `Progress: ${() => ProgressBar(ratio)}`, color: 'yellow' },
+        { text: $`${() => ProgressBar(ratio)}` }
       ]
     });
 
     const locked = Button({
-      id: "charcoal",
+      id: "crying_obsidian",
       slot,
-      name: { text: "this is locked", color: "dark_gray" }
+      name: { text: "You are not there yet!", color: "dark_gray" }
     });
 
     page.pushObject(() => {

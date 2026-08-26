@@ -3,11 +3,12 @@ import { MCFunction, tellraw } from 'sandstone';
 
 import { SkillList } from '../consts/skills';
 import { initMain } from './main';
-import { initProgress } from './skill/progress';
-import { initShop } from './shop';
+import { initProgress } from './skill_page/progress';
+import { initShop } from './shop_page';
 import { initItem } from './item';
-import { initOnEvent } from './skill/onEvent';
-import { initAchievement } from './skill/achievement';
+import { initOnEvent } from './skill_page/onEvent';
+import { initAchievement } from './skill_page/achievement';
+import { initAbility } from './skill_page/ability';
 
 /**
  * Main entry point for the GUI system.
@@ -32,10 +33,6 @@ MCFunction('menu', () => {
     initProgress(Menu, skill);
     initOnEvent(Menu, skill);
     initAchievement(Menu, skill);
-    // initAbility(Menu, skill);
-  })
-
-
+    initAbility(Menu, skill);
+  });
 }, { runOnLoad: true });
-
-

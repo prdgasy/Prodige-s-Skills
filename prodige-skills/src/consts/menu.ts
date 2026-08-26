@@ -34,5 +34,34 @@ export const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass
   })
 };
 
+export namespace Mask {
+  export function navbar() {
+    const mask: ButtonClass[] = [];
+    for (let i = 18; i <= 26; i++) {
+      mask.push(Button({
+        id: 'black_stained_glass_pane',
+        slot: i,
+        name: { text: '' }
+      }));
+    }
+    return mask;
+  }
+
+  export function gray() {
+    const mask: ButtonClass[] = [];
+    for (let i = 0; i <= 26; i++) {
+      mask.push(Button({
+        id: 'gray_stained_glass_pane',
+        slot: i,
+        name: { text: '' }
+      }));
+    }
+    return mask;
+  }
+
+  export function Mask(): ButtonClass {
+    throw new Error("Function not implemented.");
+  }
+}
 
 

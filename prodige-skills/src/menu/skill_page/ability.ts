@@ -1,5 +1,5 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames } from "../../consts/menu";
+import { goBack, PageNames, Mask } from "../../consts/menu";
 
 import { Errors } from "../../errors";
 import { SkillClass } from "../../skill/skillClass";
@@ -31,7 +31,6 @@ export function initAbility(Menu: GUI, skill: SkillClass) {
       { text: $`Progress to ${skill.ability.name} 1}: 12%` },
       { text: "progress_bar" },
     ],
-    onClick: () => Errors.functionNotImplemented()
   });
 
   const info = Button({
@@ -41,13 +40,14 @@ export function initAbility(Menu: GUI, skill: SkillClass) {
     lore: [
       { text: '' }
     ],
-    onClick: () => Errors.functionNotImplemented()
   })
 
   const page = Page(
     Menu,
     PageNames.ability(skill.name),
     [
+      ...Mask.gray(),
+      ...Mask.navbar(),
       goBack(Menu, PageNames.progress(skill.name)),
       ...navbar(Menu, skill, PageNames.ability(skill.name)),
       info

@@ -7,33 +7,36 @@ import { SkillClass, Skill } from "../skill/skillClass";
 
 const Mining = Skill({
   name: 'Mining',
-  description: textWrapper({ text: 'Mine, mine, mien, very long too. Let s see how it goes' }),
-  id: 'diamond_pickaxe',
+  description: textWrapper({ text: 'Mine, mine, mien, very long too. Lets see how it goes' }),
+  itemId: 'diamond_pickaxe',
   startingXp: 15,
 });
 
 Mining.onEvents.push(
-  OnEvent({ parent: Mining, name: 'Stone', id: 'stone', criteria: 'minecraft.mined:minecraft.stone', xp: 1, point: 5 }),
-  OnEvent({ parent: Mining, name: 'Coal Ore', id: 'coal_ore', criteria: 'minecraft.mined:minecraft.coal_ore', xp: 3, point: 5 }),
-  OnEvent({ parent: Mining, id: 'iron_ore' })
+  OnEvent({ parent: Mining, name: 'Stone', itemId: 'stone', criteria: 'minecraft.mined:minecraft.stone', xp: 1, pts: 5 }),
+  OnEvent({ parent: Mining, name: 'Coal Ore', itemId: 'coal_ore', criteria: 'minecraft.mined:minecraft.coal_ore', xp: 3, pts: 5 }),
+  OnEvent({ parent: Mining, itemId: 'iron_ore' })
 );
 
 Mining.achievements.push(
   Achievement({
     parent: Mining,
-    id: 'stone',
+    itemId: 'charcoal',
+    id: 'mine_coal_ach',
     name: 'Mine 1000 stone',
     target: 1000,
   }),
   Achievement({
     parent: Mining,
-    id: 'stone',
+    itemId: 'stone',
+    id: 'mine_stone_ach',
     name: 'Mine 1000 stone',
     target: 1000,
   }),
   Achievement({
     parent: Mining,
-    id: 'stone',
+    itemId: 'diamond_ore',
+    id: 'mine_diamond_ach',
     name: 'Mine 1000 stone',
     target: 1000,
   })

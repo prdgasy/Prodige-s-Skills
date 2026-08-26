@@ -1,5 +1,5 @@
 import { GUI, PaginatedPage, PaginatedButton } from "@prodigelib/gui";
-import { goBack, PageNames } from "../../consts/menu";
+import { goBack, Mask, PageNames } from "../../consts/menu";
 import { Errors } from "../../errors";
 import { navbar } from "./navbar";
 import { SkillClass } from "../../skill/skillClass";
@@ -11,13 +11,17 @@ export function initOnEvent(Menu: GUI, skill: SkillClass) {
   const paginatedOnEvent = PaginatedPage({
     parent: Menu,
     name: PageNames.onEvent(skill.name),
+    staticObjectList: [...Mask.gray(), ...Mask.navbar()]
   });
 
   for (const event of skill.onEvents) {
     paginatedOnEvent.objects.push(PaginatedButton({
-      id: event.id,
-      name: { text: `${event.name} (${event.xp} xp)`, color: 'yellow' },
-      onClick: () => Errors.functionNotImplemented()
+      id: event.itemId,
+      name: { text: `${event.name}`, color: 'green' },
+      lore: [
+        { text: `• ${event.xp} xp`, color: "aqua" },
+        { text: `• ${event.pts} pts`, color: "gold" }
+      ]
     }));
   }
 

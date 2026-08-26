@@ -11,7 +11,7 @@ import { AchievementClass } from "./achievementClass";
 
 type SkillOptions = {
   name: string;
-  id: ItemType;
+  itemId: ItemType;
 
   description?: Text[];
   startingXp?: number;
@@ -24,7 +24,7 @@ type SkillOptions = {
 
 export class SkillClass {
   name: string;
-  id: ItemType;
+  itemId: ItemType;
 
   description: Text[];
   startingXp: number;
@@ -43,7 +43,7 @@ export class SkillClass {
   constructor(skillOptions: SkillOptions) {
     this.name = skillOptions.name;
     this.description = skillOptions.description ?? [Errors.textNotImplemented()];
-    this.id = skillOptions.id;
+    this.itemId = skillOptions.itemId;
     this.startingXp = skillOptions.startingXp ?? 40;
     this.onEvents = skillOptions.onEvents ?? [];
     this.customItems = skillOptions.customItems ?? [];
@@ -94,7 +94,7 @@ export class SkillClass {
 
 export function Skill({
   name,
-  id,
+  itemId,
   description,
   startingXp,
   onEvents,
@@ -105,7 +105,7 @@ export function Skill({
 }: SkillOptions) {
   return new SkillClass({
     name,
-    id,
+    itemId,
     description,
     startingXp,
     onEvents,

@@ -2,6 +2,7 @@ import { Button, ButtonClass, GUI } from "@prodigelib/gui";
 
 import { PageNames } from "../../consts/menu";
 import { SkillClass } from "../../skill/skillClass";
+import { getEnvironmentData } from "node:worker_threads";
 
 export function navbar(Menu: GUI, skill: SkillClass, currentPage: string): ButtonClass[] {
   const isProgress = currentPage === PageNames.progress(skill.name);
@@ -9,39 +10,39 @@ export function navbar(Menu: GUI, skill: SkillClass, currentPage: string): Butto
   const isAbility = currentPage === PageNames.ability(skill.name);
   const isAchievement = currentPage === PageNames.achievement(skill.name);
 
+  const enchantGlint = 'enchantment_glint_override=1';
+  const currentColor = "green";
+
   const progress = Button({
-    id: skill.id,
+    id: "ender_eye",
     slot: 20,
-    name: { text: "See your progress", color: isProgress ? "gold" : "gray" },
-    lore: [
-      { text: "This page will show you your progress" }
-    ],
-    components: isProgress ? [] : undefined,  // todo : enchantement glow if onProgress
+    name: { text: "See your progress", color: isProgress ? currentColor : "gray" },
+    components: isProgress ? [enchantGlint, '!attribute_modifiers'] : undefined,
     onClick: isProgress ? undefined : () => Menu.toPage(PageNames.progress(skill.name))
   });
 
   const onEvent = Button({
     id: 'book',
     slot: 21,
-    name: { text: 'onEvent page', color: isOnEvent ? "gold" : "gray" },
+    name: { text: 'Actions', color: isOnEvent ? currentColor : "gray" },
     onClick: isOnEvent ? undefined : () => Menu.toPage(PageNames.onEvent(skill.name)),
-    components: isOnEvent ? [] : undefined
+    components: isOnEvent ? [enchantGlint] : undefined
   });
 
   const ability = Button({
-    id: 'stone',
+    id: 'nether_star',
     slot: 22,
-    name: { text: 'Ability', color: isAbility ? "gold" : "gray" },
+    name: { text: 'Ability', color: isAbility ? currentColor : "gray" },
     onClick: isAbility ? undefined : () => Menu.toPage(PageNames.ability(skill.name)),
-    components: isAbility ? [] : undefined
+    components: isAbility ? [enchantGlint] : undefined
   });
 
   const achievement = Button({
-    id: 'book',
+    id: 'diamond',
     slot: 23,
-    name: { text: 'Achievement', color: isAchievement ? "gold" : "gray" },
+    name: { text: 'Achievements', color: isAchievement ? currentColor : "gray" },
     onClick: isAchievement ? undefined : () => Menu.toPage(PageNames.achievement(skill.name)),
-    components: isAchievement ? [] : undefined
+    components: isAchievement ? [enchantGlint] : undefined
   });
 
   return [progress, onEvent, ability, achievement];
