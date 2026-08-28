@@ -18,5 +18,5 @@ export default {
   namespace: 'prodige_skills',
   packUid: '46EQ989V',
   mcmeta: 'latest',
-  saveOptions: { clientPath: 'C:\\Users\\TOSHIBA\\AppData\\Roaming\\ModrinthApp\\profiles\\Data_Resource Pack Modpack', world: 'MAIN' },
+  saveOptions: { exportZips: true }
 } as SandstoneConfig

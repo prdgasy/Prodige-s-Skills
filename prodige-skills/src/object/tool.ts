@@ -1,5 +1,7 @@
 import { Text } from "@prodigelib/gui";
 import { ItemType } from "../types";
+import { textWrapper } from "../../lib/textWrapper";
+import { say } from "sandstone";
 
 export type ToolOptions = {
   name: string;
@@ -12,7 +14,6 @@ export type ToolOptions = {
   onBreak?: () => void;
   onHold?: () => void;
 };
-
 export type ToolRarity = "§f§lCOMMON" | "§9§lRARE" | "§d§lEPIC" | "§6§lLEGENDARY";
 export class ToolClass {
   name: string;
@@ -36,6 +37,14 @@ export class ToolClass {
     this.onUse = options.onUse;
     this.onBreak = options.onBreak;
     this.onHold = options.onHold;
+  }
+
+  give() {
+    say(`Given x1 ${this.name} to @p`);
+  }
+
+  toString() {
+    return this.name;
   }
 }
 
@@ -62,3 +71,38 @@ export function Tool({
     onHold
   });
 }
+
+export const NovicePickaxe = Tool({
+  name: "§9Novice Miner's Pickaxe",
+  item: "iron_pickaxe",
+  price: 50,
+  description: textWrapper({
+    text: "A reliable pickaxe for aspiring miners, ideal for extracting basic ores.",
+    color: "gray"
+  }),
+  rarity: "§f§lCOMMON",
+  durability: 250,
+  onUse: () => { },
+  onBreak: () => { },
+  onHold: () => { }
+});
+
+export const DeepDelverPickaxe = Tool({
+  name: "Deep Delver Pickaxe",
+  item: "diamond_pickaxe",
+  price: 250,
+  description: textWrapper({
+    text: "Forged in deep caverns, this sturdy pickaxe effortlessly breaks through the toughest stone.",
+    color: "gray"
+  }),
+  rarity: "§9§lRARE",
+  durability: 1000,
+  onUse: () => { },
+  onBreak: () => { },
+  onHold: () => { }
+});
+
+export const ToolList: ToolClass[] = [
+  NovicePickaxe,
+  DeepDelverPickaxe
+];

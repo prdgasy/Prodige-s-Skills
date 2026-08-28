@@ -5,21 +5,21 @@ import { textWrapper } from '../../lib/textWrapper';
 export const ProgressPageIndex = Objective.create('progress_page_index')('@s');
 
 export const PageNames = {
-  main: 'main',
-  shop: 'shop',
-  booster: 'booster',
-  item: 'item',
-  title: 'title',
-  profile: 'profile',
-  crate: 'crate',
-  settings: 'settings',
-  leaderboard: 'leaderboard',
-  ability: (skillName: string): string => `ability_${skillName}`,
-  dailyTask: 'dailyTasks',
-  milestone: 'milestone',
-  achievement: (skillName: string): string => `achievement_${skillName}`,
-  progress: (skillName: string): string => `progress_${skillName}`,
-  onEvent: (skillName: string): string => `onEvent_${skillName}`,
+  main: 'Main',
+  shop: 'Shop',
+  booster: 'Booster',
+  item: 'Item',
+  title: 'Title',
+  profile: 'Profile',
+  crate: 'Crate',
+  settings: 'Settings',
+  leaderboard: 'Leaderboard',
+  ability: (skillName: string): string => `Ability_${skillName}`,
+  dailyTask: 'Daily_Tasks',
+  milestone: 'Milestone',
+  achievement: (skillName: string): string => `Achievement_${skillName}`,
+  progress: (skillName: string): string => `Progress_${skillName}`,
+  onEvent: (skillName: string): string => `Actions_${skillName}`,
 }
 
 /**

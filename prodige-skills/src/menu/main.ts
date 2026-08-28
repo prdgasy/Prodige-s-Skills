@@ -1,14 +1,12 @@
-import { MacroArg as $, Button, ButtonClass, GUI, Page } from "@prodigelib/gui";
-import { Score } from "sandstone";
-import { Errors } from "../../lib/errors";
-import { SkillList } from "../skill/const";
-import { ItemType } from "../types";
+import { MacroArg as $, Button, GUI, Page } from "@prodigelib/gui";
+import { SkillList } from "../skill";
 import { Mask, PageNames, ProgressPageIndex } from './const';
-import { SkillClass } from "../skill/skill";
 import { ProgressBar } from "../../lib/progressBar";
 import { RewardClass } from "../object/reward";
+import { _, tellraw } from "sandstone";
 
 export function initMain(Menu: GUI) {
+  tellraw("@p", "§eLoaded");
   const page = Page(Menu, PageNames.main, Mask.gray());
 
   const shop = Button({
@@ -18,32 +16,54 @@ export function initMain(Menu: GUI) {
     onClick: () => Menu.toPage(PageNames.shop)
   })
 
-  let slot = 10;
-  for (const skill of SkillList) {
-    const percentage = skill.xp['/'](skill.xpTarget)['*'](100);
-    const nextLevel = skill.level['+'](1);
-    const bar = () => ProgressBar(percentage);
-    page.pushObject(Button({
-      id: skill.itemId,
-      slot: slot++,
-      name: { text: skill.name, color: 'green' },
-      lore: [
-        ...skill.description,
-        { text: '' },
-        { text: $`Progress to Level ${nextLevel}: §e${percentage}%` },
-        { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
-        { text: '' },
-        { text: $`Level ${nextLevel} Rewards:` },
-        ...RewardClass.join(skill.rewards),
-        { text: "§eClick to view!" }
-      ],
-      onClick: () => {
-        ProgressPageIndex.set(skill.level['/'](18));
-        Menu.toPage(PageNames.progress(skill.name));
-      },
-      components: ['!attribute_modifiers']
-    }));
-  }
+  page.pushObject(() => {
+    let slot = 10;
+    for (const skill of SkillList) {
+      const percentage = skill.xp['*'](100)['/'](skill.xpTarget);
+      const nextLevel = skill.level['+'](1);
+      const bar = () => ProgressBar(percentage);
+
+      const emitButtonWithReward = (rewards: RewardClass[]) => {
+        page.rawEmit(Button({
+          id: skill.itemId,
+          slot: slot,
+          name: { text: skill.name, color: 'green' },
+          lore: [
+            ...skill.description,
+            { text: '' },
+            { text: $`§7Progress to Level ${nextLevel}: §e${percentage}%` },
+            { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
+            { text: '' },
+            { text: $`§7Level ${nextLevel} Rewards:` },
+            ...RewardClass.joinToText(rewards),
+            { text: '' },
+            { text: "§eClick to view!" }
+          ],
+          onClick: () => {
+            ProgressPageIndex.set(skill.level['/'](18));
+            Menu.toPage(PageNames.progress(skill.name));
+          },
+          components: ['!attribute_modifiers']
+        }));
+      };
+
+      if (skill.rewards.size > 0) {
+        skill.rewards.forEach((rewards, lvl) => {
+          _.if(nextLevel["=="](lvl), () => {
+            emitButtonWithReward(rewards);
+          });
+        });
+        const notCustom = Array.from(skill.rewards.keys()).map(lvl => nextLevel["!="](lvl));
+        _.if(_.and(...notCustom), () => {
+          emitButtonWithReward(RewardClass.common(skill));
+        });
+      } else {
+        emitButtonWithReward(RewardClass.common(skill));
+      }
+
+      slot++;
+    }
+  });
 
   const profile = Button({
     id: 'player_head',

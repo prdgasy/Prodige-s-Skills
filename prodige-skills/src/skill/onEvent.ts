@@ -1,7 +1,7 @@
 import { Objective, Score, Variable, _ } from "sandstone";
 import { Criteria, ItemType } from "../types";
-import { SkillClass } from "./skill";
-import { BoosterScore } from "../player/scores";
+import { SkillClass } from ".";
+import { Player } from "../player";
 
 type OnEventOptions = {
   name?: string;
@@ -33,8 +33,8 @@ export class OnEventClass {
   }
 
   trigger() {
-    const addedXp = Variable(this.xp)["*"](BoosterScore.xp);
-    const addedPoint = Variable(this.pts)["*"](BoosterScore.point);
+    const addedXp = Variable(this.xp)["*"](Player.boosterScore.xp);
+    const addedPoint = Variable(this.pts)["*"](Player.boosterScore.point);
 
     this.parent.xp['+='](addedXp);
 

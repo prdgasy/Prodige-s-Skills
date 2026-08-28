@@ -1,6 +1,5 @@
 import { goBack, PageNames } from "./const";
-import { ToolList } from "../object/const";
-import { Errors } from "../../lib/errors";
+import { ToolList } from "../object/tool";
 import { GUI, Page, Button } from "@prodigelib/gui";
 
 export function initItem(Menu: GUI) {
@@ -15,11 +14,13 @@ export function initItem(Menu: GUI) {
     page.pushObject(Button({
       id: tool.item,
       slot: 10,
-      name: { text: tool.name, color: tool.rarity },
+      name: { text: tool.name },
       lore: [
         ...tool.description,
         { text: '' },
-        { text: 'Price: ' + tool.price, color: 'green' }
+        { text: 'Price: ' + tool.price, color: 'green' },
+        { text: '' },
+        { text: tool.rarity }
       ],
       onClick: () => { Menu.toPage(PageNames.item) }
     }));

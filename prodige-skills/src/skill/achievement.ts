@@ -1,7 +1,7 @@
 import { Text } from "@prodigelib/gui";
 import { Objective, Score } from "sandstone";
 import { ItemType } from "../types";
-import { SkillClass } from "./skill";
+import { SkillClass } from ".";
 
 export class AchievementClass {
   name: string;

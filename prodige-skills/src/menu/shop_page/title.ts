@@ -1,6 +1,6 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
 import { Errors } from "../../../lib/errors";
-import { SkillList } from "../../skill/const";
+import { SkillList } from "../../skill";
 import { goBack, PageNames } from "../const";
 
 export function initTitlePage(Menu: GUI) {
@@ -9,6 +9,7 @@ export function initTitlePage(Menu: GUI) {
     PageNames.title,
     [goBack(Menu, PageNames.shop)]
   );
+  /*
   let slot = 0;
   SkillList.forEach(skill => {
     skill.titles.forEach(item => {
@@ -16,11 +17,12 @@ export function initTitlePage(Menu: GUI) {
       page.pushObject(Button({
         id: 'name_tag',
         slot: slot,
-        name: { text: item.name },
+        name: { text: item },
         onClick: () => { Errors.functionNotImplemented() }
       }));
     })
   })
+  */
 
   page.build();
 }

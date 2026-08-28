@@ -1,7 +1,7 @@
 import { GUI } from '@prodigelib/gui';
 import { MCFunction, tellraw } from 'sandstone';
 
-import { SkillList } from '../skill/const';
+import { SkillList } from '../skill';
 import { initMain } from './main';
 import { initProgress } from './skill_page/progress';
 import { initShop } from './shop_page';

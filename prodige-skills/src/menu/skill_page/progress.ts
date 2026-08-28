@@ -1,84 +1,87 @@
 import { MacroArg as $, Button, ButtonClass, GUI, Page, Text } from "@prodigelib/gui";
-import { _, Score, Variable } from "sandstone";
+import { _, DataPointClass, Score, tellraw, Variable } from "sandstone";
 
 import { ItemType } from "../../types";
 import { goBack, Mask, PageNames, ProgressPageIndex } from "../const";
 import { Errors } from "../../../lib/errors";
 import { navbar } from "./navbar";
-import { SkillClass } from "../../skill/skill";
+import { SkillClass } from "../../skill";
 import { ProgressBar } from "../../../lib/progressBar";
+import { RewardClass } from "../../object/reward";
 
 const totalSlots = 17;
 
 export function initProgress(Menu: GUI, skill: SkillClass) {
 
   const page = Page(Menu, PageNames.progress(skill.name));
-  const percentage = skill.xp["*"](100)["/"](skill.xpTarget);
-  const nextLevel = skill.level["+"](1);
-  const bar = () => ProgressBar(percentage);
-  // --- Dynamic Level Button Factories ---
-  const firstSlot = Button({
-    id: skill.itemId,
-    slot: 0,
-    name: { text: $`${skill.name} Skill`, color: "green" },
-    lore: [
-      ...skill.description,
-      { text: $`Progress to Level ${nextLevel}: §e${percentage}%`, color: "gray" },
-      { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` }
-    ],
-    components: ['!attribute_modifiers', 'enchantment_glint_override=1']
-  });
-
-  const notReached = (slot: Score, processedLevel: Score) => {
-    return Button({
-      id: "red_stained_glass_pane",
-      slot: $(slot),
-      name: { text: $`§c${skill.name} ${processedLevel}` },
-      lore: [
-        { text: "Rewards:" }
-      ]
-    });
-  };
-  const inProgress = (slot: Score) => {
-    return Button({
-      id: "yellow_stained_glass_pane",
-      name: { text: $`${skill.name} ${skill.level}`, color: 'yellow' },
-      slot: $(slot),
-      lore: [
-        { text: "§7Rewards: " },
-        { text: "" },
-        { text: $`Progress: §e${percentage}%`, color: "gray" },
-        { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` }
-      ],
-    });
-  };
-  const reached = (slot: Score, processedLevel: Score) => {
-    return Button({
-      id: "green_stained_glass_pane",
-      name: { text: $`${skill.name} ${processedLevel}`, color: 'green' },
-
-      slot: $(slot)
-    });
-  };
-
-
   // --- Loop & State Generator ---
   const levels = () => {
+    const percentage = skill.xp["*"](100)["/"](skill.xpTarget);
+    const nextLevel = skill.level["+"](1);
+    const bar = (): DataPointClass => ProgressBar(percentage);
+
+    const emitLevelButton = (i: Score, processedLevel: Score, rewards: RewardClass[]) => {
+      const rewardText = RewardClass.joinToText(rewards);
+
+      const notReached = Button({
+        id: "red_stained_glass_pane",
+        slot: $(i),
+        name: { text: $`§c${skill.name} ${processedLevel}` },
+        lore: [
+          { text: "§7Rewards:" },
+          ...rewardText,
+        ]
+      });
+      const inProgress = Button({
+        id: "yellow_stained_glass_pane",
+        name: { text: $`${skill.name} ${processedLevel}`, color: 'yellow' },
+        slot: $(i),
+        lore: [
+          { text: $`§7Progress: §e${percentage}%`, color: "gray" },
+          { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
+          { text: "§7Rewards: " },
+          ...rewardText,
+        ],
+      });
+      const reached = Button({
+        id: "green_stained_glass_pane",
+        name: { text: $`${skill.name} ${processedLevel}`, color: 'green' },
+        lore: [
+          { text: '§7Rewards: ' },
+          ...rewardText
+        ],
+        slot: $(i)
+      });
+
+      _.if(nextLevel['<'](processedLevel), () => {
+        page.rawEmit(notReached);
+      })
+        .elseIf(nextLevel['>'](processedLevel), () => {
+          page.rawEmit(reached);
+        })
+        .elseIf(nextLevel["=="](processedLevel), () => {
+          page.rawEmit(inProgress);
+        });
+    };
+
     _.for([0, totalSlots], 'iterate', i => {
-      const processedLevel = i['+'](ProgressPageIndex['*'](totalSlots));
+      const processedLevel = i['+'](ProgressPageIndex['*'](totalSlots))["++"];
       processedLevel['+='](ProgressPageIndex);
 
-      _.if(i["=="](0), () => { page.rawEmit(firstSlot); i["--"]; }) // skip first slot
-        .elseIf(nextLevel['<'](processedLevel), () => {
-          page.rawEmit(notReached(i, processedLevel));
-        })
-        .elseIf(nextLevel['>'](processedLevel), () => {
-          page.rawEmit(reached(i, processedLevel));
-        })
-        .elseIf(nextLevel['=='](processedLevel), () => {
-          page.rawEmit(inProgress(i));
+      if (skill.rewards.size > 0) {
+        skill.rewards.forEach((rewards, lvl) => {
+          _.if(processedLevel["=="](lvl), () => {
+            emitLevelButton(i, processedLevel, rewards);
+          });
         });
-    })
+        const notCustom = Array.from(skill.rewards.keys()).map(lvl => processedLevel["!="](lvl));
+        _.if(_.and(...notCustom), () => {
+          emitLevelButton(i, processedLevel, RewardClass.common(skill));
+        });
+      } else {
+        emitLevelButton(i, processedLevel, RewardClass.common(skill));
+      }
+    });
   };
 
   // --- Navigation & Action Buttons ---
@@ -101,11 +104,10 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
 
   page.pushObject(
     ...Mask.navbar(),
-    goBack(Menu, PageNames.main),
     prev,
     next,
-    ...navbar(Menu, skill, PageNames.progress(skill.name)),
-    levels
+    ...navbar(Menu, skill, PageNames.progress(skill.name), page),
+    levels,
   );
 
   page.build();
