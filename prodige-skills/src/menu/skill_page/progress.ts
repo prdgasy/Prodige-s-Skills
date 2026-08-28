@@ -42,6 +42,7 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
           lore: [
             $`§7Progress: §e${percentage}%`,
             $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
+            "",
             "§7Rewards: ",
             ...rewards,
           ],

@@ -14,10 +14,10 @@ type NavTabConfig = {
 }
 let startSlot = 20;
 const tabs: NavTabConfig[] = [
-  { id: "redstone", slot: startSlot++, label: "Progress", color: "green", getPageName: (name) => PageNames.progress(name) },
-  { id: "book", slot: startSlot++, label: "Actions", color: "gold", getPageName: (name) => PageNames.onEvent(name) },
-  { id: "ender_eye", slot: startSlot++, label: "Ability", color: "light_purple", getPageName: (name) => PageNames.ability(name) },
-  { id: "diamond", slot: startSlot++, label: "Achievements", color: "aqua", getPageName: (name) => PageNames.achievement(name) }
+  { id: "redstone", slot: startSlot++, label: "Progress", color: "yellow", getPageName: (name) => PageNames.progress(name) },
+  { id: "book", slot: startSlot++, label: "Actions", color: "yellow", getPageName: (name) => PageNames.onEvent(name) },
+  { id: "ender_eye", slot: startSlot++, label: "Ability", color: "yellow", getPageName: (name) => PageNames.ability(name) },
+  { id: "diamond", slot: startSlot++, label: "Achievements", color: "yellow", getPageName: (name) => PageNames.achievement(name) }
 ];
 
 const glint = "enchantment_glint_override=1";
@@ -32,12 +32,12 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
   const currentItemBtn = Button({
     id: skill.itemId,
     slot: 19,
-    name: { text: $`${skill.name} Skill`, color: "green" },
+    name: $`§d${skill.name} Skill`,
     lore: [
       ...skill.description,
       "",
-      { text: $`Progress to Level ${nextLevel}: §e${percentage}%`, color: "gray" },
-      { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` }
+      $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
+      $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}`
     ],
     components: ['!attribute_modifiers', 'enchantment_glint_override=1']
   });
@@ -60,8 +60,7 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
         slot: tab.slot,
         name: {
           text: tab.label,
-          color: tab.color,
-          bold: isCurrent
+          color: isCurrent ? tab.color : "dark_gray",
         },
         components: isCurrent ? [glint, "!attribute_modifiers"] : ["!attribute_modifiers"],
         onClick: isCurrent ? undefined : () => menu.toPage(targetPage)

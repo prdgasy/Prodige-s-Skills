@@ -27,17 +27,17 @@ export function initMain(Menu: GUI) {
         page.rawEmit(Button({
           id: skill.itemId,
           slot: slot,
-          name: { text: skill.name, color: 'green' },
+          name: $`§d${skill.name} ${skill.level}`,
           lore: [
             ...skill.description,
             "",
-            { text: $`§7Progress to Level ${nextLevel}: §e${percentage}%` },
-            { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
+            $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
+            $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
             "",
-            { text: $`§7Level ${nextLevel} Rewards:` },
+            $`§7Level ${nextLevel} Rewards:`,
             ...rewards,
             "",
-            { text: "§eClick to view!" }
+            "§eClick to view!"
           ],
           onClick: () => {
             ProgressPageIndex.set(skill.level['/'](18));
