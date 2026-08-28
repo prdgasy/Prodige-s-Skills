@@ -17,9 +17,9 @@ export function initItem(Menu: GUI) {
       name: { text: tool.name },
       lore: [
         ...tool.description,
-        { text: '' },
+        "",
         { text: 'Price: ' + tool.price, color: 'green' },
-        { text: '' },
+        "",
         { text: tool.rarity }
       ],
       onClick: () => { Menu.toPage(PageNames.item) }

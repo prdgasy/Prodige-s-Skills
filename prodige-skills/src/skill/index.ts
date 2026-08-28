@@ -99,7 +99,7 @@ export class SkillClass {
         'Next Level: ', this.name, this.level, this.xp, '/', this.xpTarget, '\n',
         '==============\n',
         'Rewards: \n',
-        ...RewardClass.joinToString(rewards),
+        ...RewardClass.joinString(rewards),
         '\n',
         `§m-------------------------------------------------§r`
       ]);

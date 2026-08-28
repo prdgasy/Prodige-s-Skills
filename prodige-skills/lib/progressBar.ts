@@ -5,8 +5,8 @@ export function ProgressBar(
   unlockedMotif: string = "-",
   lockedMotif: string = "-",
   unlockedColor: string = "§a",
-  lockedColor: string = "§7",
-  length: number = 20,
+  lockedColor: string = "§f",
+  length: number = 15,
 ): DataPointClass {
   const filledLength = progressRatio["*"](length)["/"](100);
   const bar = DataVariable();

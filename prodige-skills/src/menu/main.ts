@@ -1,4 +1,4 @@
-import { MacroArg as $, Button, GUI, Page } from "@prodigelib/gui";
+import { MacroArg as $, Button, GUI, Page, Text } from "@prodigelib/gui";
 import { SkillList } from "../skill";
 import { Mask, PageNames, ProgressPageIndex } from './const';
 import { ProgressBar } from "../../lib/progressBar";
@@ -23,20 +23,20 @@ export function initMain(Menu: GUI) {
       const nextLevel = skill.level['+'](1);
       const bar = () => ProgressBar(percentage);
 
-      const emitButtonWithReward = (rewards: RewardClass[]) => {
+      const emitBtn = (rewards: Text[]) => {
         page.rawEmit(Button({
           id: skill.itemId,
           slot: slot,
           name: { text: skill.name, color: 'green' },
           lore: [
             ...skill.description,
-            { text: '' },
+            "",
             { text: $`§7Progress to Level ${nextLevel}: §e${percentage}%` },
             { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
-            { text: '' },
+            "",
             { text: $`§7Level ${nextLevel} Rewards:` },
-            ...RewardClass.joinToText(rewards),
-            { text: '' },
+            ...rewards,
+            "",
             { text: "§eClick to view!" }
           ],
           onClick: () => {
@@ -47,19 +47,7 @@ export function initMain(Menu: GUI) {
         }));
       };
 
-      if (skill.rewards.size > 0) {
-        skill.rewards.forEach((rewards, lvl) => {
-          _.if(nextLevel["=="](lvl), () => {
-            emitButtonWithReward(rewards);
-          });
-        });
-        const notCustom = Array.from(skill.rewards.keys()).map(lvl => nextLevel["!="](lvl));
-        _.if(_.and(...notCustom), () => {
-          emitButtonWithReward(RewardClass.common(skill));
-        });
-      } else {
-        emitButtonWithReward(RewardClass.common(skill));
-      }
+      RewardClass.resolve(skill, skill.level, emitBtn)
 
       slot++;
     }

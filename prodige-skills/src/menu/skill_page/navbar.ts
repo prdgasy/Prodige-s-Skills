@@ -12,12 +12,12 @@ type NavTabConfig = {
   color: string;
   getPageName: (skillName: string) => string;
 }
-
+let startSlot = 20;
 const tabs: NavTabConfig[] = [
-  { id: "redstone", slot: 21, label: "Progress", color: "green", getPageName: (name) => PageNames.progress(name) },
-  { id: "book", slot: 22, label: "Actions", color: "gold", getPageName: (name) => PageNames.onEvent(name) },
-  { id: "ender_eye", slot: 23, label: "Ability", color: "light_purple", getPageName: (name) => PageNames.ability(name) },
-  { id: "diamond", slot: 24, label: "Achievements", color: "aqua", getPageName: (name) => PageNames.achievement(name) }
+  { id: "redstone", slot: startSlot++, label: "Progress", color: "green", getPageName: (name) => PageNames.progress(name) },
+  { id: "book", slot: startSlot++, label: "Actions", color: "gold", getPageName: (name) => PageNames.onEvent(name) },
+  { id: "ender_eye", slot: startSlot++, label: "Ability", color: "light_purple", getPageName: (name) => PageNames.ability(name) },
+  { id: "diamond", slot: startSlot++, label: "Achievements", color: "aqua", getPageName: (name) => PageNames.achievement(name) }
 ];
 
 const glint = "enchantment_glint_override=1";
@@ -35,6 +35,7 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
     name: { text: $`${skill.name} Skill`, color: "green" },
     lore: [
       ...skill.description,
+      "",
       { text: $`Progress to Level ${nextLevel}: §e${percentage}%`, color: "gray" },
       { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` }
     ],

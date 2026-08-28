@@ -10,7 +10,7 @@ export function initProfilePage(Menu: GUI) {
     name: { text: 'Your Statistics', color: 'gold' },
     lore: [
       { text: 'Total Power: ', color: 'gray' }, { text: '1,240', color: 'yellow' },
-      { text: '' },
+      "",
       { text: 'Global Rank: ', color: 'gray' }, { text: '#142', color: 'aqua' }
     ]
   });

@@ -20,67 +20,53 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
     const nextLevel = skill.level["+"](1);
     const bar = (): DataPointClass => ProgressBar(percentage);
 
-    const emitLevelButton = (i: Score, processedLevel: Score, rewards: RewardClass[]) => {
-      const rewardText = RewardClass.joinToText(rewards);
 
-      const notReached = Button({
-        id: "red_stained_glass_pane",
-        slot: $(i),
-        name: { text: $`§c${skill.name} ${processedLevel}` },
-        lore: [
-          { text: "§7Rewards:" },
-          ...rewardText,
-        ]
-      });
-      const inProgress = Button({
-        id: "yellow_stained_glass_pane",
-        name: { text: $`${skill.name} ${processedLevel}`, color: 'yellow' },
-        slot: $(i),
-        lore: [
-          { text: $`§7Progress: §e${percentage}%`, color: "gray" },
-          { text: $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}` },
-          { text: "§7Rewards: " },
-          ...rewardText,
-        ],
-      });
-      const reached = Button({
-        id: "green_stained_glass_pane",
-        name: { text: $`${skill.name} ${processedLevel}`, color: 'green' },
-        lore: [
-          { text: '§7Rewards: ' },
-          ...rewardText
-        ],
-        slot: $(i)
-      });
-
-      _.if(nextLevel['<'](processedLevel), () => {
-        page.rawEmit(notReached);
-      })
-        .elseIf(nextLevel['>'](processedLevel), () => {
-          page.rawEmit(reached);
-        })
-        .elseIf(nextLevel["=="](processedLevel), () => {
-          page.rawEmit(inProgress);
-        });
-    };
 
     _.for([0, totalSlots], 'iterate', i => {
       const processedLevel = i['+'](ProgressPageIndex['*'](totalSlots))["++"];
       processedLevel['+='](ProgressPageIndex);
+      const emitBtn = (rewards: Text[]) => {
+        const notReached = Button({
+          id: "red_stained_glass_pane",
+          slot: $(i),
+          name: $`§c${skill.name} ${processedLevel}`,
+          lore: [
+            "§7Rewards:",
+            ...rewards,
+          ]
+        });
+        const inProgress = Button({
+          id: "yellow_stained_glass_pane",
+          name: $`§e${skill.name} ${processedLevel}`,
+          slot: $(i),
+          lore: [
+            $`§7Progress: §e${percentage}%`,
+            $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
+            "§7Rewards: ",
+            ...rewards,
+          ],
+        });
+        const reached = Button({
+          id: "green_stained_glass_pane",
+          name: $`§a${skill.name} ${processedLevel}`,
+          lore: [
+            '§7Rewards:',
+            ...rewards
+          ],
+          slot: $(i)
+        });
 
-      if (skill.rewards.size > 0) {
-        skill.rewards.forEach((rewards, lvl) => {
-          _.if(processedLevel["=="](lvl), () => {
-            emitLevelButton(i, processedLevel, rewards);
+        _.if(nextLevel['<'](processedLevel), () => {
+          page.rawEmit(notReached);
+        })
+          .elseIf(nextLevel['>'](processedLevel), () => {
+            page.rawEmit(reached);
+          })
+          .elseIf(nextLevel["=="](processedLevel), () => {
+            page.rawEmit(inProgress);
           });
-        });
-        const notCustom = Array.from(skill.rewards.keys()).map(lvl => processedLevel["!="](lvl));
-        _.if(_.and(...notCustom), () => {
-          emitLevelButton(i, processedLevel, RewardClass.common(skill));
-        });
-      } else {
-        emitLevelButton(i, processedLevel, RewardClass.common(skill));
-      }
+      };
+      RewardClass.resolve(skill, processedLevel, emitBtn);
     });
   };
 

@@ -2,7 +2,7 @@ import { Text } from "@prodigelib/gui";
 import { SkillClass } from "../skill";
 import { Player } from "../player";
 import { NovicePickaxe, ToolClass } from "./tool";
-import { _ } from "sandstone";
+import { _, Score } from "sandstone";
 
 
 export type RewardOptions = {
@@ -19,16 +19,16 @@ export class RewardClass {
     this.get = options.get;
   }
 
-  static joinToText(rewards: RewardClass[]): Text[] {
+  static joinText(rewards: RewardClass[]): Text[] {
     const t: Text[] = [];
     for (const r of rewards) {
-      t.push({ text: `  §8+ §r${r.show}` });
+      t.push({ text: `  §8+§r${r.show}` });
     }
     return t;
   }
 
-  static joinToString(rewards: RewardClass[]): string[] {
-    return rewards.map(r => `  §8+ §r${r.show}`);
+  static joinString(rewards: RewardClass[]): string[] {
+    return rewards.map(r => `  §8+§r${r.show}`);
   }
 
   static get(rewards: RewardClass[]) {
@@ -82,6 +82,22 @@ export class RewardClass {
       });
     } else {
       RewardClass.get(RewardClass.common(skill));
+    }
+  }
+
+  static resolve(skill: SkillClass, lvl: Score, f: (r: Text[]) => void) {
+    if (skill.rewards.size > 0) {
+      skill.rewards.forEach((r, i) => {
+        _.if(lvl["=="](i), () => {
+          f(RewardClass.joinText(r));
+        });
+      });
+      const notCustom = Array.from(skill.rewards.keys()).map(i => lvl["!="](i));
+      _.if(_.and(...notCustom), () => {
+        f(RewardClass.joinText(RewardClass.common(skill)))
+      });
+    } else {
+      f(RewardClass.joinText(RewardClass.common(skill)))
     }
   }
 }

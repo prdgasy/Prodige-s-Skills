@@ -15,7 +15,7 @@ export function initAbility(Menu: GUI, skill: SkillClass) {
     slot: 13,
     name: { text: 'How it works ?', color: 'yellow' },
     lore: [
-      { text: '' }
+      ""
     ],
   });
 

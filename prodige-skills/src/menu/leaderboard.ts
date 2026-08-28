@@ -1,6 +1,6 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
 import { goBack, PageNames } from "./const";
-import { SkillList } from "../skill/const";
+import { SkillList } from "../skill";
 
 export function initLeaderboard(Menu: GUI) {
   const globalTopBtn = Button({
