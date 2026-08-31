@@ -1,11 +1,11 @@
 import { Objective, Score } from "sandstone";
 
 export class BoosterClass {
-  xp: Score;
+  Xp: Score;
   point: Score;
 
   constructor() {
-    this.xp = Objective.create('booster.xp')('@p');
+    this.Xp = Objective.create('booster.Xp')('@p');
     this.point = Objective.create('booster.point')('@p');
   }
 }

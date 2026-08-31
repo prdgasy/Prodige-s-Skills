@@ -1,10 +1,8 @@
-import { Text } from "@prodigelib/gui";
 import { ToolClass } from "../object/tool";
 import { ItemType } from "../types";
 import { OnEvent, OnEventClass } from "./onEvent";
 import { TitleClass } from "./title";
 import { Ability, AbilityClass } from "./ability";
-import { Errors } from "../../lib/errors";
 import { Objective, Score, tellraw, title, Variable, _, say } from "sandstone";
 import { Player } from "../player";
 import { Achievement, AchievementClass } from "./achievement";
@@ -19,7 +17,7 @@ type SkillOptions = {
   name: string;
   itemId: ItemType;
 
-  description?: Text[];
+  description?: string[];
   startingXp?: number;
   titles?: TitleClass[];
   ability?: AbilityClass;
@@ -33,7 +31,7 @@ export class SkillClass {
   name: string;
   itemId: ItemType;
 
-  description: Text[];
+  description: string[];
   startingXp: number;
   onEvents: OnEventClass[];
   customItems: (ToolClass)[];
@@ -42,8 +40,11 @@ export class SkillClass {
   ability: AbilityClass;
 
   level: Score;
-  xp: Score;
-  xpTarget: Score;
+  Xp: Score;
+  XpTarget: Score;
+
+  totalXp: Score;
+  totalPts: Score;
 
   currentAchievement: Score;
 
@@ -51,7 +52,7 @@ export class SkillClass {
 
   constructor(skillOptions: SkillOptions) {
     this.name = skillOptions.name;
-    this.description = skillOptions.description ?? [Errors.textNotImplemented()];
+    this.description = skillOptions.description ?? ["<description>"];
     this.itemId = skillOptions.itemId;
     this.startingXp = skillOptions.startingXp ?? 40;
     this.onEvents = skillOptions.onEvents ?? [];
@@ -61,24 +62,27 @@ export class SkillClass {
     this.ability = skillOptions.ability ?? Ability({ name: 'notimple', description: [] });
 
     this.level = Objective.create(`${this.name}.level`)('@p');
-    this.xp = Objective.create(`${this.name}.xp`)('@p');
-    this.xpTarget = Objective.create(`${this.name}.xpTarget`)('@p');
+    this.Xp = Objective.create(`${this.name}.Xp`)('@p');
+    this.XpTarget = Objective.create(`${this.name}.XpTarget`)('@p');
+
+    this.totalXp = Objective.create(`${this.name}.totalXp`)('@p');
+    this.totalPts = Objective.create(`${this.name}.totalPts`)('@p');
 
     this.currentAchievement = Objective.create(`${this.name}.currentAchievement`)('@p');
 
     this.rewards = skillOptions.rewards ?? new Map<number, RewardClass[]>();
   }
 
-  displayProgress(xpAdded: Score, pointAdded: Score) {
+  displayProgress(XpAdded: Score, pointAdded: Score) {
     title(Player.select(Player.option.progressNotif)).actionbar([
-      { text: this.name }, this.level, '+', xpAdded, 'Xp + ', pointAdded, 'Point'
+      { text: this.name }, this.level, '+', XpAdded, 'Xp + ', pointAdded, 'Point'
     ]);
   }
 
   levelUp() {
-    this.xpTarget["*="](13)["/="](10);
-    _.if(this.xpTarget['>'](5000), () => {
-      this.xpTarget.set(5000);
+    this.XpTarget["*="](13)["/="](10);
+    _.if(this.XpTarget['>'](5000), () => {
+      this.XpTarget.set(5000);
     })
 
     title(Player.select(Player.option.levelNotif)).title([
@@ -96,7 +100,7 @@ export class SkillClass {
         '  ',
         { text: `${this.name} Level Up!\n `, color: 'green', bold: true },
         Variable(this.level)['--'], '§8➜ ', Variable(this.level)['++'], '\n\n',
-        'Next Level: ', this.name, this.level, this.xp, '/', this.xpTarget, '\n',
+        'Next Level: ', this.name, this.level, this.Xp, '/', this.XpTarget, '\n',
         '==============\n',
         'Rewards: \n',
         ...RewardClass.joinString(rewards),
@@ -149,13 +153,17 @@ export function Skill({
 
 const Mining = Skill({
   name: 'Mining',
-  description: textWrapper({ text: 'Mine, mine, mien, very long too. Lets see how it goes' }),
+  description: textWrapper('Mine, mine, mien, very long too. Lets see how it goes'),
   itemId: 'diamond_pickaxe',
   startingXp: 15,
+  ability: Ability({
+    name: 'Tester',
+    description: textWrapper('this is a cool test of ability. This is supposed to work...')
+  })
 });
 Mining.onEvents.push(
-  OnEvent({ parent: Mining, name: 'Stone', itemId: 'stone', criteria: 'minecraft.mined:minecraft.stone', xp: 1, pts: 5 }),
-  OnEvent({ parent: Mining, name: 'Coal Ore', itemId: 'coal_ore', criteria: 'minecraft.mined:minecraft.coal_ore', xp: 3, pts: 5 }),
+  OnEvent({ parent: Mining, name: 'Stone', itemId: 'stone', criteria: 'minecraft.mined:minecraft.stone', Xp: 1, pts: 5 }),
+  OnEvent({ parent: Mining, name: 'Coal Ore', itemId: 'coal_ore', criteria: 'minecraft.mined:minecraft.coal_ore', Xp: 3, pts: 5 }),
   OnEvent({ parent: Mining, itemId: 'iron_ore' })
 );
 Mining.achievements.push(

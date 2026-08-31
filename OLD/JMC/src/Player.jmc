@@ -70,20 +70,20 @@ class Player {
         }
 
         function task_is() {
-            Player.onEvent.set_xp() with ::temp.Player.Task;
+            Player.onEvent.set_Xp() with ::temp.Player.Task;
             Player.onEvent.set_point() with ::temp.Player.Task;
             
 
             // Set storages
-            $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_xp int 1 run scoreboard players get @s skills.$(name).xp;
-            $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.xpToNext int 1 run scoreboard players get @s skills.$(name).xpToNext;
+            $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_Xp int 1 run scoreboard players get @s skills.$(name).Xp;
+            $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.XpToNext int 1 run scoreboard players get @s skills.$(name).XpToNext;
             $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_lvl int 1 run scoreboard players get @s skills.$(name).lvl;
             ::temp.Player.tellraw_comp.roman_lvl = ::temp.Player.tellraw_comp.current_lvl;
             roman_conv(roman_lvl, temp.Player.tellraw_comp);
 
             // Get percentage %
-            $scoreboard players operation $den skills.__variable__ = @s skills.$(name).xp;
-            $scoreboard players operation $num skills.__variable__ = @s skills.$(name).xpToNext;
+            $scoreboard players operation $den skills.__variable__ = @s skills.$(name).Xp;
+            $scoreboard players operation $num skills.__variable__ = @s skills.$(name).XpToNext;
 
             $100ratio = $den;
             $100ratio *= 100;
@@ -91,40 +91,40 @@ class Player {
             ::temp.Player.tellraw_comp.100ratio = $100ratio;
 
             // Send notif
-            $execute if score @s skills.$(name).lvl matches ..99 as @s[tag=skills.pref.xp_notif] run Player.onEvent.xp_notif() with ::temp.Player.tellraw_comp;
-            $execute if score @s skills.$(name).lvl matches 100 as @s[tag=skills.pref.xp_notif] run Player.onEvent.xp_notif_max() with ::temp.Player.tellraw_comp;
+            $execute if score @s skills.$(name).lvl matches ..99 as @s[tag=skills.pref.Xp_notif] run Player.onEvent.Xp_notif() with ::temp.Player.tellraw_comp;
+            $execute if score @s skills.$(name).lvl matches 100 as @s[tag=skills.pref.Xp_notif] run Player.onEvent.Xp_notif_max() with ::temp.Player.tellraw_comp;
 
             // Lvl check
-            $execute if score @s skills.$(name).lvl matches ..99 if score @s skills.$(name).xp >= @s skills.$(name).xpToNext run Player.onEvent.lvl() with ::temp.Player.tellraw_comp;
+            $execute if score @s skills.$(name).lvl matches ..99 if score @s skills.$(name).Xp >= @s skills.$(name).XpToNext run Player.onEvent.lvl() with ::temp.Player.tellraw_comp;
             
         }
 
-        function xp_notif() {
-            $Text.actionbar(@s, "&<aqua>+$(xp) &<aqua>XP (x&<$xp_power>) &<dark_gray>• &<gold>+$(point) &<gold>SP (x&<$point_power>) &<dark_gray>| &<#A888B5>$(name) &<#EFB6C8, bold>$(roman_lvl) &<dark_gray>| &<gray>$(current_xp)&<dark_gray>/&<gray>$(xpToNext) $(100ratio)%");
+        function Xp_notif() {
+            $Text.actionbar(@s, "&<aqua>+$(Xp) &<aqua>Xp (x&<$Xp_power>) &<dark_gray>• &<gold>+$(point) &<gold>SP (x&<$point_power>) &<dark_gray>| &<#A888B5>$(name) &<#EFB6C8, bold>$(roman_lvl) &<dark_gray>| &<gray>$(current_Xp)&<dark_gray>/&<gray>$(XpToNext) $(100ratio)%");
         }
 
-        function xp_notif_max() {
-            $Text.actionbar(@s, "&<gold>+$(point) &<bold>x&<$point_power> &<gold>SP &<dark_gray>| &<light_purple>$(name) &<dark_purple, bold>$(current_lvl) &<dark_gray>| &<gray>$(current_xp)&<dark_gray>/&<gray>$(current_xp) 100%");
+        function Xp_notif_max() {
+            $Text.actionbar(@s, "&<gold>+$(point) &<bold>x&<$point_power> &<gold>SP &<dark_gray>| &<light_purple>$(name) &<dark_purple, bold>$(current_lvl) &<dark_gray>| &<gray>$(current_Xp)&<dark_gray>/&<gray>$(current_Xp) 100%");
         }
 
-        function set_xp() {
-            // Get xp from DB
-            JMC.put("$scoreboard players set $xp skills.__variable__ $(xp)");
+        function set_Xp() {
+            // Get Xp from DB
+            JMC.put("$scoreboard players set $Xp skills.__variable__ $(Xp)");
 
             // Mult by the number of times task was repeated -> 5sec loop
-            JMC.put("$scoreboard players operation $xp skills.__variable__ *= @s skills.$(name).task.$(task)");
+            JMC.put("$scoreboard players operation $Xp skills.__variable__ *= @s skills.$(name).task.$(task)");
             // Mult by booster
-            $xp_power = skills.booster.1.power:@s;
-            $xp *= $xp_power;
+            $Xp_power = skills.booster.1.power:@s;
+            $Xp *= $Xp_power;
 
             // Storage set
             ::temp.Player.tellraw_comp = ::temp.Player.Task;
 
-            // Set new xp to the multiplied one
-            ::temp.Player.tellraw_comp.xp = $xp;
+            // Set new Xp to the multiplied one
+            ::temp.Player.tellraw_comp.Xp = $Xp;
             
-            // Add xp with new components
-            execute run { $scoreboard players add @s skills.$(name).xp $(xp); } with ::temp.Player.tellraw_comp;
+            // Add Xp with new components
+            execute run { $scoreboard players add @s skills.$(name).Xp $(Xp); } with ::temp.Player.tellraw_comp;
         }
 
         function set_point() {
@@ -140,15 +140,15 @@ class Player {
 
         function lvl() {
             $execute if score @s skills.$(name).lvl matches ..98 run {
-                // Reset xp
-                $scoreboard players operation @s skills.$(name).xp -= @s skills.$(name).xpToNext;
+                // Reset Xp
+                $scoreboard players operation @s skills.$(name).Xp -= @s skills.$(name).XpToNext;
 
-                // Set new xpToNext: "U(n+1) = U(n)*1.2" < 2000
-                    $scoreboard players operation $xpToNext skills.__variable__ = @s skills.$(name).xpToNext;
-                    $xpToNext *= 12;
-                    $xpToNext /= 10;
-                    $scoreboard players operation @s skills.$(name).xpToNext = $xpToNext skills.__variable__;
-                    $execute if score $xpToNext skills.__variable__ matches 2001.. run scoreboard players set @s skills.$(name).xpToNext 2000;
+                // Set new XpToNext: "U(n+1) = U(n)*1.2" < 2000
+                    $scoreboard players operation $XpToNext skills.__variable__ = @s skills.$(name).XpToNext;
+                    $XpToNext *= 12;
+                    $XpToNext /= 10;
+                    $scoreboard players operation @s skills.$(name).XpToNext = $XpToNext skills.__variable__;
+                    $execute if score $XpToNext skills.__variable__ matches 2001.. run scoreboard players set @s skills.$(name).XpToNext 2000;
                 
                 // Store $temp_lvl for lvl_notif
                     $scoreboard players operation $temp_lvl skills.__variable__ = @s skills.$(name).lvl;
@@ -175,11 +175,11 @@ class Player {
                     } with ::temp.Player.title;
 
                 // Get percentage %
-                    $scoreboard players operation $num skills.__variable__ = @s skills.$(name).xp;
-                    $scoreboard players operation $den skills.__variable__ = @s skills.$(name).xpToNext;
+                    $scoreboard players operation $num skills.__variable__ = @s skills.$(name).Xp;
+                    $scoreboard players operation $den skills.__variable__ = @s skills.$(name).XpToNext;
                     
-                    ::temp.Player.title.xp = $num;
-                    ::temp.Player.title.xpToNext = $den;
+                    ::temp.Player.title.Xp = $num;
+                    ::temp.Player.title.XpToNext = $den;
                     $15ratio = $num;
                     $15ratio *= 15;
                     $15ratio /= $den;
@@ -216,15 +216,15 @@ class Player {
                 execute as @s[tag=skills.pref.lvl_notif] run Player.onEvent.lvl_notif() with ::temp.Player.title;
                 
                 // Set storages
-                    $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_xp int 1 run scoreboard players get @s skills.$(name).xp;
-                    $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.xpToNext int 1 run scoreboard players get @s skills.$(name).xpToNext;
+                    $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_Xp int 1 run scoreboard players get @s skills.$(name).Xp;
+                    $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.XpToNext int 1 run scoreboard players get @s skills.$(name).XpToNext;
                     $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_lvl int 1 run scoreboard players get @s skills.$(name).lvl;
                     ::temp.Player.tellraw_comp.roman_lvl = ::temp.Player.tellraw_comp.current_lvl;
                     roman_conv(roman_lvl, temp.Player.tellraw_comp);
 
                 // Get percentage %
-                    $scoreboard players operation $den skills.__variable__ = @s skills.$(name).xp;
-                    $scoreboard players operation $num skills.__variable__ = @s skills.$(name).xpToNext;
+                    $scoreboard players operation $den skills.__variable__ = @s skills.$(name).Xp;
+                    $scoreboard players operation $num skills.__variable__ = @s skills.$(name).XpToNext;
 
                     $100ratio = $den;
                     $100ratio *= 100;
@@ -232,19 +232,19 @@ class Player {
                     ::temp.Player.tellraw_comp.100ratio = $100ratio;
 
                 // Re Send notif
-                execute as @s[tag=skills.pref.lvl_notif] run Player.onEvent.xp_notif() with ::temp.Player.tellraw_comp;
+                execute as @s[tag=skills.pref.lvl_notif] run Player.onEvent.Xp_notif() with ::temp.Player.tellraw_comp;
                 execute as @s[tag=skills.pref.lvl_broadcast] run Player.onEvent.lvl_broadcast() with ::temp.Player.tellraw_comp;
                 // While
-                $execute if score @s skills.$(name).xp >= @s skills.$(name).xpToNext run Player.onEvent.lvl() with ::temp.Player.tellraw_comp;
+                $execute if score @s skills.$(name).Xp >= @s skills.$(name).XpToNext run Player.onEvent.lvl() with ::temp.Player.tellraw_comp;
                 
                 
             } with ::temp.Player.tellraw_comp;
             $execute if score @s skills.$(name).lvl matches 99 run {
-                // Reset xp
-                $scoreboard players operation @s skills.$(name).xp -= @s skills.$(name).xpToNext;
+                // Reset Xp
+                $scoreboard players operation @s skills.$(name).Xp -= @s skills.$(name).XpToNext;
 
-                // Set new xpToNext: "U(n+1) = U(n)*1.2" < 5000
-                $scoreboard players operation @s skills.$(name).xpToNext = @s skills.$(name).xp;
+                // Set new XpToNext: "U(n+1) = U(n)*1.2" < 5000
+                $scoreboard players operation @s skills.$(name).XpToNext = @s skills.$(name).Xp;
                 
                 // Store $temp_lvl for lvl_notif
                 $scoreboard players operation $temp_lvl skills.__variable__ = @s skills.$(name).lvl;
@@ -264,7 +264,7 @@ class Player {
                 ::temp.Player.title.prev_lvl = ::DB.Roman.99;
 
                 // Get percentage %
-                $::temp.Player.title.xp = scoreboard players get @s skills.$(name).xp;
+                $::temp.Player.title.Xp = scoreboard players get @s skills.$(name).Xp;
                 
                 $15ratio = 15;
                 $100ratio = 100;
@@ -297,15 +297,15 @@ class Player {
 
                 // Set New bar
                 // Set storages
-                $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_xp int 1 run scoreboard players get @s skills.$(name).xp;
-                $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.xpToNext int 1 run scoreboard players get @s skills.$(name).xpToNext;
+                $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_Xp int 1 run scoreboard players get @s skills.$(name).Xp;
+                $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.XpToNext int 1 run scoreboard players get @s skills.$(name).XpToNext;
                 $execute store result storage prodiges_skills:prodiges_skills temp.Player.tellraw_comp.current_lvl int 1 run scoreboard players get @s skills.$(name).lvl;
                 ::temp.Player.tellraw_comp.roman_lvl = ::temp.Player.tellraw_comp.current_lvl;
                 roman_conv(roman_lvl, temp.Player.tellraw_comp);
 
                 // Get percentage %
-                $scoreboard players operation $den skills.__variable__ = @s skills.$(name).xp;
-                $scoreboard players operation $num skills.__variable__ = @s skills.$(name).xpToNext;
+                $scoreboard players operation $den skills.__variable__ = @s skills.$(name).Xp;
+                $scoreboard players operation $num skills.__variable__ = @s skills.$(name).XpToNext;
 
                 $100ratio = $den;
                 $100ratio *= 100;
@@ -313,7 +313,7 @@ class Player {
                 ::temp.Player.tellraw_comp.100ratio = $100ratio;
 
                 // Re Send notif
-                execute as @s[tag=skills.pref.lvl_notif] run Player.onEvent.xp_notif() with ::temp.Player.tellraw_comp;
+                execute as @s[tag=skills.pref.lvl_notif] run Player.onEvent.Xp_notif() with ::temp.Player.tellraw_comp;
                 execute as @s[tag=skills.pref.lvl_broadcast] run Player.onEvent.lvl_broadcast() with ::temp.Player.tellraw_comp;
 
                 
@@ -324,7 +324,7 @@ class Player {
             // ╔ ╗ ║ ╚ ╝  ═  
             if (entity @s[tag=skills.pref.sound]) { execute at @s run playsound minecraft:entity.player.levelup ambient @s[tag=skills.pref.sound] ~ ~ ~ 1 0; }
 
-            $tellraw @p[tag=skills.pref.lvl_notif] ["",{"text":"=================================","color":"#715979"},{"text":"\n "},{"text":"Skill ","color":"yellow"},{"text":"Level Up","bold":true,"color":"yellow"},{"text":"!","color":"yellow"},{"text":" $(name)","color":"#A888B5"},{"text":" $(prev_lvl)","color":"dark_gray"},{"text":"\u2192","bold":true,"color":"dark_gray"},{"text":"$(current_lvl)\n ","bold":true,"color":"#EFB6C8"},{"text":"\n"},{"text":" Rewards:","color":"yellow"},{"text":"\n"},{"text":"  -","color":"dark_gray"},{"text":" $(show)\n"},{"text":"  -","color":"dark_gray"},{"text":" +$(point) SP","color":"gold"},{"text":"\n"},{"text":" ","italic":true},{"text":"Claim your rewards in the menu. (i)","italic":true,"color":"gray","hoverEvent":{"action":"show_text","contents":"§fOpen the UI using §d/trigger skills.lib.ui"}},{"text":"\n\n "},{"text":"Progress to","color":"gray"},{"text":" $(name)","color":"#A888B5"},{"text":" $(next_lvl)","bold":true,"color":"#EFB6C8"},{"text":":","color":"gray"},{"text":" $(100ratio)%","color":"gray"},{"text":"\n"},{"text":" $(bar)"},{"text":" $(xp)","color":"#EFB6C8"},{"text":"/","color":"#A888B5"},{"text":"$(xpToNext)","color":"#EFB6C8"},{"text":"\n"},{"text":"=================================","color":"#715979"}];
+            $tellraw @p[tag=skills.pref.lvl_notif] ["",{"text":"=================================","color":"#715979"},{"text":"\n "},{"text":"Skill ","color":"yellow"},{"text":"Level Up","bold":true,"color":"yellow"},{"text":"!","color":"yellow"},{"text":" $(name)","color":"#A888B5"},{"text":" $(prev_lvl)","color":"dark_gray"},{"text":"\u2192","bold":true,"color":"dark_gray"},{"text":"$(current_lvl)\n ","bold":true,"color":"#EFB6C8"},{"text":"\n"},{"text":" Rewards:","color":"yellow"},{"text":"\n"},{"text":"  -","color":"dark_gray"},{"text":" $(show)\n"},{"text":"  -","color":"dark_gray"},{"text":" +$(point) SP","color":"gold"},{"text":"\n"},{"text":" ","italic":true},{"text":"Claim your rewards in the menu. (i)","italic":true,"color":"gray","hoverEvent":{"action":"show_text","contents":"§fOpen the UI using §d/trigger skills.lib.ui"}},{"text":"\n\n "},{"text":"Progress to","color":"gray"},{"text":" $(name)","color":"#A888B5"},{"text":" $(next_lvl)","bold":true,"color":"#EFB6C8"},{"text":":","color":"gray"},{"text":" $(100ratio)%","color":"gray"},{"text":"\n"},{"text":" $(bar)"},{"text":" $(Xp)","color":"#EFB6C8"},{"text":"/","color":"#A888B5"},{"text":"$(XpToNext)","color":"#EFB6C8"},{"text":"\n"},{"text":"=================================","color":"#715979"}];
             
             $Text.title(@s, "&<#A888B5>$(name) &<#EFB6C8>Level Up!");
             $Text.subtitle(@s, "&<#ce81ff>$(prev_lvl) &<dark_gray,bold>➜ &<bold, #ce81ff>$(current_lvl)");
@@ -357,7 +357,7 @@ class Player {
             
             $type = ::temp.Booster.use.type_int;
             if ($type == 1 && skills.booster.1.duration:@s > 1) {
-                Text.actionbar(@s, "&<red, bold>Skills ♦ &<red>You already have an active &<aqua>XP Booster&<red>!");
+                Text.actionbar(@s, "&<red, bold>Skills ♦ &<red>You already have an active &<aqua>Xp Booster&<red>!");
             } else if ($type == 2 && skills.booster.2.duration:@s > 1) {
                 Text.actionbar(@s, "&<red, bold>Skills ♦ &<red>You already have an active &<gold>SP Booster&<red>!");
             } else {

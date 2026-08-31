@@ -16,7 +16,7 @@ export function initMilestonesPage(Menu: GUI) {
     slot: 10,
     name: { text: 'Milestone: Level 50', color: 'white' },
     lore: [
-      { text: 'Reward: ', color: 'gray' }, { text: '+5% Global XP', color: 'green' },
+      { text: 'Reward: ', color: 'gray' }, { text: '+5% Global Xp', color: 'green' },
       { text: 'Status: ', color: 'gray' }, { text: 'LOCKED', color: 'red' }
     ],
     onClick: () => Errors.functionNotImplemented()

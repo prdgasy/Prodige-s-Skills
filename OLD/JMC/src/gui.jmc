@@ -227,7 +227,7 @@ class GUI {
             } else if (!data entity @s Items[{ Slot:11b } ]) {
                 toggler_tag(lvl_broadcast);
             } else if (!data entity @s Items[{ Slot:12b } ]) {
-                toggler_tag(xp_notif);
+                toggler_tag(Xp_notif);
             } else if (!data entity @s Items[{ Slot:13b } ]) {
                 toggler_tag(lvl_notif);
             } else if (!data entity @s Items[{ Slot:14b } ]) {
@@ -265,13 +265,13 @@ function 6() {
         tellraw @p ["", { "text":"\nSkills Config \u2666 Editing Rewards", "bold":true, "color":"yellow" }, { "text":"\n" }, { "text":"\u25ba Open the file: ", "color":"white" }, { "text":"Prodige's Skills\\data\\prodiges_skills\\function\\config\\rewards", "color":"light_purple" }, { "text":"\n\n" }, { "text":"\u25ba Replace the", "color":"white" }, { "text":" /function ...", "color":"light_purple" }, { "text":" commands with the function you want to execute when a player levels up.", "color":"white" }, { "text":"\n\n" }, { "text":"\u25ba Save the file and reload with ", "color":"white" }, { "text":"/reload", "color":"light_purple" }, { "text":".", "color":"white" } ];
         skills.lib.gui.Logic.click_event();
     } else if (!data entity @s Items[{ Slot:12b } ]) {
-        tellraw @p ["", { "text":"\n" }, { "text":"Skills Config \u2666 Editing XP from Tasks", "bold":true, "color":"yellow" }, { "text":"\n\u25ba Open the file: " }, { "text":"Prodige's Skills\\data\\prodiges_skills\\function\\config\\skills.mcfunction", "color":"light_purple" }, { "text":"\n You\u2019ll see a structure like this:\n" }, { "text":"...", "color":"gray" }, { "text":"\n" }, { "text":"Mining", "color":"white" }, { "text":": " }, { "text":"{", "color":"gold" }, { "text":"\n    " }, { "text":"...", "color":"gray" }, { "text":",\n    " }, { "text":"Tasks", "color":"light_purple" }, { "text":": " }, { "text":"[", "color":"blue" }, { "text":"\n        " }, { "text":"{", "color":"aqua" }, { "text":"..., task: \"stone\",", "color":"gray" }, { "text":" xp", "color":"green" }, { "text":": 1" }, { "text":", ...", "color":"gray" }, { "text":"}", "color":"aqua" }, { "text":",\n        " }, { "text":"...", "color":"gray" }, { "text":"\n    " }, { "text":"]", "color":"blue" }, { "text":",\n    " }, { "text":"...", "color":"gray" }, { "text":".\n" }, { "text":"}", "color":"gold" }, { "text":"\n" }, { "text":"...", "color":"gray" }, { "text":"\n\u25ba In the " }, { "text":"Tasks", "color":"light_purple" }, { "text":" list, modify the " }, { "text":"xp", "color":"green" }, { "text":" key to the value you want for each task.\n\u25ba Save the file and reload with " }, { "text":"/reload", "color":"light_purple" }, { "text":".\n " } ];
+        tellraw @p ["", { "text":"\n" }, { "text":"Skills Config \u2666 Editing Xp from Tasks", "bold":true, "color":"yellow" }, { "text":"\n\u25ba Open the file: " }, { "text":"Prodige's Skills\\data\\prodiges_skills\\function\\config\\skills.mcfunction", "color":"light_purple" }, { "text":"\n You\u2019ll see a structure like this:\n" }, { "text":"...", "color":"gray" }, { "text":"\n" }, { "text":"Mining", "color":"white" }, { "text":": " }, { "text":"{", "color":"gold" }, { "text":"\n    " }, { "text":"...", "color":"gray" }, { "text":",\n    " }, { "text":"Tasks", "color":"light_purple" }, { "text":": " }, { "text":"[", "color":"blue" }, { "text":"\n        " }, { "text":"{", "color":"aqua" }, { "text":"..., task: \"stone\",", "color":"gray" }, { "text":" Xp", "color":"green" }, { "text":": 1" }, { "text":", ...", "color":"gray" }, { "text":"}", "color":"aqua" }, { "text":",\n        " }, { "text":"...", "color":"gray" }, { "text":"\n    " }, { "text":"]", "color":"blue" }, { "text":",\n    " }, { "text":"...", "color":"gray" }, { "text":".\n" }, { "text":"}", "color":"gold" }, { "text":"\n" }, { "text":"...", "color":"gray" }, { "text":"\n\u25ba In the " }, { "text":"Tasks", "color":"light_purple" }, { "text":" list, modify the " }, { "text":"Xp", "color":"green" }, { "text":" key to the value you want for each task.\n\u25ba Save the file and reload with " }, { "text":"/reload", "color":"light_purple" }, { "text":".\n " } ];
         skills.lib.gui.Logic.click_event();
     } else if (!data entity @s Items[{ Slot:13b } ]) {
         tellraw @p ["", { "text":"\n" }, { "text":"Skills Config \u2666 Editing Points per Task", "bold":true, "color":"yellow" }, { "text":"\n\u25ba Open the file: " }, { "text":"Prodige's Skills\\data\\prodiges_skills\\function\\config\\points.mcfunction", "color":"light_purple" }, { "text":"\n\n" }, { "text":"execute store result score $skills.point skills.__variable__ run random ", "italic":true, "color":"gray" }, { "text":"roll", "italic":true, "color":"gold" }, { "text":" 1", "italic":true, "color":"gold" }, { "text":"..", "italic":true, "color":"gray" }, { "text":"5", "italic":true, "color":"gold" }, { "text":"\n\n\u25ba Modify the values of the " }, { "text":"roll", "color":"gold" }, { "text":", which represent the " }, { "text":"minimum", "color":"gold" }, { "text":" and " }, { "text":"maximum", "color":"gold" }, { "text":" points you can earn.\n\n\u25ba Save the file and reload with " }, { "text":"/reload", "color":"light_purple" }, { "text":"." } ];
         skills.lib.gui.Logic.click_event();
     } else if (!data entity @s Items[{ Slot:14b } ]) {
-        tellraw @p ["", { "text":"\n" }, { "text":"Skills Config \u2666 Adding Tasks", "bold":true, "color":"yellow" }, { "text":"\n\u25ba Open the file: " }, { "text":"Prodige's Skills\\data\\prodiges_skills\\function\\config\\skills.mcfunction", "color":"light_purple" }, { "text":"\n\n\u25ba Find the " }, { "text":"Tasks", "color":"light_purple" }, { "text":" list, and add a new task like this:\n" }, { "text":"{ name: \"Mining\", task: \"end_stone\", xp: 15, item_repr: \"end_stone\", item_name: \"End Stone\", criteria: \"mined\" }", "color":"gold" }, { "text":"\n\n\u25ba To remove a task, simply delete the corresponding dictionary.\n\n\u25ba Save the file and reload with " }, { "text":"/reload", "color":"light_purple" }, { "text":"." } ];
+        tellraw @p ["", { "text":"\n" }, { "text":"Skills Config \u2666 Adding Tasks", "bold":true, "color":"yellow" }, { "text":"\n\u25ba Open the file: " }, { "text":"Prodige's Skills\\data\\prodiges_skills\\function\\config\\skills.mcfunction", "color":"light_purple" }, { "text":"\n\n\u25ba Find the " }, { "text":"Tasks", "color":"light_purple" }, { "text":" list, and add a new task like this:\n" }, { "text":"{ name: \"Mining\", task: \"end_stone\", Xp: 15, item_repr: \"end_stone\", item_name: \"End Stone\", criteria: \"mined\" }", "color":"gold" }, { "text":"\n\n\u25ba To remove a task, simply delete the corresponding dictionary.\n\n\u25ba Save the file and reload with " }, { "text":"/reload", "color":"light_purple" }, { "text":"." } ];
         skills.lib.gui.Logic.click_event();
     } else if (!data entity @s Items[{ Slot:15b } ]) {
         Text.tellraw(@p, "&<yellow, bold>Skills ♦ &<yellow>Everyone's skills were reset.");
@@ -371,7 +371,7 @@ class Macro {
         '["",{"text":"$(desc2) ","italic":false,"color":"white"},{"text":" ","italic":false}]',
         '[""]',
         '["",{"text":"Progress to ","italic":false,"color":"gray"},{"text":"$(name) ","italic":false,"color":"yellow"},{"text":"$(nextLvl)","italic":false,"color":"yellow","bold":true},{"text":":","italic":false,"color":"gray"},{"text":" ","italic":false},{"text":"$(100ratio)%","italic":false,"color":"gray"}]',
-        '["",{"text":" ","italic":false,"color":"gray"},{"text":"$(bar)","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"$(xp)","italic":false,"color":"#efb6c8"},{"text":"/","italic":false,"color":"#a888b5"},{"text":"$(xpToNext)","italic":false,"color":"#efb6c8"}]',
+        '["",{"text":" ","italic":false,"color":"gray"},{"text":"$(bar)","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"$(Xp)","italic":false,"color":"#efb6c8"},{"text":"/","italic":false,"color":"#a888b5"},{"text":"$(XpToNext)","italic":false,"color":"#efb6c8"}]',
         '[""]',
         '["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" ","italic":false},{"text":"Prestige:","italic":false,"color":"#a888b5"},{"text":" ","italic":false},{"text":"$(name) §8§l♦ §8[§c§l$(prestige_lvl)§8]","italic":false,"color":"#efb6c8"}]',
         '[""]',
@@ -463,21 +463,21 @@ class setItem {
     }
 
     // Shop
-    item replace entity @s container.22 with player_head[profile = { id:[I; 1434832075, -102998962, -1229628019, 1369636598], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = ['["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
+    item replace entity @s container.22 with player_head[profile = { id:[I; 1434832075, -102998962, -1229628019, 1369636598], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = ['["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"Xp","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
     // Discord
     item replace entity @s container.26 with player_head[profile = { id:[I; -566027055, -1373812234, -1824937619, -1364409557], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzg3M2MxMmJmZmI1MjUxYTBiODhkNWFlNzVjNzI0N2NiMzlhNzVmZjFhODFjYmU0YzhhMzliMzExZGRlZGEifX19" } ] }, custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Join the discord","color":"blue","italic":false}', lore = ['[{"text":"Need help ?","color":"white","italic":false}]', '[""]', '[{"text":"Click to join the discord!","color":"yellow","italic":false}]']];
 
     // Profile & Preferences
     ::temp.gui.profile.sp = skills.player.sp:@p;
 
-    ::temp.gui.profile.booster_xp = "§c-";
-    $xp_duration = skills.booster.1.duration:@p;
-    if ($xp_duration > 1) {
-        ::temp.gui.profile.booster_xp_duration = $xp_duration;
-        ::temp.gui.profile.booster_xp_power = skills.booster.1.power:@p;
+    ::temp.gui.profile.booster_Xp = "§c-";
+    $Xp_duration = skills.booster.1.duration:@p;
+    if ($Xp_duration > 1) {
+        ::temp.gui.profile.booster_Xp_duration = $Xp_duration;
+        ::temp.gui.profile.booster_Xp_power = skills.booster.1.power:@p;
 
         execute run {
-            $::temp.gui.profile.booster_xp = "§bx$(booster_xp_power) XP Booster §7- $(booster_xp_duration) minute(s) left";
+            $::temp.gui.profile.booster_Xp = "§bx$(booster_Xp_power) Xp Booster §7- $(booster_Xp_duration) minute(s) left";
         } with ::temp.gui.profile;
     }
 
@@ -493,7 +493,7 @@ class setItem {
     }
 
     execute run {
-        JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skills.lib.gui] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{skills_lib_gui:1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false},{"text":""},{"text":"Click to view!","color":"yellow","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
+        JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skills.lib.gui] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{skills_lib_gui:1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_Xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false},{"text":""},{"text":"Click to view!","color":"yellow","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
     } with ::temp.gui.profile;
 
     // Skills
@@ -521,14 +521,14 @@ class setItem {
             ::temp.gui.profile.power = $prestige;
 
             // Get scores
-            $scoreboard players operation $x skills.__variable__ = @p skills.$(name).xp;
-            $scoreboard players operation $y skills.__variable__ = @p skills.$(name).xpToNext;
+            $scoreboard players operation $x skills.__variable__ = @p skills.$(name).Xp;
+            $scoreboard players operation $y skills.__variable__ = @p skills.$(name).XpToNext;
             $scoreboard players operation $lvl skills.__variable__ = @p skills.$(name).lvl;
             $nextLvl = $lvl;
             $nextLvl += 1;
 
-            ::temp.gui.profile.xp = $x;
-            ::temp.gui.profile.xpToNext = $y;
+            ::temp.gui.profile.Xp = $x;
+            ::temp.gui.profile.XpToNext = $y;
             ::temp.gui.profile.lvl_int = $lvl;
             ::temp.gui.profile.lvl = $lvl;
             ::temp.gui.profile.nextLvl = $nextLvl;
@@ -577,14 +577,14 @@ function 2() {
     } with ::temp.gui.prog;
     execute run {
         // Get scores
-        $scoreboard players operation $x skills.__variable__ = @p skills.$(name).xp;
-        $scoreboard players operation $y skills.__variable__ = @p skills.$(name).xpToNext;
+        $scoreboard players operation $x skills.__variable__ = @p skills.$(name).Xp;
+        $scoreboard players operation $y skills.__variable__ = @p skills.$(name).XpToNext;
         $scoreboard players operation $lvl skills.__variable__ = @p skills.$(name).lvl;
         $nextLvl = $lvl;
         $nextLvl += 1;
 
-        ::temp.gui.prog.data.xp = $x;
-        ::temp.gui.prog.data.xpToNext = $y;
+        ::temp.gui.prog.data.Xp = $x;
+        ::temp.gui.prog.data.XpToNext = $y;
         ::temp.gui.prog.data.lvl = $lvl;
         ::temp.gui.prog.data.nextLvl = $nextLvl;
         roman_conv(lvl, temp.gui.prog.data);
@@ -626,7 +626,7 @@ function 2() {
 
     GUI.prog.fill();
 
-    item replace entity @s container.17 with book[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Task Rewards","italic":false,"color":"#996666"}]', lore = ['["",{"text":"See","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"XP","italic":false,"color":"aqua"},{"text":" ","italic":false,"color":"gray"},{"text":"values for each","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"Tasks.","italic":false,"color":"gold"}]', '["",{"text":"Find out which actions pay off","italic":false,"color":"gray"}]', '["",{"text":"the most!","italic":false,"color":"gray"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
+    item replace entity @s container.17 with book[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Task Rewards","italic":false,"color":"#996666"}]', lore = ['["",{"text":"See","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"Xp","italic":false,"color":"aqua"},{"text":" ","italic":false,"color":"gray"},{"text":"values for each","italic":false,"color":"white"},{"text":" ","italic":false,"color":"gray"},{"text":"Tasks.","italic":false,"color":"gold"}]', '["",{"text":"Find out which actions pay off","italic":false,"color":"gray"}]', '["",{"text":"the most!","italic":false,"color":"gray"}]', '[""]', '["",{"text":"Click to view!","italic":false,"color":"yellow"}]']];
 }
 
 function 3() {
@@ -642,7 +642,7 @@ function 3() {
         $::temp.gui.tasks.item = ::DB.Skills.$(name).item;
     } with ::temp.gui.tasks;
     execute run {
-        $item replace entity @s container.9 with $(item)[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"$(name) Task Rewards","italic":false,"color":"yellow"}]', lore = ['["",{"text":"Here, you can find all ","italic":false,"color":"white"},{"text":"actions","italic":false,"color":"gold"}]', '["",{"text":"that grant ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"aqua"},{"text":". Check how much","italic":false,"color":"white"}]', '["",{"text":"each ","italic":false,"color":"white"},{"text":"task rewards you","italic":false,"color":"dark_purple"},{"text":". Use this","italic":false,"color":"white"}]', '["",{"text":"to optimize your skill","italic":false,"color":"white"}]', '["",{"text":"progression!","italic":false,"color":"white"}]'], !attribute_modifiers, enchantment_glint_override = true];
+        $item replace entity @s container.9 with $(item)[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"$(name) Task Rewards","italic":false,"color":"yellow"}]', lore = ['["",{"text":"Here, you can find all ","italic":false,"color":"white"},{"text":"actions","italic":false,"color":"gold"}]', '["",{"text":"that grant ","italic":false,"color":"white"},{"text":"Xp","italic":false,"color":"aqua"},{"text":". Check how much","italic":false,"color":"white"}]', '["",{"text":"each ","italic":false,"color":"white"},{"text":"task rewards you","italic":false,"color":"dark_purple"},{"text":". Use this","italic":false,"color":"white"}]', '["",{"text":"to optimize your skill","italic":false,"color":"white"}]', '["",{"text":"progression!","italic":false,"color":"white"}]'], !attribute_modifiers, enchantment_glint_override = true];
     } with ::temp.gui.tasks;
     // Get data
     execute run {
@@ -678,8 +678,8 @@ function 4() {
     item replace entity @s container.23 with barrier[custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Close","color":"red","italic":false}'];
     JMC.put('execute as @p run loot replace entity @n[type=chest_minecart, tag=skills.lib.gui] container.22 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile & Preferences","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{skills_lib_gui:1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":"Manage your §6settings §fand view your","type":"text","color":"white","italic":false},{"text":"§6stats§r. Customize your experience!","type":"text","color":"white","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
     item replace entity @s container.4 with paper[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"How to Change Preferences?","italic":false,"color":"yellow","bold":true}]', lore = ['["",{"text":"♦","italic":false,"bold":true,"color":"dark_gray"},{"text":" Click on any setting to toggle","italic":false,"color":"white"}]', '["",{"text":" it ","italic":false,"color":"white"},{"text":"on or off","italic":false,"color":"aqua"},{"text":".","italic":false,"color":"white"}]', '[""]', '["",{"text":"♦ ","italic":false,"bold":true,"color":"dark_gray"},{"text":"Your changes will ","italic":false,"color":"white"},{"text":"instantly","italic":false,"color":"gold"}]', '["",{"text":" apply—customize your experience","italic":false,"color":"white"}]', '["",{"text":" freely!","italic":false,"color":"white"}]']];
-    ::temp.gui.pref.xp_notif = "§a§l✔";
-    if (entity @p[tag = !skills.pref.xp_notif]) { ::temp.gui.pref.xp_notif = "§c§l❌"; }
+    ::temp.gui.pref.Xp_notif = "§a§l✔";
+    if (entity @p[tag = !skills.pref.Xp_notif]) { ::temp.gui.pref.Xp_notif = "§c§l❌"; }
 
     ::temp.gui.pref.lvl_notif = "§a§l✔";
     if (entity @p[tag = !skills.pref.lvl_notif]) { ::temp.gui.pref.lvl_notif = "§c§l❌"; }
@@ -697,7 +697,7 @@ function 4() {
         $item replace entity @s container.11 with ender_eye[
         custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Level Up Broadcast.","italic":false,"color":"light_purple"},{"text":" ","italic":false},{"text":"[","italic":false,"color":"gray"},{"text":"$(lvl_broadcast)","italic":false},{"text":"]","italic":false,"color":"gray"}]', lore = ['["",{"text":"Toggle broadcast of ","italic":false,"color":"white"},{"text":"level-up","italic":false,"color":"gold"}]', '["",{"text":"messages","italic":false,"color":"gold"},{"text":" to all players.","italic":false,"color":"white"}]', '["",{"text":"Let everyone know when you level","italic":false,"color":"gray"}]', '["",{"text":"up your skills with a public","italic":false,"color":"gray"}]', '["",{"text":"announcement!","italic":false,"color":"gray"}]', '[""]', '["",{"text":"Click to toggle!","italic":false,"color":"yellow"}]']];
         $item replace entity @s container.12 with bell[
-        custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"XP Notifications","italic":false,"color":"light_purple"},{"text":" ","italic":false,"color":"yellow"},{"text":"[","italic":false,"color":"gray"},{"text":"$(xp_notif)","italic":false},{"text":"]","italic":false,"color":"gray"}]', lore = ['["",{"text":"Toggle notifications for ","italic":false,"color":"white"},{"text":"XP gains","italic":false,"color":"gold"},{"text":".","italic":false,"color":"white"}]', '["",{"text":"Stay informed when you progress!","italic":false,"color":"gray"}]', '[""]', '["",{"text":"Click to toggle!","italic":false,"color":"yellow"}]']];
+        custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Xp Notifications","italic":false,"color":"light_purple"},{"text":" ","italic":false,"color":"yellow"},{"text":"[","italic":false,"color":"gray"},{"text":"$(Xp_notif)","italic":false},{"text":"]","italic":false,"color":"gray"}]', lore = ['["",{"text":"Toggle notifications for ","italic":false,"color":"white"},{"text":"Xp gains","italic":false,"color":"gold"},{"text":".","italic":false,"color":"white"}]', '["",{"text":"Stay informed when you progress!","italic":false,"color":"gray"}]', '[""]', '["",{"text":"Click to toggle!","italic":false,"color":"yellow"}]']];
         $item replace entity @s container.13 with fire_charge[
         custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Level-Up Notification","italic":false,"color":"light_purple"},{"text":" ","italic":false,"color":"yellow"},{"text":"[","italic":false,"color":"gray"},{"text":"$(lvl_notif)","italic":false},{"text":"]","italic":false,"color":"gray"}]', lore = ['["",{"text":"Toggle ","italic":false,"color":"white"},{"text":"level-up","italic":false,"color":"gold"},{"text":" notifications.","italic":false,"color":"white"}]', '["",{"text":"Receive a visual cue and a sound","italic":false,"color":"gray"}]', '["",{"text":"effect every time you level up!","italic":false,"color":"gray"}]', '[""]', '["",{"text":"Click to toggle!","italic":false,"color":"yellow"}]']];
         $item replace entity @s container.14 with note_block[
@@ -713,19 +713,19 @@ function 5() {
 
     item replace entity @s container.21 with arrow[custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Go Back","color":"gray","italic":false}'];
     item replace entity @s container.23 with barrier[custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Close","color":"red","italic":false}'];
-    item replace entity @s container.22 with player_head[profile = { id:[I; 1434832075, -102998962, -1229628019, 1369636598], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = ['["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"XP","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]']];
+    item replace entity @s container.22 with player_head[profile = { id:[I; 1434832075, -102998962, -1229628019, 1369636598], properties:[{ name:"textures", value:"eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTRjZGZiODhjZjhjMzY1NjMwNDI1NGU0ZDY3YTBhYjAyZjZkMjdjNzlmMWIxZTQwNGRjM2E3Y2U0ZWIyZGUwMCJ9fX0=" } ] }, custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Shop","italic":false,"color":"green"}]', lore = ['["",{"text":"Buy ","italic":false,"color":"white"},{"text":"boosters","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"Xp","italic":false,"color":"gold"},{"text":", ","italic":false,"color":"white"},{"text":"prestige","italic":false,"color":"gold"},{"text":", and","italic":false,"color":"white"}]', '["",{"text":"more! Unlock exclusive perks to","italic":false,"color":"white"}]', '["",{"text":"enhance your gameplay experience!","italic":false,"color":"white"}]']];
     // Profile & Preferences
 
     ::temp.gui.profile.sp = skills.player.sp:@p;
 
-    ::temp.gui.profile.booster_xp = "§c-";
-    $xp_duration = skills.booster.1.duration:@p;
-    if ($xp_duration > 1) {
-        ::temp.gui.profile.booster_xp_duration = $xp_duration;
-        ::temp.gui.profile.booster_xp_power = skills.booster.1.power:@p;
+    ::temp.gui.profile.booster_Xp = "§c-";
+    $Xp_duration = skills.booster.1.duration:@p;
+    if ($Xp_duration > 1) {
+        ::temp.gui.profile.booster_Xp_duration = $Xp_duration;
+        ::temp.gui.profile.booster_Xp_power = skills.booster.1.power:@p;
 
         execute run {
-            $::temp.gui.profile.booster_xp = "§bx$(booster_xp_power) XP Booster §7- $(booster_xp_duration) minute(s) left";
+            $::temp.gui.profile.booster_Xp = "§bx$(booster_Xp_power) Xp Booster §7- $(booster_Xp_duration) minute(s) left";
         } with ::temp.gui.profile;
     }
 
@@ -741,7 +741,7 @@ function 5() {
     }
 
     execute run {
-        JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skills.lib.gui] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{skills_lib_gui:1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
+        JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skills.lib.gui] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{skills_lib_gui:1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_Xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
     } with ::temp.gui.profile;
     // Items
     $mod = skills.gui.shop.boost_state:@s;
@@ -779,7 +779,7 @@ function 5() {
     }
 
     execute run {
-        $item replace entity @s container.15 with $(booster_item)[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Boosters","italic":false,"color":"green"}]', lore = ['[{"text":"Boosters temporarily ","italic":false,"color":"white"},{"text":"increase","italic":false,"color":"gold"}]', '["",{"text":"your XP or Skill Point","italic":false,"color":"gold"},{"text":" gain.","italic":false,"color":"white"}]', '[{"text":"Speed up your progressoin!","italic":false,"color":"gray"}]', '[""]', '{"text":"Click to view!","italic":false,"color":"yellow"}'], enchantment_glint_override = true];
+        $item replace entity @s container.15 with $(booster_item)[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Boosters","italic":false,"color":"green"}]', lore = ['[{"text":"Boosters temporarily ","italic":false,"color":"white"},{"text":"increase","italic":false,"color":"gold"}]', '["",{"text":"your Xp or Skill Point","italic":false,"color":"gold"},{"text":" gain.","italic":false,"color":"white"}]', '[{"text":"Speed up your progressoin!","italic":false,"color":"gray"}]', '[""]', '{"text":"Click to view!","italic":false,"color":"yellow"}'], enchantment_glint_override = true];
     } with ::temp.gui.shop;
 }
 
@@ -792,7 +792,7 @@ function 6() {
     item replace entity @s container.22 with command_block[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Configuration Panel","italic":false,"color":"red"}]', lore = ['["",{"text":"Modify all server-wide settings","italic":false,"color":"white"}]', '["",{"text":"here.","italic":false,"color":"white"}]']];
 
     item replace entity @s container.11 with carrot[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Rewards","italic":false,"color":"red"}]', lore = ['["",{"text":"Configure the rewards players","italic":false,"color":"white"}]', '["",{"text":"receive when they level up their","italic":false,"color":"white"}]', '["",{"text":"skills.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to see how!","italic":false,"color":"yellow"}]']];
-    item replace entity @s container.12 with minecraft:experience_bottle[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"XP from Tasks","italic":false,"color":"red"}]', lore = ['["",{"text":"Adjust the amount of XP players","italic":false,"color":"white"}]', '["",{"text":"earn from completing each tasks.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to see how!","italic":false,"color":"yellow"}]']];
+    item replace entity @s container.12 with minecraft:experience_bottle[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Xp from Tasks","italic":false,"color":"red"}]', lore = ['["",{"text":"Adjust the amount of Xp players","italic":false,"color":"white"}]', '["",{"text":"earn from completing each tasks.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to see how!","italic":false,"color":"yellow"}]']];
     item replace entity @s container.13 with gold_nugget[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Points per Task","italic":false,"color":"red"}]', lore = ['["",{"text":"Set the number of Skill Points players","italic":false,"color":"white"}]', '[{"text":"gain for each task they complete.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to see how!","italic":false,"color":"yellow"}]']];
     item replace entity @s container.14 with wooden_pickaxe[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Add Tasks","italic":false,"color":"red"}]', lore = ['["",{"text":"Add new tasks to the skill","italic":false,"color":"white"}]', '["",{"text":"system.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to see how!","italic":false,"color":"yellow"}]'], !attribute_modifiers];
     item replace entity @s container.15 with hopper[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Reset Everyone\'s Skills","italic":false,"color":"red"}]', lore = ['["",{"text":"Reset the skills of all players","italic":false,"color":"white"}]', '["",{"text":"on the server.","italic":false,"color":"white"}]', '[""]', '["",{"text":"Click to see how!","italic":false,"color":"yellow"}]']];
@@ -894,20 +894,20 @@ function 9() {
     // Boosters
     GUI.Mask.2();
     item replace entity @s container.21 with arrow[custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Go Back","color":"gray","italic":false}'];
-    item replace entity @s container.22 with experience_bottle[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Boosters","italic":false,"color":"green"}]', lore = ['[{"text":"Boosters temporarily ","italic":false,"color":"white"},{"text":"increase","italic":false,"color":"gold"}]', '["",{"text":"your XP or Skill Point","italic":false,"color":"gold"},{"text":" gain.","italic":false,"color":"white"}]', '[{"text":"Speed up your progressoin!","italic":false,"color":"gray"}]'], enchantment_glint_override = true];
+    item replace entity @s container.22 with experience_bottle[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"Boosters","italic":false,"color":"green"}]', lore = ['[{"text":"Boosters temporarily ","italic":false,"color":"white"},{"text":"increase","italic":false,"color":"gold"}]', '["",{"text":"your Xp or Skill Point","italic":false,"color":"gold"},{"text":" gain.","italic":false,"color":"white"}]', '[{"text":"Speed up your progressoin!","italic":false,"color":"gray"}]'], enchantment_glint_override = true];
     item replace entity @s container.23 with barrier[custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"Close","color":"red","italic":false}'];
     // Profile & Preferences
 
     ::temp.gui.profile.sp = skills.player.sp:@p;
 
-    ::temp.gui.profile.booster_xp = "§c-";
-    $xp_duration = skills.booster.1.duration:@p;
-    if ($xp_duration > 1) {
-        ::temp.gui.profile.booster_xp_duration = $xp_duration;
-        ::temp.gui.profile.booster_xp_power = skills.booster.1.power:@p;
+    ::temp.gui.profile.booster_Xp = "§c-";
+    $Xp_duration = skills.booster.1.duration:@p;
+    if ($Xp_duration > 1) {
+        ::temp.gui.profile.booster_Xp_duration = $Xp_duration;
+        ::temp.gui.profile.booster_Xp_power = skills.booster.1.power:@p;
 
         execute run {
-            $::temp.gui.profile.booster_xp = "§bx$(booster_xp_power) XP Booster §7- $(booster_xp_duration) minute(s) left";
+            $::temp.gui.profile.booster_Xp = "§bx$(booster_Xp_power) Xp Booster §7- $(booster_Xp_duration) minute(s) left";
         } with ::temp.gui.profile;
     }
 
@@ -923,7 +923,7 @@ function 9() {
     }
 
     execute run {
-        JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skills.lib.gui] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{skills_lib_gui:1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
+        JMC.put('$execute as @p run loot replace entity @n[type=chest_minecart, tag=skills.lib.gui] container.4 loot {"type":"minecraft:command","pools":[{"rolls":1,"entries":[{"type":"minecraft:item","name":"minecraft:player_head","functions":[{"function":"minecraft:set_name","entity":"this","target":"custom_name","name":{"text":"Profile","color":"light_purple","italic":false}},{"function":"minecraft:fill_player_head","entity":"this"},{"function":"minecraft:set_custom_data","tag":"{skills_lib_gui:1b}"},{"function":"minecraft:set_lore","entity":"this","lore":[{"text":""},{"text":"§8§l♦ §rPoints: ","type":"text","extra":[{"text":"$(sp) SP","type":"text","color":"gold","italic":false}],"color":"#A888B5","italic":false},{"text":""},{"text":"Active Boosters:","color":"yellow","italic":false},{"text":"§8• $(booster_Xp)","italic":false},{"text":"§8• $(booster_sp)","italic":false}],"mode":"append"}],"conditions":[]}]}]}');
     } with ::temp.gui.profile;
 
     Hardcode.repeatLists(
@@ -945,7 +945,7 @@ function 9() {
             ::temp.gui.Boosters.type = "[type]";
             GUI.Boosters.set_item() with ::temp.gui.Boosters;
         },
-        [["10", "11", "12", "14", "15", "16"], ["experience_bottle", "experience_bottle", "experience_bottle", "gold_ingot", "gold_ingot", "gold_ingot"], ["2", "3", "5", "2", "5", "8"], ["15", "60", "120", "20", "30", "60"], ["aqua", "aqua", "aqua", "gold", "gold", "gold"], ["35", "50", "150", "50", "100", "200"], ["XP", "XP", "XP", "SP", "SP", "SP"]]
+        [["10", "11", "12", "14", "15", "16"], ["experience_bottle", "experience_bottle", "experience_bottle", "gold_ingot", "gold_ingot", "gold_ingot"], ["2", "3", "5", "2", "5", "8"], ["15", "60", "120", "20", "30", "60"], ["aqua", "aqua", "aqua", "gold", "gold", "gold"], ["35", "50", "150", "50", "100", "200"], ["Xp", "Xp", "Xp", "SP", "SP", "SP"]]
     );
 }
 }
@@ -1030,7 +1030,7 @@ class prog {
             } with ::temp.gui.prog.data;
         } else {
             execute run {
-                $item replace entity @s container.$(slot) with amethyst_shard[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"§l$(lvl)","italic":false,"color":"#EFB6C8"}]', lore = ['[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '["",{"text":"$(desc1)","italic":false,"color":"white"}]', '["",{"text":"$(desc2)","italic":false,"color":"white"}]', '[""]', '["",{"text":"Progress to $(name)","italic":false,"color":"gray"},{"text":" $(nextLvl)","italic":false,"bold":true,"color":"#EFB6C8"},{"text":": ","italic":false,"color":"gray"},{"text":"$(100ratio)%","italic":false,"color":"#8174A0"}]', '["",{"text":"$(bar)","italic":false,"color":"white"},{"text":" $(xp)","italic":false,"color":"#EFB6C8"},{"text":"/","italic":false,"color":"#8174A0"},{"text":"$(xpToNext) ","italic":false,"color":"#EFB6C8"}]', '[""]', '[{"text":"Rewards:","italic":false,"color":"yellow"}]', '[{"text":"§8- $(show)"}]', '[{"text":"§8- §6+$(point) Skill Points (SP)"}]', ], !attribute_modifiers, enchantment_glint_override = true];
+                $item replace entity @s container.$(slot) with amethyst_shard[custom_data = { skills_lib_gui:1b }, custom_name = '["",{"text":"$(name) ","italic":false,"color":"#A888B5"},{"text":"§l$(lvl)","italic":false,"color":"#EFB6C8"}]', lore = ['[{"text":"Level $(lvlcheck_int)","italic":false,"color":"blue"}]', '["",{"text":"$(desc1)","italic":false,"color":"white"}]', '["",{"text":"$(desc2)","italic":false,"color":"white"}]', '[""]', '["",{"text":"Progress to $(name)","italic":false,"color":"gray"},{"text":" $(nextLvl)","italic":false,"bold":true,"color":"#EFB6C8"},{"text":": ","italic":false,"color":"gray"},{"text":"$(100ratio)%","italic":false,"color":"#8174A0"}]', '["",{"text":"$(bar)","italic":false,"color":"white"},{"text":" $(Xp)","italic":false,"color":"#EFB6C8"},{"text":"/","italic":false,"color":"#8174A0"},{"text":"$(XpToNext) ","italic":false,"color":"#EFB6C8"}]', '[""]', '[{"text":"Rewards:","italic":false,"color":"yellow"}]', '[{"text":"§8- $(show)"}]', '[{"text":"§8- §6+$(point) Skill Points (SP)"}]', ], !attribute_modifiers, enchantment_glint_override = true];
             } with ::temp.gui.prog.data;
         }
 
@@ -1076,7 +1076,7 @@ class Tasks {
     }
 
     function set_items() {
-        $item replace entity @s container.$(slot) with $(item_repr)[custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(item_name) §b+$(xp) xp","color":"gray","italic":false}', !attribute_modifiers];
+        $item replace entity @s container.$(slot) with $(item_repr)[custom_data = { skills_lib_gui:1b }, custom_name = '{"text":"$(item_name) §b+$(Xp) Xp","color":"gray","italic":false}', !attribute_modifiers];
     }
 }
 
@@ -1119,8 +1119,8 @@ class Prestige {
                 // Operations
                 $scoreboard players add @p skills.$(name).prestige 1;
                 $scoreboard players set @p skills.$(name).lvl 1;
-                $scoreboard players set @p skills.$(name).xp 0;
-                $execute store result score @p skills.$(name).xpToNext run data get storage prodiges_skills:prodiges_skills DB.Skills.$(name).xpstart;
+                $scoreboard players set @p skills.$(name).Xp 0;
+                $execute store result score @p skills.$(name).XpToNext run data get storage prodiges_skills:prodiges_skills DB.Skills.$(name).Xpstart;
                 playsound minecraft:entity.ender_dragon.growl ambient @p[tag = skills.pref.sound] ~ ~ ~ 1 1;
             } with ::temp.gui.prestige;
         }
@@ -1232,7 +1232,7 @@ class Boosters {
                     }
                 }
             },
-            [["10", "11", "12", "14", "15", "16"], ["experience_bottle", "experience_bottle", "experience_bottle", "gold_ingot", "gold_ingot", "gold_ingot"], ["2", "3", "5", "2", "5", "8"], ["15", "60", "120", "20", "30", "60"], ["aqua", "aqua", "aqua", "gold", "gold", "gold"], ["35", "50", "150", "50", "100", "200"], ["1", "1", "1", "2", "2", "2"], ["XP", "XP", "XP", "SP", "SP", "SP"]]
+            [["10", "11", "12", "14", "15", "16"], ["experience_bottle", "experience_bottle", "experience_bottle", "gold_ingot", "gold_ingot", "gold_ingot"], ["2", "3", "5", "2", "5", "8"], ["15", "60", "120", "20", "30", "60"], ["aqua", "aqua", "aqua", "gold", "gold", "gold"], ["35", "50", "150", "50", "100", "200"], ["1", "1", "1", "2", "2", "2"], ["Xp", "Xp", "Xp", "SP", "SP", "SP"]]
         );
     }
 }

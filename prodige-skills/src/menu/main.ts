@@ -19,7 +19,7 @@ export function initMain(Menu: GUI) {
   page.pushObject(() => {
     let slot = 10;
     for (const skill of SkillList) {
-      const percentage = skill.xp['*'](100)['/'](skill.xpTarget);
+      const percentage = skill.Xp['*'](100)['/'](skill.XpTarget);
       const nextLevel = skill.level['+'](1);
       const bar = () => ProgressBar(percentage);
 
@@ -32,7 +32,7 @@ export function initMain(Menu: GUI) {
             ...skill.description,
             "",
             $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
-            $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
+            $`${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
             "",
             $`§7Level ${nextLevel} Rewards:`,
             ...rewards,

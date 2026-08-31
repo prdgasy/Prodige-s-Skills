@@ -52,8 +52,12 @@ MCFunction('player/first_join', () => {
 
     for (const skill of SkillList) {
       skill.level.set(0);
-      skill.xp.set(0);
-      skill.xpTarget.set(skill.startingXp);
+      skill.Xp.set(0);
+      skill.XpTarget.set(skill.startingXp);
+
+      skill.totalXp.set(0);
+      skill.totalPts.set(0);
+
       skill.ability.tier.set(0);
       skill.currentAchievement.set(0);
       for (const achievement of skill.achievements) {
@@ -62,7 +66,7 @@ MCFunction('player/first_join', () => {
     }
 
     Player.boosterScore.point.set(1);
-    Player.boosterScore.xp.set(1);
+    Player.boosterScore.Xp.set(1);
 
 
     firstJoin('@s').add();

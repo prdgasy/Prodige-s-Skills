@@ -8,7 +8,7 @@ export function initShop(Menu: GUI) {
     slot: 10,
     name: { text: 'Items', color: 'green', bold: true },
     lore: [
-      ...textWrapper({ text: 'Browse and purchase custom items and specialized gear crafted to enhance your skill progression.', color: 'gray' }),
+      ...textWrapper('§7Browse and purchase custom items and specialized gear crafted to enhance your skill progression.'),
       "",
       { text: 'Includes:', color: 'gold' },
       { text: ' • Exclusive tools & weapons', color: 'white' },
@@ -24,10 +24,10 @@ export function initShop(Menu: GUI) {
     slot: 12,
     name: { text: 'Boosters', color: 'aqua', bold: true },
     lore: [
-      ...textWrapper({ text: 'Supercharge your leveling with powerful XP & Point multipliers.', color: 'gray' }),
+      ...textWrapper('§7Supercharge your leveling with powerful Xp & Point multipliers.'),
       "",
       { text: 'Includes:', color: 'gold' },
-      { text: ' • Skill XP Boosters', color: 'white' },
+      { text: ' • Skill Xp Boosters', color: 'white' },
       { text: ' • Skill Point Boosters', color: 'white' },
       "",
       { text: 'Click to view boosters!', color: 'yellow' }
@@ -40,7 +40,7 @@ export function initShop(Menu: GUI) {
     slot: 14,
     name: { text: 'Crates', color: 'light_purple', bold: true },
     lore: [
-      ...textWrapper({ text: 'Open mystery crates to obtain rare loot, titles, and points.', color: 'gray' }),
+      ...textWrapper('§7Open mystery crates to obtain rare loot, titles, and points.'),
       "",
       { text: 'Contains:', color: 'gold' },
       { text: ' • Common & Legendary Crates', color: 'white' },
@@ -56,7 +56,7 @@ export function initShop(Menu: GUI) {
     slot: 16,
     name: { text: 'Titles', color: 'yellow', bold: true },
     lore: [
-      ...textWrapper({ text: 'Unlock and equip prestigious titles to showcase your achievements.', color: 'gray' }),
+      ...textWrapper('§7Unlock and equip prestigious titles to showcase your achievements.'),
       "",
       { text: 'Features:', color: 'gold' },
       { text: ' • Skill-themed cosmetic badges', color: 'white' },

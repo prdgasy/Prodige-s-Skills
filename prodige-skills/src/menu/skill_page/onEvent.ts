@@ -10,8 +10,7 @@ import { SkillClass } from "../../skill";
 export function initOnEvent(Menu: GUI, skill: SkillClass) {
   const paginatedOnEvent = PaginatedPage({
     parent: Menu,
-    name: PageNames.onEvent(skill.name),
-    staticObjectList: [...Mask.gray(), ...Mask.navbar()]
+    name: PageNames.onEvent(skill.name)
   });
 
   for (const event of skill.onEvents) {
@@ -19,7 +18,7 @@ export function initOnEvent(Menu: GUI, skill: SkillClass) {
       id: event.itemId,
       name: { text: `${event.name}`, color: 'green' },
       lore: [
-        { text: `• ${event.xp} xp`, color: "aqua" },
+        { text: `• ${event.Xp} Xp`, color: "aqua" },
         { text: `• ${event.pts} pts`, color: "gold" }
       ]
     }));

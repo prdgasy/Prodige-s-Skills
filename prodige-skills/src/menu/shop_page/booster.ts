@@ -4,18 +4,18 @@ import { Errors } from "../../../lib/errors";
 import { ItemType } from "../../types";
 
 
-function boosterItem(type: 'xp' | 'point', multiplier: number) {
+function boosterItem(type: 'Xp' | 'point', multiplier: number) {
   let itemRepr: ItemType;
   let name: string;
   let color: string;
   let onClick = () => { Errors.functionNotImplemented(); }
-  if (type === 'xp') {
+  if (type === 'Xp') {
     itemRepr = 'experience_bottle';
-    name = `${multiplier}x XP Booster`;
+    name = `${multiplier}x Xp Booster`;
     color = 'aqua';
   } else {
     itemRepr = 'gold_ingot';
-    name = `${multiplier}x XP Booster`;
+    name = `${multiplier}x Xp Booster`;
     color = 'gold';
   }
   return { itemRepr, name, color, multiplier, onClick };
@@ -29,14 +29,14 @@ export function initBoosterPage(Menu: GUI) {
   );
 
   for (let i = 0; i < 5; i++) {
-    const xpBooster = boosterItem('xp', i);
+    const XpBooster = boosterItem('Xp', i);
     const pointBooster = boosterItem('point', i);
 
     page.pushObject(Button({
-      id: xpBooster.itemRepr,
+      id: XpBooster.itemRepr,
       slot: i + 5,
-      name: { text: xpBooster.name },
-      onClick: () => { xpBooster.onClick() }
+      name: { text: XpBooster.name },
+      onClick: () => { XpBooster.onClick() }
     }), Button({
       id: pointBooster.itemRepr,
       slot: i + 10,

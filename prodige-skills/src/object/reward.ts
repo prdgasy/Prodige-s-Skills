@@ -42,10 +42,10 @@ export class RewardClass {
     });
   }
 
-  static xp(x: number, skill: SkillClass): RewardClass {
+  static Xp(x: number, skill: SkillClass): RewardClass {
     return Reward({
       show: `§b${x} ${skill.name} Xp`,
-      get: () => skill.xp.add(x)
+      get: () => skill.Xp.add(x)
     });
   }
 
@@ -59,7 +59,7 @@ export class RewardClass {
   static common(skill: SkillClass): RewardClass[] {
     return [
       RewardClass.point(20),
-      RewardClass.xp(30, skill),
+      RewardClass.Xp(30, skill),
       RewardClass.tool(NovicePickaxe)
     ]
   }

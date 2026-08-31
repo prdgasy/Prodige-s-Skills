@@ -10,10 +10,7 @@ import { ProgressBar } from "../../../lib/progressBar";
 export function initAchievement(menu: GUI, skill: SkillClass) {
   const page = Page(
     menu,
-    PageNames.achievement(skill.name),
-    [
-      ...Mask.navbar(),
-    ]
+    PageNames.achievement(skill.name)
   );
 
   page.pushObject(...navbar(menu, skill, PageNames.achievement(skill.name), page))

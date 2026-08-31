@@ -41,7 +41,7 @@ export namespace Mask {
       mask.push(Button({
         id: 'black_stained_glass_pane',
         slot: i,
-        name: ""
+        name: " ",
       }));
     }
     return mask;
@@ -53,7 +53,7 @@ export namespace Mask {
       mask.push(Button({
         id: 'gray_stained_glass_pane',
         slot: i,
-        name: ""
+        name: " "
       }));
     }
     return mask;
@@ -64,4 +64,7 @@ export namespace Mask {
   }
 }
 
+export namespace Bars {
+  export const separator = "§8§m------------------------";
+}
 

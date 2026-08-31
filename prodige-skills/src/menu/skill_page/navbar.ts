@@ -1,5 +1,5 @@
 import { Button, ButtonClass, GUI, MacroArg as $, MenuObject, PageClass, PaginatedPageClass } from "@prodigelib/gui";
-import { goBack, PageNames } from "../const";
+import { goBack, Mask, PageNames } from "../const";
 import { SkillClass } from "../../skill";
 import { ItemType } from "../../types";
 import { DataPointClass } from "sandstone";
@@ -16,7 +16,7 @@ let startSlot = 20;
 const tabs: NavTabConfig[] = [
   { id: "redstone", slot: startSlot++, label: "Progress", color: "yellow", getPageName: (name) => PageNames.progress(name) },
   { id: "book", slot: startSlot++, label: "Actions", color: "yellow", getPageName: (name) => PageNames.onEvent(name) },
-  { id: "ender_eye", slot: startSlot++, label: "Ability", color: "yellow", getPageName: (name) => PageNames.ability(name) },
+  { id: "ender_eye", slot: startSlot++, label: "Stats & Ability", color: "yellow", getPageName: (name) => PageNames.ability(name) },
   { id: "diamond", slot: startSlot++, label: "Achievements", color: "yellow", getPageName: (name) => PageNames.achievement(name) }
 ];
 
@@ -25,7 +25,7 @@ const glint = "enchantment_glint_override=1";
 export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: PageClass | PaginatedPageClass): MenuObject[] {
 
   // 1. Définition directe du bouton currentItem
-  const percentage = skill.xp["*"](100)["/"](skill.xpTarget);
+  const percentage = skill.Xp["*"](100)["/"](skill.XpTarget);
   const bar = (): DataPointClass => ProgressBar(percentage);
   const nextLevel = skill.level["+"](1);
 
@@ -37,7 +37,7 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
       ...skill.description,
       "",
       $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
-      $`${bar} §e${skill.xp}§6/§e${skill.xpTarget}`
+      $`${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`
     ],
     components: ['!attribute_modifiers', 'enchantment_glint_override=1']
   });
@@ -49,6 +49,7 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
     : currentItemBtn;
 
   return [
+    ...Mask.navbar(),
     currentItemObject,
     goBack(menu, PageNames.main),
     ...tabs.map((tab) => {

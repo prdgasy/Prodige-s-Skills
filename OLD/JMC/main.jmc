@@ -27,9 +27,9 @@ function uninstall() {
         execute run { $::temp.init.name = ::DB.Indexes.$(index); } with ::temp.init;
         execute run {
             $scoreboard objectives remove skills.$(name).prestige;
-            $scoreboard objectives remove skills.$(name).xp;
+            $scoreboard objectives remove skills.$(name).Xp;
             $scoreboard objectives remove skills.$(name).lvl;
-            $scoreboard objectives remove skills.$(name).xpToNext;
+            $scoreboard objectives remove skills.$(name).XpToNext;
 
             $i = 0;
             $exist = 0;
@@ -147,7 +147,7 @@ Player.firstJoin(()=>{
     tag @s add skills.pref.sound;
     tag @s add skills.pref.lvl_notif;
     tag @s add skills.pref.lvl_broadcast;
-    tag @s add skills.pref.xp_notif;
+    tag @s add skills.pref.Xp_notif;
     tag @s add skills.pref.skill_prog;
     skills.booster.1.power:@s = 1;
     skills.booster.2.power:@s = 1;
@@ -155,10 +155,10 @@ Player.firstJoin(()=>{
         "[name]",
         ()=>{
             tag @s add skills.ability.[name];
-            skills.[name].xp:@s = 0;
+            skills.[name].Xp:@s = 0;
             skills.[name].prestige:@s = 0;
             skills.[name].lvl:@s = 1;
-            skills.[name].xpToNext:@s = ::DB.Skills.[name].xpstart;
+            skills.[name].XpToNext:@s = ::DB.Skills.[name].Xpstart;
         },
         #skillList
     );
@@ -170,9 +170,9 @@ for ($index = 0; $index < 7; $index++) {
     execute run { $::temp.init.name = ::DB.Indexes.$(index); } with ::temp.init;
     execute run {
         $scoreboard objectives add skills.$(name).prestige dummy;
-        $scoreboard objectives add skills.$(name).xp dummy;
+        $scoreboard objectives add skills.$(name).Xp dummy;
         $scoreboard objectives add skills.$(name).lvl dummy;
-        $scoreboard objectives add skills.$(name).xpToNext dummy;
+        $scoreboard objectives add skills.$(name).XpToNext dummy;
 
 
         // Main tasks
