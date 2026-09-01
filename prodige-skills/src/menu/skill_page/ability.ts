@@ -6,7 +6,7 @@ import { SkillClass } from "../../skill";
 import { navbar } from "./navbar";
 import { ProgressBar } from "../../../lib/progressBar";
 import { textWrapper } from "../../../lib/textWrapper";
-
+import { convertToRoman } from "../../../lib/romanNumbers";
 function getMax(skill: SkillClass) {
   const max = Variable(0);
   const maxData = {
@@ -31,8 +31,9 @@ function getMax(skill: SkillClass) {
 
 export function initAbility(menu: GUI, skill: SkillClass) {
   const pageName = PageNames.ability(skill.name);
-  const page = Page(menu, pageName, [...Mask.gray()]);
-  page.pushObject(...navbar(menu, skill, pageName, page));
+  const page = Page(menu, pageName, [...Mask.gray(), ...Mask.upperBlack()]);
+  navbar(menu, skill, pageName, page);
+
   // favourite action
   page.pushObject(() => {
     const favData = getMax(skill);
@@ -44,19 +45,20 @@ export function initAbility(menu: GUI, skill: SkillClass) {
 
     const favourite = Button({
       id: $(favData.id),
-      slot: 12,
-      name: $`§eFavorite Action: §b${favData.name}`,
+      slot: 11,
+      name: $`§e§lFavorite Action`,
       lore: [
         ...textWrapper("Your most repeated activity and primary source of progression for this skill."),
         "",
         "§6Statistics:",
+        $` §7• Skill Action: §b${favData.name}`,
         $` §7• Times Executed: §a${favData.total} §7times`,
-        $` §7• Total Xp Generated: §3+${totalXpGained} Xp`,
-        $` §7• Total Points Earned: §e+${totalPtsGained} pts`,
+        $` §7• Total Xp Generated: §3${totalXpGained} Xp`,
+        $` §7• Total Points Earned: §e${totalPtsGained} Pts`,
         $` §7• Skill Impact: §d${contributionPercentage}% §7of all Xp`,
         "",
         "§6Per Action Value:",
-        $` §7• §3+${favData.Xp} Xp §7| §e+${favData.pts} pts`,
+        $` §7• §3+${favData.Xp} Xp §7| §e+${favData.pts} Pts`,
         "",
         "§8Keep going to unlock higher milestones!"
       ]
@@ -74,14 +76,14 @@ export function initAbility(menu: GUI, skill: SkillClass) {
 
     const totalGain = Button({
       id: "gold_ingot",
-      slot: 11,
-      name: "§6§lTotal Lifetime Earnings",
+      slot: 10,
+      name: "§6§lTotal Earnings",
       lore: [
         ...textWrapper(`Cumulative experience and points earned since you started training ${skill.name}.`),
         "",
         "§6Progression Summary:",
-        $` §7• Total Xp: §3+${skill.totalXp} Xp`,
-        $` §7• Total Points: §e+${skill.totalPts} pts`,
+        $` §7• Total Xp: §3${skill.totalXp} Xp`,
+        $` §7• Total Points: §e${skill.totalPts} pts`,
         "",
         "§6Efficiency Ratio:",
         $` §7• Avg Xp per Point: §3~${averageXpPerPoint} Xp/pt`,
@@ -93,71 +95,74 @@ export function initAbility(menu: GUI, skill: SkillClass) {
     page.rawEmit(totalGain);
   });
 
+  // info
+  page.pushObject(Button({
+    slot: 15,
+    id: "knowledge_book",
+    name: "§a§l📖 Ability Guide",
+    lore: [
+      ...textWrapper("Abilities are powerful passive traits that enhance your skill performance continuously."),
+      "",
+      "§6Activation:",
+      ...textWrapper(" §7• Triggers seamlessly whenever you use or hold the tool."),
+      "",
+      "§6Progression Rules:",
+      " §7• Unlocks at §eSkill Level 10§7.",
+      " §7• Upgrades every §b10 levels §7(§dTier I §7➡ §dTier X§7).",
+      "",
+      "§8No cooldown, or activation key required."
+    ]
+  }));
+
+  // ability tier
   page.pushObject(() => {
     // --- Dynamic Tier Calculations ---
     const currentTierProgress = skill.level["%"](10);
     const progressPercentage = currentTierProgress["*"](10);
-    const nextTier = skill.ability.tier["+"](1);
+    const nextTier = Variable(skill.ability.tier);
+    nextTier["+="](1);
     const levelsLeft = Variable(10)["-"](currentTierProgress);
-
-    // --- Slot 16: Refined Info / Guide Button ---
-    const infoBtn = Button({
-      slot: 15,
-      id: "knowledge_book",
-      name: "§e§l📖 Ability Guide",
-      lore: [
-        ...textWrapper("Abilities are powerful passive traits that enhance your skill performance continuously."),
-        "",
-        "§6Activation:",
-        ...textWrapper(" §7• Triggers seamlessly whenever you use or hold the tool."),
-        "",
-        "§6Progression Rules:",
-        " §7• Unlocks at §eSkill Level 10§7.",
-        " §7• Upgrades every §b10 levels §7(§dTier I §7➡ §dTier X§7).",
-        "",
-        "§8No mana, cooldown, or activation key required."
-      ]
-    });
-
+    const slot = 13;
     const unlockedCard = Button({
-      slot: 14,
+      slot: slot,
       id: "nether_star",
-      name: $`§b§l✦ ${skill.ability.name} §d[Tier ${skill.ability.tier}]`,
+      name: $`§b§l✦ ${skill.ability.name} ${convertToRoman(skill.ability.tier)}`, // 
       lore: [
+        "§a✔ Ability Currently Active",
+        "",
         ...skill.ability.description,
         "",
-        "§6Tier progression",
-        $` §7• Next Tier: §dTier ${nextTier}`,
+        "§6Tier progression:",
+        $` §7• Next Tier: §b§l${skill.ability.name} ${convertToRoman(nextTier)}`, // 
         $` §7• Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
         $` ${() => ProgressBar(progressPercentage)}`,
         "",
         Bars.separator,
-        "§a✔ Ability Currently Active"
+        "§eClick to toggle!"
       ],
       components: ["enchantment_glint_override=1", "!attribute_modifiers"]
     });
 
     const lockedCard = Button({
-      slot: 14,
+      slot: slot,
       id: "charcoal",
       name: "§8§l✦ §kUnknown§r §8[Locked]",
       lore: [
-        "§8[§c§lDiscoverable Ability§8]",
+        "§c✘ Currently Inactive",
         "",
         ...skill.ability.description,
         "",
-        "§6§lUnlock progression",
-        $` §7• Requirement: §eSkill Level 10`,
-        $` §7• Remaining: §c${Variable(10)["-"](skill.level)} levels to go`,
+        "§6Unlock progression:",
+        $` §7• Requirement: §dSkill Level 10`,
+        $` §7• Remaining: §c${Variable(10)["-"](skill.level)} levels`,
         $` ${() => ProgressBar(skill.level["*"](10))}`,
         "",
         Bars.separator,
-        "§c✘ Currently Inactive"
+        "§7You cannot toggle this yet!"
       ]
     });
 
     // --- Render logic ---
-    page.rawEmit(infoBtn);
 
     _.if(skill.ability.tier["=="](0), () => {
       page.rawEmit(lockedCard);

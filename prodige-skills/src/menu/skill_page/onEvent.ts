@@ -24,9 +24,7 @@ export function initOnEvent(Menu: GUI, skill: SkillClass) {
     }));
   }
 
-  paginatedOnEvent.staticObjects.push(
-    ...navbar(Menu, skill, PageNames.onEvent(skill.name), paginatedOnEvent)
-  );
+  navbar(Menu, skill, PageNames.onEvent(skill.name), paginatedOnEvent);
 
   paginatedOnEvent.build();
 }

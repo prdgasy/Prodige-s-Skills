@@ -88,9 +88,8 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
   });
 
   // --- Page Registration & Build ---
-
+  navbar(Menu, skill, PageNames.progress(skill.name), page)
   page.pushObject(
-    ...navbar(Menu, skill, PageNames.progress(skill.name), page),
 
     prev,
     next,

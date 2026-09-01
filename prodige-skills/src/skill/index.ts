@@ -59,7 +59,7 @@ export class SkillClass {
     this.customItems = skillOptions.customItems ?? [];
     this.achievements = skillOptions.achievements ?? [];
     this.titles = skillOptions.titles ?? [];
-    this.ability = skillOptions.ability ?? Ability({ name: 'notimple', description: [] });
+    this.ability = skillOptions.ability ?? Ability({ parent: this, name: 'notimple', description: [] });
 
     this.level = Objective.create(`${this.name}.level`)('@p');
     this.Xp = Objective.create(`${this.name}.Xp`)('@p');
@@ -156,11 +156,13 @@ const Mining = Skill({
   description: textWrapper('Mine, mine, mien, very long too. Lets see how it goes'),
   itemId: 'diamond_pickaxe',
   startingXp: 15,
-  ability: Ability({
-    name: 'Tester',
-    description: textWrapper('this is a cool test of ability. This is supposed to work...')
-  })
 });
+Mining.ability = Ability({
+  parent: Mining,
+  name: 'Miner Speed',
+  description: textWrapper('Increases mining speed when hodling a pickaxe, but this is also very coow'),
+
+})
 Mining.onEvents.push(
   OnEvent({ parent: Mining, name: 'Stone', itemId: 'stone', criteria: 'minecraft.mined:minecraft.stone', Xp: 1, pts: 5 }),
   OnEvent({ parent: Mining, name: 'Coal Ore', itemId: 'coal_ore', criteria: 'minecraft.mined:minecraft.coal_ore', Xp: 3, pts: 5 }),

@@ -1,8 +1,8 @@
-import { Button, ButtonClass, GUI, MacroArg as $, MenuObject, PageClass, PaginatedPageClass } from "@prodigelib/gui";
+import { Button, GUI, MacroArg as $, MenuObject, PageClass, PaginatedPageClass } from "@prodigelib/gui";
 import { goBack, Mask, PageNames } from "../const";
 import { SkillClass } from "../../skill";
 import { ItemType } from "../../types";
-import { DataPointClass } from "sandstone";
+import { DataPointClass, Variable } from "sandstone"; // 🟢 Ajout de Variable
 import { ProgressBar } from "../../../lib/progressBar";
 
 type NavTabConfig = {
@@ -12,7 +12,7 @@ type NavTabConfig = {
   color: string;
   getPageName: (skillName: string) => string;
 }
-let startSlot = 20;
+let startSlot = 21;
 const tabs: NavTabConfig[] = [
   { id: "redstone", slot: startSlot++, label: "Progress", color: "yellow", getPageName: (name) => PageNames.progress(name) },
   { id: "book", slot: startSlot++, label: "Actions", color: "yellow", getPageName: (name) => PageNames.onEvent(name) },
@@ -22,35 +22,41 @@ const tabs: NavTabConfig[] = [
 
 const glint = "enchantment_glint_override=1";
 
-export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: PageClass | PaginatedPageClass): MenuObject[] {
+export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: PageClass | PaginatedPageClass) {
+  const btns: MenuObject[] = [];
 
-  // 1. Définition directe du bouton currentItem
-  const percentage = skill.Xp["*"](100)["/"](skill.XpTarget);
-  const bar = (): DataPointClass => ProgressBar(percentage);
-  const nextLevel = skill.level["+"](1);
+  // 1. On encapsule la logique dynamique dans une fonction pour éviter l'exécution dans le "load"
+  const currentItemFunc = () => {
+    const percentage = skill.Xp["*"](100)["/"](skill.XpTarget);
+    const bar = (): DataPointClass => ProgressBar(percentage);
 
-  const currentItemBtn = Button({
-    id: skill.itemId,
-    slot: 19,
-    name: $`§d${skill.name} Skill`,
-    lore: [
-      ...skill.description,
-      "",
-      $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
-      $`${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`
-    ],
-    components: ['!attribute_modifiers', 'enchantment_glint_override=1']
-  });
+    // 🟢 CORRECTION SANDSTONE: On copie le level pour ne pas modifier le VRAI niveau du joueur en jeu
+    const nextLevel = Variable(skill.level);
+    nextLevel["+="](1);
 
-  // 2. Si c'est une PageClass normale, on peut wrapper l'émission avec rawEmit
-  // Si c'est une PaginatedPageClass, on renvoie directement le ButtonClass pour qu'il soit dans staticObjects dès le départ !
-  const currentItemObject: MenuObject = (page instanceof PageClass)
-    ? () => page.rawEmit(currentItemBtn)
-    : currentItemBtn;
+    const currentItemBtn = Button({
+      id: skill.itemId,
+      slot: 20,
+      name: $`§d${skill.name} Skill`,
+      lore: [
+        ...skill.description,
+        "",
+        $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
+        $`${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`
+      ],
+      components: ['!attribute_modifiers', 'enchantment_glint_override=1']
+    });
 
-  return [
+    if (page instanceof PageClass) {
+      page.rawEmit(currentItemBtn); // Ici on peut utiliser rawEmit car on a un vrai ButtonClass
+    } else {
+      page.staticObjects.push(currentItemBtn);
+    }
+  }
+
+  btns.push(
     ...Mask.navbar(),
-    currentItemObject,
+    currentItemFunc, // 🟢 On passe la fonction SANS les (), pour qu'elle s'exécute à la construction de la page
     goBack(menu, PageNames.main),
     ...tabs.map((tab) => {
       const targetPage = tab.getPageName(skill.name);
@@ -67,5 +73,15 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
         onClick: isCurrent ? undefined : () => menu.toPage(targetPage)
       });
     })
-  ];
+  );
+
+  btns.forEach(btn => {
+    if (page instanceof PaginatedPageClass) {
+      page.staticObjects.push(btn);
+    } else {
+      // 🟢 CORRECTION DE L'ERREUR : On utilise pushObject au lieu de rawEmit
+      // pushObject accepte tous les MenuObject (Fonctions, Masques FillClick, Boutons...)
+      page.pushObject(btn);
+    }
+  });
 }

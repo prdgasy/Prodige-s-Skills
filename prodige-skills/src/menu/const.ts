@@ -35,6 +35,17 @@ export const goBack = (Menu: GUI, previousPage: PageClass | string): ButtonClass
 };
 
 export namespace Mask {
+  export function upperBlack() {
+    const mask: ButtonClass[] = [];
+    for (let i = 0; i <= 8; i++) {
+      mask.push(Button({
+        id: 'black_stained_glass_pane',
+        slot: i,
+        name: " "
+      }));
+    }
+    return mask;
+  }
   export function navbar() {
     const mask: ButtonClass[] = [];
     for (let i = 18; i <= 26; i++) {

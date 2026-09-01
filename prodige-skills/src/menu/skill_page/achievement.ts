@@ -13,8 +13,8 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
     PageNames.achievement(skill.name)
   );
 
-  page.pushObject(...navbar(menu, skill, PageNames.achievement(skill.name), page))
-
+  navbar(menu, skill, PageNames.achievement(skill.name), page);
+  
   page.pushObject(() => {
     for (let slot = 0; slot < skill.achievements.length; slot++) {
       const achievement = skill.achievements[slot];
