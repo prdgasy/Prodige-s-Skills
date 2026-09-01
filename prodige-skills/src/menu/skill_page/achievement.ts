@@ -36,7 +36,7 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
           $`§8 > ${bar} §e${achievement.progress}§6/§e${achievement.target}`,
           `§7`,
           `§f§lRewards:`,
-          ...RewardClass.joinText(achievement.reward),
+          ...RewardClass.join(achievement.reward),
           `§7`,
           `§e• IN PROGRESS`
         ],
@@ -55,7 +55,7 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
           $` §8• §7Target: §a${achievement.target} §8(Done)`,
           `§7`,
           `§f§lRewards:`,
-          ...RewardClass.joinText(achievement.reward),
+          ...RewardClass.join(achievement.reward),
           `§7`,
           `§a✔ COMPLETED`
         ],
