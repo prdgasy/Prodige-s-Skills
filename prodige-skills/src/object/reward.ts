@@ -19,15 +19,7 @@ export class RewardClass {
     this.get = options.get;
   }
 
-  static joinText(rewards: RewardClass[]): Text[] {
-    const t: Text[] = [];
-    for (const r of rewards) {
-      t.push({ text: ` §8+ §r${r.show}` });
-    }
-    return t;
-  }
-
-  static joinString(rewards: RewardClass[]): string[] {
+  static join(rewards: RewardClass[]): string[] {
     return rewards.map(r => ` §8+ §r${r.show}`);
   }
 
@@ -42,10 +34,10 @@ export class RewardClass {
     });
   }
 
-  static Xp(x: number, skill: SkillClass): RewardClass {
+  static xp(x: number, skill: SkillClass): RewardClass {
     return Reward({
       show: `§3${x} ${skill.name} Xp`,
-      get: () => skill.Xp.add(x)
+      get: () => skill.xp.add(x)
     });
   }
 
@@ -59,7 +51,7 @@ export class RewardClass {
   static common(skill: SkillClass): RewardClass[] {
     return [
       RewardClass.point(20),
-      RewardClass.Xp(30, skill),
+      RewardClass.xp(30, skill),
       RewardClass.tool(NovicePickaxe)
     ]
   }
@@ -85,19 +77,19 @@ export class RewardClass {
     }
   }
 
-  static resolve(skill: SkillClass, lvl: Score, f: (r: Text[]) => void) {
+  static resolve(skill: SkillClass, lvl: Score, f: (r: string[]) => void) {
     if (skill.rewards.size > 0) {
       skill.rewards.forEach((r, i) => {
         _.if(lvl["=="](i), () => {
-          f(RewardClass.joinText(r));
+          f(RewardClass.join(r));
         });
       });
       const notCustom = Array.from(skill.rewards.keys()).map(i => lvl["!="](i));
       _.if(_.and(...notCustom), () => {
-        f(RewardClass.joinText(RewardClass.common(skill)))
+        f(RewardClass.join(RewardClass.common(skill)))
       });
     } else {
-      f(RewardClass.joinText(RewardClass.common(skill)))
+      f(RewardClass.join(RewardClass.common(skill)))
     }
   }
 }

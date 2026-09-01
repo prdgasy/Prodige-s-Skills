@@ -12,17 +12,17 @@ function getMax(skill: SkillClass) {
   const maxData = {
     id: DataVariable(skill.onEvents[0].itemId),
     name: DataVariable(skill.onEvents[0].name),
-    total: Variable(skill.onEvents[0].total),
-    Xp: Variable(skill.onEvents[0].Xp),
+    total: Variable(skill.onEvents[0].totalExecuted),
+    Xp: Variable(skill.onEvents[0].xp),
     pts: Variable(skill.onEvents[0].pts),
   }
   for (const event of skill.onEvents) {
-    _.if(event.total['>'](max), () => {
-      max['='](event.total);
+    _.if(event.totalExecuted['>'](max), () => {
+      max['='](event.totalExecuted);
       maxData.id.set(event.itemId);
       maxData.name.set(event.name);
-      maxData.total.set(event.total);
-      maxData.Xp.set(event.Xp);
+      maxData.total.set(event.totalExecuted);
+      maxData.Xp.set(event.xp);
       maxData.pts.set(event.pts);
     });
   }

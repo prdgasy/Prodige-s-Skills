@@ -28,7 +28,7 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
   // 🟢 1. Définition de la fonction anonyme. 
   // Elle accepte `p` (l'instance réelle de PageClass) et NE S'EXÉCUTE PAS tout de suite.
   const renderCurrentItem = (p: PageClass) => {
-    const percentage = skill.Xp["*"](100)["/"](skill.XpTarget);
+    const percentage = skill.xp["*"](100)["/"](skill.xpTarget);
     const bar = (): DataPointClass => ProgressBar(percentage);
     const nextLevel = skill.level["+"](1);
 
@@ -42,7 +42,7 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
         "§f§lProgression Overview:",
         $` §8• §7Target Level: §dLevel ${nextLevel}`,
         $` §8• §7Progress Ratio: §e${percentage}%`,
-        $` §8> ${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
+        $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
         "",
         "§8Skill progression overview."
       ],

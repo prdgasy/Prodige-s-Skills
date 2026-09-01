@@ -1,29 +1,13 @@
 import { execute, MCFunction, Selector, tellraw, _, Label, Objective } from "sandstone";
 import { BoosterClass } from "./object/booster";
-import { SkillList } from "./skill";
+import { AchievementClass, OnEventClass, SkillClass, SkillList } from "./skill";
 
 export namespace Player {
-  export const option = {
-    progress: Label('option.progress'),
-    progressNotif: Label('option.progress_notif'),
-    levelNotif: Label('option.level_notif')
-  }
-
-  /**
- * Custom selector for @p with multiple labels
- * Usage: Player(MyLabel, AnotherLabel)
- */
-  export function select(...labels: ReturnType<typeof Label>[]) {
-    return Selector('@p', {
-      tag: labels
-    });
-  }
-
+  export const firstJoin = Objective.create('player.first_join')('@p');
   export const pts = Objective.create('pts')('@p');
-
   export const boosterScore = new BoosterClass(); // make scores static inside booster class
 
-
+  export const sound = Objective.create('player.sound')('@p');
 }
 
 MCFunction('player/load', () => {
@@ -32,45 +16,49 @@ MCFunction('player/load', () => {
 }, { runOnLoad: true });
 
 MCFunction('player/event_watcher', () => {
-  execute.as(Selector('@a', { tag: Player.option.progress })).at('@s').run(() => {
-    for (const skill of SkillList) {
-      for (const event of skill.onEvents) {
-        _.if(event.watcher[">"](0), () => {
-          event.trigger();
-        })
+  execute.as('@a').at('@s').run(() => {
+    _.if(SkillClass.progression, () => {
+      for (const skill of SkillList) {
+        for (const event of skill.onEvents) {
+          _.if(event.watcher[">"](0), () => {
+            event.trigger();
+          })
+        }
       }
-    }
+    });
   })
 }, { runEvery: '1s' })
 
 MCFunction('player/first_join', () => {
-  const firstJoin = Label('first_join');
-  execute.as('@a').as(Selector('@s', { tag: [`!${firstJoin.fullName}`] })).run(() => {
-    for (const label of Object.values(Player.option)) {
-      label('@s').add();
-    }
+  execute.as('@a').run(() => {
+    _.if(Player.firstJoin["=="](0), () => {
+      for (const skill of SkillList) {
 
-    for (const skill of SkillList) {
-      skill.level.set(0);
-      skill.Xp.set(0);
-      skill.XpTarget.set(skill.startingXp);
+        skill.level.set(0);
+        skill.xp.set(0);
+        skill.xpTarget.set(skill.startingXp);
 
-      skill.totalXp.set(0);
-      skill.totalPts.set(0);
+        skill.totalXp.set(0);
+        skill.totalPts.set(0);
 
-      skill.ability.tier.set(0);
-      skill.ability.toggle.set(1);
-      skill.currentAchievement.set(0);
-      for (const achievement of skill.achievements) {
-        achievement.progress.set(0);
+        skill.ability.tier.set(0);
+        skill.ability.toggle.set(1);
+        skill.currentAchievement.set(0);
+        for (const achievement of skill.achievements) {
+          achievement.progress.set(0);
+        }
       }
-    }
 
-    Player.boosterScore.point.set(1);
-    Player.boosterScore.Xp.set(1);
+      OnEventClass.notif.set(1);
+      AchievementClass.notification.set(1);
+
+      Player.boosterScore.point.set(1);
+      Player.boosterScore.xp.set(1);
 
 
-    firstJoin('@s').add();
+      Player.firstJoin.set(1);
+    })
+
   })
 
 }, { runEvery: '5s' })

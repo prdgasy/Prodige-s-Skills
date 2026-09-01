@@ -16,7 +16,7 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
   const page = Page(Menu, PageNames.progress(skill.name));
   // --- Loop & State Generator ---
   const levels = () => {
-    const percentage = skill.Xp["*"](100)["/"](skill.XpTarget);
+    const percentage = skill.xp["*"](100)["/"](skill.xpTarget);
     const nextLevel = skill.level["+"](1);
     const bar = (): DataPointClass => ProgressBar(percentage);
 
@@ -43,7 +43,7 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
           lore: [
             "",
             $`§f§lProgress: §e${percentage}%`,
-            $` §8> ${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
+            $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
             "",
             "§f§lRewards: ",
             ...rewards,

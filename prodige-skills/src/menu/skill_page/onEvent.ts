@@ -15,18 +15,18 @@ export function initOnEvent(Menu: GUI, skill: SkillClass) {
 
   for (const event of skill.onEvents) {
     // Calculs statistiques identiques à la Favorite Action
-    const totalXpGained = event.total["*"](event.Xp);
-    const totalPtsGained = event.total["*"](event.pts);
+    const totalXpGained = event.totalExecuted["*"](event.xp);
+    const totalPtsGained = event.totalExecuted["*"](event.pts);
     const contributionPercentage = totalXpGained["*"](100)["/"](skill.totalXp);
 
     paginatedOnEvent.objects.push(PaginatedButton({
       id: event.itemId,
-      name: $`§e${event.name} §8• §3${event.Xp} Xp §7| §e${event.pts} Pts`,
+      name: $`§e${event.name} §8• §3${event.xp} Xp §7| §e${event.pts} Pts`,
       lore: [
         "",
         "§f§lStatistics:",
         $` §8• §7Skill Action: §b${event.name}`,
-        $` §8• §7Times Executed: §a${event.total} §7times`,
+        $` §8• §7Times Executed: §a${event.totalExecuted} §7times`,
         $` §8• §7Total Xp Generated: §3${totalXpGained} Xp`,
         $` §8• §7Total Points Earned: §e${totalPtsGained} Pts`,
         $` §8• §7Skill Impact: §d${contributionPercentage}% §7of all Xp`

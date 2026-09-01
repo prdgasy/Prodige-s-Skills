@@ -13,38 +13,49 @@ type OnEventOptions = {
 }
 
 export class OnEventClass {
+  static notif: Score = Objective.create('on_event.notif')('@p');
   name: string;
   itemId: ItemType;
   parent: SkillClass;
-  Xp: number;
+  xp: number;
   pts: number;
   criteria: Criteria;
-  total: Score;
+
+  totalExecuted: Score;
+  totalXp: Score;
+  totalPts: Score;
 
   watcher: Score;
+
+
   constructor(options: OnEventOptions) {
     this.name = options.name ?? String(options.itemId);
     this.parent = options.parent;
     this.itemId = options.itemId;
-    this.Xp = options.Xp ?? 1;
+    this.xp = options.Xp ?? 1;
     this.pts = options.pts ?? 1;
     this.criteria = options.criteria ?? 'dummy';
 
     this.watcher = Objective.create(`${this.parent.name}.event.${this.name.replace(/\s+/g, '')}`, this.criteria)('@p');
-    this.total = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}`, this.criteria)('@p');
+    this.totalExecuted = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}`, this.criteria)('@p');
+    this.totalXp = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}.xp`, 'dummy')('@p');
+    this.totalPts = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}.pts`, 'dummy')('@p');
   }
 
   trigger() {
-    const addedXp = Variable(this.Xp)["*"](Player.boosterScore.Xp);
-    const addedPoint = Variable(this.pts)["*"](Player.boosterScore.point);
+    const addedXp = Player.boosterScore.xp["*"](this.xp)["*"](this.watcher);
+    const addedPoint = Player.boosterScore.point["*"](this.pts)["*"](this.watcher);
 
-    this.parent.Xp['+='](addedXp);
+    this.totalPts['+='](addedPoint);
+    this.totalXp['+='](addedXp);
+
+    this.parent.xp['+='](addedXp);
     this.parent.totalXp['+='](addedXp);
     this.parent.totalPts['+='](addedPoint);
 
     this.parent.displayProgress(addedXp, addedPoint);
 
-    _.if(_.and(this.parent.Xp['>='](this.parent.XpTarget), this.parent.level['<'](100)), () => this.parent.levelUp());
+    _.if(_.and(this.parent.xp['>='](this.parent.xpTarget), this.parent.level['<'](100)), () => this.parent.levelUp());
 
     this.watcher.reset();
   }

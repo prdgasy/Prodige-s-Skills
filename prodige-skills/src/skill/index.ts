@@ -3,7 +3,7 @@ import { ItemType } from "../types";
 import { OnEvent, OnEventClass } from "./onEvent";
 import { TitleClass } from "./title";
 import { Ability, AbilityClass } from "./ability";
-import { Objective, Score, tellraw, title, Variable, _, say } from "sandstone";
+import { Objective, Score, tellraw, title, Variable, _, say, playsound } from "sandstone";
 import { Player } from "../player";
 import { Achievement, AchievementClass } from "./achievement";
 import { Reward, RewardClass } from "../object/reward";
@@ -30,6 +30,8 @@ type SkillOptions = {
 }
 
 export class SkillClass {
+  static progression: Score = Objective.create('skill.progression')('@p');
+  static notif: Score = Objective.create('skill.notif')('@p');
   name: string;
   itemId: ItemType;
 
@@ -42,8 +44,8 @@ export class SkillClass {
   ability: AbilityClass;
 
   level: Score;
-  Xp: Score;
-  XpTarget: Score;
+  xp: Score;
+  xpTarget: Score;
 
   totalXp: Score;
   totalPts: Score;
@@ -64,8 +66,8 @@ export class SkillClass {
     this.ability = skillOptions.ability ?? Ability({ parent: this, name: 'notimple', description: [] });
 
     this.level = Objective.create(`${this.name}.level`)('@p');
-    this.Xp = Objective.create(`${this.name}.Xp`)('@p');
-    this.XpTarget = Objective.create(`${this.name}.XpTarget`)('@p');
+    this.xp = Objective.create(`${this.name}.Xp`)('@p');
+    this.xpTarget = Objective.create(`${this.name}.XpTarget`)('@p');
 
     this.totalXp = Objective.create(`${this.name}.totalXp`)('@p');
     this.totalPts = Objective.create(`${this.name}.totalPts`)('@p');
@@ -76,54 +78,61 @@ export class SkillClass {
   }
 
   displayProgress(XpAdded: Score, pointAdded: Score) {
-    title(Player.select(Player.option.progressNotif)).actionbar([
+    _.if(OnEventClass.notif, () => title('@p').actionbar([
       { text: this.name }, this.level, '+', XpAdded, 'Xp + ', pointAdded, 'Point'
-    ]);
+    ]));
+
   }
 
   levelUp() {
-    this.XpTarget["*="](13)["/="](10);
-    _.if(this.XpTarget['>'](5000), () => {
-      this.XpTarget.set(5000);
-    })
+    // Reset xp
+    this.xp["-="](this.xpTarget);
 
-    title(Player.select(Player.option.levelNotif)).title([
-      { text: `${this.name} Level Up!` }
-    ]);
-    title(Player.select(Player.option.levelNotif)).subtitle([
-      Variable(this.level)['--'], `§8➜ `, Variable(this.level)['++']
-    ]);
+    // set new target
+    this.xpTarget["*="](13)["/="](10);
+    _.if(this.xpTarget['>'](5000), () => {
+      this.xpTarget.set(5000);
+    });
 
+    // give reward
     RewardClass.giveRewards(this);
 
-    const displayNotification = (rewards: RewardClass[]) => {
-      tellraw(Player.select(Player.option.levelNotif), [
-        `§m-------------------------------------------------§r\n`,
-        '  ',
-        { text: `${this.name} Level Up!\n `, color: 'green', bold: true },
-        Variable(this.level)['--'], '§8➜ ', Variable(this.level)['++'], '\n\n',
-        'Next Level: ', this.name, this.level, this.Xp, '/', this.XpTarget, '\n',
-        '==============\n',
-        'Rewards: \n',
-        ...RewardClass.joinString(rewards),
-        '\n',
-        `§m-------------------------------------------------§r`
-      ]);
+    // send notif
+    const displayNotification = (rewards: string[]) => {
+      _.if(SkillClass.notif, () => {
+        title('@p').title([{ text: `${this.name} Level Up!` }]);
+        title('@p').subtitle([Variable(this.level)['--'], `§8➜ `, Variable(this.level)['++']]);
+        tellraw('@p', [
+          `§m-------------------------------------------------§r\n`,
+          '  ',
+          { text: `${this.name} Level Up!\n `, color: 'green', bold: true },
+          Variable(this.level)['--'], '§8➜ ', Variable(this.level)['++'], '\n\n',
+          'Next Level: ', this.name, this.level, this.xp, '/', this.xpTarget, '\n',
+          '==============\n',
+          'Rewards: \n',
+          ...rewards,
+          '\n'
+        ]);
+      })
     };
+    RewardClass.resolve(this, this.level, displayNotification);
 
-    if (this.rewards.size > 0) {
-      this.rewards.forEach((rewards, lvl) => {
-        _.if(this.level["=="](lvl), () => {
-          displayNotification(rewards);
-        });
-      });
-      const notCustom = Array.from(this.rewards.keys()).map(lvl => this.level["!="](lvl));
-      _.if(_.and(...notCustom), () => {
-        displayNotification(RewardClass.common(this));
-      });
-    } else {
-      displayNotification(RewardClass.common(this));
-    }
+    // add level
+    this.level["++"];
+
+    // ability tiers
+    _.if(this.level["=="](10), () => {
+      this.ability.tier["++"];
+      _.if(SkillClass.notif, () => {
+        tellraw('@p', ['Ability Unlokced! Unlocked tier I', this.ability.name, this.ability.tier]);
+        _.if(Player.sound, () => playsound('entity.ender_dragon.growl', 'master', '@p', '~ ~ ~', 1, 0));
+      })
+    }).elseIf(this.level["%"](10)["=="](0), () => {
+      tellraw('@p', ['Ability upgrade! ', this.ability.name, this.ability.tier]);
+      _.if(Player.sound, () => playsound('entity.ender_dragon.growl', 'master', '@p', '~ ~ ~', 1, 0));
+    })
+
+    _.if(SkillClass.notif, () => tellraw('@p', `§m-------------------------------------------------§r`));
   }
 }
 

@@ -1,10 +1,11 @@
-import { Text } from "@prodigelib/gui";
 import { Objective, Score } from "sandstone";
 import { ItemType } from "../types";
 import { SkillClass } from ".";
 import { RewardClass } from "../object/reward";
 
 export class AchievementClass {
+  static notification: Score = Objective.create(`achievement.notification`)(`@p`);
+
   name: string;
   description: string[];
   itemId: ItemType;
