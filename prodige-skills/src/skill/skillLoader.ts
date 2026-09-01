@@ -67,7 +67,7 @@ export function loadSkillsFromCSV(dirPath: string): SkillClass[] {
       skill.onEvents.push(
         OnEvent({
           parent: skill,
-          name: row.name || row.itemId,
+          name: row.name,
           itemId: row.itemId as any,
           criteria: row.criteria as any,
           Xp: parseInt(row.Xp, 10) || 0,

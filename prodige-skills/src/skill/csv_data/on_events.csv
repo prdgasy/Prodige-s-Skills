@@ -9,3 +9,13 @@ Mining,Redstone Ore,redstone_ore,minecraft.mined:minecraft.redstone_ore,12,10
 Mining,Lapis Ore,lapis_ore,minecraft.mined:minecraft.lapis_ore,12,10
 Mining,Diamond Ore,diamond_ore,minecraft.mined:minecraft.diamond_ore,50,40
 Mining,Ancient Debris,ancient_debris,minecraft.mined:minecraft.ancient_debris,150,100
+Foraging,Oak Log,oak_log,minecraft.mined:minecraft.oak_log,2,3
+Foraging,Spruce Log,spruce_log,minecraft.mined:minecraft.spruce_log,2,3
+Foraging,Birch Log,birch_log,minecraft.mined:minecraft.birch_log,2,3
+Foraging,Jungle Log,jungle_log,minecraft.mined:minecraft.jungle_log,3,4
+Foraging,Acacia Log,acacia_log,minecraft.mined:minecraft.acacia_log,3,4
+Foraging,Dark Oak Log,dark_oak_log,minecraft.mined:minecraft.dark_oak_log,3,4
+Foraging,Mangrove Log,mangrove_log,minecraft.mined:minecraft.mangrove_log,4,5
+Foraging,Cherry Log,cherry_log,minecraft.mined:minecraft.cherry_log,4,5
+Foraging,Crimson Stem,crimson_stem,minecraft.mined:minecraft.crimson_stem,10,8
+Foraging,Warped Stem,warped_stem,minecraft.mined:minecraft.warped_stem,10,8

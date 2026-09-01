@@ -30,8 +30,8 @@ export class OnEventClass {
     this.pts = options.pts ?? 1;
     this.criteria = options.criteria ?? 'dummy';
 
-    this.watcher = Objective.create(`${this.parent.name}.event.${this.name.replace(' ', '')}`, this.criteria)('@p');
-    this.total = Objective.create(`${this.parent.name}.total_event.${this.name.replace(' ', '')}`, 'dummy')('@p');
+    this.watcher = Objective.create(`${this.parent.name}.event.${this.name.replace(/\s+/g, '')}`, this.criteria)('@p');
+    this.total = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}`, this.criteria)('@p');
   }
 
   trigger() {
