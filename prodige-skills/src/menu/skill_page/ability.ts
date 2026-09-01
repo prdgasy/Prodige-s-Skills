@@ -119,21 +119,27 @@ export function initAbility(menu: GUI, skill: SkillClass) {
     // --- Dynamic Tier Calculations ---
     const currentTierProgress = skill.level["%"](10);
     const progressPercentage = currentTierProgress["*"](10);
-    const nextTier = Variable(skill.ability.tier);
-    nextTier["+="](1);
+    const nextTier = skill.ability.tier["+"](1);
+
+    const tierRoman = DataVariable();
+    convertToRoman(skill.ability.tier, tierRoman);
+
+    const nextTierRoman = DataVariable();
+    convertToRoman(nextTier, nextTierRoman);
+
     const levelsLeft = Variable(10)["-"](currentTierProgress);
     const slot = 13;
     const unlockedCard = Button({
       slot: slot,
       id: "nether_star",
-      name: $`§b§l✦ ${skill.ability.name} ${convertToRoman(skill.ability.tier)}`, // 
+      name: $`§b§l✦ ${skill.ability.name} ${tierRoman}`, // 
       lore: [
         "§a✔ Ability Currently Active",
         "",
         ...skill.ability.description,
         "",
         "§6Tier progression:",
-        $` §7• Next Tier: §b§l${skill.ability.name} ${convertToRoman(nextTier)}`, // 
+        $` §7• Next Tier: §b§l${skill.ability.name} ${nextTierRoman}`, // 
         $` §7• Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
         $` ${() => ProgressBar(progressPercentage)}`,
         "",

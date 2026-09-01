@@ -1,16 +1,11 @@
-import { Data, Score, tellraw } from "sandstone";
-import { Indexer } from "./indexer";
+import { _, Data, DataPointClass, Score } from "sandstone";
 
-export function convertToRoman(value: Score) {
-  // const numbers = Indexer({
-  //   1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V',
-  //   6: 'VI', 7: 'VII', 8: 'VIII', 9: 'IX', 10: 'X'
-  // });
+const romanNumbers = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
-  // // Renvoie directement le résultat de get() sans l'encapsuler dans une fonction
-  // return numbers.get(value);
-
-  tellraw("@p", value);
-  // Si ton tier est un score Sandstone, l'indexer corrigé à l'étape 2 fonctionnera parfaitement.
-  return "I";
+export function convertToRoman(value: Score, dataVar: DataPointClass<'storage'>) {
+  romanNumbers.forEach((roman, index) => {
+    _.if(value["=="](index + 1), () => {
+      dataVar.set(roman);
+    });
+  });
 }
