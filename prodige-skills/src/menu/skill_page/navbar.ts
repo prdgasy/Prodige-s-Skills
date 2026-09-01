@@ -2,7 +2,7 @@ import { Button, GUI, MacroArg as $, MenuObject, PageClass, PaginatedPageClass }
 import { goBack, Mask, PageNames } from "../const";
 import { SkillClass } from "../../skill";
 import { ItemType } from "../../types";
-import { DataPointClass, Variable } from "sandstone"; // 🟢 Ajout de Variable
+import { DataPointClass } from "sandstone";
 import { ProgressBar } from "../../../lib/progressBar";
 
 type NavTabConfig = {
@@ -11,7 +11,8 @@ type NavTabConfig = {
   label: string;
   color: string;
   getPageName: (skillName: string) => string;
-}
+};
+
 let startSlot = 21;
 const tabs: NavTabConfig[] = [
   { id: "redstone", slot: startSlot++, label: "Progress", color: "yellow", getPageName: (name) => PageNames.progress(name) },
@@ -23,16 +24,13 @@ const tabs: NavTabConfig[] = [
 const glint = "enchantment_glint_override=1";
 
 export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: PageClass | PaginatedPageClass) {
-  const btns: MenuObject[] = [];
 
-  // 1. On encapsule la logique dynamique dans une fonction pour éviter l'exécution dans le "load"
-  const currentItemFunc = () => {
+  // 🟢 1. Définition de la fonction anonyme. 
+  // Elle accepte `p` (l'instance réelle de PageClass) et NE S'EXÉCUTE PAS tout de suite.
+  const renderCurrentItem = (p: PageClass) => {
     const percentage = skill.Xp["*"](100)["/"](skill.XpTarget);
     const bar = (): DataPointClass => ProgressBar(percentage);
-
-    // 🟢 CORRECTION SANDSTONE: On copie le level pour ne pas modifier le VRAI niveau du joueur en jeu
-    const nextLevel = Variable(skill.level);
-    nextLevel["+="](1);
+    const nextLevel = skill.level["+"](1);
 
     const currentItemBtn = Button({
       id: skill.itemId,
@@ -41,22 +39,23 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
       lore: [
         ...skill.description,
         "",
-        $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
-        $`${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`
+        "§f§lProgression Overview:",
+        $` §8• §7Target Level: §dLevel ${nextLevel}`,
+        $` §8• §7Progress Ratio: §e${percentage}%`,
+        $` §8> ${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
+        "",
+        "§8Skill progression overview."
       ],
       components: ['!attribute_modifiers', 'enchantment_glint_override=1']
     });
 
-    if (page instanceof PageClass) {
-      page.rawEmit(currentItemBtn); // Ici on peut utiliser rawEmit car on a un vrai ButtonClass
-    } else {
-      page.staticObjects.push(currentItemBtn);
-    }
-  }
+    // Émet le bouton dans le contexte actif (fill ou click) de la page p
+    p.rawEmit(currentItemBtn);
+  };
 
-  btns.push(
+  const btns: (MenuObject | ((p: PageClass) => void))[] = [
     ...Mask.navbar(),
-    currentItemFunc, // 🟢 On passe la fonction SANS les (), pour qu'elle s'exécute à la construction de la page
+    renderCurrentItem, // 🟢 ON PASSE LA FONCTION SANS PARENTHÈSES () !
     goBack(menu, PageNames.main),
     ...tabs.map((tab) => {
       const targetPage = tab.getPageName(skill.name);
@@ -73,15 +72,14 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
         onClick: isCurrent ? undefined : () => menu.toPage(targetPage)
       });
     })
-  );
+  ];
 
+  // 🟢 2. Transmission aux objets statiques ou à la page
   btns.forEach(btn => {
     if (page instanceof PaginatedPageClass) {
-      page.staticObjects.push(btn);
+      page.staticObjects.push(btn as any);
     } else {
-      // 🟢 CORRECTION DE L'ERREUR : On utilise pushObject au lieu de rawEmit
-      // pushObject accepte tous les MenuObject (Fonctions, Masques FillClick, Boutons...)
-      page.pushObject(btn);
+      page.pushObject(btn as any);
     }
   });
 }

@@ -1,7 +1,7 @@
 import { Button, GUI, Page, MacroArg as $ } from "@prodigelib/gui";
 import { _, DataVariable, Variable } from "sandstone";
 
-import { PageNames, Mask, Bars } from "../const";
+import { PageNames, Mask } from "../const";
 import { SkillClass } from "../../skill";
 import { navbar } from "./navbar";
 import { ProgressBar } from "../../../lib/progressBar";
@@ -46,19 +46,19 @@ export function initAbility(menu: GUI, skill: SkillClass) {
     const favourite = Button({
       id: $(favData.id),
       slot: 11,
-      name: $`§e§lFavorite Action`,
+      name: $`§e§lFavorite Action §8• §b${favData.name}`,
       lore: [
         ...textWrapper("Your most repeated activity and primary source of progression for this skill."),
         "",
-        "§6Statistics:",
-        $` §7• Skill Action: §b${favData.name}`,
-        $` §7• Times Executed: §a${favData.total} §7times`,
-        $` §7• Total Xp Generated: §3${totalXpGained} Xp`,
-        $` §7• Total Points Earned: §e${totalPtsGained} Pts`,
-        $` §7• Skill Impact: §d${contributionPercentage}% §7of all Xp`,
+        "§f§lStatistics:",
+        $` §8• §7Skill Action: §b${favData.name}`,
+        $` §8• §7Times Executed: §a${favData.total} §7times`,
+        $` §8• §7Total Xp Generated: §3${totalXpGained} Xp`,
+        $` §8• §7Total Points Earned: §e${totalPtsGained} Pts`,
+        $` §8• §7Skill Impact: §d${contributionPercentage}% §7of all Xp`,
         "",
-        "§6Per Action Value:",
-        $` §7• §3+${favData.Xp} Xp §7| §e+${favData.pts} Pts`,
+        "§f§lPer Action Value:",
+        $` §8• §3+${favData.Xp} Xp §7| §e+${favData.pts} Pts`,
         "",
         "§8Keep going to unlock higher milestones!"
       ]
@@ -67,7 +67,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
     page.rawEmit(favourite);
   });
 
-  // total points
+  // total
   page.pushObject(() => {
     // Calculs ou variables supplémentaires utiles pour meubler
     const averageXpPerPoint = skill.totalPts[">"](0)
@@ -81,12 +81,12 @@ export function initAbility(menu: GUI, skill: SkillClass) {
       lore: [
         ...textWrapper(`Cumulative experience and points earned since you started training ${skill.name}.`),
         "",
-        "§6Progression Summary:",
-        $` §7• Total Xp: §3${skill.totalXp} Xp`,
-        $` §7• Total Points: §e${skill.totalPts} pts`,
+        "§f§lProgression Summary:",
+        $` §8• §7Total Xp: §3${skill.totalXp} Xp`,
+        $` §8• §7Total Points: §e${skill.totalPts} pts`,
         "",
-        "§6Efficiency Ratio:",
-        $` §7• Avg Xp per Point: §3~${averageXpPerPoint} Xp/pt`,
+        "§f§lEfficiency Ratio:",
+        $` §8• §7Avg Xp per Point: §3~${averageXpPerPoint} Xp/pt`,
         "",
         "§8All resources earned across all activities."
       ]
@@ -99,16 +99,13 @@ export function initAbility(menu: GUI, skill: SkillClass) {
   page.pushObject(Button({
     slot: 15,
     id: "knowledge_book",
-    name: "§a§l📖 Ability Guide",
+    name: "§a§lAbility Guide",
     lore: [
       ...textWrapper("Abilities are powerful passive traits that enhance your skill performance continuously."),
       "",
-      "§6Activation:",
-      ...textWrapper(" §7• Triggers seamlessly whenever you use or hold the tool."),
-      "",
-      "§6Progression Rules:",
-      " §7• Unlocks at §eSkill Level 10§7.",
-      " §7• Upgrades every §b10 levels §7(§dTier I §7➡ §dTier X§7).",
+      "§f§lProgression Rules:",
+      " §8• §7Unlocks at §eSkill Level 10§7.",
+      " §8• §7Upgrades every §b10 levels §7(§dTier I §7➡ §dTier X§7).",
       "",
       "§8No cooldown, or activation key required."
     ]
@@ -129,52 +126,49 @@ export function initAbility(menu: GUI, skill: SkillClass) {
 
     const levelsLeft = Variable(10)["-"](currentTierProgress);
     const slot = 13;
-    const unlockedCard = Button({
+    const unlocked = (color: string, message: string) => Button({
       slot: slot,
       id: "nether_star",
-      name: $`§b§l✦ ${skill.ability.name} ${tierRoman}`, // 
+      name: $`${color}§l♦ ${skill.ability.name} ${tierRoman} ♦`, // 
       lore: [
-        "§a✔ Ability Currently Active",
+        message,
         "",
         ...skill.ability.description,
         "",
-        "§6Tier progression:",
-        $` §7• Next Tier: §b§l${skill.ability.name} ${nextTierRoman}`, // 
-        $` §7• Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
-        $` ${() => ProgressBar(progressPercentage)}`,
+        "§f§lTier progression:",
+        $` §8• §7Next Tier: §d${skill.ability.name} ${nextTierRoman}`, // 
+        $` §8• §7Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
+        $` §8> ${() => ProgressBar(progressPercentage)}`,
         "",
-        Bars.separator,
         "§eClick to toggle!"
       ],
-      components: ["enchantment_glint_override=1", "!attribute_modifiers"]
+      components: ["enchantment_glint_override=1", "!attribute_modifiers"],
+      onClick: () => _.if(skill.ability.toggle, () => skill.ability.toggle["="](0)).else(() => skill.ability.toggle["="](1))
     });
 
     const lockedCard = Button({
       slot: slot,
       id: "charcoal",
-      name: "§8§l✦ §kUnknown§r §8[Locked]",
+      name: "§8§l♦ §kUnknown §8§l♦",
       lore: [
         "§c✘ Currently Inactive",
         "",
         ...skill.ability.description,
         "",
-        "§6Unlock progression:",
-        $` §7• Requirement: §dSkill Level 10`,
-        $` §7• Remaining: §c${Variable(10)["-"](skill.level)} levels`,
-        $` ${() => ProgressBar(skill.level["*"](10))}`,
+        "§f§lUnlock progression:",
+        $` §8• §7Requirement: §dSkill Level 10`,
+        $` §8• §7Remaining: §c${Variable(10)["-"](skill.level)} levels`,
+        $` §8> ${() => ProgressBar(skill.level["*"](10))}`,
         "",
-        Bars.separator,
         "§7You cannot toggle this yet!"
       ]
     });
 
     // --- Render logic ---
 
-    _.if(skill.ability.tier["=="](0), () => {
-      page.rawEmit(lockedCard);
-    }).else(() => {
-      page.rawEmit(unlockedCard);
-    });
+    _.if(skill.ability.tier["=="](0), () => page.rawEmit(lockedCard))
+      .elseIf(skill.ability.toggle, () => page.rawEmit(unlocked("§d", "§a✔ Ability Currently Active")))
+      .else(() => page.rawEmit(unlocked("§c", "§c✘ Currently Inactive")));
   });
 
 

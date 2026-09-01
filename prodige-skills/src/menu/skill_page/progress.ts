@@ -31,7 +31,8 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
           slot: $(i),
           name: $`§c${skill.name} ${processedLevel}`,
           lore: [
-            "§7Rewards:",
+            "",
+            "§f§lRewards:",
             ...rewards,
           ]
         });
@@ -40,10 +41,11 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
           name: $`§e${skill.name} ${processedLevel}`,
           slot: $(i),
           lore: [
-            $`§7Progress: §e${percentage}%`,
-            $`${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
             "",
-            "§7Rewards: ",
+            $`§f§lProgress: §e${percentage}%`,
+            $` §8> ${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
+            "",
+            "§f§lRewards: ",
             ...rewards,
           ],
         });
@@ -51,7 +53,8 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
           id: "green_stained_glass_pane",
           name: $`§a${skill.name} ${processedLevel}`,
           lore: [
-            '§7Rewards:',
+            "",
+            '§f§lRewards:',
             ...rewards
           ],
           slot: $(i)
@@ -76,14 +79,14 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
   const prev = Button({
     id: 'paper',
     slot: 25,
-    name: { text: "Previous", color: "red" },
+    name: "§ePrevious",
     onClick: () => _.if(ProgressPageIndex['>'](0), () => ProgressPageIndex['--'])
   });
 
   const next = Button({
     id: 'paper',
     slot: 26,
-    name: { text: "Next", color: "green" },
+    name: "§eNext",
     onClick: () => _.if(ProgressPageIndex['<'](5), () => ProgressPageIndex['++'])
   });
 

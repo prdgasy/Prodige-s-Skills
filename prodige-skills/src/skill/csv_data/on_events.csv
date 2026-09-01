@@ -1,0 +1,11 @@
+skillName,name,itemId,criteria,Xp,pts
+Mining,Stone,stone,minecraft.mined:minecraft.stone,1,2
+Mining,Deepslate,deepslate,minecraft.mined:minecraft.deepslate,2,3
+Mining,Coal Ore,coal_ore,minecraft.mined:minecraft.coal_ore,5,5
+Mining,Copper Ore,copper_ore,minecraft.mined:minecraft.copper_ore,6,6
+Mining,Iron Ore,iron_ore,minecraft.mined:minecraft.iron_ore,10,10
+Mining,Gold Ore,gold_ore,minecraft.mined:minecraft.gold_ore,15,15
+Mining,Redstone Ore,redstone_ore,minecraft.mined:minecraft.redstone_ore,12,10
+Mining,Lapis Ore,lapis_ore,minecraft.mined:minecraft.lapis_ore,12,10
+Mining,Diamond Ore,diamond_ore,minecraft.mined:minecraft.diamond_ore,50,40
+Mining,Ancient Debris,ancient_debris,minecraft.mined:minecraft.ancient_debris,150,100

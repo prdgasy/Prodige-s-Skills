@@ -22,13 +22,13 @@ export class RewardClass {
   static joinText(rewards: RewardClass[]): Text[] {
     const t: Text[] = [];
     for (const r of rewards) {
-      t.push({ text: `  §8+§r${r.show}` });
+      t.push({ text: ` §8+ §r${r.show}` });
     }
     return t;
   }
 
   static joinString(rewards: RewardClass[]): string[] {
-    return rewards.map(r => `  §8+§r${r.show}`);
+    return rewards.map(r => ` §8+ §r${r.show}`);
   }
 
   static get(rewards: RewardClass[]) {
@@ -37,14 +37,14 @@ export class RewardClass {
 
   static point(p: number): RewardClass {
     return Reward({
-      show: `§6${p} Pts`,
+      show: `§e${p} Pts`,
       get: () => Player.pts.add(p)
     });
   }
 
   static Xp(x: number, skill: SkillClass): RewardClass {
     return Reward({
-      show: `§b${x} ${skill.name} Xp`,
+      show: `§3${x} ${skill.name} Xp`,
       get: () => skill.Xp.add(x)
     });
   }

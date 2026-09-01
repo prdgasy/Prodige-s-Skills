@@ -59,6 +59,7 @@ MCFunction('player/first_join', () => {
       skill.totalPts.set(0);
 
       skill.ability.tier.set(0);
+      skill.ability.toggle.set(1);
       skill.currentAchievement.set(0);
       for (const achievement of skill.achievements) {
         achievement.progress.set(0);

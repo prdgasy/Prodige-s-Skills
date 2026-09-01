@@ -31,10 +31,12 @@ export function initMain(Menu: GUI) {
           lore: [
             ...skill.description,
             "",
-            $`§7Progress to Level ${nextLevel}: §e${percentage}%`,
-            $`${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
+            "§f§lNext Level Goal:",
+            $` §8• §7Target: §dLevel ${nextLevel}`,
+            $` §8• §7Progress Ratio: §e${percentage}%`,
+            $` §8> ${bar} §e${skill.Xp}§6/§e${skill.XpTarget}`,
             "",
-            $`§7Level ${nextLevel} Rewards:`,
+            $`§f§lLevel ${nextLevel} Rewards:`,
             ...rewards,
             "",
             "§eClick to view!"

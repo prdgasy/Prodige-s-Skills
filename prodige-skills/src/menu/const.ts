@@ -74,8 +74,3 @@ export namespace Mask {
     throw new Error("Function not implemented.");
   }
 }
-
-export namespace Bars {
-  export const separator = "§8§m------------------------";
-}
-

@@ -1,7 +1,6 @@
-import chokidar, { FSWatcher } from "chokidar";
 import fs from "fs-extra";
 import chalk from "chalk";
-import { spawn, execSync } from "child_process";
+import { execSync } from "child_process";
 import readline from "readline";
 import path from "path";
 import os from "os";
@@ -69,36 +68,6 @@ async function getSubdirectories(dirPath: string): Promise<string[]> {
   } catch {
     return [];
   }
-}
-
-/**
- * Demande à l'utilisateur quel mode lancer (Watch ou Simple Compile & Copy)
- */
-async function askExecutionMode(): Promise<"watch" | "build"> {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
-  console.log(chalk.cyan.bold("\n⚡ Choisissez le mode d'exécution :"));
-  console.log(chalk.white("  [1] ") + chalk.green("Watch") + chalk.gray(" (surveille et synchronise en continu à chaque modification)"));
-  console.log(chalk.white("  [2] ") + chalk.yellow("Simple compile & copy") + chalk.gray(" (compile une fois avec 'sand build' puis copie)"));
-
-  let mode: "watch" | "build" | null = null;
-
-  while (!mode) {
-    const answer = await askQuestion(rl, chalk.cyan("\nVotre choix (1 ou 2, défaut = 2) : "));
-    if (answer === "1" || answer.toLowerCase() === "watch" || answer.toLowerCase() === "w") {
-      mode = "watch";
-    } else if (answer === "" || answer === "2" || answer.toLowerCase() === "build" || answer.toLowerCase() === "b" || answer.toLowerCase() === "compile") {
-      mode = "build";
-    } else {
-      console.log(chalk.red("Option invalide, choisissez 1 ou 2."));
-    }
-  }
-
-  rl.close();
-  return mode;
 }
 
 /**
@@ -211,7 +180,6 @@ async function promptForDestination(datapackName: string): Promise<string> {
  * Récupère ou demande le chemin de destination
  */
 async function getDestinationPath(datapackName: string): Promise<string> {
-  // 1. Vérifier si un fichier outputPath existe et n'est pas vide
   for (const fileName of OUTPUT_FILE_NAMES) {
     const filePath = path.join(process.cwd(), fileName);
     if (await fs.pathExists(filePath)) {
@@ -222,90 +190,24 @@ async function getDestinationPath(datapackName: string): Promise<string> {
     }
   }
 
-  // 2. Si non trouvé ou vide, demander interactivement
   return await promptForDestination(datapackName);
 }
 
-// Variables d'exécution
-let sand: any;
-let watcher: FSWatcher | null = null;
-let shuttingDown = false;
-let copyTimeout: NodeJS.Timeout | null = null;
-let isCopying = false;
-
-function shutdown() {
-  if (shuttingDown) return;
-  shuttingDown = true;
-
-  console.log(chalk.yellow("\n👋 Shutting down..."));
-  if (copyTimeout) clearTimeout(copyTimeout);
-  if (watcher) watcher.close();
-  if (sand) sand.kill("SIGTERM");
-
-  process.exit(0);
-}
-
-function startSand() {
-  if (shuttingDown) return;
-
-  console.log(chalk.magenta("🚀 sand watch started\n"));
-
-  sand = spawn("sand", ["watch"], {
-    shell: true,
-    stdio: "inherit",
-  });
-
-  sand.on("exit", (code: number) => {
-    if (shuttingDown) return;
-
-    console.log(chalk.red(`\n❌ sand stopped (code ${code})`));
-
-    setTimeout(() => {
-      console.log(chalk.yellow("🔄 restarting sand watch...\n"));
-      startSand();
-    }, 1000);
-  });
-}
-
 async function fullSync(source: string, destination: string) {
-  if (isCopying || shuttingDown) return;
-  isCopying = true;
-
-  try {
-    if (!(await fs.pathExists(source))) {
-      isCopying = false;
-      return;
-    }
-
-    // 1. On vide le dossier de destination pour remplacer proprement le datapack
-    if (await fs.pathExists(destination)) {
-      await fs.emptyDir(destination);
-    } else {
-      await fs.ensureDir(destination);
-    }
-
-    // 2. On copie le datapack fraîchement compilé
-    await fs.copy(source, destination, {
-      overwrite: true,
-      errorOnExist: false,
-    });
-
-    console.log(chalk.green(`\n✔ Datapack synchronisé avec succès vers :\n   ${chalk.gray(destination)} (${new Date().toLocaleTimeString()})\n`));
-  } catch (err) {
-    console.log(chalk.red("\n❌ La synchronisation a échoué :"), err);
+  if (!(await fs.pathExists(source))) {
+    throw new Error(`Le dossier source n'existe pas : ${source}`);
   }
 
-  isCopying = false;
-}
+  if (await fs.pathExists(destination)) {
+    await fs.emptyDir(destination);
+  } else {
+    await fs.ensureDir(destination);
+  }
 
-function triggerSync(source: string, destination: string) {
-  if (shuttingDown) return;
-
-  if (copyTimeout) clearTimeout(copyTimeout);
-
-  copyTimeout = setTimeout(() => {
-    fullSync(source, destination);
-  }, 800);
+  await fs.copy(source, destination, {
+    overwrite: true,
+    errorOnExist: false,
+  });
 }
 
 async function main() {
@@ -316,56 +218,20 @@ async function main() {
   console.log(chalk.cyan("📦 Source Sandstone : ") + chalk.gray(source));
   console.log(chalk.cyan("🎯 Destination      : ") + chalk.green(destination));
 
-  const mode = await askExecutionMode();
-
-  if (mode === "build") {
-    console.log(chalk.cyan("\n🔨 Compilation du datapack avec Sandstone (sand build)..."));
-    try {
-      execSync("sand build", { stdio: "inherit" });
-      console.log(chalk.blue("\n📂 Copie en cours vers le monde Minecraft..."));
-      await fullSync(source, destination);
-      console.log(chalk.green("✨ Opération terminée avec succès !"));
-      process.exit(0);
-    } catch (err) {
-      console.log(chalk.red("\n❌ Erreur lors de la compilation ou de la copie :"), err);
-      process.exit(1);
-    }
+  console.log(chalk.cyan("\n🔨 Compilation du datapack avec Sandstone (sand build)..."));
+  try {
+    execSync("sand build", { stdio: "inherit" });
+    console.log(chalk.blue("\n📂 Copie en cours vers le monde Minecraft..."));
+    await fullSync(source, destination);
+    console.log(chalk.green(`\n✨ Opération terminée avec succès !\n   ${chalk.gray(destination)}`));
+    process.exit(0);
+  } catch (err) {
+    console.log(chalk.red("\n❌ Erreur lors de la compilation ou de la copie :"), err);
+    process.exit(1);
   }
-
-  // Mode Watch
-  console.log(chalk.gray("\nMode Watch activé. Appuyez sur 'q' ou 'Ctrl+C' pour quitter.\n"));
-
-  // Clavier pour quitter
-  readline.emitKeypressEvents(process.stdin);
-  if (process.stdin.isTTY) {
-    process.stdin.setRawMode(true);
-  }
-  process.stdin.resume();
-
-  process.stdin.on("keypress", (_, key) => {
-    if (key.name === "q" || (key.ctrl && key.name === "c")) {
-      shutdown();
-    }
-  });
-
-  // Watcher sur le dossier de sortie de Sandstone
-  watcher = chokidar
-    .watch(source, {
-      ignoreInitial: false, // Permet de synchroniser au démarrage si déjà compilé
-      persistent: true,
-      awaitWriteFinish: {
-        stabilityThreshold: 200,
-        pollInterval: 50,
-      },
-    })
-    .on("all", () => triggerSync(source, destination));
-
-  // Lancement du compilateur Sandstone
-  startSand();
 }
 
 main().catch((err) => {
   console.error(chalk.red("Erreur inattendue :"), err);
   process.exit(1);
 });
-

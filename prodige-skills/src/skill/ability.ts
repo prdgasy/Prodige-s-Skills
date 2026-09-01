@@ -1,4 +1,3 @@
-import { Text } from "@prodigelib/gui";
 import { Objective, Score } from "sandstone";
 import { SkillClass } from ".";
 
@@ -7,11 +6,14 @@ export class AbilityClass {
   name: string;
   description: string[]
   tier: Score;
+  toggle: Score;
+
   constructor(parent: SkillClass, name: string, description: string[]) {
     this.parent = parent;
     this.name = name;
     this.description = description;
     this.tier = Objective.create(`${this.parent.name}.ability.tier`)('@p');
+    this.toggle = Objective.create(`${this.parent.name}.ability.toggle`)('@p');
   }
 }
 

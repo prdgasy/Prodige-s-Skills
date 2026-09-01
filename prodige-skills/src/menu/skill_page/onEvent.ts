@@ -1,6 +1,5 @@
-import { GUI, PaginatedPage, PaginatedButton } from "@prodigelib/gui";
+import { GUI, PaginatedPage, PaginatedButton, MacroArg as $ } from "@prodigelib/gui";
 import { goBack, Mask, PageNames } from "../const";
-import { Errors } from "../../../lib/errors";
 import { navbar } from "./navbar";
 import { SkillClass } from "../../skill";
 
@@ -10,17 +9,29 @@ import { SkillClass } from "../../skill";
 export function initOnEvent(Menu: GUI, skill: SkillClass) {
   const paginatedOnEvent = PaginatedPage({
     parent: Menu,
-    name: PageNames.onEvent(skill.name)
+    name: PageNames.onEvent(skill.name),
+    staticObjectList: [...Mask.gray()]
   });
 
   for (const event of skill.onEvents) {
+    // Calculs statistiques identiques à la Favorite Action
+    const totalXpGained = event.total["*"](event.Xp);
+    const totalPtsGained = event.total["*"](event.pts);
+    const contributionPercentage = totalXpGained["*"](100)["/"](skill.totalXp);
+
     paginatedOnEvent.objects.push(PaginatedButton({
       id: event.itemId,
-      name: { text: `${event.name}`, color: 'green' },
+      name: $`§e${event.name} §8• §3${event.Xp} Xp §7| §e${event.pts} Pts`,
       lore: [
-        { text: `• ${event.Xp} Xp`, color: "aqua" },
-        { text: `• ${event.pts} pts`, color: "gold" }
-      ]
+        "",
+        "§f§lStatistics:",
+        $` §8• §7Skill Action: §b${event.name}`,
+        $` §8• §7Times Executed: §a${event.total} §7times`,
+        $` §8• §7Total Xp Generated: §3${totalXpGained} Xp`,
+        $` §8• §7Total Points Earned: §e${totalPtsGained} Pts`,
+        $` §8• §7Skill Impact: §d${contributionPercentage}% §7of all Xp`
+      ],
+      components: ['!attribute_modifiers']
     }));
   }
 
