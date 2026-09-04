@@ -138,7 +138,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         "§f§lTier progression:",
         $` §8• §7Next Tier: §d${skill.ability.name} ${nextTierRoman}`, // 
         $` §8• §7Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
-        $` §8> ${() => ProgressBar(progressPercentage)}`,
+        $` §8> ${() => ProgressBar(progressPercentage, 10)}`,
         "",
         "§eClick to toggle!"
       ],
@@ -158,7 +158,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         "§f§lUnlock progression:",
         $` §8• §7Requirement: §dSkill Level 10`,
         $` §8• §7Remaining: §c${Variable(10)["-"](skill.level)} levels`,
-        $` §8> ${() => ProgressBar(skill.level["*"](10))}`,
+        $` §8> ${() => ProgressBar(skill.level["*"](10), 10)}`,
         "",
         "§7You cannot toggle this yet!"
       ]

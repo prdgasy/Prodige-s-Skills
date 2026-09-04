@@ -2,11 +2,12 @@ import { _, DataPointClass, DataVariable, Score } from "sandstone";
 
 export function ProgressBar(
   progressRatio: Score,
+  length: number = 15,
   unlockedMotif: string = "-",
   lockedMotif: string = "-",
   unlockedColor: string = "§a",
   lockedColor: string = "§f",
-  length: number = 15,
+
 ): DataPointClass {
   const filledLength = progressRatio["*"](length)["/"](100);
   const bar = DataVariable();

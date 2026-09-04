@@ -51,7 +51,7 @@ export class RewardClass {
   static common(skill: SkillClass): RewardClass[] {
     return [
       RewardClass.point(20),
-      RewardClass.xp(30, skill),
+      // RewardClass.xp(30, skill),
       RewardClass.tool(NovicePickaxe)
     ]
   }

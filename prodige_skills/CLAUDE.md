@@ -2,12 +2,24 @@
 
 Starter template for creating Minecraft datapacks and resource packs with [Sandstone](https://github.com/sandstone-mc/sandstone).
 
+## Notes
+
+- **Minecraft SNBT supports single-quoted strings** — `'foo'` is valid NBT and parses the same as `"foo"`. Single quotes have been supported in SNBT since 1.13. Don't "fix" generated output that uses single quotes; it's intentional (Sandstone's `JSONTextComponentClass.toString()` emits single-quoted JSON, which is valid NBT).
+
+### Cache & clean rebuilds
+
+- **Trust the CLI's cache.** If a file in `.sandstone/output/` isn't rewritten on a rebuild, that's intentional — Sandstone hashes the fully-visited-and-serialized resource data in-memory and compares it against the hash stored in `.sandstone/cache.json`. A stale-looking file means the generator produced the same bytes as the previous run, not that the build skipped it.
+- **To force a clean rebuild, delete the entire `.sandstone/` folder**, not just `.sandstone/output/`. The `.sandstone/cache.json` tracks resource state across builds; clearing only `output/` leaves stale cache entries that suppress regeneration.
+
 ## Commands
 
 ```bash
 bun dev:build    # Build the pack (outputs to `.sandstone/output/`)
+bun dev:build --debug  # Same, but mirror console output to `.sandstone/build-debug.log` (overwritten each run) for targeted inspection
 bun dev:watch    # Watch mode - rebuilds on file changes, run this in a background shell and read from `.sandstone/watch.log` rather than your own background shell log
 ```
+
+**Build logging — keep noise out of your context window.** Always pipe routine builds to `/dev/null`: `bun dev:build > /dev/null 2>&1`. Piping the stdout into a blackhole prevents it from filling your context window, all of the logging goes to the file, do not attempt to do any other piping or the harness will ask the user for permissions all the time. Only use `--debug` (followed by `grep` on `.sandstone/build-debug.log`) when you're actually investigating something specific — don't `cat` the whole file, the log is meant to be searched.
 
 ## Project Structure
 
@@ -88,15 +100,14 @@ execute.as('@a').at('@s').run(() => {
 - `MCFunction('name', () => {...}, { runOnLoad: true })` - Runs on datapack load
 - `MCFunction('name', () => {...}, { runOnTick: true })` - Runs every tick
 - `{ lazy: true }` - Only creates file if called from another function
-- Async functions with `sleep()`: `MCFunction('name', async () => { await sleep('1s') })`
 - Inline functions (JS functions) don't create files, commands are inlined
 
 **IMPORTANT: Synchronous Execution**
-Everything inside an MCFunction (including all Flow control like `_.if`, `_.while`, `_.forScore`) executes **synchronously within a single game tick**. Minecraft processes all commands instantly - there is no "waiting" between commands. The only way to delay execution across ticks is with `sleep()` in an async MCFunction:
+Everything inside an MCFunction (including all Flow control like `_.if`, `_.while`, `_.forScore`) executes **synchronously within a single game tick**. Minecraft processes all commands instantly - there is no "waiting" between commands. The only way to delay execution across ticks is with `sleep()` in an MCFunction:
 ```typescript
-MCFunction('delayed', async () => {
+MCFunction('delayed', () => {
   say('This runs immediately')
-  await sleep('1s')  // Waits 20 ticks (1 second)
+  sleep('1s')  // Waits 20 ticks (1 second)
   say('This runs 1 second later')
 })
 ```
@@ -104,22 +115,21 @@ MCFunction('delayed', async () => {
 **Async Context**: By default, scheduled functions lose entity (`@s`) and position context because `schedule` runs from server context. Use `asyncContext: true` to preserve context:
 ```typescript
 // WITHOUT asyncContext - @s and position are LOST after sleep
-MCFunction('loses_context', async () => {
-  execute.as('@p').at('@s').run(async () => {
-    say('Player is @s here')
-    await sleep('1s')
-    say('Now @s is GONE - runs as server!')
-  })
+const loses_context = MCFunction('loses_context', () => {
+  say('Player is @s here')
+  sleep('1s')
+  say('Now @s is GONE - runs as server!')
 })
+execute.as('@p').at('@s').run(() => loses_context())
 
 // WITH asyncContext - context is preserved
-MCFunction('keeps_context', async () => {
-  execute.as('@p').at('@s').run(async () => {
-    say('Player is @s here')
-    await sleep('1s')
-    say('Still the same @s and position!')
-  })
+const keeps_context = MCFunction('keeps_context', () => {
+  say('Player is @s here')
+  sleep('1s')
+  say('Still the same @s and position!')
 }, { asyncContext: true })
+
+execute.as('@p').at('@s').run(() => keeps_context())
 ```
 Under the hood, `asyncContext` works by:
 1. Adding a **Label tag** to `@s` to mark entities waiting for this sleep
@@ -127,12 +137,12 @@ Under the hood, `asyncContext` works by:
 3. When scheduled time arrives, selecting all entities with that tag whose timer matches current gametime
 4. Running the continuation `as` and `at` each matched entity
 
-This elegantly handles multiple entities sleeping simultaneously - each wakes up independently when their timer eXpires.
+This elegantly handles multiple entities sleeping simultaneously - each wakes up independently when their timer expires.
 
 ### Macros & MCFunction Parameters
 [docs/features/macros.md](https://github.com/sandstone-mc/sandstone-documentation/blob/master/docs/features/macros.md)
 
-Macros allow runtime value substitution in commands using `$(variable)` syntax. Sandstone provides first-class macro support through MCFunction parameters and environment variables.
+**Mental model** — `$(name)` is Minecraft's runtime substitution, not JS async. Sandstone compiles `$.give(name, 'diamond', {}, count)` into a command with literal `$(env_0)` / `$(param_0)` tokens, plus emits the dispatch `function <name> with storage <envPath>` at the call site. MC copies storage values into the slots when invoking the mcfunction. The mcfunction file is the same regardless of how many times it's called.
 
 ```typescript
 const $ = Macro // common alias
@@ -154,10 +164,34 @@ MCFunction('foo', () => {
 })
 ```
 
+**You must invoke the thunk to emit the body.** `MCFunction('macro_flow', [x], () => { ... })` creates the function, but the body (`{...}`) only runs when the thunk is called. Without the trailing `()`, visitors see an empty mcfunction and the macro body never serializes:
+```typescript
+MCFunction('macro_flow', [x], () => {
+  $.give(...)
+})()   // ← call the thunk to actually emit the body
+```
+
 #### Environment Variables vs Parameters
 - **Environment variables**: Array as second MCFunction argument `[name]` - cannot be overridden at call time
 - **Parameters**: Declared in callback after `_loop`: `(_loop, count: Score)` - passed at call time
 - **Usage**: Reference the actual variables in `Macro` commands, not string placeholders
+
+#### `_.with()` — wrap a callback in a macro mcfunction
+`_.with([env], cb)` is the convenience form. It lifts `cb`'s body into a child mcfunction (`<parent>/__with_macro`) with each env var registered as `env_N`. Generated output:
+```mcfunction
+# parent.mcfunction
+data modify storage __sandstone:variable foo.env_0 set value 20d
+function test:parent/__with_macro with storage __sandstone:variable foo
+
+# parent/__with_macro.mcfunction
+$give @s minecraft:diamond 1 $(env_0)
+```
+The two nesting patterns produce equivalent output — order of `_.with` vs `execute.as/at` doesn't matter:
+```typescript
+_.with([volume], () => execute.as('@a').at('@s').run(() => $.playsound(...)))
+execute.as('@a').at('@s').run(() => _.with([volume], () => $.playsound(...)))
+// both → execute as @a at @s run function <__with_macro>; __with_macro has $playsound ... $(env_0)
+```
 
 #### Macro Template Literals
 Use `Macro` tagged template for dynamic paths:
@@ -170,6 +204,13 @@ const test = MCFunction('get_thing', (_loop, index: Score) => {
   $.data.storage.modify(thing).set.from.storage(thingMap.currentTarget, $`Things[${index}]`)
 })
 ```
+
+#### Template literals with DataPoints — DON'T
+```typescript
+say(`got ${entry}`)                       // ❌ serializes as `say got [object Object]`
+tellraw('@a', ['got', entry])             // ✅ proper SNBT element-wise serialization
+```
+DataPoints don't auto-coerce to SNBT inside JS template strings. Use tellraw with an array (or build the `JSONTextComponent` explicitly).
 
 #### Important Limitations
 - MCFunctions with macro variables **must** be called at compile-time to register macro names
@@ -370,9 +411,3 @@ Edit `sandstone.config.ts` to change:
 - `packs.datapack.packFormat`: Data pack format version
 - `packs.resourcepack.packFormat`: Resource pack format version
 - `mcmeta`: Minecraft version for type generation (`'latest'` or specific version)
-
-### Pack Formats
-
-**Always check [Pack format](https://minecraft.wiki/w/Pack_format) for current version numbers** - these change frequently with snapshots.
-
-26.1.x will be the first supported stable release. Until 26.1.0 is released, use the latest snapshot pack formats from the wiki.
