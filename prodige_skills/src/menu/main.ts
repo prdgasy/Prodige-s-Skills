@@ -23,7 +23,7 @@ export function initMain(Menu: GUI) {
       const nextLevel = skill.level['+'](1);
       const bar = () => ProgressBar(percentage);
 
-      const emitBtn = (rewards: Text[]) => {
+      const emitBtn = (rewards: string[]) => {
         page.rawEmit(Button({
           id: skill.itemId,
           slot: slot,
@@ -31,12 +31,12 @@ export function initMain(Menu: GUI) {
           lore: [
             ...skill.description,
             "",
-            "§f§lNext Level Goal:",
+            "§f§lNext Level Goal",
             $` §8• §7Target: §dLevel ${nextLevel}`,
             $` §8• §7Progress Ratio: §e${percentage}%`,
             $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
             "",
-            $`§f§lLevel ${nextLevel} Rewards:`,
+            $`§f§lLevel ${nextLevel} Rewards`,
             ...rewards,
             "",
             "§eClick to view!"

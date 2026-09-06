@@ -3,7 +3,6 @@ import { _, DataPointClass, Score, tellraw, Variable } from "sandstone";
 
 import { ItemType } from "../../types";
 import { goBack, Mask, PageNames, ProgressPageIndex } from "../const";
-import { Errors } from "../../../lib/errors";
 import { navbar } from "./navbar";
 import { SkillClass } from "../../skill";
 import { ProgressBar } from "../../../lib/progressBar";
@@ -25,14 +24,14 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
     _.for([0, totalSlots], 'iterate', i => {
       const processedLevel = i['+'](ProgressPageIndex['*'](totalSlots))["++"];
       processedLevel['+='](ProgressPageIndex);
-      const emitBtn = (rewards: Text[]) => {
+      const emitBtn = (rewards: string[]) => {
         const notReached = Button({
           id: "red_stained_glass_pane",
           slot: $(i),
           name: $`§c${skill.name} ${processedLevel}`,
           lore: [
             "",
-            "§f§lRewards:",
+            "§f§lRewards",
             ...rewards,
           ]
         });

@@ -50,14 +50,14 @@ export function initAbility(menu: GUI, skill: SkillClass) {
       lore: [
         ...textWrapper("Your most repeated activity and primary source of progression for this skill."),
         "",
-        "§f§lStatistics:",
+        "§f§lStatistics",
         $` §8• §7Skill Action: §b${favData.name}`,
         $` §8• §7Times Executed: §a${favData.total} §7times`,
         $` §8• §7Total Xp Generated: §3${totalXpGained} Xp`,
         $` §8• §7Total Points Earned: §e${totalPtsGained} Pts`,
         $` §8• §7Skill Impact: §d${contributionPercentage}% §7of all Xp`,
         "",
-        "§f§lPer Action Value:",
+        "§f§lPer Action Value",
         $` §8• §3+${favData.Xp} Xp §7| §e+${favData.pts} Pts`,
         "",
         "§8Keep going to unlock higher milestones!"
@@ -81,11 +81,11 @@ export function initAbility(menu: GUI, skill: SkillClass) {
       lore: [
         ...textWrapper(`Cumulative experience and points earned since you started training ${skill.name}.`),
         "",
-        "§f§lProgression Summary:",
+        "§f§lProgression Summary",
         $` §8• §7Total Xp: §3${skill.totalXp} Xp`,
         $` §8• §7Total Points: §e${skill.totalPts} pts`,
         "",
-        "§f§lEfficiency Ratio:",
+        "§f§lEfficiency Ratio",
         $` §8• §7Avg Xp per Point: §3~${averageXpPerPoint} Xp/pt`,
         "",
         "§8All resources earned across all activities."
@@ -103,7 +103,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
     lore: [
       ...textWrapper("Abilities are powerful passive traits that enhance your skill performance continuously."),
       "",
-      "§f§lProgression Rules:",
+      "§f§lProgression Rules",
       " §8• §7Unlocks at §eSkill Level 10§7.",
       " §8• §7Upgrades every §b10 levels §7(§dTier I §7➡ §dTier X§7).",
       "",
@@ -135,7 +135,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         "",
         ...skill.ability.description,
         "",
-        "§f§lTier progression:",
+        "§f§lTier progression",
         $` §8• §7Next Tier: §d${skill.ability.name} ${nextTierRoman}`, // 
         $` §8• §7Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
         $` §8> ${() => ProgressBar(progressPercentage, 10)}`,
@@ -155,7 +155,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         "",
         ...skill.ability.description,
         "",
-        "§f§lUnlock progression:",
+        "§f§lUnlock progression",
         $` §8• §7Requirement: §dSkill Level 10`,
         $` §8• §7Remaining: §c${Variable(10)["-"](skill.level)} levels`,
         $` §8> ${() => ProgressBar(skill.level["*"](10), 10)}`,
