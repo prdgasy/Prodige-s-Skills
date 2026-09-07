@@ -41,7 +41,7 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
         "",
         "§f§lProgression Overview",
         $` §8• §7Target Level: §dLevel ${nextLevel}`,
-        $` §8• §7Progress Ratio: §e${percentage}%`,
+        $` §8• §7Progress: §e${percentage}%`,
         $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
         "",
         "§8Skill progression overview."

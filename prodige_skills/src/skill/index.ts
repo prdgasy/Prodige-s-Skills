@@ -3,7 +3,7 @@ import { ItemType } from "../types";
 import { OnEvent, OnEventClass } from "./onEvent";
 import { TitleClass } from "./title";
 import { Ability, AbilityClass } from "./ability";
-import { Objective, Score, tellraw, title, Variable, _, say, playsound, scoreboard, raw } from "sandstone";
+import { Objective, Score, tellraw, title, Variable, _, say, playsound, scoreboard, raw, DataVariable } from "sandstone";
 import { Player } from "../player";
 import { Achievement, AchievementClass } from "./achievement";
 import { Reward, RewardClass } from "../object/reward";
@@ -13,6 +13,7 @@ import { loadSkillsFromCSV } from './skillLoader';
 import { ScoreDisplay } from "sandstone/variables";
 import { ProgressBar } from "../../lib/progressBar";
 import { richTellraw, macro as $ } from "@prodigelib/easymacro";
+import { convertToRoman } from "../../lib/romanNumbers";
 
 export * from "./ability";
 export * from "./achievement";
@@ -121,43 +122,49 @@ export class SkillClass {
         ]);
 
         // 2. Audio
-        _.if(Player.sound, () => playsound('entity.player.levelup', 'master', '@p', '~ ~ ~', 1, 1));
+        _.if(Player.sound, () => playsound('entity.player.levelup', 'master', '@p', '~ ~ ~', 1, 0));
         _.if(_.or(isAbilityUnlocked, isAbilityUpgraded), () => {
-          _.if(Player.sound, () => playsound('entity.ender_dragon.growl', 'master', '@p', '~ ~ ~', 0.8, 1));
+          _.if(Player.sound, () => playsound('entity.ender_dragon.growl', 'master', '@p', '~ ~ ~', 1, 1));
         });
 
-        const encapsuler = '§7§m------------------------------------------\n';
+        const encapsuler = '§7§m------------------------------------------';
         const percentage = this.xp['*'](100)['/'](this.xpTarget);
         const bar = ProgressBar(percentage);
 
         // 3. Header & Progression actuelle
         richTellraw([
-          encapsuler,
-          $` §d§l${this.name.toUpperCase()} LEVEL UP!\n`,
-          $` §f§lProgress to Level ${this.level['+'](1)}: §e${percentage}\n`,
-          $` §f§lProgress: §d${this.xp} §6/ §d${this.xpTarget} XP\n`,
-          $`  §8> ${bar} §d${this.xp} §6/ §d${this.xpTarget} XP\n`,
-          $` §f§lRewards:\n`,
+          encapsuler + '\n',
+          $` §e§l${this.name.toUpperCase()} LEVEL UP! §8${this.level['-'](1)} ➜ §e§l${this.level}\n\n`,
+          $` §f§lNext Level Goal\n`,
+          $`  §8• §7Target: §d${this.name} ${this.level['+'](1)}\n`,
+          $`  §8• §7Progress: §e${percentage}%\n`,
+          $`  §8> ${bar} §e${this.xp}§6/§e${this.xpTarget} XP\n\n`,
+          ` §f§lRewards\n`,
           ...rewards.map(r => ` ${r}\n`)
         ], '@p');
-
+        const tierRoman = DataVariable();
+        convertToRoman(this.ability.tier, tierRoman);
+        const previousRoman = DataVariable();
+        convertToRoman(this.ability.tier['-'](1), previousRoman);
         // 4. Section Ability (si débloquée/améliorée à CE niveau)
         _.if(isAbilityUnlocked, () => {
-          tellraw('@p', [
+          richTellraw([
             ' \n',
             ' §a§lABILITY UNLOCKED!\n',
-            `  §8• §7Ability: §b${this.ability.name}\n`,
-            '  §8• §7Tier: §eTier I\n'
-          ]);
+            $`  §8• §7Ability: §c§l${this.ability.name} §8[§c§l${tierRoman}§8]\n`,
+            ...this.ability.description.map(r => $`   §7${r}\n`),
+            $` §8• §7Bonus:\n`
+          ], ('@p'));
         });
 
         _.if(isAbilityUpgraded, () => {
-          tellraw('@p', [
+          richTellraw([
             ' \n',
             ' §b§lABILITY UPGRADE!\n',
-            `  §8• §7Ability: §b${this.ability.name}\n`,
-            '  §8• §7New Tier: §eTier ', this.ability.tier, '\n'
-          ]);
+            $`  §8• §7Ability: §c§l${this.ability.name} §8[${previousRoman}➜§c§l${tierRoman}§8]\n`,
+            ...this.ability.description.map(r => $`   §7${r}\n`),
+            '  §8• §7Bonus:\n'
+          ], '@p');
         });
 
         tellraw('@p', [encapsuler]);

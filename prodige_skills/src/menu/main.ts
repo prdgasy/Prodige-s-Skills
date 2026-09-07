@@ -33,7 +33,7 @@ export function initMain(Menu: GUI) {
             "",
             "§f§lNext Level Goal",
             $` §8• §7Target: §dLevel ${nextLevel}`,
-            $` §8• §7Progress Ratio: §e${percentage}%`,
+            $` §8• §7Progress: §e${percentage}%`,
             $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
             "",
             $`§f§lLevel ${nextLevel} Rewards`,

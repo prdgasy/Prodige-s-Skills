@@ -32,10 +32,10 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
         lore: [
           ...achievement.description.map(line => `§7${line}`),
           `§7`,
-          $`§f§lProgress: §e${ratio}%`,
+          $`§f§lProgress §e${ratio}%`,
           $`§8 > ${bar} §e${achievement.progress}§6/§e${achievement.target}`,
           `§7`,
-          `§f§lRewards:`,
+          `§f§lRewards`,
           ...RewardClass.join(achievement.reward),
           `§7`,
           `§e• IN PROGRESS`

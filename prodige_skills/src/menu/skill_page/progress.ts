@@ -33,7 +33,9 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
             "",
             "§f§lRewards",
             ...rewards,
-          ]
+          ],
+          count: $(processedLevel),
+          components: ['max_stack_size=99']
         });
         const inProgress = Button({
           id: "yellow_stained_glass_pane",
@@ -47,6 +49,8 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
             "§f§lRewards: ",
             ...rewards,
           ],
+          count: $(processedLevel),
+          components: ['max_stack_size=99']
         });
         const reached = Button({
           id: "green_stained_glass_pane",
@@ -56,7 +60,9 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
             '§f§lRewards:',
             ...rewards
           ],
-          slot: $(i)
+          slot: $(i),
+          count: $(processedLevel),
+          components: ['max_stack_size=99']
         });
 
         _.if(nextLevel['<'](processedLevel), () => {

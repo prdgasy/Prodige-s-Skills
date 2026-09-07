@@ -105,7 +105,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
       "",
       "§f§lProgression Rules",
       " §8• §7Unlocks at §eSkill Level 10§7.",
-      " §8• §7Upgrades every §b10 levels §7(§dTier I §7➡ §dTier X§7).",
+      " §8• §7Upgrades every §b10 levels §7(§cTier I §7➡ §cTier X§7).",
       "",
       "§8No cooldown, or activation key required."
     ]
@@ -136,7 +136,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         ...skill.ability.description,
         "",
         "§f§lTier progression",
-        $` §8• §7Next Tier: §d${skill.ability.name} ${nextTierRoman}`, // 
+        $` §8• §7Next Tier: §c§l${skill.ability.name} ${nextTierRoman}`, // 
         $` §8• §7Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
         $` §8> ${() => ProgressBar(progressPercentage, 10)}`,
         "",
