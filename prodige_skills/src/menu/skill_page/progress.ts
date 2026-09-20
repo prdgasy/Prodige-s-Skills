@@ -7,6 +7,8 @@ import { navbar } from "./navbar";
 import { SkillClass } from "../../skill";
 import { ProgressBar } from "../../../lib/progressBar";
 import { RewardClass } from "../../object/reward";
+import { RomanNumbers } from "../../../lib/romanNumbers";
+import { macro as EM, richTellraw } from "@prodigelib/easymacro";
 
 const totalSlots = 17;
 
@@ -17,19 +19,19 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
   const levels = () => {
     const percentage = skill.xp["*"](100)["/"](skill.xpTarget);
     const nextLevel = skill.level["+"](1);
-    const bar = (): DataPointClass => ProgressBar(percentage);
-
-
 
     _.for([0, totalSlots], 'iterate', i => {
       const processedLevel = i['+'](ProgressPageIndex['*'](totalSlots))["++"];
       processedLevel['+='](ProgressPageIndex);
+      const r = RomanNumbers.convert(processedLevel);
       const emitBtn = (rewards: string[]) => {
         const notReached = Button({
           id: "red_stained_glass_pane",
           slot: $(i),
-          name: $`§c${skill.name} ${processedLevel}`,
+          name: $`§c${skill.name} ${r}`,
           lore: [
+            $`§9${skill.name} ${processedLevel}`,
+            '',
             "",
             "§f§lRewards",
             ...rewards,
@@ -39,12 +41,14 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
         });
         const inProgress = Button({
           id: "yellow_stained_glass_pane",
-          name: $`§e${skill.name} ${processedLevel}`,
+          name: $`§e${skill.name} ${r}`,
           slot: $(i),
           lore: [
+            $`§9${skill.name} ${processedLevel}`,
+            '',
             "",
             $`§f§lProgress: §e${percentage}%`,
-            $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
+            $` §8> ${ProgressBar(percentage)} §e${skill.xp}§6/§e${skill.xpTarget}`,
             "",
             "§f§lRewards: ",
             ...rewards,
@@ -54,8 +58,10 @@ export function initProgress(Menu: GUI, skill: SkillClass) {
         });
         const reached = Button({
           id: "green_stained_glass_pane",
-          name: $`§a${skill.name} ${processedLevel}`,
+          name: $`§a${skill.name} ${r}`,
           lore: [
+            $`§9${skill.name} ${processedLevel}`,
+            '',
             "",
             '§f§lRewards:',
             ...rewards

@@ -13,7 +13,7 @@ import { loadSkillsFromCSV } from './skillLoader';
 import { ScoreDisplay } from "sandstone/variables";
 import { ProgressBar } from "../../lib/progressBar";
 import { richTellraw, macro as $ } from "@prodigelib/easymacro";
-import { convertToRoman } from "../../lib/romanNumbers";
+import { RomanNumbers } from "../../lib/romanNumbers";
 
 export * from "./ability";
 export * from "./achievement";
@@ -115,9 +115,9 @@ export class SkillClass {
         // 1. Titres à l'écran
         title('@p').title([{ text: '§d§lSKILL LEVEL UP!', bold: true }]);
         title('@p').subtitle([
-          { text: `§7${this.name} ` },
+          { text: `§d${this.name} §8` },
           this.level['-'](1),
-          { text: ' §8➜ §dLevel ' },
+          { text: '§8➜§d' },
           this.level
         ]);
 
@@ -142,10 +142,9 @@ export class SkillClass {
           ` §f§lRewards\n`,
           ...rewards.map(r => ` ${r}\n`)
         ], '@p');
-        const tierRoman = DataVariable();
-        convertToRoman(this.ability.tier, tierRoman);
-        const previousRoman = DataVariable();
-        convertToRoman(this.ability.tier['-'](1), previousRoman);
+        const tierRoman = RomanNumbers.convert(this.ability.tier);
+        const previousRoman = RomanNumbers.convert(this.ability.tier['-'](1));
+
         // 4. Section Ability (si débloquée/améliorée à CE niveau)
         _.if(isAbilityUnlocked, () => {
           richTellraw([

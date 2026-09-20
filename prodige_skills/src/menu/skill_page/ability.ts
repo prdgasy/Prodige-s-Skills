@@ -6,7 +6,7 @@ import { SkillClass } from "../../skill";
 import { navbar } from "./navbar";
 import { ProgressBar } from "../../../lib/progressBar";
 import { textWrapper } from "../../../lib/textWrapper";
-import { convertToRoman } from "../../../lib/romanNumbers";
+import { RomanNumbers } from "../../../lib/romanNumbers";
 function getMax(skill: SkillClass) {
   const max = Variable(0);
   const maxData = {
@@ -117,28 +117,24 @@ export function initAbility(menu: GUI, skill: SkillClass) {
     const currentTierProgress = skill.level["%"](10);
     const progressPercentage = currentTierProgress["*"](10);
     const nextTier = skill.ability.tier["+"](1);
+    const r = RomanNumbers.convert(skill.ability.tier);
 
-    const tierRoman = DataVariable();
-    convertToRoman(skill.ability.tier, tierRoman);
-
-    const nextTierRoman = DataVariable();
-    convertToRoman(nextTier, nextTierRoman);
 
     const levelsLeft = Variable(10)["-"](currentTierProgress);
     const slot = 13;
     const unlocked = (color: string, message: string) => Button({
       slot: slot,
       id: "nether_star",
-      name: $`${color}§l♦ ${skill.ability.name} ${tierRoman} ♦`, // 
+      name: $`${color}§l${skill.ability.name} ${r}`, // 
       lore: [
         message,
         "",
         ...skill.ability.description,
         "",
         "§f§lTier progression",
-        $` §8• §7Next Tier: §c§l${skill.ability.name} ${nextTierRoman}`, // 
+        $` §8• §7Next Tier: §4§l${skill.ability.name} ${RomanNumbers.convert(nextTier)}`, // 
         $` §8• §7Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
-        $` §8> ${() => ProgressBar(progressPercentage, 10)}`,
+        $` §8> ${() => ProgressBar(progressPercentage)}`,
         "",
         "§eClick to toggle!"
       ],
@@ -149,7 +145,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
     const lockedCard = Button({
       slot: slot,
       id: "charcoal",
-      name: "§8§l♦ §kUnknown §8§l♦",
+      name: "§8§l§kUnknown",
       lore: [
         "§c✘ Currently Inactive",
         "",
@@ -160,15 +156,15 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         $` §8• §7Remaining: §c${Variable(10)["-"](skill.level)} levels`,
         $` §8> ${() => ProgressBar(skill.level["*"](10), 10)}`,
         "",
-        "§7You cannot toggle this yet!"
+        "§8You cannot toggle this yet!"
       ]
     });
 
     // --- Render logic ---
 
     _.if(skill.ability.tier["=="](0), () => page.rawEmit(lockedCard))
-      .elseIf(skill.ability.toggle, () => page.rawEmit(unlocked("§d", "§a✔ Ability Currently Active")))
-      .else(() => page.rawEmit(unlocked("§c", "§c✘ Currently Inactive")));
+      .elseIf(skill.ability.toggle, () => page.rawEmit(unlocked("§4", "§a§l♦ §aAbility Currently Active")))
+      .else(() => page.rawEmit(unlocked("§7", "§c§l♦ §cCurrently Inactive")));
   });
 
 

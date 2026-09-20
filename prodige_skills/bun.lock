@@ -7,7 +7,7 @@
       "dependencies": {
         "@prodigelib/easymacro": "prdgasy/easy-macro",
         "@prodigelib/gui": "prdgasy/prodigelib-gui",
-        "sandstone": "~1.2.26",
+        "sandstone": "1.2.26",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -79,9 +79,9 @@
 
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.6.0", "", { "os": "win32", "cpu": "x64" }, "sha512-cA+/pXV2YkfxlIcXOQ5fSWqAzzPyD78/x5qbK/I0vUkrlYHA8TIz+MXjAbGouguKVSI4bOmkTSJ1/poVSsgt+A=="],
 
-    "@prodigelib/easymacro": ["@prodigelib/easymacro@github:prdgasy/easy-macro#6d18fbe", { "dependencies": { "sandstone": "^1.2.26" } }, "prdgasy-easy-macro-6d18fbe", "sha512-FpsRIJ0ukentGxO23QeKI7AX7ognvNKIl6R+VJb1OUftHdzzGHM+DHtnrQsQ8DHVD2YfLFTNGDnRJgIfqmp+qQ=="],
+    "@prodigelib/easymacro": ["@prodigelib/easymacro@github:prdgasy/easy-macro#754964e", { "dependencies": { "sandstone": "1.2.26" } }, "prdgasy-easy-macro-754964e", "sha512-Yb+Se1kYRLLluG0z2Mc+FRfT2KQdg/+Bj1U/6LhcNJ8OzTZ8P973QvMHeKP0zk5cjkq5+FJJrnq5GH3Qwc6ZDg=="],
 
-    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#a3cd886", { "dependencies": { "sandstone": "~1.2.26" } }, "prdgasy-prodigelib-gui-a3cd886", "sha512-CE+YWqsubKyo0A5Crtd3sJe0n4PJuHcwfhZMIQIWOzNzrY4uauI3Cq2A+W3wUmi1P1uLU6A08l2D22O1qL674g=="],
+    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#99c6fe8", { "dependencies": { "sandstone": "1.2.26" } }, "prdgasy-prodigelib-gui-99c6fe8", "sha512-aOh5ozrxg5RIRxIXeBCh8HvEm3fkSlFX5ObbioBqbAZc8n7Cq3rrioiiY2B2Vlfg68qt8kLX1QBt93R4CNtAlA=="],
 
     "@types/bun": ["@types/bun@1.3.14", "", { "dependencies": { "bun-types": "1.3.14" } }, "sha512-h1hFqFVcvAvD9j9K7ZW7vd82aSA+rTdznZa+5bwvCwqSB1jmmfLcbIWhOLx1/+boy/xmjgCs/OMUL8hRJSmnPw=="],
 

@@ -4,6 +4,7 @@ import { Mask, PageNames, ProgressPageIndex } from './const';
 import { ProgressBar } from "../../lib/progressBar";
 import { RewardClass } from "../object/reward";
 import { _, tellraw } from "sandstone";
+import { RomanNumbers } from "../../lib/romanNumbers";
 
 export function initMain(Menu: GUI) {
   tellraw("@p", "§eLoaded");
@@ -21,22 +22,24 @@ export function initMain(Menu: GUI) {
     for (const skill of SkillList) {
       const percentage = skill.xp['*'](100)['/'](skill.xpTarget);
       const nextLevel = skill.level['+'](1);
-      const bar = () => ProgressBar(percentage);
+      // const bar = () => ;
 
       const emitBtn = (rewards: string[]) => {
         page.rawEmit(Button({
           id: skill.itemId,
           slot: slot,
-          name: $`§d${skill.name} ${skill.level}`,
+          name: $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`,
           lore: [
+            $`§9${skill.name} ${skill.level}`,
+            "",
             ...skill.description,
             "",
             "§f§lNext Level Goal",
-            $` §8• §7Target: §dLevel ${nextLevel}`,
+            $` §8• §7Target: §d${skill.name} ${RomanNumbers.convert(nextLevel)}`,
             $` §8• §7Progress: §e${percentage}%`,
-            $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
+            $` §8> ${ProgressBar(percentage)} §e${skill.xp}§6/§e${skill.xpTarget}`,
             "",
-            $`§f§lLevel ${nextLevel} Rewards`,
+            $`§f§l${skill.name} ${RomanNumbers.convert(nextLevel)} Rewards`,
             ...rewards,
             "",
             "§eClick to view!"

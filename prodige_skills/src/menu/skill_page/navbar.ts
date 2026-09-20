@@ -4,6 +4,7 @@ import { SkillClass } from "../../skill";
 import { ItemType } from "../../types";
 import { DataPointClass } from "sandstone";
 import { ProgressBar } from "../../../lib/progressBar";
+import { RomanNumbers } from "../../../lib/romanNumbers";
 
 type NavTabConfig = {
   id: ItemType;
@@ -35,18 +36,20 @@ export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: Pag
     const currentItemBtn = Button({
       id: skill.itemId,
       slot: 20,
-      name: $`§d${skill.name} Skill`,
+      name: $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`,
       lore: [
+        "",
         ...skill.description,
         "",
         "§f§lProgression Overview",
-        $` §8• §7Target Level: §dLevel ${nextLevel}`,
+        $` §8• §7Target Level: §d${skill.name} ${RomanNumbers.convert(nextLevel)}`,
         $` §8• §7Progress: §e${percentage}%`,
         $` §8> ${bar} §e${skill.xp}§6/§e${skill.xpTarget}`,
         "",
         "§8Skill progression overview."
       ],
-      components: ['!attribute_modifiers', 'enchantment_glint_override=1']
+      count: $(skill.level),
+      components: ['!attribute_modifiers', 'enchantment_glint_override=1', 'max_stack_size=99', '!max_damage']
     });
 
     // Émet le bouton dans le contexte actif (fill ou click) de la page p
