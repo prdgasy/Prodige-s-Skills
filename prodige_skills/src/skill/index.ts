@@ -12,7 +12,7 @@ import * as path from 'path';
 import { loadSkillsFromCSV } from './skillLoader';
 import { ScoreDisplay } from "sandstone/variables";
 import { ProgressBar } from "../../lib/progressBar";
-import { richTellraw, macro as $ } from "@prodigelib/easymacro";
+import { PGTellraw, macro as $ } from "@prodigelib/easymacro";
 import { RomanNumbers } from "../../lib/romanNumbers";
 
 export * from "./ability";
@@ -132,7 +132,7 @@ export class SkillClass {
         const bar = ProgressBar(percentage);
 
         // 3. Header & Progression actuelle
-        richTellraw([
+        PGTellraw([
           encapsuler + '\n',
           $` §e§l${this.name.toUpperCase()} LEVEL UP! §8${this.level['-'](1)} ➜ §e§l${this.level}\n\n`,
           $` §f§lNext Level Goal\n`,
@@ -147,7 +147,7 @@ export class SkillClass {
 
         // 4. Section Ability (si débloquée/améliorée à CE niveau)
         _.if(isAbilityUnlocked, () => {
-          richTellraw([
+          PGTellraw([
             ' \n',
             ' §a§lABILITY UNLOCKED!\n',
             $`  §8• §7Ability: §c§l${this.ability.name} §8[§c§l${tierRoman}§8]\n`,
@@ -157,7 +157,7 @@ export class SkillClass {
         });
 
         _.if(isAbilityUpgraded, () => {
-          richTellraw([
+          PGTellraw([
             ' \n',
             ' §b§lABILITY UPGRADE!\n',
             $`  §8• §7Ability: §c§l${this.ability.name} §8[${previousRoman}➜§c§l${tierRoman}§8]\n`,

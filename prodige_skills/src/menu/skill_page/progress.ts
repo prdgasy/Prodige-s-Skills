@@ -1,5 +1,5 @@
 import { MacroArg as $, Button, ButtonClass, GUI, Page, Text } from "@prodigelib/gui";
-import { _, DataPointClass, Score, tellraw, Variable } from "sandstone";
+import { _, DataPointClass, raw, Score, tellraw, Variable } from "sandstone";
 
 import { ItemType } from "../../types";
 import { goBack, Mask, PageNames, ProgressPageIndex } from "../const";
@@ -8,7 +8,7 @@ import { SkillClass } from "../../skill";
 import { ProgressBar } from "../../../lib/progressBar";
 import { RewardClass } from "../../object/reward";
 import { RomanNumbers } from "../../../lib/romanNumbers";
-import { macro as EM, richTellraw } from "@prodigelib/easymacro";
+import { macro as EM, PGTellraw } from "@prodigelib/easymacro";
 
 const totalSlots = 17;
 

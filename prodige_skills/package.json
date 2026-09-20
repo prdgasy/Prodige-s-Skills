@@ -1,5 +1,5 @@
 {
-  "name": "sandstone-template",
+  "name": "prodige_skills",
   "version": "0.0.1",
   "description": "A pack created with Sandstone",
   "type": "module",
@@ -17,9 +17,10 @@
     "sandstone-cli": "^2.6.9"
   },
   "dependencies": {
-    "@prodigelib/easymacro": "prdgasy/easy-macro",
-    "@prodigelib/gui": "prdgasy/prodigelib-gui",
-    "sandstone": "1.2.26"
+    "@prodigelib/betterarray": "github:prdgasy/betterarray",
+    "@prodigelib/easymacro": "github:prdgasy/easy-macro",
+    "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
+    "sandstone": "~1.2.32"
   },
   "trustedDependencies": [
     "@parcel/watcher"

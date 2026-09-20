@@ -134,12 +134,19 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         "§f§lTier progression",
         $` §8• §7Next Tier: §4§l${skill.ability.name} ${RomanNumbers.convert(nextTier)}`, // 
         $` §8• §7Progress: §e${progressPercentage}% §8(§a${levelsLeft} levels left§8)`,
-        $` §8> ${() => ProgressBar(progressPercentage)}`,
+        $` §8> ${ProgressBar(progressPercentage)}`,
         "",
         "§eClick to toggle!"
       ],
       components: ["enchantment_glint_override=1", "!attribute_modifiers"],
-      onClick: () => _.if(skill.ability.toggle, () => skill.ability.toggle["="](0)).else(() => skill.ability.toggle["="](1))
+      onClick: () => {
+        // On inverse proprement le score 0 <-> 1
+        _.if(skill.ability.toggle['=='](1), () => {
+          skill.ability.toggle.set(0);
+        }).else(() => {
+          skill.ability.toggle.set(1);
+        });
+      }
     });
 
     const lockedCard = Button({
@@ -154,7 +161,7 @@ export function initAbility(menu: GUI, skill: SkillClass) {
         "§f§lUnlock progression",
         $` §8• §7Requirement: §dSkill Level 10`,
         $` §8• §7Remaining: §c${Variable(10)["-"](skill.level)} levels`,
-        $` §8> ${() => ProgressBar(skill.level["*"](10), 10)}`,
+        $` §8> ${ProgressBar(skill.level["*"](10))}`,
         "",
         "§8You cannot toggle this yet!"
       ]

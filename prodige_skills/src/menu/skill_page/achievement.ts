@@ -21,10 +21,7 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
 
       const achievement = skill.achievements[slot];
       const ratio = achievement.progress["*"](100)["/"](achievement.target);
-      const bar = (): DataPointClass => ProgressBar(ratio);
 
-      // 🟡 Bouton : Succès en cours (IN PROGRESS)
-      // 🟡 Bouton : Succès en cours (IN PROGRESS)
       const current = Button({
         id: achievement.itemId,
         slot,
@@ -33,7 +30,7 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
           ...achievement.description.map(line => `§7${line}`),
           `§7`,
           $`§f§lProgress §e${ratio}%`,
-          $`§8 > ${bar} §e${achievement.progress}§6/§e${achievement.target}`,
+          $`§8 > ${ProgressBar(ratio)} §e${achievement.progress}§6/§e${achievement.target}`,
           `§7`,
           `§f§lRewards`,
           ...RewardClass.join(achievement.reward),
@@ -77,7 +74,6 @@ export function initAchievement(menu: GUI, skill: SkillClass) {
         components: ['!attribute_modifiers']
       });
 
-      // 🟢 Logique d'affichage : Déjà fait -> En cours -> Verrouillé
       _.if(skill.currentAchievement[">"](slot), () => page.rawEmit(done))
         .elseIf(skill.currentAchievement["=="](slot), () => page.rawEmit(current))
         .else(() => page.rawEmit(locked));
