@@ -1,6 +1,6 @@
 import { Button, GUI, MacroArg as $, MenuObject, PageClass, PaginatedPageClass } from "@prodigelib/gui";
 import { goBack, Mask, PageNames } from "../const";
-import { SkillClass } from "../../skill";
+import { Skill } from "../../skill";
 import { ItemType } from "../../types";
 import { DataPointClass } from "sandstone";
 import { ProgressBar } from "../../../lib/progressBar";
@@ -24,7 +24,7 @@ const tabs: NavTabConfig[] = [
 
 const glint = "enchantment_glint_override=1";
 
-export function navbar(menu: GUI, skill: SkillClass, pageName: string, page: PageClass | PaginatedPageClass) {
+export function navbar(menu: GUI, skill: Skill, pageName: string, page: PageClass | PaginatedPageClass) {
 
   // 🟢 1. Définition de la fonction anonyme. 
   // Elle accepte `p` (l'instance réelle de PageClass) et NE S'EXÉCUTE PAS tout de suite.

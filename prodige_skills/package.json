@@ -20,7 +20,7 @@
     "@prodigelib/betterarray": "github:prdgasy/betterarray",
     "@prodigelib/easymacro": "github:prdgasy/easy-macro",
     "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
-    "sandstone": "~1.2.32"
+    "sandstone": "~1.2.36"
   },
   "trustedDependencies": [
     "@parcel/watcher"

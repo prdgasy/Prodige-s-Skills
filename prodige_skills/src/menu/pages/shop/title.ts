@@ -1,6 +1,6 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
 import { Errors } from "../../../lib/errors";
-import { SkillList } from "../../skill";
+import { SkillList } from "../skillill";
 import { goBack, PageNames } from "../const";
 
 export function initTitlePage(Menu: GUI) {

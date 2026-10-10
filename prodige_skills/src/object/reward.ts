@@ -1,5 +1,5 @@
 import { Text } from "@prodigelib/gui";
-import { SkillClass } from "../skill";
+import { Skill } from "../skill";
 import { Player } from "../player";
 import { NovicePickaxe, ToolClass } from "./tool";
 import { _, Score } from "sandstone";
@@ -34,7 +34,7 @@ export class RewardClass {
     });
   }
 
-  static xp(x: number, skill: SkillClass): RewardClass {
+  static xp(x: number, skill: Skill): RewardClass {
     return Reward({
       show: `§3${x} ${skill.name} Xp`,
       get: () => skill.xp.add(x)
@@ -48,7 +48,7 @@ export class RewardClass {
     });
   }
 
-  static common(skill: SkillClass): RewardClass[] {
+  static common(skill: Skill): RewardClass[] {
     return [
       RewardClass.point(20),
       // RewardClass.xp(30, skill),
@@ -56,11 +56,11 @@ export class RewardClass {
     ]
   }
 
-  static forLevel(skill: SkillClass, level: number): RewardClass[] {
+  static forLevel(skill: Skill, level: number): RewardClass[] {
     return skill.rewards.get(level) ?? RewardClass.common(skill);
   }
 
-  static giveRewards(skill: SkillClass) {
+  static giveRewards(skill: Skill) {
     if (skill.rewards.size > 0) {
       skill.rewards.forEach((rewards, level) => {
         _.if(skill.level["=="](level), () => {
@@ -77,7 +77,7 @@ export class RewardClass {
     }
   }
 
-  static resolve(skill: SkillClass, lvl: Score, f: (r: string[]) => void) {
+  static resolve(skill: Skill, lvl: Score, f: (r: string[]) => void) {
     if (skill.rewards.size > 0) {
       skill.rewards.forEach((r, i) => {
         _.if(lvl["=="](i), () => {

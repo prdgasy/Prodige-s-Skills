@@ -1,14 +1,14 @@
 import { Objective, Score } from "sandstone";
-import { SkillClass } from ".";
+import { Skill } from ".";
 
 export class AbilityClass {
-  parent: SkillClass;
+  parent: Skill;
   name: string;
   description: string[]
   tier: Score;
   toggle: Score;
 
-  constructor(parent: SkillClass, name: string, description: string[]) {
+  constructor(parent: Skill, name: string, description: string[]) {
     this.parent = parent;
     this.name = name;
     this.description = description;
@@ -17,6 +17,6 @@ export class AbilityClass {
   }
 }
 
-export function Ability({ parent, name, description }: { parent: SkillClass, name: string, description: string[] }) {
+export function Ability({ parent, name, description }: { parent: Skill, name: string, description: string[] }) {
   return new AbilityClass(parent, name, description);
 }

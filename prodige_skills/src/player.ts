@@ -1,6 +1,6 @@
 import { execute, MCFunction, Selector, tellraw, _, Label, Objective } from "sandstone";
 import { BoosterClass } from "./object/booster";
-import { AchievementClass, OnEventClass, SkillClass, SkillList } from "./skill";
+import { AchievementClass, OnEventClass, Skill, SkillList } from "./skill";
 
 export namespace Player {
   export const firstJoin = Objective.create('player.first_join')('@p');
@@ -17,7 +17,7 @@ MCFunction('player/load', () => {
 
 MCFunction('player/event_watcher', () => {
   execute.as('@a').at('@s').run(() => {
-    _.if(SkillClass.progression, () => {
+    _.if(Skill.progression, () => {
       for (const skill of SkillList) {
         for (const event of skill.onEvents) {
           _.if(event.watcher[">"](0), () => {
@@ -29,7 +29,7 @@ MCFunction('player/event_watcher', () => {
   })
 }, { runEvery: '1s' })
 
-MCFunction('player/first_join', () => {
+MCFunction('player/first_join', () => { // change to advancement
   execute.as('@a').run(() => {
     _.if(Player.firstJoin["=="](0), () => {
       for (const skill of SkillList) {

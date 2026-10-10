@@ -3,12 +3,12 @@ import { _, Variable, DataPointClass } from "sandstone";
 
 import { goBack, PageNames, Mask } from "../const";
 
-import { SkillClass } from "../../skill";
+import { Skill } from "../../skill";
 import { navbar } from "./navbar";
 import { ProgressBar } from "../../../lib/progressBar";
 import { RewardClass } from "../../object/reward";
 
-export function initAchievement(menu: GUI, skill: SkillClass) {
+export function initAchievement(menu: GUI, skill: Skill) {
   const page = Page(
     menu,
     PageNames.achievement(skill.name)

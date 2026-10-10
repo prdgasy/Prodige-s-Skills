@@ -1,12 +1,12 @@
 import { Objective, Score, Variable, _ } from "sandstone";
 import { Criteria, ItemType } from "../types";
-import { SkillClass } from ".";
+import { Skill } from ".";
 import { Player } from "../player";
 
 type OnEventOptions = {
   name?: string;
   itemId: ItemType;
-  parent: SkillClass;
+  parent: Skill;
   criteria?: Criteria;
   Xp?: number;
   pts?: number;
@@ -16,7 +16,7 @@ export class OnEventClass {
   static notif: Score = Objective.create('on_event.notif')('@p');
   name: string;
   itemId: ItemType;
-  parent: SkillClass;
+  parent: Skill;
   xp: number;
   pts: number;
   criteria: Criteria;

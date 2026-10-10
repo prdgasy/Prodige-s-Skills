@@ -2,25 +2,7 @@ import { Objective } from 'sandstone';
 import { Button, ButtonClass, GUI, PageClass } from '@prodigelib/gui';
 import { textWrapper } from '../../lib/textWrapper';
 
-export const ProgressPageIndex = Objective.create('progress_page_index')('@s');
 
-export const PageNames = {
-  main: 'Main',
-  shop: 'Shop',
-  booster: 'Booster',
-  item: 'Item',
-  title: 'Title',
-  profile: 'Profile',
-  crate: 'Crate',
-  settings: 'Settings',
-  leaderboard: 'Leaderboard',
-  ability: (skillName: string): string => `Ability_${skillName}`,
-  dailyTask: 'Daily_Tasks',
-  milestone: 'Milestone',
-  achievement: (skillName: string): string => `Achievement_${skillName}`,
-  progress: (skillName: string): string => `Progress_${skillName}`,
-  onEvent: (skillName: string): string => `Actions_${skillName}`,
-}
 
 /**
  * Navigate back to a given page

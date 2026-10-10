@@ -2,12 +2,12 @@ import { Button, GUI, Page, MacroArg as $ } from "@prodigelib/gui";
 import { _, DataVariable, Variable } from "sandstone";
 
 import { PageNames, Mask } from "../const";
-import { SkillClass } from "../../skill";
+import { Skill } from "../../skill";
 import { navbar } from "./navbar";
 import { ProgressBar } from "../../../lib/progressBar";
 import { textWrapper } from "../../../lib/textWrapper";
 import { RomanNumbers } from "../../../lib/romanNumbers";
-function getMax(skill: SkillClass) {
+function getMax(skill: Skill) {
   const max = Variable(0);
   const maxData = {
     id: DataVariable(skill.onEvents[0].itemId),
@@ -29,7 +29,7 @@ function getMax(skill: SkillClass) {
   return maxData;
 }
 
-export function initAbility(menu: GUI, skill: SkillClass) {
+export function initAbility(menu: GUI, skill: Skill) {
   const pageName = PageNames.ability(skill.name);
   const page = Page(menu, pageName, [...Mask.gray(), ...Mask.upperBlack()]);
   navbar(menu, skill, pageName, page);

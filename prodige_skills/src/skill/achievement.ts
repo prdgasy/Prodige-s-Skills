@@ -1,6 +1,6 @@
 import { Objective, Score } from "sandstone";
 import { ItemType } from "../types";
-import { SkillClass } from ".";
+import { Skill } from ".";
 import { RewardClass } from "../object/reward";
 
 export class AchievementClass {
@@ -14,7 +14,7 @@ export class AchievementClass {
   id: string;
   reward: RewardClass[];
 
-  constructor(parent: SkillClass, name: string, id: string, itemId: ItemType, target: number, description: string[], reward?: RewardClass[]) {
+  constructor(parent: Skill, name: string, id: string, itemId: ItemType, target: number, description: string[], reward?: RewardClass[]) {
     this.name = name;
     this.itemId = itemId;
     this.id = id;
@@ -25,6 +25,6 @@ export class AchievementClass {
   }
 }
 
-export function Achievement({ parent, name, id, target, itemId, description, reward }: { parent: SkillClass, name: string, id: string, target: number, itemId: ItemType, description: string[], reward?: RewardClass[] }) {
+export function Achievement({ parent, name, id, target, itemId, description, reward }: { parent: Skill, name: string, id: string, target: number, itemId: ItemType, description: string[], reward?: RewardClass[] }) {
   return new AchievementClass(parent, name, id, itemId, target, description, reward);
 }

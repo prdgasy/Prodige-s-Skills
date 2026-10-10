@@ -1,3 +1,16 @@
+export class Skill {
+  public name: string;
+
+  static list: Skill[] = [];
+
+  constructor(name: string) {
+    this.name = name;
+
+    Skill.list.push(this);
+  }
+}
+
+/*
 import { ToolClass } from "../object/tool";
 import { ItemType } from "../types";
 import { OnEvent, OnEventClass } from "./onEvent";
@@ -34,7 +47,7 @@ type SkillOptions = {
   rewards?: Map<number, RewardClass[]>;
 }
 
-export class SkillClass {
+export class Skill {
   static progression: Score = Objective.create('skill.progression')('@p');
   static notif: Score = Objective.create('skill.notif')('@p');
   name: string;
@@ -111,7 +124,7 @@ export class SkillClass {
     _.if(_.or(isAbilityUnlocked, isAbilityUpgraded), () => this.ability.tier["++"]);
     // Notif
     const displayNotification = (rewards: string[]) => {
-      _.if(SkillClass.notif, () => {
+      _.if(Skill.notif, () => {
         // 1. Titres à l'écran
         title('@p').title([{ text: '§d§lSKILL LEVEL UP!', bold: true }]);
         title('@p').subtitle([
@@ -175,33 +188,6 @@ export class SkillClass {
   }
 }
 
-export function Skill({
-  name,
-  itemId,
-  description,
-  startingXp,
-  onEvents,
-  customItems,
-  achievements,
-  titles,
-  ability,
-  rewards,
-}: SkillOptions) {
-  return new SkillClass({
-    name,
-    itemId,
-    description,
-    startingXp,
-    onEvents,
-    customItems,
-    achievements,
-    titles,
-    ability,
-    rewards
-  })
-}
-
-
 
 // Importation automatique depuis le dossier où sont stockés tes CSV
 export const SkillList = loadSkillsFromCSV(path.join(__dirname, 'csv_data'));
@@ -213,3 +199,4 @@ if (Mining) {
   Mining.rewards.set(10, [Reward({ show: '§dCustom Reward', get: () => { say('got custom reward') } })]);
   Mining.rewards.set(20, [Reward({ show: '§dCustom Reward 2', get: () => { say('got custom reward 2') } })]);
 }
+  */

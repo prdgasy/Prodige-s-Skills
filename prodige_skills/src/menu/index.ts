@@ -1,38 +1,65 @@
-import { GUI } from '@prodigelib/gui';
-import { MCFunction, tellraw } from 'sandstone';
+import { Gui, PageClass } from '@prodigelib/gui';
+import { Uninstaller } from '@prodigelib/uninstaller';
+import { Objective } from 'sandstone';
+import { Main } from '@/pages/main';
+import { Shop } from '@/pages/shop';
+import { Skill } from '@/skill';
+import { Progress } from '@/pages/skill/progress';
 
-import { SkillList } from '../skill';
-import { initMain } from './main';
-import { initProgress } from './skill_page/progress';
-import { initShop } from './shop_page';
-import { initItem } from './item';
-import { initOnEvent } from './skill_page/onEvent';
-import { initAchievement } from './skill_page/achievement';
-import { initAbility } from './skill_page/ability';
+const Mining = new Skill('Mining');
+const Menu = new Gui('prodige_skills', 'menu');
 
-/**
- * Main entry point for the GUI system.
- * Initializes scores, menu, and all pages.
- */
-MCFunction('menu', () => {
-  tellraw('@p', { text: "§e[Skills/Menu] Loaded" });
 
-  const Menu = new GUI('prodige_skills', 'menu', 100107);
+type NormalPage = {
+  getName: () => string;
+  init: (g: Gui, page: PageClass) => PageClass;
+};
 
-  initMain(Menu);
-  initShop(Menu);
-  // initBooster(Menu);
-  initItem(Menu);
-  // initTitle(Menu);
-  // initProfile(Menu);
-  // initSettings(Menu);
-  // initMilestones(Menu);
-  // initDailyTasks(Menu);
+type SubSkillPage = {
+  getName: (skill: Skill) => string;
+  init: (g: Gui, page: PageClass, skill: Skill) => PageClass;
+};
 
-  SkillList.forEach(skill => {
-    initProgress(Menu, skill);
-    initOnEvent(Menu, skill);
-    initAchievement(Menu, skill);
-    initAbility(Menu, skill);
-  });
-}, { runOnLoad: true });
+export const pages: (NormalPage | SubSkillPage)[] = [Main, Shop, Progress];
+
+
+for (const p of pages) {
+  if (p.getName.length > 0) {
+    for (const skill of Skill.list) {
+      const name = p.getName(skill);
+      const toRegister = p.init(Menu, Menu.createPage(name), skill);
+
+      Menu.registerPage(toRegister);
+    }
+  } else {
+    const normalP = p as NormalPage;
+    const name = normalP.getName();
+    const toRegister = normalP.init(Menu, Menu.createPage(name));
+
+    Menu.registerPage(toRegister);
+  }
+
+
+}
+
+Uninstaller.generate(Gui);
+// reg(Shop);
+// MCFunction('menu', () => {
+
+//   initMain(Menu);
+//   initShop(Menu);
+//   // initBooster(Menu);
+//   initItem(Menu);
+//   // initTitle(Menu);
+//   // initProfile(Menu);
+//   // initSettings(Menu);
+//   // initMilestones(Menu);
+//   // initDailyTasks(Menu);
+
+//   SkillList.forEach(skill => {
+//     initProgress(Menu, skill);
+//     initOnEvent(Menu, skill);
+//     initAchievement(Menu, skill);
+//     initAbility(Menu, skill);
+//   });
+// }, { runOnLoad: true });

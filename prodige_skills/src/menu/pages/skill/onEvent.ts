@@ -1,12 +1,12 @@
 import { GUI, PaginatedPage, PaginatedButton, MacroArg as $ } from "@prodigelib/gui";
 import { goBack, Mask, PageNames } from "../const";
 import { navbar } from "./navbar";
-import { SkillClass } from "../../skill";
+import { Skill } from "../../skill";
 
 /**
  * Creates paginated onEvent pages for a skill
  */
-export function initOnEvent(Menu: GUI, skill: SkillClass) {
+export function initOnEvent(Menu: GUI, skill: Skill) {
   const paginatedOnEvent = PaginatedPage({
     parent: Menu,
     name: PageNames.onEvent(skill.name),

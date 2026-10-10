@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { textWrapper } from '../../lib/textWrapper'; // Ton path exact
-import { Skill, SkillClass } from './index';
+import { Skill } from './index';
 import { Ability } from './ability';
 import { OnEvent } from './onEvent';
 import { Achievement } from './achievement';
@@ -35,13 +35,13 @@ function parseCSV(filePath: string): Record<string, string>[] {
   });
 }
 
-export function loadSkillsFromCSV(dirPath: string): SkillClass[] {
-  const skillsMap = new Map<string, SkillClass>();
+export function loadSkillsFromCSV(dirPath: string): Skill[] {
+  const skillsMap = new Map<string, Skill>();
 
   // 1. Charger les Skills & Abilities
   const skillsData = parseCSV(path.join(dirPath, 'skills.csv'));
   for (const row of skillsData) {
-    const skill = Skill({
+    const skill = new Skill({
       name: row.name,
       description: textWrapper(row.description),
       itemId: row.itemId as any,
