@@ -1,11 +1,11 @@
 import { GUI, Page, Button } from "@prodigelib/gui";
 import { goBack, PageNames } from "../const";
 import { Errors } from "../../../lib/errors";
-import { ItemType } from "../../../types";
+import { Item } from "../../../types";
 
 
 function boosterItem(type: 'Xp' | 'point', multiplier: number) {
-  let itemRepr: ItemType;
+  let itemRepr: Item;
   let name: string;
   let color: string;
   let onClick = () => { Errors.functionNotImplemented(); }

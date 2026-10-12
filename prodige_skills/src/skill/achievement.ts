@@ -1,30 +1,35 @@
-import { Objective, Score } from "sandstone";
-import { ItemType } from "../types";
-import { Skill } from ".";
-import { RewardClass } from "../object/reward";
+import { Label, Objective, Score } from "sandstone";
+import { Item } from "@src/types";
+import { Skill } from "@src/skill";
+import { Reward } from "@src/misc/reward";
 
-export class AchievementClass {
-  static notification: Score = Objective.create(`achievement.notification`)(`@p`);
+export class Achievement {
+  static notif = Label(`achievement.notification`)(`@p`);
 
+  parent: Skill;
+  /** Name of the achievement. */
   name: string;
-  description: string[];
-  itemId: ItemType;
-  target: number;
-  progress: Score;
+  /** Unique ID of the achievement. */
   id: string;
-  reward: RewardClass[];
+  /** Description of the achievement. */
+  description: string;
+  /** Item to display in the achievement. */
+  item: Item;
+  /** Target progress of the achievement. */
+  target: number;
+  /** Progress score of the achievement. */
+  progress: Score;
+  /** Rewards of the achievement. */
+  reward: Reward[];
 
-  constructor(parent: Skill, name: string, id: string, itemId: ItemType, target: number, description: string[], reward?: RewardClass[]) {
+  constructor(parent: Skill, name: string, item: Item, target: number, description: string, reward?: Reward[]) {
+    this.parent = parent;
     this.name = name;
-    this.itemId = itemId;
-    this.id = id;
+    this.id = name.toLowerCase().replace(" ", "_");
+    this.item = item;
     this.target = target;
     this.description = description;
-    this.progress = Objective.create(`${parent.name}.achievement.${id}`)('@p');
-    this.reward = reward ?? RewardClass.common(parent);
+    this.progress = Objective.create(`${this.parent.name}.achievement.${this.id}`)('@p');
+    this.reward = reward ?? Reward.common(this.parent);
   }
-}
-
-export function Achievement({ parent, name, id, target, itemId, description, reward }: { parent: Skill, name: string, id: string, target: number, itemId: ItemType, description: string[], reward?: RewardClass[] }) {
-  return new AchievementClass(parent, name, id, itemId, target, description, reward);
 }

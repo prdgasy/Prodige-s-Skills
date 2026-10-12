@@ -1,131 +1,107 @@
-export class Skill {
-  public name: string;
-
-  static list: Skill[] = [];
-
-  constructor(name: string) {
-    this.name = name;
-
-    Skill.list.push(this);
-  }
-}
-
-/*
-import { ToolClass } from "../object/tool";
-import { ItemType } from "../types";
-import { OnEvent, OnEventClass } from "./onEvent";
-import { TitleClass } from "./title";
-import { Ability, AbilityClass } from "./ability";
-import { Objective, Score, tellraw, title, Variable, _, say, playsound, scoreboard, raw, DataVariable } from "sandstone";
-import { Player } from "../player";
-import { Achievement, AchievementClass } from "./achievement";
-import { Reward, RewardClass } from "../object/reward";
-import { textWrapper } from "../../lib/textWrapper";
-import * as path from 'path';
-import { loadSkillsFromCSV } from './skillLoader';
-import { ScoreDisplay } from "sandstone/variables";
-import { ProgressBar } from "../../lib/progressBar";
+import { Item } from "@src/types";
+import { _, Label, Objective, playsound, say, Score, tellraw, title } from "sandstone";
+import { Ability } from "./ability";
+import { Reward } from "@src/misc/reward";
+import { Achievement } from "@src/skill/achievement";
+import { Title } from "@src/skill/title";
+import { Tool } from "@src/misc/tool";
+import { Player } from "@src/player";
+import { OnEvent } from '@src/skill/onEvent'
 import { PGTellraw, macro as $ } from "@prodigelib/easymacro";
-import { RomanNumbers } from "../../lib/romanNumbers";
-
-export * from "./ability";
-export * from "./achievement";
-export * from "./onEvent";
-export * from "./title";
-
+import { Bar } from "@lib/bar"
+import { RomanNumbers } from "@lib/romanNumbers";
+import { loadSkillsFromCSV } from "./skillLoader";
+import * as path from 'path';
 type SkillOptions = {
-  name: string;
-  itemId: ItemType;
-
-  description?: string[];
-  startingXp?: number;
-  titles?: TitleClass[];
-  ability?: AbilityClass;
-  onEvents?: OnEventClass[];
-  customItems?: ToolClass[];
-  achievements?: AchievementClass[];
-  rewards?: Map<number, RewardClass[]>;
+  name: string,
+  description?: string,
+  item?: Item,
+  starting?: number,
+  achievements?: Achievement[],
+  titles?: Title[],
+  rewards?: Map<number, Reward[]>,
+  ability?: Ability,
+  customItems?: Tool[],
+  onEvents?: OnEvent[],
 }
 
 export class Skill {
-  static progression: Score = Objective.create('skill.progression')('@p');
-  static notif: Score = Objective.create('skill.notif')('@p');
-  name: string;
-  itemId: ItemType;
+  static list: Skill[] = [];
+  static levelUpNotifState = Label('level_up_notif')('@p');
 
-  description: string[];
-  startingXp: number;
-  onEvents: OnEventClass[];
-  customItems: (ToolClass)[];
-  achievements: AchievementClass[];
-  titles: TitleClass[];
-  ability: AbilityClass;
+  public name: string;
+  public description: string;
+  public item: Item;
+  public level: Score;
+  public xp: Score;
+  public goal: Score;
+  public starting: number;
+  public achievements: Achievement[];
+  public achievement: Score;
+  public titles: Title[];
+  public rewards: Map<number, Reward[]>;
+  public customItems: Tool[];
+  public onEvents: OnEvent[];
+  public ability?: Ability;
 
-  level: Score;
-  xp: Score;
-  xpTarget: Score;
 
-  totalXp: Score;
-  totalPts: Score;
-
-  currentAchievement: Score;
-
-  rewards: Map<number, RewardClass[]>;
-
-  constructor(skillOptions: SkillOptions) {
-    this.name = skillOptions.name;
-    this.description = skillOptions.description ?? ["<description>"];
-    this.itemId = skillOptions.itemId;
-    this.startingXp = skillOptions.startingXp ?? 40;
-    this.onEvents = skillOptions.onEvents ?? [];
-    this.customItems = skillOptions.customItems ?? [];
-    this.achievements = skillOptions.achievements ?? [];
-    this.titles = skillOptions.titles ?? [];
-    this.ability = skillOptions.ability ?? Ability({ parent: this, name: 'notimple', description: [] });
-
+  constructor(options: SkillOptions) {
+    this.name = options.name;
+    this.description = options.description ?? "§7No description for this skill yet.";
+    this.item = options.item ?? "anvil";
     this.level = Objective.create(`${this.name}.level`)('@p');
     this.xp = Objective.create(`${this.name}.xp`)('@p');
-    this.xpTarget = Objective.create(`${this.name}.xpTarget`)('@p');
-
-    this.totalXp = Objective.create(`${this.name}.totalXp`)('@p');
-    this.totalPts = Objective.create(`${this.name}.totalPts`)('@p');
-
-    this.currentAchievement = Objective.create(`${this.name}.currentAchievement`)('@p');
-
-    this.rewards = skillOptions.rewards ?? new Map<number, RewardClass[]>();
+    this.goal = Objective.create(`${this.name}.goal`)('@p');
+    this.starting = options.starting ?? 40;
+    this.achievements = options.achievements ?? [];
+    this.achievement = Objective.create(`${this.name}.achievement`)(`@p`);
+    this.titles = options.titles ?? [];
+    this.rewards = options.rewards ?? new Map<number, Reward[]>();
+    this.ability = options.ability ?? new Ability(this, 'notimple', '§7No ability for this skill yet.');
+    this.customItems = options.customItems ?? [];
+    this.onEvents = options.onEvents ?? [];
+    Skill.list.push(this);
   }
 
-  displayProgress(XpAdded: Score, pointAdded: Score) {
-    _.if(OnEventClass.notif, () => title('@p').actionbar([
-      { text: this.name }, this.level, '+', XpAdded, 'Xp + ', pointAdded, 'Point'
-    ]));
-
-  }
-
-  levelUp() {
-    // Reset xp
-    this.xp["-="](this.xpTarget);
-
-    // set new target
-    this.xpTarget["*="](13)["/="](10);
-    _.if(this.xpTarget['>'](5000), () => {
-      this.xpTarget.set(5000);
+  public onEventTriggered(addedXp: Score, addedPoint: Score) {
+    const canLevelUp = _.and(this.xp['>='](this.goal), this.level['<'](100));
+    _.if(_.not(canLevelUp), () => {
+      this.xp['+='](addedXp);
+      this.levelUp()
     });
 
-    // add level
+    Player.pts['+='](addedPoint);
+    this.onEventDisplay(addedXp, addedPoint);
+  }
+
+  private levelUp() {
+    this.xp["-="](this.goal);
+
+    this.goal["*="](13)["/="](10);
+    _.if(this.goal['>'](5000), () => {
+      this.goal.set(5000);
+    });
+
     this.level["++"];
 
-    // give reward
-    RewardClass.giveRewards(this);
+    Reward.giveRewards(this); // store it in a storage associated by name; claim later in the menu;
 
-    const isAbilityUnlocked = this.level['=='](10);
-    const isAbilityUpgraded = _.and(this.level['>'](10), (this.level['%'](10)['=='](0)));
+    this.ability?.tierUp();
 
-    _.if(_.or(isAbilityUnlocked, isAbilityUpgraded), () => this.ability.tier["++"]);
-    // Notif
-    const displayNotification = (rewards: string[]) => {
-      _.if(Skill.notif, () => {
-        // 1. Titres à l'écran
+    const abilityMsg = this.ability?.tierUpNotif();
+
+    this.levelUpNotif(abilityMsg);
+  }
+
+  private onEventDisplay(XpAdded: Score, pointAdded: Score) {
+    return _.if(OnEvent.notifState, () => title('@p').actionbar([
+      { text: this.name }, this.level, '+', XpAdded, 'Xp + ', pointAdded, 'Point'
+    ]));
+  }
+
+  private levelUpNotif(abilityMsg?: () => void) {
+    const display = (rewards: string[]) => {
+      _.if(Skill.levelUpNotifState, () => {
         title('@p').title([{ text: '§d§lSKILL LEVEL UP!', bold: true }]);
         title('@p').subtitle([
           { text: `§d${this.name} §8` },
@@ -134,60 +110,33 @@ export class Skill {
           this.level
         ]);
 
-        // 2. Audio
+
         _.if(Player.sound, () => playsound('entity.player.levelup', 'master', '@p', '~ ~ ~', 1, 0));
-        _.if(_.or(isAbilityUnlocked, isAbilityUpgraded), () => {
-          _.if(Player.sound, () => playsound('entity.ender_dragon.growl', 'master', '@p', '~ ~ ~', 1, 1));
-        });
 
         const encapsuler = '§7§m------------------------------------------';
-        const percentage = this.xp['*'](100)['/'](this.xpTarget);
-        const bar = ProgressBar(percentage);
+        const percentage = this.xp['*'](100)['/'](this.goal);
+        const bar = new Bar(percentage);
 
-        // 3. Header & Progression actuelle
         PGTellraw([
           encapsuler + '\n',
           $` §e§l${this.name.toUpperCase()} LEVEL UP! §8${this.level['-'](1)} ➜ §e§l${this.level}\n\n`,
           $` §f§lNext Level Goal\n`,
           $`  §8• §7Target: §d${this.name} ${this.level['+'](1)}\n`,
           $`  §8• §7Progress: §e${percentage}%\n`,
-          $`  §8> ${bar} §e${this.xp}§6/§e${this.xpTarget} XP\n\n`,
+          $`  §8> ${bar.get()} §e${this.xp}§6/§e${this.goal} XP\n\n`,
           ` §f§lRewards\n`,
           ...rewards.map(r => ` ${r}\n`)
         ], '@p');
-        const tierRoman = RomanNumbers.convert(this.ability.tier);
-        const previousRoman = RomanNumbers.convert(this.ability.tier['-'](1));
 
-        // 4. Section Ability (si débloquée/améliorée à CE niveau)
-        _.if(isAbilityUnlocked, () => {
-          PGTellraw([
-            ' \n',
-            ' §a§lABILITY UNLOCKED!\n',
-            $`  §8• §7Ability: §c§l${this.ability.name} §8[§c§l${tierRoman}§8]\n`,
-            ...this.ability.description.map(r => $`   §7${r}\n`),
-            $` §8• §7Bonus:\n`
-          ], ('@p'));
-        });
-
-        _.if(isAbilityUpgraded, () => {
-          PGTellraw([
-            ' \n',
-            ' §b§lABILITY UPGRADE!\n',
-            $`  §8• §7Ability: §c§l${this.ability.name} §8[${previousRoman}➜§c§l${tierRoman}§8]\n`,
-            ...this.ability.description.map(r => $`   §7${r}\n`),
-            '  §8• §7Bonus:\n'
-          ], '@p');
-        });
+        abilityMsg ? abilityMsg() : null;
 
         tellraw('@p', [encapsuler]);
       });
     };
 
-    // Traitement des récompenses
-    RewardClass.resolve(this, this.level, displayNotification);
+    Reward.resolve(this, this.level, display);
   }
 }
-
 
 // Importation automatique depuis le dossier où sont stockés tes CSV
 export const SkillList = loadSkillsFromCSV(path.join(__dirname, 'csv_data'));
@@ -196,7 +145,6 @@ export const SkillList = loadSkillsFromCSV(path.join(__dirname, 'csv_data'));
 const Mining = SkillList.find(s => s.name === 'Mining');
 
 if (Mining) {
-  Mining.rewards.set(10, [Reward({ show: '§dCustom Reward', get: () => { say('got custom reward') } })]);
-  Mining.rewards.set(20, [Reward({ show: '§dCustom Reward 2', get: () => { say('got custom reward 2') } })]);
+  Mining.rewards.set(10, [new Reward({ show: '§dCustom Reward', get: () => { say('got custom reward') } })]);
+  Mining.rewards.set(20, [new Reward({ show: '§dCustom Reward 2', get: () => { say('got custom reward 2') } })]);
 }
-  */

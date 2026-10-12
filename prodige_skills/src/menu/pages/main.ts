@@ -1,11 +1,8 @@
 import { GuiMacro as $, Button, Gui, PageClass } from "@prodigelib/gui";
-import { ProgressBar } from "../../../lib/progressBar";
-import { RewardClass } from "../../object/reward";
-import { tellraw } from "sandstone";
-import { RomanNumbers } from "../../../lib/romanNumbers";
-import { Shop } from "./shop";
-import { Progress } from "@/pages/skill/progress";
-import { Skill } from "@/skill";
+import { RomanNumbers } from "@lib/romanNumbers";
+import { Shop } from "@src/menu/shop";
+import { Progress } from "@src/menu/skill/progress";
+import { Skill } from "@src/skill";
 
 
 export class Main {

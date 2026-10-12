@@ -1,3 +1,3 @@
-name,itemId,startingXp,description,abilityName,abilityDescription
-Mining,diamond_pickaxe,15,"Mine, mine, mine, very long too. Lets see how it goes",Miner Speed,"Increases mining speed when holding a pickaxe"
-Foraging,oak_sapling,15,"Chop trees, gather wood, and master the art of forestry.",Tree Feller,"Increases chopping speed and wood yields when holding an axe."
+name,item,starting,description,abilityName,abilityDescription
+Mining,diamond_pickaxe,15,"Mine, mine, mine, very long too. Lets see how it goes",Miner Speed,Increases mining speed when holding a pickaxe
+Foraging,oak_sapling,15,"Chop trees, gather wood, and master the art of forestry.",Tree Feller,Increases chopping speed and wood yields when holding an axe.

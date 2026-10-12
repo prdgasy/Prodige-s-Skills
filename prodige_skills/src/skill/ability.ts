@@ -1,22 +1,71 @@
-import { Objective, Score } from "sandstone";
+import { _, Label, LabelClass, NonEmptyString, Objective, playsound, Score } from "sandstone";
 import { Skill } from ".";
+import { EntityLabel } from "sandstone/variables";
+import { Player } from "@src/player";
+import { PGTellraw, macro as $ } from "@prodigelib/easymacro";
+import { RomanNumbers } from "@lib/romanNumbers";
+import { textWrapper } from "@lib/textWrapper";
 
-export class AbilityClass {
+export class Ability {
   parent: Skill;
   name: string;
-  description: string[]
+  description: string;
   tier: Score;
-  toggle: Score;
+  state: EntityLabel;
 
-  constructor(parent: Skill, name: string, description: string[]) {
+  constructor(parent: Skill, name: string, description: string) {
     this.parent = parent;
     this.name = name;
     this.description = description;
     this.tier = Objective.create(`${this.parent.name}.ability.tier`)('@p');
-    this.toggle = Objective.create(`${this.parent.name}.ability.toggle`)('@p');
+    this.state = Label(`${this.parent.name}.ability.toggle` as NonEmptyString)('@p');
   }
-}
 
-export function Ability({ parent, name, description }: { parent: Skill, name: string, description: string[] }) {
-  return new AbilityClass(parent, name, description);
+  public disable() {
+    this.state.remove();
+  }
+
+  public enable() {
+    this.state.add();
+  }
+
+  public toggle() {
+    this.state.toggle();
+  }
+
+  public tierUp() {
+    const abilityUnlocked = this.tier['=='](0);
+    const abilityUpgraded = _.and(this.tier['>'](0), (this.tier['%'](10)['=='](0)));
+    _.if(_.or(abilityUnlocked, abilityUpgraded), () => this.tier["++"]);
+  }
+
+  public tierUpNotif() {
+    const abilityUnlocked = this.tier['=='](0);
+    const abilityUpgraded = _.and(this.tier['>'](0), (this.tier['%'](10)['=='](0)));
+    _.if(_.or(abilityUnlocked, abilityUpgraded), () => {
+      _.if(Player.sound, () => playsound('entity.ender_dragon.growl', 'master', '@p', '~ ~ ~', 1, 1));
+    })
+    const sendAbilityMessage = (unlocked: boolean) => {
+      const romanTier = RomanNumbers.convert(this.tier);
+      const romanPreviousTier = RomanNumbers.convert(this.tier['-'](1));
+
+      const title = unlocked ? '§a§lABILITY UNLOCKED!' : '§b§lABILITY UPGRADE!';
+      const tier = unlocked
+        ? `§c§l${romanTier}`
+        : `${romanPreviousTier}➜§c§l${romanTier}`;
+
+      PGTellraw([
+        ' \n',
+        ` ${title}\n`,
+        $`  §8• §7Ability: §c§l${this.name} §8[${tier}§8]\n`,
+        ...textWrapper(this.description).map(r => $`   §7${r}\n`),
+        ' §8• §7Bonus:\n'
+      ], '@p');
+    };
+
+    return () => {
+      _.if(abilityUnlocked, () => sendAbilityMessage(true));
+      _.if(abilityUpgraded, () => sendAbilityMessage(false));
+    }
+  }
 }

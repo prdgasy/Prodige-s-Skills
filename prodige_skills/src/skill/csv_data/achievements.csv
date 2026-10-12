@@ -1,37 +1,37 @@
-skillName,id,name,itemId,target,description
-Mining,mine_stone_1,Stone Cutter I,stone,100,"Break 100 stone blocks to get started."
-Mining,mine_stone_2,Stone Cutter II,stone_bricks,1000,"Mine 1 000 stone blocks like a real miner."
-Mining,mine_stone_3,Stone Cutter III,smooth_stone,10000,"Mine 10 000 stone blocks. A true quarry master."
-Mining,mine_deepslate_1,Into the Depths I,deepslate,250,"Reach the bottom of the world and mine 250 deepslate."
-Mining,mine_deepslate_2,Into the Depths II,reinforced_deepslate,2500,"Mine 2 500 deepslate blocks."
-Mining,mine_coal_1,Fuel Finder I,coal,100,"Extract 100 coal ores to power your furnaces."
-Mining,mine_coal_2,Fuel Finder II,coal_block,1000,"Mine 1 000 coal ores."
-Mining,mine_iron_1,Iron Age I,iron_ore,50,"Mine your first 50 iron ores."
-Mining,mine_iron_2,Iron Age II,iron_block,500,"Extract 500 iron ores for your armor."
-Mining,mine_gold_1,Gold Rush I,gold_ore,25,"Find 25 gold ores in the depths."
-Mining,mine_gold_2,Gold Rush II,gold_block,250,"Extract 250 gold ores."
-Mining,mine_redstone_1,Electrician I,redstone,100,"Gather 100 redstone ores."
-Mining,mine_lapis_1,Enchanter Assistant I,lapis_lazuli,100,"Mine 100 lapis lazuli ores for enchantment power."
-Mining,mine_diamond_1,Diamond Seeker I,diamond,10,"Find your first 10 diamonds."
-Mining,mine_diamond_2,Diamond Seeker II,diamond_ore,100,"Mine 100 diamond ores."
-Mining,mine_diamond_3,Diamond Hoarder,diamond_block,500,"Amass 500 diamond ores."
-Mining,mine_debris_1,Nether Miner I,ancient_debris,5,"Find 5 ancient debris in the Nether."
-Mining,mine_debris_2,Nether Miner II,netherite_ingot,25,"Extract 25 ancient debris for Netherite gear."
-Foraging,chop_oak_1,Oak Cutter I,oak_log,100,"Chop 100 oak logs to start your lumberjack journey."
-Foraging,chop_oak_2,Oak Cutter II,oak_wood,1000,"Chop 1 000 oak logs. A steady supply of timber."
-Foraging,chop_spruce_1,Taiga Worker I,spruce_log,100,"Gather 100 spruce logs from cold biomes."
-Foraging,chop_spruce_2,Taiga Worker II,spruce_wood,1000,"Gather 1 000 spruce logs."
-Foraging,chop_birch_1,Birch Collector I,birch_log,100,"Harvest 100 white birch logs."
-Foraging,chop_jungle_1,Jungle Explorer I,jungle_log,100,"Chop 100 massive jungle logs."
-Foraging,chop_jungle_2,Jungle Explorer II,jungle_wood,1000,"Harvest 1 000 jungle logs."
-Foraging,chop_acacia_1,Savanna Harvester I,acacia_log,100,"Chop 100 savanna acacia logs."
-Foraging,chop_dark_oak_1,Dark Forest I,dark_oak_log,100,"Chop 100 dark oak logs in dense forests."
-Foraging,chop_dark_oak_2,Dark Forest II,dark_oak_wood,1000,"Harvest 1 000 dark oak logs."
-Foraging,chop_mangrove_1,Swamp Forester I,mangrove_log,100,"Extract 100 mangrove logs from swamps."
-Foraging,chop_cherry_1,Blossom Gatherer I,cherry_log,100,"Gather 100 pink cherry logs."
-Foraging,chop_crimson_1,Nether Wood I,crimson_stem,50,"Harvest 50 crimson stems from the Nether."
-Foraging,chop_crimson_2,Nether Wood II,crimson_hyphae,500,"Harvest 500 crimson stems."
-Foraging,chop_warped_1,Warped Collector I,warped_stem,50,"Harvest 50 strange warped stems."
-Foraging,chop_warped_2,Warped Collector II,warped_hyphae,500,"Gather 500 warped stems."
-Foraging,chop_total_1,Master Forester I,diamond_axe,2500,"Chop a total of 2 500 logs of any type."
-Foraging,chop_total_2,Master Forester II,netherite_axe,10000,"Chop a total of 10 000 logs. You are a legendary lumberjack."
+skillName,id,name,item,target,description
+Mining,mine_stone_1,Stone Cutter I,stone,100,Break 100 stone blocks to get started.
+Mining,mine_stone_2,Stone Cutter II,stone_bricks,1000,Mine 1 000 stone blocks like a real miner.
+Mining,mine_stone_3,Stone Cutter III,smooth_stone,10000,Mine 10 000 stone blocks. A true quarry master.
+Mining,mine_deepslate_1,Into the Depths I,deepslate,250,Reach the bottom of the world and mine 250 deepslate.
+Mining,mine_deepslate_2,Into the Depths II,reinforced_deepslate,2500,Mine 2 500 deepslate blocks.
+Mining,mine_coal_1,Fuel Finder I,coal,100,Extract 100 coal ores to power your furnaces.
+Mining,mine_coal_2,Fuel Finder II,coal_block,1000,Mine 1 000 coal ores.
+Mining,mine_iron_1,Iron Age I,iron_ore,50,Mine your first 50 iron ores.
+Mining,mine_iron_2,Iron Age II,iron_block,500,Extract 500 iron ores for your armor.
+Mining,mine_gold_1,Gold Rush I,gold_ore,25,Find 25 gold ores in the depths.
+Mining,mine_gold_2,Gold Rush II,gold_block,250,Extract 250 gold ores.
+Mining,mine_redstone_1,Electrician I,redstone,100,Gather 100 redstone ores.
+Mining,mine_lapis_1,Enchanter Assistant I,lapis_lazuli,100,Mine 100 lapis lazuli ores for enchantment power.
+Mining,mine_diamond_1,Diamond Seeker I,diamond,10,Find your first 10 diamonds.
+Mining,mine_diamond_2,Diamond Seeker II,diamond_ore,100,Mine 100 diamond ores.
+Mining,mine_diamond_3,Diamond Hoarder,diamond_block,500,Amass 500 diamond ores.
+Mining,mine_debris_1,Nether Miner I,ancient_debris,5,Find 5 ancient debris in the Nether.
+Mining,mine_debris_2,Nether Miner II,netherite_ingot,25,Extract 25 ancient debris for Netherite gear.
+Foraging,chop_oak_1,Oak Cutter I,oak_log,100,Chop 100 oak logs to start your lumberjack journey.
+Foraging,chop_oak_2,Oak Cutter II,oak_wood,1000,Chop 1 000 oak logs. A steady supply of timber.
+Foraging,chop_spruce_1,Taiga Worker I,spruce_log,100,Gather 100 spruce logs from cold biomes.
+Foraging,chop_spruce_2,Taiga Worker II,spruce_wood,1000,Gather 1 000 spruce logs.
+Foraging,chop_birch_1,Birch Collector I,birch_log,100,Harvest 100 white birch logs.
+Foraging,chop_jungle_1,Jungle Explorer I,jungle_log,100,Chop 100 massive jungle logs.
+Foraging,chop_jungle_2,Jungle Explorer II,jungle_wood,1000,Harvest 1 000 jungle logs.
+Foraging,chop_acacia_1,Savanna Harvester I,acacia_log,100,Chop 100 savanna acacia logs.
+Foraging,chop_dark_oak_1,Dark Forest I,dark_oak_log,100,Chop 100 dark oak logs in dense forests.
+Foraging,chop_dark_oak_2,Dark Forest II,dark_oak_wood,1000,Harvest 1 000 dark oak logs.
+Foraging,chop_mangrove_1,Swamp Forester I,mangrove_log,100,Extract 100 mangrove logs from swamps.
+Foraging,chop_cherry_1,Blossom Gatherer I,cherry_log,100,Gather 100 pink cherry logs.
+Foraging,chop_crimson_1,Nether Wood I,crimson_stem,50,Harvest 50 crimson stems from the Nether.
+Foraging,chop_crimson_2,Nether Wood II,crimson_hyphae,500,Harvest 500 crimson stems.
+Foraging,chop_warped_1,Warped Collector I,warped_stem,50,Harvest 50 strange warped stems.
+Foraging,chop_warped_2,Warped Collector II,warped_hyphae,500,Gather 500 warped stems.
+Foraging,chop_total_1,Master Forester I,diamond_axe,2500,Chop a total of 2 500 logs of any type.
+Foraging,chop_total_2,Master Forester II,netherite_axe,10000,Chop a total of 10 000 logs. You are a legendary lumberjack.

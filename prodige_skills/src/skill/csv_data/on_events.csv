@@ -1,4 +1,4 @@
-skillName,name,itemId,criteria,Xp,pts
+skillName,name,item,criteria,Xp,pts
 Mining,Stone,stone,minecraft.mined:minecraft.stone,1,2
 Mining,Deepslate,deepslate,minecraft.mined:minecraft.deepslate,2,3
 Mining,Coal Ore,coal_ore,minecraft.mined:minecraft.coal_ore,5,5

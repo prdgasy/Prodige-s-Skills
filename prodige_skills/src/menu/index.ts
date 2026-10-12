@@ -1,12 +1,11 @@
 import { Gui, PageClass } from '@prodigelib/gui';
 import { Uninstaller } from '@prodigelib/uninstaller';
 import { Objective } from 'sandstone';
-import { Main } from '@/pages/main';
-import { Shop } from '@/pages/shop';
-import { Skill } from '@/skill';
-import { Progress } from '@/pages/skill/progress';
+import { Main } from '@src/menu/main';
+import { Shop } from '@src/menu/shop';
+import { Skill } from '@src/skill';
+import { Progress } from '@src/menu/skill/progress';
 
-const Mining = new Skill('Mining');
 const Menu = new Gui('prodige_skills', 'menu');
 
 

@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { textWrapper } from '../../lib/textWrapper'; // Ton path exact
 import { Skill } from './index';
 import { Ability } from './ability';
 import { OnEvent } from './onEvent';
 import { Achievement } from './achievement';
+import { Criteria } from '@src/types';
 
 // Utility pour parser un fichier CSV simplement (gère les guillemets)
 // Utility pour parser un fichier CSV simplement (gère les guillemets et les espaces)
@@ -43,56 +43,28 @@ export function loadSkillsFromCSV(dirPath: string): Skill[] {
   for (const row of skillsData) {
     const skill = new Skill({
       name: row.name,
-      description: textWrapper(row.description),
-      itemId: row.itemId as any,
-      startingXp: parseInt(row.startingXp, 10) || 0,
+      description: row.description,
+      item: row.item as any,
+      starting: parseInt(row.starting, 10) || 0,
     });
 
     if (row.abilityName) {
-      skill.ability = Ability({
-        parent: skill,
-        name: row.abilityName,
-        description: textWrapper(row.abilityDescription),
-      });
+      skill.ability = new Ability(skill, row.abilityName, row.abilityDescription);
     }
 
     skillsMap.set(row.name, skill);
   }
 
-  // 2. Charger les OnEvents
   const onEventsData = parseCSV(path.join(dirPath, 'on_events.csv'));
   for (const row of onEventsData) {
     const skill = skillsMap.get(row.skillName);
-    if (skill) {
-      skill.onEvents.push(
-        OnEvent({
-          parent: skill,
-          name: row.name,
-          itemId: row.itemId as any,
-          criteria: row.criteria as any,
-          Xp: parseInt(row.Xp, 10) || 0,
-          pts: parseInt(row.pts, 10) || 0,
-        })
-      );
-    }
+    if (skill) skill.onEvents.push(new OnEvent(skill, row.name, row.item as any, parseInt(row.Xp, 10) || 0, parseInt(row.pts, 10) || 0, row.criteria as Criteria));
   }
 
-  // 3. Charger les Achievements
   const achievementsData = parseCSV(path.join(dirPath, 'achievements.csv'));
   for (const row of achievementsData) {
     const skill = skillsMap.get(row.skillName);
-    if (skill) {
-      skill.achievements.push(
-        Achievement({
-          parent: skill,
-          id: row.id,
-          name: row.name,
-          itemId: row.itemId as any,
-          target: parseInt(row.target, 10) || 0,
-          description: textWrapper(row.description),
-        })
-      );
-    }
+    if (skill) skill.achievements.push(new Achievement(skill, row.name, row.item as any, parseInt(row.target, 10) || 0, row.description));
   }
 
   return Array.from(skillsMap.values());

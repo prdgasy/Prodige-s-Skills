@@ -1,7 +1,7 @@
 import { Text } from "@prodigelib/gui";
 import { Skill } from "../skill";
 import { Player } from "../player";
-import { NovicePickaxe, ToolClass } from "./tool";
+import { Tool } from "./tool";
 import { _, Score } from "sandstone";
 
 
@@ -10,7 +10,7 @@ export type RewardOptions = {
   get: () => void;
 }
 
-export class RewardClass {
+export class Reward {
   show: string;
   get: () => void;
 
@@ -19,61 +19,60 @@ export class RewardClass {
     this.get = options.get;
   }
 
-  static join(rewards: RewardClass[]): string[] {
+  static join(rewards: Reward[]): string[] {
     return rewards.map(r => ` §8+ §r${r.show}`);
   }
 
-  static get(rewards: RewardClass[]) {
+  static get(rewards: Reward[]) {
     rewards.map(r => r.get());
   }
 
-  static point(p: number): RewardClass {
-    return Reward({
+  static point(p: number): Reward {
+    return new Reward({
       show: `§e${p} Pts`,
       get: () => Player.pts.add(p)
     });
   }
 
-  static xp(x: number, skill: Skill): RewardClass {
-    return Reward({
+  static xp(x: number, skill: Skill): Reward {
+    return new Reward({
       show: `§3${x} ${skill.name} Xp`,
       get: () => skill.xp.add(x)
     });
   }
 
-  static tool(t: ToolClass): RewardClass {
-    return Reward({
+  static tool(t: Tool): Reward {
+    return new Reward({
       show: `${t}`,
       get: () => t.give()
     });
   }
 
-  static common(skill: Skill): RewardClass[] {
+  static common(skill: Skill): Reward[] {
     return [
-      RewardClass.point(20),
-      // RewardClass.xp(30, skill),
-      RewardClass.tool(NovicePickaxe)
+      Reward.point(20),
+      Reward.tool(Tool.list[0])
     ]
   }
 
-  static forLevel(skill: Skill, level: number): RewardClass[] {
-    return skill.rewards.get(level) ?? RewardClass.common(skill);
+  static forLevel(skill: Skill, level: number): Reward[] {
+    return skill.rewards.get(level) ?? Reward.common(skill);
   }
 
   static giveRewards(skill: Skill) {
     if (skill.rewards.size > 0) {
       skill.rewards.forEach((rewards, level) => {
         _.if(skill.level["=="](level), () => {
-          RewardClass.get(rewards);
+          Reward.get(rewards);
         });
       });
 
       const notCustom = Array.from(skill.rewards.keys()).map(lvl => skill.level["!="](lvl));
       _.if(_.and(...notCustom), () => {
-        RewardClass.get(RewardClass.common(skill));
+        Reward.get(Reward.common(skill));
       });
     } else {
-      RewardClass.get(RewardClass.common(skill));
+      Reward.get(Reward.common(skill));
     }
   }
 
@@ -81,20 +80,15 @@ export class RewardClass {
     if (skill.rewards.size > 0) {
       skill.rewards.forEach((r, i) => {
         _.if(lvl["=="](i), () => {
-          f(RewardClass.join(r));
+          f(Reward.join(r));
         });
       });
       const notCustom = Array.from(skill.rewards.keys()).map(i => lvl["!="](i));
       _.if(_.and(...notCustom), () => {
-        f(RewardClass.join(RewardClass.common(skill)))
+        f(Reward.join(Reward.common(skill)))
       });
     } else {
-      f(RewardClass.join(RewardClass.common(skill)))
+      f(Reward.join(Reward.common(skill)))
     }
   }
 }
-
-export function Reward({ show, get }: RewardOptions): RewardClass {
-  return new RewardClass({ show, get });
-}
-

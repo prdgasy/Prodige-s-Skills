@@ -16,14 +16,14 @@
     "allowImportingTsExtensions": true,
     "baseUrl": ".",
     "paths": {
-      "@/skills/*": [
-        "src/skills/*"
-      ],
-      "@/pages/*": [
+      "@src/menu/*": [
         "src/menu/pages/*"
       ],
-      "@/*": [
+      "@src/*": [
         "src/*"
+      ],
+      "@lib/*": [
+        "lib/*"
       ]
     }
   },
