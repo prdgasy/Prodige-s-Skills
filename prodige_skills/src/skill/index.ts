@@ -1,5 +1,5 @@
 import { Item } from "@src/types";
-import { _, Label, Objective, playsound, say, Score, tellraw, title } from "sandstone";
+import { _, Label, MCFunction, Objective, playsound, say, Score, tellraw, title } from "sandstone";
 import { Ability } from "./ability";
 import { Reward } from "@src/misc/reward";
 import { Achievement } from "@src/skill/achievement";
@@ -7,11 +7,11 @@ import { Title } from "@src/skill/title";
 import { Tool } from "@src/misc/tool";
 import { Player } from "@src/player";
 import { OnEvent } from '@src/skill/onEvent'
-import { PGTellraw, macro as $ } from "@prodigelib/easymacro";
+import { smartTellraw, macro as $ } from "@prodigelib/easymacro";
 import { Bar } from "@lib/bar"
 import { RomanNumbers } from "@lib/romanNumbers";
-import { loadSkillsFromCSV } from "./skillLoader";
 import * as path from 'path';
+
 type SkillOptions = {
   name: string,
   description?: string,
@@ -64,14 +64,18 @@ export class Skill {
   }
 
   public onEventTriggered(addedXp: Score, addedPoint: Score) {
-    const canLevelUp = _.and(this.xp['>='](this.goal), this.level['<'](100));
-    _.if(_.not(canLevelUp), () => {
-      this.xp['+='](addedXp);
-      this.levelUp()
-    });
+    const fn = MCFunction('skill/on_event_triggered', () => {
+      const canLevelUp = _.and(this.xp['>='](this.goal), this.level['<'](100));
+      _.if(_.not(canLevelUp), () => {
+        this.xp['+='](addedXp);
+        this.levelUp()
+      });
 
-    Player.pts['+='](addedPoint);
-    this.onEventDisplay(addedXp, addedPoint);
+      Player.pts['+='](addedPoint);
+      this.onEventDisplay(addedXp, addedPoint);
+    }, { onConflict: 'ignore' })
+
+    fn();
   }
 
   private levelUp() {
@@ -94,7 +98,7 @@ export class Skill {
   }
 
   private onEventDisplay(XpAdded: Score, pointAdded: Score) {
-    return _.if(OnEvent.notifState, () => title('@p').actionbar([
+    return _.if(Player.onEventNotif, () => title('@p').actionbar([
       { text: this.name }, this.level, '+', XpAdded, 'Xp + ', pointAdded, 'Point'
     ]));
   }
@@ -117,7 +121,7 @@ export class Skill {
         const percentage = this.xp['*'](100)['/'](this.goal);
         const bar = new Bar(percentage);
 
-        PGTellraw([
+        smartTellraw([
           encapsuler + '\n',
           $` §e§l${this.name.toUpperCase()} LEVEL UP! §8${this.level['-'](1)} ➜ §e§l${this.level}\n\n`,
           $` §f§lNext Level Goal\n`,
@@ -136,15 +140,19 @@ export class Skill {
 
     Reward.resolve(this, this.level, display);
   }
+
+  public firstJoin() {
+    this.level.set(0);
+    this.xp.set(0);
+    this.goal.set(this.starting);
+
+    this.ability?.firstJoin();
+
+    this.achievement.set(0);
+    for (const achievement of this.achievements) {
+      achievement.progress.set(0);
+    }
+  }
 }
 
-// Importation automatique depuis le dossier où sont stockés tes CSV
-export const SkillList = loadSkillsFromCSV(path.join(__dirname, 'csv_data'));
 
-// On récupère le skill pour lui lier ses récompenses dynamiques (car les fonctions ne passent pas en CSV)
-const Mining = SkillList.find(s => s.name === 'Mining');
-
-if (Mining) {
-  Mining.rewards.set(10, [new Reward({ show: '§dCustom Reward', get: () => { say('got custom reward') } })]);
-  Mining.rewards.set(20, [new Reward({ show: '§dCustom Reward 2', get: () => { say('got custom reward 2') } })]);
-}

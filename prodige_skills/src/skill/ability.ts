@@ -2,7 +2,7 @@ import { _, Label, LabelClass, NonEmptyString, Objective, playsound, Score } fro
 import { Skill } from ".";
 import { EntityLabel } from "sandstone/variables";
 import { Player } from "@src/player";
-import { PGTellraw, macro as $ } from "@prodigelib/easymacro";
+import { smartTellraw, macro as $ } from "@prodigelib/easymacro";
 import { RomanNumbers } from "@lib/romanNumbers";
 import { textWrapper } from "@lib/textWrapper";
 
@@ -54,7 +54,7 @@ export class Ability {
         ? `§c§l${romanTier}`
         : `${romanPreviousTier}➜§c§l${romanTier}`;
 
-      PGTellraw([
+      smartTellraw([
         ' \n',
         ` ${title}\n`,
         $`  §8• §7Ability: §c§l${this.name} §8[${tier}§8]\n`,
@@ -67,5 +67,10 @@ export class Ability {
       _.if(abilityUnlocked, () => sendAbilityMessage(true));
       _.if(abilityUpgraded, () => sendAbilityMessage(false));
     }
+  }
+
+  public firstJoin() {
+    this.tier.set(0);
+    this.enable();
   }
 }

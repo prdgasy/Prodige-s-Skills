@@ -5,6 +5,8 @@ import { Ability } from './ability';
 import { OnEvent } from './onEvent';
 import { Achievement } from './achievement';
 import { Criteria } from '@src/types';
+import { Reward } from '@src/misc/reward';
+import { say } from 'sandstone';
 
 // Utility pour parser un fichier CSV simplement (gère les guillemets)
 // Utility pour parser un fichier CSV simplement (gère les guillemets et les espaces)
@@ -35,7 +37,7 @@ function parseCSV(filePath: string): Record<string, string>[] {
   });
 }
 
-export function loadSkillsFromCSV(dirPath: string): Skill[] {
+function loadSkillsFromCSV(dirPath: string): Skill[] {
   const skillsMap = new Map<string, Skill>();
 
   // 1. Charger les Skills & Abilities
@@ -68,4 +70,12 @@ export function loadSkillsFromCSV(dirPath: string): Skill[] {
   }
 
   return Array.from(skillsMap.values());
+}
+
+Skill.list = loadSkillsFromCSV(path.join(__dirname, 'data'));
+
+const Mining = Skill.list.find(s => s.name === 'Mining');
+if (Mining) {
+  Mining.rewards.set(10, [new Reward({ show: '§dCustom Reward', get: () => { say('got custom reward') } })]);
+  Mining.rewards.set(20, [new Reward({ show: '§dCustom Reward 2', get: () => { say('got custom reward 2') } })]);
 }

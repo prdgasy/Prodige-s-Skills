@@ -1,12 +1,10 @@
-import { Label, Objective, Score, Variable, _ } from "sandstone";
+import { Data, DataVariable, Label, MCFunction, Objective, Score, Variable, _, defaultNamespace, execute, raw } from "sandstone";
 import { Criteria, Item } from "@src/types";
 import { Skill } from "@src/skill";
 import { Player } from "@src/player";
 
 
 export class OnEvent {
-  static notifState = Label('on_event.notif')('@p');
-
   public parent: Skill;
   public name: string;
   public item: Item;
@@ -19,7 +17,9 @@ export class OnEvent {
   public totalPts: Score;
 
   private criteria: Criteria;
-  private watcher: Score;
+  public watcher: Score;
+
+  static score = Objective.create('on_event');
 
 
   constructor(parent: Skill, name: string, item: Item, xp: number, pts: number, criteria = "dummy" as Criteria) {
@@ -36,16 +36,44 @@ export class OnEvent {
     this.totalPts = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}.pts`, 'dummy')('@p');
   }
 
-  triggered() {
-    const addedXp = Player.boosterScore.xp["*"](this.xp)["*"](this.watcher);
-    const addedPoint = Player.boosterScore.point["*"](this.pts)["*"](this.watcher);
+  private trigger(xp: Score, pts: Score, w: Score, tXp: Score, tPts: Score) {
+    const fn = MCFunction('on_event/trigger', () => {
+      const addedXp = Player.boosterScore.xp["*"](xp)["*"](w);
+      const addedPoint = Player.boosterScore.point["*"](pts)["*"](w);
 
-    this.totalPts['+='](addedPoint);
-    this.totalXp['+='](addedXp);
+      tPts['+='](addedPoint);
+      tXp['+='](addedXp);
 
-    this.parent.onEventTriggered(addedXp, addedPoint);
+      this.parent.onEventTriggered(addedXp, addedPoint);
+    }, { onConflict: 'ignore' })
+    return fn();
+  }
 
-    this.watcher.reset();
+  public static watch() {
+    return MCFunction('on_event/watch', () => {
+      execute.as('@a').at('@s').run(() => {
+        for (const skill of Skill.list) for (const event of skill.onEvents) this.loop(event);
+      })
+    }, { runEvery: '5s' })
+  }
+
+  private static loop(event: OnEvent) {
+
+    _.if(event.watcher[">"](0), () => {
+      const pts = OnEvent.score('.pts').set(event.pts);
+      const xp = OnEvent.score('.xp').set(event.xp);
+      const w = OnEvent.score('.w').set(event.watcher);
+      const tXp = OnEvent.score('.tXp').set(event.totalXp);
+      const tPts = OnEvent.score('.tPts').set(event.totalPts);
+
+      event.trigger(xp, pts, w, tXp, tPts)
+
+      event.totalXp.set(tXp);
+      event.totalPts.set(tPts);
+      event.watcher.reset();
+    })
+
+
   }
 }
 
