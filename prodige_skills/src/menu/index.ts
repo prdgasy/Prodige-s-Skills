@@ -8,37 +8,40 @@ import { Titles } from '@src/menu/shop/titles';
 import { Progress } from '@src/menu/skill/progress';
 import { Skill } from '@src/skill';
 
-const Menu = new Gui('prodige_skills', 'menu', '§e§l', true);
 
-type NormalPage = {
-	getName: () => string;
-	init: (g: Gui, page: PageClass) => PageClass;
-};
+export function initMenu() {
+	const Menu = new Gui('prodige_skills', 'menu', '§e§l', true);
 
-type SubSkillPage = {
-	getName: (skill: Skill) => string;
-	init: (g: Gui, page: PageClass, skill: Skill) => PageClass;
-};
+	type NormalPage = {
+		getName: () => string;
+		init: (g: Gui, page: PageClass) => PageClass;
+	};
 
-export const pages: (NormalPage | SubSkillPage)[] = [
-	Main, Progress, Shop, Crates, Items, Boosters, Titles
-];
+	type SubSkillPage = {
+		getName: (skill: Skill) => string;
+		init: (g: Gui, page: PageClass, skill: Skill) => PageClass;
+	};
+
+	const pages: (NormalPage | SubSkillPage)[] = [
+		Main, Progress, Shop, Crates, Items, Boosters, Titles
+	];
 
 
-for (const p of pages) {
-	if (p.getName.length > 0) {
-		for (const skill of Skill.list) {
-			const name = p.getName(skill);
-			const toRegister = p.init(Menu, Menu.createPage(name), skill);
+	for (const p of pages) {
+		if (p.getName.length > 0) {
+			for (const skill of Skill.list) {
+				const name = p.getName(skill);
+				const toRegister = p.init(Menu, Menu.createPage(name), skill);
+
+				Menu.registerPage(toRegister);
+			}
+		} else {
+			const normalP = p as NormalPage;
+			const name = normalP.getName();
+			const toRegister = normalP.init(Menu, Menu.createPage(name));
 
 			Menu.registerPage(toRegister);
 		}
-	} else {
-		const normalP = p as NormalPage;
-		const name = normalP.getName();
-		const toRegister = normalP.init(Menu, Menu.createPage(name));
-
-		Menu.registerPage(toRegister);
 	}
 }
 
