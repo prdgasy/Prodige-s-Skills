@@ -1,5 +1,4 @@
 import { BetterArray } from "@prodigelib/betterarray";
-import { smartTellraw, macro as T } from "@prodigelib/easymacro";
 import { FloatVar } from "@prodigelib/floatVar";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
@@ -8,7 +7,6 @@ import { Buyable } from "./buyable";
 
 export class Crate {
 	public name: string;
-	public price: number;
 	public description: string;
 	public item: string;
 	public rewards: Map<Buyable, number>;
@@ -17,9 +15,8 @@ export class Crate {
 	public static storage = Global.storage.select("crate");
 
 
-	public constructor(name: string, price: number, description: string, item: string, rewards?: Map<Buyable, number>) {
+	public constructor(name: string, description: string, item: string, rewards?: Map<Buyable, number>) {
 		this.name = name;
-		this.price = price;
 		this.rewards = rewards ?? new Map<Buyable, number>();
 
 		this.description = description;
@@ -48,23 +45,20 @@ export class Crate {
 
 			const i = Variable(0);
 			const picked = Variable(0);
-			const stay = _.and(i['<'](this.rewards.size), picked['<'](n));
 
-			_.while(stay, () => {
+			_.while(picked['<'](n), () => {
 				const b = buyables.get(i);
 				const w = new FloatVar(weights.get(i));
-				smartTellraw([
-					T`Weight: ${w}`
-				]);
-				const P_b = w['/'](t);
 
+				const P_b = w['/'](t);
 				const roll = FloatVar.random()['*'](t);
+
 				_.if(roll['-'](P_b)['<'](0), () => {
-					_.with([b], () => $.functionCmd(Buyable.giveFnName(b)));
+					_.with([b], () => $.functionCmd($`${Global.ns}:${Buyable.giveFnName(b)}`));
 					picked.add(1);
 				})
 
-				i['++'];
+				i['++']['%='](this.rewards.size);
 			})
 		}, { onConflict: 'ignore' });
 
@@ -72,7 +66,7 @@ export class Crate {
 	}
 
 	private open() {
-		const fn = MCFunction(Buyable.giveFnName(this.name), () => {
+		const fn = MCFunction(`misc/crate/open/${this.name}`, () => {
 			this.pick(1);
 			Player.playSound('info');
 			return tellraw('@p', `Opened x1 [${this.name}§a]!`);
