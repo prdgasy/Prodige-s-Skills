@@ -18,5 +18,7 @@ export default {
   namespace: 'prodige_skills',
   packUid: 'xTSjehSB',
   mcmeta: 'latest',
-  saveOptions: {},
+  saveOptions: {
+
+  },
 } as SandstoneConfig

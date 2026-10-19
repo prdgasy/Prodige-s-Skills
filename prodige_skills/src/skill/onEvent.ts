@@ -3,14 +3,12 @@ import { Criteria, Item } from "@src/types";
 import { Skill } from "@src/skill";
 import { Player } from "@src/player";
 
-
 export class OnEvent {
   public parent: Skill;
   public name: string;
   public item: Item;
   public xp: number;
   public pts: number;
-
 
   public totalExecuted: Score;
   public totalXp: Score;
@@ -20,7 +18,6 @@ export class OnEvent {
   public watcher: Score;
 
   static score = Objective.create('on_event');
-
 
   constructor(parent: Skill, name: string, item: Item, xp: number, pts: number, criteria = "dummy" as Criteria) {
     this.name = name;
@@ -46,6 +43,7 @@ export class OnEvent {
 
       this.parent.onEventTriggered(addedXp, addedPoint);
     }, { onConflict: 'ignore' })
+
     return fn();
   }
 
@@ -58,7 +56,6 @@ export class OnEvent {
   }
 
   private static loop(event: OnEvent) {
-
     _.if(event.watcher[">"](0), () => {
       const pts = OnEvent.score('.pts').set(event.pts);
       const xp = OnEvent.score('.xp').set(event.xp);
@@ -66,14 +63,11 @@ export class OnEvent {
       const tXp = OnEvent.score('.tXp').set(event.totalXp);
       const tPts = OnEvent.score('.tPts').set(event.totalPts);
 
-      event.trigger(xp, pts, w, tXp, tPts)
+      event.trigger(xp, pts, w, tXp, tPts);
 
       event.totalXp.set(tXp);
       event.totalPts.set(tPts);
       event.watcher.reset();
     })
-
-
   }
 }
-

@@ -1,49 +1,26 @@
-import { GUI, Page, Button } from "@prodigelib/gui";
-import { goBack, PageNames } from "../const";
-import { Errors } from "../../../lib/errors";
-import { Item } from "../../../types";
+import { Button, Gui, PageClass } from "@prodigelib/gui";
+import { tellraw } from "sandstone";
 
-
-function boosterItem(type: 'Xp' | 'point', multiplier: number) {
-  let itemRepr: Item;
-  let name: string;
-  let color: string;
-  let onClick = () => { Errors.functionNotImplemented(); }
-  if (type === 'Xp') {
-    itemRepr = 'experience_bottle';
-    name = `${multiplier}x Xp Booster`;
-    color = 'aqua';
-  } else {
-    itemRepr = 'gold_ingot';
-    name = `${multiplier}x Xp Booster`;
-    color = 'gold';
-  }
-  return { itemRepr, name, color, multiplier, onClick };
-}
-
-export function initBoosterPage(Menu: GUI) {
-  const page = Page(
-    Menu,
-    PageNames.booster,
-    [goBack(Menu, PageNames.shop), Button({ id: 'stone_button', slot: 5, name: { text: 'testbutton' } })]
-  );
-
-  for (let i = 0; i < 5; i++) {
-    const XpBooster = boosterItem('Xp', i);
-    const pointBooster = boosterItem('point', i);
-
-    page.pushObject(Button({
-      id: XpBooster.itemRepr,
-      slot: i + 5,
-      name: { text: XpBooster.name },
-      onClick: () => { XpBooster.onClick() }
-    }), Button({
-      id: pointBooster.itemRepr,
-      slot: i + 10,
-      name: { text: pointBooster.name },
-      onClick: () => { pointBooster.onClick() }
-    }));
+export class Boosters {
+  public static getName() {
+    return this.name;
   }
 
-  page.build();
+  public static init(g: Gui, p: PageClass) {
+    for (let i = 1; i < 5; i++) {
+      p.add(this.btn(i + 3, 'Xp', i + 1), this.btn(i + 13, 'Pts', i + 1));
+    }
+    return p;
+  }
+
+  private static btn(s: number, type: 'Xp' | 'Pts', m: number) {
+    const item = type === 'Xp' ? 'gold_ingot' : 'stone';
+    return new Button(
+      item, s, `${m}x ${type} Booster`, [
+      '§9Prodige Skill',
+      '',
+      '§eClick to buy!'
+    ], () => { tellraw('@p', '§cNot implemented yet.') }
+    );
+  }
 }

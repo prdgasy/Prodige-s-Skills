@@ -1,15 +1,13 @@
 import { Gui, PageClass } from "@prodigelib/gui";
 import { Objective } from "sandstone";
-
-
-import { Skill } from "@/skill";
+import { Skill } from "@src/skill";
 
 
 export class Progress {
   static pageIndex = Objective.create('progress_page_index')('@s');
 
   static getName(skill: Skill) {
-    return `progress_${skill.name}`;
+    return this.name + skill.name;
   }
 
   static init(g: Gui, p: PageClass, skill: Skill) {

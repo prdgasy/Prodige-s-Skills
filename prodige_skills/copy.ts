@@ -1,237 +1,249 @@
-import fs from "fs-extra";
-import chalk from "chalk";
-import { execSync } from "child_process";
-import readline from "readline";
-import path from "path";
-import os from "os";
+// @ts-nocheck
+import fs from 'fs-extra'
+import chalk from 'chalk'
+import { execSync } from 'child_process'
+import readline from 'readline'
+import path from 'path'
+import os from 'os'
 
-// Fichiers de configuration
-const OUTPUT_FILE_NAMES = ["outputPath", "outputPath.txt"];
+const OUTPUT_FILE = 'datapack-destination.txt'
+const SOURCE = path.resolve('.sandstone/output/datapack')
 
-/**
- * Récupère le nom du datapack depuis sandstone.config.ts, package.json ou le dossier courant
- */
 function getDatapackName(): string {
   try {
-    const configPath = path.join(process.cwd(), "sandstone.config.ts");
-    if (fs.existsSync(configPath)) {
-      const content = fs.readFileSync(configPath, "utf-8");
-      const match = content.match(/name\s*:\s*['"`]([^'"`]+)['"`]/);
-      if (match && match[1]) return match[1];
-    }
+    const config = fs.readFileSync('sandstone.config.ts', 'utf8')
+    const match = config.match(/\bname\s*:\s*['"`]([^'"`]+)['"`]/)
+    if (match) return match[1]
   } catch { }
 
   try {
-    const pkgPath = path.join(process.cwd(), "package.json");
-    if (fs.existsSync(pkgPath)) {
-      const pkg = fs.readJsonSync(pkgPath);
-      if (pkg.name && pkg.name !== "sandstone-template") return pkg.name;
-    }
+    const pkg = fs.readJsonSync('package.json')
+    if (pkg.name && pkg.name !== 'sandstone-template') return pkg.name
   } catch { }
 
-  return path.basename(process.cwd());
+  return path.basename(process.cwd())
 }
 
-/**
- * Recherche le chemin de base des profils Modrinth
- */
-function getModrinthProfilesDir(): string {
-  if (process.platform === "win32") {
-    const appData = process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
-    return path.join(appData, "ModrinthApp", "profiles");
-  } else if (process.platform === "darwin") {
-    return path.join(os.homedir(), "Library", "Application Support", "ModrinthApp", "profiles");
-  } else {
-    return path.join(os.homedir(), ".config", "ModrinthApp", "profiles");
+function getProfilesDir(): string {
+  if (process.platform === 'win32') {
+    return path.join(
+      process.env.APPDATA || path.join(os.homedir(), 'AppData', 'Roaming'),
+      'ModrinthApp',
+      'profiles',
+    )
   }
-}
 
-/**
- * Pose une question dans la console
- */
-function askQuestion(rl: readline.Interface, query: string): Promise<string> {
-  return new Promise((resolve) => {
-    rl.question(query, (answer) => {
-      resolve(answer.trim());
-    });
-  });
-}
-
-/**
- * Récupère les sous-dossiers d'un répertoire
- */
-async function getSubdirectories(dirPath: string): Promise<string[]> {
-  try {
-    if (!(await fs.pathExists(dirPath))) return [];
-    const entries = await fs.readdir(dirPath, { withFileTypes: true });
-    return entries.filter((e) => e.isDirectory()).map((e) => e.name);
-  } catch {
-    return [];
+  if (process.platform === 'darwin') {
+    return path.join(os.homedir(), 'Library/Application Support/ModrinthApp/profiles')
   }
+
+  return path.join(os.homedir(), '.config/ModrinthApp/profiles')
 }
 
-/**
- * Configure interactivement la destination du datapack
- */
-async function promptForDestination(datapackName: string): Promise<string> {
+function ask(question: string): Promise<string> {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
-  });
+  })
 
-  console.log(chalk.cyan.bold("\n🔧 Configuration initiale de la destination du datapack"));
-  console.log(chalk.gray(`Datapack ciblé : ${chalk.white.bold(datapackName)}`));
-
-  const modrinthDir = getModrinthProfilesDir();
-  const profiles = await getSubdirectories(modrinthDir);
-
-  let chosenProfileDir = "";
-
-  if (profiles.length > 0) {
-    console.log(chalk.yellow(`\n📁 Profils Modrinth détectés (${modrinthDir}) :`));
-    profiles.forEach((p, idx) => {
-      console.log(chalk.white(`  [${idx + 1}] `) + chalk.green(p));
-    });
-    console.log(chalk.white(`  [0] `) + chalk.gray("Entrer un chemin personnalisé"));
-
-    while (!chosenProfileDir) {
-      const answer = await askQuestion(
-        rl,
-        chalk.cyan(`\nChoisissez un profil (1-${profiles.length}) ou 0 : `)
-      );
-
-      if (answer === "0") {
-        const customPath = await askQuestion(rl, chalk.cyan("Entrez le chemin complet du profil : "));
-        if (customPath && (await fs.pathExists(customPath))) {
-          chosenProfileDir = customPath;
-        } else {
-          console.log(chalk.red("Chemin invalide ou introuvable."));
-        }
-      } else {
-        const num = parseInt(answer, 10);
-        if (!isNaN(num) && num >= 1 && num <= profiles.length) {
-          chosenProfileDir = path.join(modrinthDir, profiles[num - 1]);
-        } else {
-          console.log(chalk.red("Option invalide, veuillez réessayer."));
-        }
-      }
-    }
-  } else {
-    console.log(chalk.yellow(`\nAucun profil Modrinth trouvé automatiquement dans : ${modrinthDir}`));
-    const custom = await askQuestion(rl, chalk.cyan("Entrez le chemin complet vers le dossier du profil : "));
-    chosenProfileDir = custom;
-  }
-
-  // Sélection du monde dans saves/
-  const savesDir = path.join(chosenProfileDir, "saves");
-  const worlds = await getSubdirectories(savesDir);
-
-  let chosenWorld = "";
-
-  if (worlds.length > 0) {
-    console.log(chalk.yellow(`\n🌍 Mondes détectés dans le profil :`));
-    worlds.forEach((w, idx) => {
-      console.log(chalk.white(`  [${idx + 1}] `) + chalk.green(w));
-    });
-    console.log(chalk.white(`  [0] `) + chalk.gray("Entrer un nom de monde personnalisé"));
-
-    while (!chosenWorld) {
-      const answer = await askQuestion(
-        rl,
-        chalk.cyan(`\nChoisissez un monde (1-${worlds.length}) ou 0 : `)
-      );
-
-      if (answer === "0") {
-        const customWorld = await askQuestion(rl, chalk.cyan("Entrez le nom du monde : "));
-        if (customWorld) {
-          chosenWorld = customWorld;
-        }
-      } else {
-        const num = parseInt(answer, 10);
-        if (!isNaN(num) && num >= 1 && num <= worlds.length) {
-          chosenWorld = worlds[num - 1];
-        } else {
-          console.log(chalk.red("Option invalide, veuillez réessayer."));
-        }
-      }
-    }
-  } else {
-    console.log(chalk.yellow(`\nAucun monde trouvé dans ${savesDir}`));
-    chosenWorld = await askQuestion(rl, chalk.cyan("Entrez le nom du monde (ex: FRIANDISE) : "));
-  }
-
-  rl.close();
-
-  // Chemin final vers datapacks/<datapackName>
-  const finalPath = path.join(savesDir, chosenWorld, "datapacks", datapackName).replace(/\\/g, "/");
-
-  // Enregistrement dans outputPath
-  const saveFile = path.join(process.cwd(), "outputPath");
-  await fs.writeFile(saveFile, finalPath, "utf-8");
-
-  console.log(chalk.green(`\n💾 Destination enregistrée dans ${chalk.bold("outputPath")} :`));
-  console.log(chalk.gray(`   ${finalPath}`));
-  console.log(chalk.gray(`   (Pour changer plus tard, modifiez ou supprimez le fichier 'outputPath')\n`));
-
-  return finalPath;
+  return new Promise(resolve => {
+    rl.question(question, answer => {
+      rl.close()
+      resolve(answer.trim().replace(/^["']|["']$/g, ''))
+    })
+  })
 }
 
-/**
- * Récupère ou demande le chemin de destination
- */
-async function getDestinationPath(datapackName: string): Promise<string> {
-  for (const fileName of OUTPUT_FILE_NAMES) {
-    const filePath = path.join(process.cwd(), fileName);
-    if (await fs.pathExists(filePath)) {
-      const content = (await fs.readFile(filePath, "utf-8")).trim();
-      if (content) {
-        return content.replace(/\\/g, "/");
+async function select(
+  title: string,
+  options: string[],
+): Promise<string> {
+  if (!process.stdin.isTTY || !process.stdin.setRawMode) {
+    console.log(`\n${title}`)
+    options.forEach((option, i) => console.log(`  ${i + 1}. ${option}`))
+
+    while (true) {
+      const answer = Number(await ask('Choix : '))
+      if (Number.isInteger(answer) && answer >= 1 && answer <= options.length) {
+        return options[answer - 1]
       }
     }
   }
 
-  return await promptForDestination(datapackName);
+  let selected = 0
+  let firstRender = true
+
+  readline.emitKeypressEvents(process.stdin)
+  process.stdin.setRawMode(true)
+  process.stdin.resume()
+
+  const render = () => {
+    if (!firstRender) {
+      process.stdout.write(`\x1B[${options.length + 1}A`)
+    }
+
+    firstRender = false
+    process.stdout.write(`\x1B[2K\r${chalk.cyan(title)}\n`)
+
+    options.forEach((option, i) => {
+      const pointer = i === selected ? chalk.green('❯') : ' '
+      const label = i === selected ? chalk.green.bold(option) : option
+      process.stdout.write(`\x1B[2K\r${pointer} ${label}\n`)
+    })
+  }
+
+  render()
+
+  return new Promise(resolve => {
+    const cleanup = () => {
+      process.stdin.removeListener('keypress', onKeypress)
+      process.stdin.setRawMode(false)
+      process.stdout.write('\x1B[?25h')
+      process.stdout.write('\n')
+    }
+
+    const onKeypress = (_: string, key: readline.Key) => {
+      if (key.name === 'up') {
+        selected = (selected - 1 + options.length) % options.length
+        render()
+      } else if (key.name === 'down') {
+        selected = (selected + 1) % options.length
+        render()
+      } else if (key.name === 'return') {
+        const result = options[selected]
+        cleanup()
+        resolve(result)
+      } else if (key.ctrl && key.name === 'c') {
+        cleanup()
+        process.exit(1)
+      }
+    }
+
+    process.stdout.write('\x1B[?25l')
+    process.stdin.on('keypress', onKeypress)
+  })
 }
 
-async function fullSync(source: string, destination: string) {
+async function getDirectories(dir: string): Promise<string[]> {
+  if (!(await fs.pathExists(dir))) return []
+
+  const entries = await fs.readdir(dir, { withFileTypes: true })
+  return entries.filter(entry => entry.isDirectory()).map(entry => entry.name)
+}
+
+async function getDestination(datapackName: string): Promise<string> {
+  const savedPath = path.resolve(OUTPUT_FILE)
+
+  if (await fs.pathExists(savedPath)) {
+    const saved = (await fs.readFile(savedPath, 'utf8')).trim()
+    if (saved) return path.resolve(saved)
+  }
+
+  const profilesDir = getProfilesDir()
+  const profiles = await getDirectories(profilesDir)
+
+  let profile: string
+
+  if (profiles.length) {
+    const custom = 'Entrer un chemin personnalisé'
+    const choice = await select('Choisis un profil Modrinth :', [...profiles, custom])
+
+    if (choice === custom) {
+      profile = path.resolve(await ask('Chemin complet du profil : '))
+    } else {
+      profile = path.join(profilesDir, choice)
+    }
+  } else {
+    profile = path.resolve(await ask('Chemin complet du profil Modrinth : '))
+  }
+
+  if (!(await fs.pathExists(profile))) {
+    throw new Error(`Profil introuvable : ${profile}`)
+  }
+
+  const savesDir = path.join(profile, 'saves')
+  const worlds = await getDirectories(savesDir)
+  const customWorld = 'Saisir un nom de monde'
+
+  let world: string
+
+  if (worlds.length) {
+    const choice = await select('Choisis un monde :', [...worlds, customWorld])
+    world = choice === customWorld ? await ask('Nom du monde : ') : choice
+  } else {
+    world = await ask('Nom du monde : ')
+  }
+
+  const destination = path.join(savesDir, world, 'datapacks', datapackName)
+
+  await fs.ensureDir(path.dirname(destination))
+  await fs.writeFile(savedPath, destination, 'utf8')
+
+  console.log(chalk.gray(`Destination saved to ${OUTPUT_FILE}`))
+
+  return destination
+}
+
+async function syncDirectory(source: string, destination: string): Promise<void> {
   if (!(await fs.pathExists(source))) {
-    throw new Error(`Le dossier source n'existe pas : ${source}`);
+    throw new Error(`Dossier source introuvable : ${source}`)
   }
 
-  if (await fs.pathExists(destination)) {
-    await fs.emptyDir(destination);
-  } else {
-    await fs.ensureDir(destination);
+  await fs.ensureDir(destination)
+
+  const sourceEntries = await fs.readdir(source)
+  const destinationEntries = await fs.readdir(destination)
+
+  for (const name of destinationEntries) {
+    if (!sourceEntries.includes(name)) {
+      await fs.remove(path.join(destination, name))
+    }
   }
 
-  await fs.copy(source, destination, {
-    overwrite: true,
-    errorOnExist: false,
-  });
+  for (const name of sourceEntries) {
+    const src = path.join(source, name)
+    const dest = path.join(destination, name)
+    const stat = await fs.lstat(src)
+
+    if (stat.isDirectory()) {
+      await syncDirectory(src, dest)
+    } else {
+      const destExists = await fs.pathExists(dest)
+      const same =
+        destExists &&
+        (await fs.stat(dest)).isFile() &&
+        (await fs.stat(dest)).size === stat.size &&
+        (await fs.stat(dest)).mtimeMs === stat.mtimeMs
+
+      if (!same) {
+        await fs.copy(src, dest, { overwrite: true })
+      }
+    }
+  }
 }
+
 
 async function main() {
-  const datapackName = getDatapackName();
-  const source = path.resolve(process.cwd(), ".sandstone/output/datapack").replace(/\\/g, "/");
-  const destination = await getDestinationPath(datapackName);
+  const datapackName = getDatapackName()
+  const destination = await getDestination(datapackName)
 
-  console.log(chalk.cyan("📦 Source Sandstone : ") + chalk.gray(source));
-  console.log(chalk.cyan("🎯 Destination      : ") + chalk.green(destination));
+  const world = path.basename(path.dirname(path.dirname(destination)))
+  const profile = destination.split(`${path.sep}saves${path.sep}`)[0]
+  const instance = path.basename(profile)
 
-  console.log(chalk.cyan("\n🔨 Compilation du datapack avec Sandstone (sand build)..."));
-  try {
-    execSync("sand build", { stdio: "inherit" });
-    console.log(chalk.blue("\n📂 Copie en cours vers le monde Minecraft..."));
-    await fullSync(source, destination);
-    console.log(chalk.green(`\n✨ Opération terminée avec succès !\n   ${chalk.gray(destination)}`));
-    process.exit(0);
-  } catch (err) {
-    console.log(chalk.red("\n❌ Erreur lors de la compilation ou de la copie :"), err);
-    process.exit(1);
-  }
+  console.log(`${chalk.gray('Instance:')} ${instance}`)
+  console.log(`${chalk.gray('World:')} ${world}`)
+
+  execSync('sand build', { stdio: 'inherit' })
+
+  await syncDirectory(SOURCE, destination)
+
+  console.log(chalk.green(`\n✓ ${datapackName} successfully copied to ${world} (${instance}).`))
 }
 
-main().catch((err) => {
-  console.error(chalk.red("Erreur inattendue :"), err);
-  process.exit(1);
-});
+main()
+  .then(() => process.exit(0))
+  .catch(error => {
+    console.error(chalk.red(`\nError: ${error.message}`))
+    process.exit(1)
+  })

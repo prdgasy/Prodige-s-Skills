@@ -7,6 +7,9 @@ import { Achievement } from './achievement';
 import { Criteria } from '@src/types';
 import { Reward } from '@src/misc/reward';
 import { say } from 'sandstone';
+import { Crate } from '@src/misc/crate';
+import { Buyable } from '@src/misc/buyable';
+import { Tool } from '@src/misc/tool';
 
 // Utility pour parser un fichier CSV simplement (gère les guillemets)
 // Utility pour parser un fichier CSV simplement (gère les guillemets et les espaces)
@@ -79,3 +82,9 @@ if (Mining) {
   Mining.rewards.set(10, [new Reward({ show: '§dCustom Reward', get: () => { say('got custom reward') } })]);
   Mining.rewards.set(20, [new Reward({ show: '§dCustom Reward 2', get: () => { say('got custom reward 2') } })]);
 }
+
+const rewards = new Map<Buyable, number>([
+  [Tool.list[0], 0.1], [Tool.list[1], 0.5]
+]);
+
+const common = new Crate('common', 1500, 'This is a simple description', 'chest', rewards);

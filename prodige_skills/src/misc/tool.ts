@@ -1,13 +1,14 @@
 import { Item } from "../types";
-import { textWrapper } from "../../lib/textWrapper";
-import { say } from "sandstone";
+import { _, give, MCFunction, say, tellraw } from "sandstone";
 import { Skill } from "@src/skill";
+import { Buyable } from "@src/misc/buyable";
 
 export type ToolOptions = {
   name: string;
   item: Item;
   price: number;
   description: string;
+  characteristics: string[];
   rarity: ToolRarity;
   durability: number;
   type?: Skill;
@@ -18,12 +19,13 @@ export type ToolOptions = {
 
 type ToolRarity = "§f§lCOMMON" | "§9§lRARE" | "§d§lEPIC" | "§6§lLEGENDARY";
 
-export class Tool {
+export class Tool extends Buyable {
   public static list: Tool[] = [];
   public name: string;
   public item: Item;
   public price: number;
   public description: string;
+  public characteristics: string[];
   public rarity: ToolRarity;
   public durability: number;
 
@@ -33,10 +35,12 @@ export class Tool {
   public onHold?: () => void;
 
   constructor(options: ToolOptions) {
+    super();
     this.name = options.name;
     this.item = options.item;
     this.price = options.price;
     this.description = options.description;
+    this.characteristics = options.characteristics;
     this.rarity = options.rarity;
     this.durability = options.durability;
     this.type = options.type;
@@ -45,12 +49,12 @@ export class Tool {
     this.onHold = options.onHold;
   }
 
-  give() {
-    say(`Given x1 ${this.name} to @p`);
-  }
-
-  toString() {
-    return this.name;
+  override give() {
+    const fn = MCFunction(Buyable.giveFnName(this.name), () => {
+      tellraw('@p', `§aBought x1 [${this.name}§a]!`);
+      give('@p', this.item);
+    }, { onConflict: 'ignore' })
+    return fn();
   }
 }
 
@@ -59,6 +63,7 @@ const NovicePickaxe = new Tool({
   item: "iron_pickaxe",
   price: 50,
   description: '§7A reliable pickaxe for aspiring miners, ideal for extracting basic ores.',
+  characteristics: ["test", "test3"],
   rarity: "§f§lCOMMON",
   durability: 250,
   onUse: () => { },
@@ -71,6 +76,7 @@ const DeepDelverPickaxe = new Tool({
   item: "diamond_pickaxe",
   price: 250,
   description: '§7Forged in deep caverns, this sturdy pickaxe effortlessly breaks through the toughest stone.',
+  characteristics: [],
   rarity: "§9§lRARE",
   durability: 1000,
   onUse: () => { },

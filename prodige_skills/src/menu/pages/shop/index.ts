@@ -1,93 +1,85 @@
 import { Button, Gui, PageClass } from "@prodigelib/gui";
-import { textWrapper } from "../../../../lib/textWrapper";
+import { textWrapper } from "@lib/textWrapper";
+import { Items } from "./items";
+import { Boosters } from "./booster";
+import { Crates } from "./crates";
+import { Titles } from "./titles";
 
 export class Shop {
-  static getName() {
+  public static getName() {
     return this.name;
   }
 
-  static init(g: Gui, p: PageClass) {
+  public static init(g: Gui, p: PageClass) {
+    const items = new Button(
+      "emerald",
+      10,
+      "§a§l⚒ Items & Gear",
+      [
+        ...textWrapper("§7Discover exclusive equipment designed to enhance your skills."),
+        "",
+        "§a§lWhat's inside?",
+        "§7• §fExclusive tools & weapons",
+        "§7• §fCustom item abilities",
+        "§7• §fSpecialized gear",
+        "",
+        "§e➜ Click to browse items!"
+      ],
+      () => g.switch(Items.getName())
+    );
 
+    const boosters = new Button(
+      "experience_bottle",
+      12,
+      "§b§l✦ Boosters",
+      [
+        ...textWrapper("§7Accelerate your progression with powerful multipliers."),
+        "",
+        "§b§lAvailable boosts",
+        "§7• §fSkill experience multipliers",
+        "§7• §fSkill point multipliers",
+        "",
+        "§e➜ Click to explore boosts!"
+      ],
+      () => g.switch(Boosters.getName())
+    );
+
+    const crates = new Button(
+      "ender_chest",
+      14,
+      "§6§l✧ Crates",
+      [
+        ...textWrapper("§7Open mysterious crates and discover valuable rewards."),
+        "",
+        "§6§lPossible rewards",
+        "§7• §fCommon & legendary loot",
+        "§7• §6Rare jackpot rewards",
+        "§7• §eExclusive titles & points",
+        "",
+        "§e➜ Click to discover crates!"
+      ],
+      () => g.switch(Crates.getName())
+    );
+
+    const titles = new Button(
+      "name_tag",
+      16,
+      "§d§l✦ Titles",
+      [
+        ...textWrapper("§7Show off your achievements with prestigious cosmetic titles."),
+        "",
+        "§d§lPersonalize your profile",
+        "§7• §fSkill-themed titles",
+        "§7• §fCustom chat prefixes",
+        "§7• §fShowcase your progress",
+        "",
+        "§e➜ Click to customize titles!"
+      ],
+      () => g.switch(Titles.getName())
+    );
+
+    p.add(items, boosters, crates, titles);
     return p;
   }
 }
-// }
-// export function initShop(Menu: GUI) {
-//   const item = Button({
-//     id: 'emerald',
-//     slot: 10,
-//     name: { text: 'Items', color: 'green', bold: true },
-//     lore: [
-//       ...textWrapper('§7Browse and purchase custom items and specialized gear crafted to enhance your skill progression.'),
-//       "",
-//       { text: 'Includes:', color: 'gold' },
-//       { text: ' • Exclusive tools & weapons', color: 'white' },
-//       { text: ' • Custom item abilities', color: 'white' },
-//       "",
-//       { text: 'Click to browse items!', color: 'yellow' }
-//     ],
-//     onClick: () => { Menu.toPage(PageNames.item) }
-//   });
 
-//   const booster = Button({
-//     id: 'experience_bottle',
-//     slot: 12,
-//     name: { text: 'Boosters', color: 'aqua', bold: true },
-//     lore: [
-//       ...textWrapper('§7Supercharge your leveling with powerful Xp & Point multipliers.'),
-//       "",
-//       { text: 'Includes:', color: 'gold' },
-//       { text: ' • Skill Xp Boosters', color: 'white' },
-//       { text: ' • Skill Point Boosters', color: 'white' },
-//       "",
-//       { text: 'Click to view boosters!', color: 'yellow' }
-//     ],
-//     onClick: () => { Menu.toPage(PageNames.booster) }
-//   });
-
-//   const crate = Button({
-//     id: 'ender_chest',
-//     slot: 14,
-//     name: { text: 'Crates', color: 'light_purple', bold: true },
-//     lore: [
-//       ...textWrapper('§7Open mystery crates to obtain rare loot, titles, and points.'),
-//       "",
-//       { text: 'Contains:', color: 'gold' },
-//       { text: ' • Common & Legendary Crates', color: 'white' },
-//       { text: ' • Rare jackpot rewards', color: 'white' },
-//       "",
-//       { text: 'Click to open crates!', color: 'yellow' }
-//     ],
-//     onClick: () => { Menu.toPage(PageNames.crate) }
-//   });
-
-//   const title = Button({
-//     id: 'name_tag',
-//     slot: 16,
-//     name: { text: 'Titles', color: 'yellow', bold: true },
-//     lore: [
-//       ...textWrapper('§7Unlock and equip prestigious titles to showcase your achievements.'),
-//       "",
-//       { text: 'Features:', color: 'gold' },
-//       { text: ' • Skill-themed cosmetic badges', color: 'white' },
-//       { text: ' • Chat prefix customization', color: 'white' },
-//       "",
-//       { text: 'Click to customize titles!', color: 'yellow' }
-//     ],
-//     onClick: () => { Menu.toPage(PageNames.title) }
-//   });
-
-//   const page = Page(
-//     Menu,
-//     PageNames.shop,
-//     [
-//       goBack(Menu, PageNames.main),
-//       item,
-//       booster,
-//       crate,
-//       title
-//     ]
-//   );
-//   page.build();
-
-// }

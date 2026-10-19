@@ -1,64 +1,64 @@
-import { GuiMacro as $, Button, Gui, PageClass } from "@prodigelib/gui";
+import { Bar } from "@lib/bar";
 import { RomanNumbers } from "@lib/romanNumbers";
+import { textWrapper } from "@lib/textWrapper";
+import { GuiMacro as $, Button, Gui, PageClass } from "@prodigelib/gui";
 import { Shop } from "@src/menu/shop";
 import { Progress } from "@src/menu/skill/progress";
+import { Reward } from "@src/misc/reward";
 import { Skill } from "@src/skill";
+import { comment, tellraw } from "sandstone";
 
 
 export class Main {
-  static getName() {
-    return this.name;
-  }
-  static init(g: Gui, p: PageClass) {
-    // tellraw("@s", "§eMain page loaded");
+	static getName() {
+		return this.name;
+	}
 
-    const shop = new Button("emerald", 21, "§aShop", () => g.switch(Shop.name));
-    // const profile = new Button("player_head", 4, "§bProfile", () => g.toPage(PageNames.profile));
-    // const dailyTask = new Button("wheat", 23, "§cDaily Tasks", () => g.toPage(PageNames.dailyTask));
-    // const leaderboard = new Button("book", 25, "§6Leaderboard", () => g.toPage(PageNames.leaderboard));
+	static init(g: Gui, p: PageClass) {
+		const shop = new Button("emerald", 21, "§aShop", [], () => g.switch(Shop.getName()));
+		const profile = new Button("player_head", 4, "§bProfile", [], () => { tellraw('@p', '§cNot implemented yet.') });
+		const dailyTask = new Button("wheat", 23, "§cDaily Tasks", [], () => { tellraw('@p', '§cNot implemented yet.') });
 
-    p.add(shop);
-    // p.pushObject(shop, profile, dailyTask, leaderboard);
+		p.add(shop, profile, dailyTask, this.skillBts(g, p));
 
-    p.add(() => {
-      let slot = 10;
+		return p;
+	}
 
-      for (const skill of Skill.list) {
-        // const percentage = skill.xp["*"](100)["/"](skill.xpTarget);
-        // const nextLevel = skill.level["+"](1);
+	private static skillBts(g: Gui, p: PageClass) {
+		return () => {
+			let slot = 10;
 
-        const emitBtn = (rewards: string[]) => p.add(new Button(
-          'diamond_sword', // skill.itemId,
-          slot,
-          $`§d${skill.name} ${RomanNumbers.convert(4)}`, // $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`,
-          () => {
-            Progress.pageIndex.set(0); // skill.level["/"](18));
-            g.switch(Progress.getName(skill));
-          },
-          [
-            // $`§9${skill.name} ${skill.level}`,
-            "",
-            // ...skill.description,
-            "",
-            "§f§lNext Level Goal",
-            // $` §8• §7Target: §d${skill.name} ${RomanNumbers.convert(nextLevel)}`,
-            // $` §8• §7Progress: §e${percentage}%`,
-            // $` §8> ${ProgressBar(percentage)} §e${skill.xp}§6/§e${skill.xpTarget}`,
-            // "",
-            // $`§f§l${skill.name} ${RomanNumbers.convert(nextLevel)} Rewards`,
-            // ...rewards,
-            // "",
-            "§eClick to view!",
-          ],
-          1,
-          ["!attribute_modifiers"],
-        ));
-        emitBtn(["a", "b"]);
-        // RewardClass.resolve(skill, skill.level, emitBtn);
-        slot++;
-      }
-    });
+			for (const skill of Skill.list) {
+				comment(`skill_button::${skill.name}`)
 
-    return p;
-  }
+				const r = skill.xp["*"](100)["/"](skill.goal);
+				const nLvl = skill.level["+"](1);
+
+				const emitBtn = (rewards: string[]) => p.add(new Button(
+					skill.item, slot++, $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`, [
+					$`§9${skill.name} ${skill.level}`,
+					"",
+					...textWrapper(skill.description),
+					"",
+					"§f§lNext Level Goal:",
+					$` §8• §7Target: §d${skill.name} ${RomanNumbers.convert(nLvl)}`,
+					$` §8• §7Progress: §e${r}%`,
+					$` §8> ${new Bar(r).get()} §e${skill.xp}§6/§e${skill.goal}`,
+					"",
+					$`§f§l${skill.name} ${RomanNumbers.convert(nLvl)} Rewards:`,
+					...rewards,
+					"",
+					"§eClick to view!",
+				], () => {
+					Progress.pageIndex.set(skill.level["/"](18));
+					g.switch(Progress.getName(skill));
+				},
+					1,
+					["!attribute_modifiers"],
+				));
+
+				Reward.resolve(skill, skill.level, emitBtn);
+			}
+		}
+	}
 }

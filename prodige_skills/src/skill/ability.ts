@@ -1,4 +1,4 @@
-import { _, Label, LabelClass, NonEmptyString, Objective, playsound, Score } from "sandstone";
+import { _, Label, NonEmptyString, Objective, playsound, Score } from "sandstone";
 import { Skill } from ".";
 import { EntityLabel } from "sandstone/variables";
 import { Player } from "@src/player";

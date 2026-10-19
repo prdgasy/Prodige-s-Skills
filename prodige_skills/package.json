@@ -19,7 +19,9 @@
   "dependencies": {
     "@prodigelib/betterarray": "github:prdgasy/betterarray",
     "@prodigelib/easymacro": "github:prdgasy/easy-macro",
+    "@prodigelib/floatVar": "github:prdgasy/floatvar",
     "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
+    "@prodigelib/uninstaller": "github:prdgasy/uninstaller",
     "sandstone": "~1.2.36"
   },
   "trustedDependencies": [

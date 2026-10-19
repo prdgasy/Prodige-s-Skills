@@ -7,7 +7,9 @@
       "dependencies": {
         "@prodigelib/betterarray": "github:prdgasy/betterarray",
         "@prodigelib/easymacro": "github:prdgasy/easy-macro",
+        "@prodigelib/floatVar": "github:prdgasy/floatvar",
         "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
+        "@prodigelib/uninstaller": "github:prdgasy/uninstaller",
         "sandstone": "~1.2.36",
       },
       "devDependencies": {
@@ -80,15 +82,17 @@
 
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.6.0", "", { "os": "win32", "cpu": "x64" }, "sha512-cA+/pXV2YkfxlIcXOQ5fSWqAzzPyD78/x5qbK/I0vUkrlYHA8TIz+MXjAbGouguKVSI4bOmkTSJ1/poVSsgt+A=="],
 
-    "@prodigelib/betterarray": ["@prodigelib/betterarray@github:prdgasy/betterarray#9c43b1b", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-betterarray-9c43b1b", "sha512-FJzVpGPLn70VTkSp8dfRVEly/aU9YujSGDY7XtnrpFP8etBIdrLtTGkeebqGzuPTneCtCTgnlrh8TPd2jxHg4Q=="],
+    "@prodigelib/betterarray": ["@prodigelib/betterarray@github:prdgasy/betterarray#8b60d83", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-betterarray-8b60d83", "sha512-lVK5IbNRj9Mt85ng0sdQYkI6UAAPMUWHf9qRStymm++7WHYIWyuycSmQd/ChqlArJN+RMYlTJzKMI2Z/XRcOTg=="],
 
     "@prodigelib/cjmap": ["@prodigelib/cjmap@github:prdgasy/cjmap#2a8cbce", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-cjmap-2a8cbce", "sha512-XLWcTFKrbWydwrROpnExmJeIGxWvWpJ2v0d1ZRIWEyuyaU7S+g/RbSkH+VV/mg2wkopLKgF2c1hInsGTwW/m/w=="],
 
     "@prodigelib/easymacro": ["@prodigelib/easymacro@github:prdgasy/easy-macro#4f92548", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-easy-macro-4f92548", "sha512-Nr8SUb8NwbRQS6do6k8FBS4VNfB9LrVJb1rifMztWero+3wv/wsDcgkT8wzj5YYb0vkPHuWlmJFpY6n14uRHNw=="],
 
-    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#d719a38", { "dependencies": { "@prodigelib/cjmap": "github:prdgasy/cjmap", "@prodigelib/uninstaller": "github:prdgasy/uninstaller", "sandstone": "~1.2.36" } }, "prdgasy-prodigelib-gui-d719a38", "sha512-wTWmPwXNNYRr6ebDAoKh3BH7SzXAhQlbnh2EQo1A2vmw5AbMWpWUMuzGEbaHNOMZD8dwo096nvjttks5TJ+0Yw=="],
+    "@prodigelib/floatVar": ["@prodigelib/floatVar@github:prdgasy/floatvar#443ecb1", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-floatVar-443ecb1", "sha512-M5+eKwOMG7y29gfu9oqp1WZZiyozxLoG6I+X00UX/fQOeuneoy2PaC+IyqvAOgZd7L36bOMsp9ecjK69zealtg=="],
 
-    "@prodigelib/uninstaller": ["@prodigelib/uninstaller@github:prdgasy/uninstaller#d0a18a0", { "dependencies": { "picocolors": "^1.1.1", "sandstone": "~1.2.36" } }, "prdgasy-uninstaller-d0a18a0", "sha512-cuKTrm4kNAHZLyHLN7w4qPyCw0ESb0GbwERiEJVMMFz/RTIogAG/J6NBH0HrIERq2htqbdDNHMJowy0RZtV7ow=="],
+    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#f6c428e", { "dependencies": { "@prodigelib/cjmap": "github:prdgasy/cjmap", "@prodigelib/uninstaller": "github:prdgasy/uninstaller", "sandstone": "~1.2.36" } }, "prdgasy-prodigelib-gui-f6c428e", "sha512-TMvlIqOSqid3+PgANDyWBnbF7RBA15QLg6TqGPKwPdOt920rUBFi9QpsvJ94KtmhOyxGnZ4XzHcacdcvHGUyDw=="],
+
+    "@prodigelib/uninstaller": ["@prodigelib/uninstaller@github:prdgasy/uninstaller#8d16bef", { "dependencies": { "picocolors": "^1.1.1", "sandstone": "~1.2.36" } }, "prdgasy-uninstaller-8d16bef", "sha512-VwKZeOuymCan8F8kTgQqgXXRqn3z0yB5M2nRIkr9m5zonvETk/+0ghsiQJHgTPgli+QWNdLVgzg3gSvNPn7LsQ=="],
 
     "@types/bun": ["@types/bun@1.3.14", "", { "dependencies": { "bun-types": "1.3.14" } }, "sha512-h1hFqFVcvAvD9j9K7ZW7vd82aSA+rTdznZa+5bwvCwqSB1jmmfLcbIWhOLx1/+boy/xmjgCs/OMUL8hRJSmnPw=="],
 

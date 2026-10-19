@@ -1,5 +1,5 @@
 import { Item } from "@src/types";
-import { _, Label, MCFunction, Objective, playsound, say, Score, tellraw, title } from "sandstone";
+import { _, Label, MCFunction, Objective, playsound, Score, tellraw, title } from "sandstone";
 import { Ability } from "./ability";
 import { Reward } from "@src/misc/reward";
 import { Achievement } from "@src/skill/achievement";
@@ -9,8 +9,6 @@ import { Player } from "@src/player";
 import { OnEvent } from '@src/skill/onEvent'
 import { smartTellraw, macro as $ } from "@prodigelib/easymacro";
 import { Bar } from "@lib/bar"
-import { RomanNumbers } from "@lib/romanNumbers";
-import * as path from 'path';
 
 type SkillOptions = {
   name: string,
@@ -154,5 +152,3 @@ export class Skill {
     }
   }
 }
-
-
