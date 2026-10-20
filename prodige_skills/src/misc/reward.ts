@@ -1,94 +1,82 @@
-import { Text } from "@prodigelib/gui";
-import { Skill } from "../skill";
+import { Global } from "@src/global";
+import { Macro as $, _, DataPointClass, Score, Variable } from "sandstone";
+import { MacroLiteral } from "sandstone/core";
 import { Player } from "../player";
+import { Skill } from "../skill";
 import { Tool } from "./tool";
-import { _, Score } from "sandstone";
-
-
-export type RewardOptions = {
-  show: string;
-  get: () => void;
-}
 
 export class Reward {
-  show: string;
-  get: () => void;
+	show: string;
+	give: () => void;
 
-  constructor(options: RewardOptions) {
-    this.show = options.show;
-    this.get = options.get;
-  }
+	constructor(show: string, give: () => void) {
+		this.show = show;
+		this.give = give;
+	}
 
-  static join(rewards: Reward[]): string[] {
-    return rewards.map(r => ` §8+ §r${r.show}`);
-  }
+	/** Assemble multiple rewards into a string[] */
+	public static join(rewards: Reward[]): string[] {
+		return rewards.map(r => ` §8+ §r${r.show}`);
+	}
 
-  static get(rewards: Reward[]) {
-    rewards.map(r => r.get());
-  }
+	/** Give every rewards inside @param rewards */
+	public static get(rewards: Reward[]) {
+		rewards.map(r => r.give);
+	}
 
-  static point(p: number): Reward {
-    return new Reward({
-      show: `§e${p} Pts`,
-      get: () => Player.pts.add(p)
-    });
-  }
+	public static point(p: number): Reward {
+		return new Reward(`§e${p} Pts`, () => Player.pts.add(p));
+	}
 
-  static xp(x: number, skill: Skill): Reward {
-    return new Reward({
-      show: `§3${x} ${skill.name} Xp`,
-      get: () => skill.xp.add(x)
-    });
-  }
+	public static xp(x: number, skill: Skill): Reward {
+		return new Reward(`§3${x} ${skill.name} Xp`, () => skill.xp.add(x));
+	}
 
-  static tool(t: Tool): Reward {
-    return new Reward({
-      show: `${t}`,
-      get: () => t.give()
-    });
-  }
+	public static common(skill: Skill): Reward[] {
+		return [
+			Reward.point(20),
+			Tool.list[0]
+		]
+	}
 
-  static common(skill: Skill): Reward[] {
-    return [
-      Reward.point(20),
-      Reward.tool(Tool.list[0])
-    ]
-  }
+	public static level(skill: Skill, level: number): Reward[] {
+		return skill.rewards.get(level) ?? Reward.common(skill);
+	}
 
-  static forLevel(skill: Skill, level: number): Reward[] {
-    return skill.rewards.get(level) ?? Reward.common(skill);
-  }
+	public static giveRewards(skill: Skill) {
+		const found = Variable(0);
+		skill.rewards.forEach((rewards, level) => {
+			_.if(skill.level["=="](level), () => {
+				Reward.get(rewards);
+				found.set(1);
+			});
+		});
 
-  static giveRewards(skill: Skill) {
-    if (skill.rewards.size > 0) {
-      skill.rewards.forEach((rewards, level) => {
-        _.if(skill.level["=="](level), () => {
-          Reward.get(rewards);
-        });
-      });
+		_.if(_.not(found), () => {
+			Reward.get(Reward.common(skill));
+		});
+	}
 
-      const notCustom = Array.from(skill.rewards.keys()).map(lvl => skill.level["!="](lvl));
-      _.if(_.and(...notCustom), () => {
-        Reward.get(Reward.common(skill));
-      });
-    } else {
-      Reward.get(Reward.common(skill));
-    }
-  }
+	public static resolve(skill: Skill, lvl: Score, f: (rewards: string[]) => void) {
+		const found = Variable(0);
+		skill.rewards.forEach((r, i) => {
+			_.if(lvl["=="](i), () => {
+				f(Reward.join(r));
+				found.set(1);
+			});
+		});
 
-  static resolve(skill: Skill, lvl: Score, f: (r: string[]) => void) {
-    if (skill.rewards.size > 0) {
-      skill.rewards.forEach((r, i) => {
-        _.if(lvl["=="](i), () => {
-          f(Reward.join(r));
-        });
-      });
-      const notCustom = Array.from(skill.rewards.keys()).map(i => lvl["!="](i));
-      _.if(_.and(...notCustom), () => {
-        f(Reward.join(Reward.common(skill)))
-      });
-    } else {
-      f(Reward.join(Reward.common(skill)))
-    }
-  }
+		_.if(_.not(found), () => {
+			f(Reward.join(Reward.common(skill)))
+		});
+	}
+
+	public static giveMcFn(name: string): string;
+	public static giveMcFn(name: DataPointClass): MacroLiteral;
+	public static giveMcFn(name: string | DataPointClass) {
+		if (typeof name === 'string') return `misc/give/${Global.toMcFunction(name)}`;
+
+		return $`misc/give/${name}`;
+	}
 }
+

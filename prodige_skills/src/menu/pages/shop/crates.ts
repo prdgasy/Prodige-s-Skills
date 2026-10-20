@@ -3,21 +3,21 @@ import { Button, Gui, PageClass } from "@prodigelib/gui";
 import { Crate } from "@src/misc/crate";
 
 export class Crates {
-  public static getName() {
-    return this.name;
-  }
+	public static getName() {
+		return this.name;
+	}
 
-  public static init(g: Gui, p: PageClass) {
-    const crates: Button[] = [];
-    let slot = 11;
-    for (const crate of Crate.list) {
-      crates.push(
-        new Button('chest', slot++, crate.name, textWrapper(crate.description), () => crate.tryOpen())
-        // add keys
-      );
-    }
+	public static init(g: Gui, p: PageClass) {
+		const crates: Button[] = [];
+		let slot = 11;
+		for (const crate of Crate.list) {
+			crates.push(
+				new Button('chest', slot++, crate.color + crate.name, textWrapper(crate.description), () => crate.tryOpen())
+				// add keys
+			);
+		}
 
-    p.add(...crates);
-    return p;
-  }
+		p.add(...crates);
+		return p;
+	}
 }

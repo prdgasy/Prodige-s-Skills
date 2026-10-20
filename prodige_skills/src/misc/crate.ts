@@ -4,20 +4,25 @@ import { Global } from "@src/global";
 import { Player } from "@src/player";
 import { Macro as $, _, MCFunction, tellraw, Variable } from "sandstone";
 import { Buyable } from "./buyable";
+import { Reward } from "./reward";
 
 export class Crate {
 	public name: string;
+	public color: string;
 	public description: string;
 	public item: string;
+	public roll: number;
 	public rewards: Map<Buyable, number>;
 	public rewardShow: string[];
 	public static list: Crate[] = [];
 	public static storage = Global.storage.select("crate");
 
 
-	public constructor(name: string, description: string, item: string, rewards?: Map<Buyable, number>) {
+	public constructor(name: string, color: string, description: string, item: string, roll: number, rewards: Map<Buyable, number>) {
 		this.name = name;
-		this.rewards = rewards ?? new Map<Buyable, number>();
+		this.color = color;
+		this.roll = roll;
+		this.rewards = rewards;
 
 		this.description = description;
 		this.rewardShow = this.setDescription();
@@ -34,7 +39,7 @@ export class Crate {
 	}
 
 	private pick(n: number) {
-		const fn = MCFunction(`misc/crate/roll/${this.name}`, () => {
+		const fn = MCFunction(`misc/crate/roll/${Global.toMcFunction(this.name)}`, () => {
 			let t = 0;
 			this.rewards.forEach(weight => t += weight);
 			const buyables = new BetterArray<string>(this.rewards.keys().map(b => Global.toMcFunction(b.name)).toArray());
@@ -51,7 +56,7 @@ export class Crate {
 				const roll = FloatVar.random()['*'](t);
 
 				_.if(roll['-'](P_b)['<'](0), () => {
-					_.with([b], () => $.functionCmd($`${Global.ns}:${Buyable.giveFnName(b)}`));
+					_.with([b], () => $.functionCmd($`${Global.ns}:${Reward.giveMcFn(b)}`));
 					picked.add(1);
 				})
 
@@ -63,16 +68,16 @@ export class Crate {
 	}
 
 	private open() {
-		const fn = MCFunction(`misc/crate/open/${this.name}`, () => {
-			this.pick(1);
+		const fn = MCFunction(`misc/crate/open/${Global.toMcFunction(this.name)}`, () => {
+			tellraw('@p', `§eOpened x1 [${this.color}${this.name}§e]!`);
 			Player.playSound('info');
-			return tellraw('@p', `Opened x1 [${this.name}§a]!`);
+			return this.pick(this.roll);
 		}, { onConflict: 'ignore' });
 
 		return fn();
 	}
 
 	public tryOpen() {
-		_.if(Variable(0)['=='](0), () => this.open()); // TODO > Verify if player has the corresponding crate key
+		_.if(Variable(0)['=='](0), () => this.open()); // crate key
 	}
 }

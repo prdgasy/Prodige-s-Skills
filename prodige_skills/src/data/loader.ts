@@ -9,7 +9,6 @@ import { OnEvent } from '@src/skill/onEvent';
 import { Criteria } from '@src/types';
 import * as fs from 'fs';
 import * as path from 'path';
-import { say } from 'sandstone';
 
 export class Loader {
 	private static parseCSV(filePath: string): Record<string, string>[] {
@@ -75,12 +74,12 @@ export class Loader {
 
 	}
 
-	private static setRewards(skills: Skill[]) {
-		const Mining = skills.find(s => s.name === 'Mining');
-		if (Mining) {
-			Mining.rewards.set(10, [new Reward({ show: '§dCustom Reward', get: () => { say('got custom reward') } })]);
-			Mining.rewards.set(20, [new Reward({ show: '§dCustom Reward 2', get: () => { say('got custom reward 2') } })]);
-		}
+	private static setRewards() {
+		const Mining = Loader.getSkill('Mining');
+		const r1 = Tool.list[0];
+		const r2 = Reward.point(200);
+		Mining.rewards.set(10, [r1, r2]);
+		Mining.rewards.set(20, [r2, r2]);
 	}
 
 	private static crates(tools: Tool[]): Crate[] {
@@ -88,7 +87,7 @@ export class Loader {
 		const commonReward = new Map<Buyable, number>([
 			[tools[0], 0.5], [tools[1], 0.5],
 		]);
-		const common = new Crate('Common', 'This is a simple description', 'chest', commonReward);
+		const common = new Crate('Common', '§a§l', 'This is a simple description', 'chest', 3, commonReward);
 		c.push(common);
 		return c;
 	}
@@ -129,8 +128,12 @@ export class Loader {
 	public static init() {
 		Skill.list = Loader.loadSkillsFromCSV(path.join(__dirname, 'csv'));
 
-		Loader.setRewards(Skill.list);
+		Loader.setRewards();
 		Tool.list = Loader.tools();
 		Crate.list = Loader.crates(Tool.list);
+	}
+
+	public static getSkill(skill: 'Mining' | 'Foraging'): Skill {
+		return Skill.list.find(s => s.name === skill) as Skill;
 	}
 }

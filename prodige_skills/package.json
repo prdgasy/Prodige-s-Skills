@@ -1,31 +1,32 @@
 {
-  "name": "prodige_skills",
-  "version": "0.0.1",
-  "description": "A pack created with Sandstone",
-  "type": "module",
-  "module": "src/index.ts",
-  "scripts": {
-    "dev:watch": "sand watch",
-    "dev:build": "sand build",
-    "setup": "bun i"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/bun": "latest",
-    "@types/node": "^26.6.5",
-    "sandstone-cli": "^2.6.9"
-  },
-  "dependencies": {
-    "@prodigelib/betterarray": "github:prdgasy/betterarray",
-    "@prodigelib/easymacro": "github:prdgasy/easy-macro",
-    "@prodigelib/floatVar": "github:prdgasy/floatvar",
-    "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
-    "@prodigelib/uninstaller": "github:prdgasy/uninstaller",
-    "sandstone": "~1.2.36"
-  },
-  "trustedDependencies": [
-    "@parcel/watcher"
-  ]
+	"name": "prodige_skills",
+	"version": "0.0.1",
+	"description": "A pack created with Sandstone",
+	"type": "module",
+	"module": "src/index.ts",
+	"scripts": {
+		"dev:watch": "sand watch",
+		"dev:build": "sand build",
+		"setup": "bun i",
+		"clean": "rm -rf .sandstone/cache.json"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/node": "^26.6.5",
+		"sandstone-cli": "^2.6.9"
+	},
+	"dependencies": {
+		"@prodigelib/betterarray": "github:prdgasy/betterarray",
+		"@prodigelib/easymacro": "github:prdgasy/easy-macro",
+		"@prodigelib/floatVar": "github:prdgasy/floatvar",
+		"@prodigelib/gui": "github:prdgasy/prodigelib-gui",
+		"@prodigelib/uninstaller": "github:prdgasy/uninstaller",
+		"sandstone": "~1.2.36"
+	},
+	"trustedDependencies": [
+		"@parcel/watcher"
+	]
 }

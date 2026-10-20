@@ -1,7 +1,8 @@
 import { Buyable } from "@src/misc/buyable";
 import { Skill } from "@src/skill";
-import { give, MCFunction, tellraw } from "sandstone";
+import { give, MCFunction } from "sandstone";
 import { Item } from "../types";
+import { Reward } from "./reward";
 
 export type ToolOptions = {
 	name: string;
@@ -34,26 +35,26 @@ export class Tool extends Buyable {
 	public onBreak?: () => void;
 	public onHold?: () => void;
 
-	constructor(options: ToolOptions) {
-		super();
-		this.name = options.name;
-		this.item = options.item;
-		this.price = options.price;
-		this.description = options.description;
-		this.characteristics = options.characteristics;
-		this.rarity = options.rarity;
-		this.durability = options.durability;
-		this.type = options.type;
-		this.onUse = options.onUse;
-		this.onBreak = options.onBreak;
-		this.onHold = options.onHold;
+	constructor(opt: ToolOptions) {
+		super(opt.name, opt.description, opt.item, opt.price, Tool.getFromOpt(opt));
+		this.name = opt.name;
+		this.item = opt.item;
+		this.price = opt.price;
+		this.description = opt.description;
+		this.characteristics = opt.characteristics;
+		this.rarity = opt.rarity;
+		this.durability = opt.durability;
+		this.type = opt.type;
+		this.onUse = opt.onUse;
+		this.onBreak = opt.onBreak;
+		this.onHold = opt.onHold;
 	}
 
-	override give() {
-		const fn = MCFunction(Buyable.giveFnName(this.name), () => {
-			tellraw('@p', `§aBought x1 [${this.name}§a]!`);
-			give('@p', this.item);
-		}, { onConflict: 'ignore' })
-		return fn();
+	public static getFromOpt(opt: ToolOptions) {
+		const fn = MCFunction(Reward.giveMcFn(opt.name), () => {
+			give('@p', opt.item, { custom_name: opt.name, lore: [{ text: opt.description }] });
+		}, { onConflict: 'ignore' });
+
+		return () => fn();
 	}
 }
