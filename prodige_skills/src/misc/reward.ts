@@ -1,7 +1,7 @@
 import { Global } from "@src/global";
 import { Player } from "@src/player";
 import { Skill } from "@src/skill";
-import { Macro as $, _, DataPointClass, Score, Variable } from "sandstone";
+import { Macro as $, _, comment, DataPointClass, Score, Variable } from "sandstone";
 import { MacroLiteral } from "sandstone/core";
 
 export class Reward {
@@ -22,7 +22,8 @@ export class Reward {
 
 	/** Give every rewards inside @param rewards */
 	public static giveAll(rewards: Reward[]) {
-		return rewards.map(r => r.give);
+		comment(`Reward.giveAll::${rewards.toString()}`);
+		return rewards.forEach(r => r.give);
 	}
 
 	public static point(p: number): Reward {

@@ -17,9 +17,10 @@ const toolDefs = {
 	},
 	'Expert Sword': {
 		item: 'diamond_sword', description: 'A very cool sword',
-		rarity: '§6§lLEGENDARY', durability: 2000,
+		rarity: '§d§lEPIC', durability: 2000,
 		price: 5000
-	}
+	},
+
 } satisfies Record<string, Omit<ToolOptions, 'name'>>;
 
 export type ToolName = keyof typeof toolDefs;
@@ -117,8 +118,8 @@ export class Loader {
 	public static init() {
 		Skill.list = Loader.loadSkillsFromCSV(path.join(__dirname, 'csv'));
 
-		Loader.setRewards();
 		Tool.tools = Loader.tools();
+		Loader.setRewards();
 		Crate.list = Loader.crates();
 	}
 }
