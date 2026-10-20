@@ -26,16 +26,20 @@ export class Main {
 
 	private static skillBts(g: Gui, p: PageClass) {
 		return () => {
-			let slot = 10;
+			let slot = 9;
 
 			for (const skill of Object.values(Skill.skills)) {
 				comment(`skill_button::${skill.name}`)
 
 				const r = skill.xp["*"](100)["/"](skill.goal);
+				const bar = new Bar(r);
 				const nLvl = skill.level["+"](1);
-
-				const emitBtn = (strings: string[], _: any) => p.add(new Button(
-					skill.item, slot++, $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`, [
+				const rewards = Reward.resolve(skill, skill.level, 'string').map(r =>
+					$` +${r}\n`
+				)
+				slot++;
+				p.emit(new Button(
+					skill.item, slot, $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`, [
 					$`§9${skill.name} ${skill.level}`,
 					"",
 					...textWrapper(skill.description),
@@ -43,10 +47,10 @@ export class Main {
 					"§f§lNext Level Goal:",
 					$` §8• §7Target: §d${skill.name} ${RomanNumbers.convert(nLvl)}`,
 					$` §8• §7Progress: §e${r}%`,
-					$` §8> ${new Bar(r).get()} §e${skill.xp}§6/§e${skill.goal}`,
+					$` §8> ${bar.toData()} §e${skill.xp}§6/§e${skill.goal}`,
 					"",
 					$`§f§l${skill.name} ${RomanNumbers.convert(nLvl)} Rewards:`,
-					...strings,
+					...rewards,
 					"",
 					"§eClick to view!",
 				], () => {
@@ -57,7 +61,6 @@ export class Main {
 					["!attribute_modifiers"],
 				));
 
-				Reward.resolve(skill, skill.level, emitBtn);
 			}
 		}
 	}

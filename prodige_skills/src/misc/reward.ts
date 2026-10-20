@@ -2,7 +2,7 @@ import { ToolName } from "@src/data/definitions";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
 import { Skill } from "@src/skill";
-import { Macro as $, _, comment, DataPointClass, Score, Variable } from "sandstone";
+import { Macro as $, _, comment, DataPointClass, DataVariable, Score, Variable } from "sandstone";
 import { MacroLiteral } from "sandstone/core";
 
 export type AllRewards = ToolName | 'Common Crate Key'
@@ -44,16 +44,23 @@ export class Reward {
 		return skill.rewards.get(level) ?? Reward.common;
 	}
 
-	public static resolve(skill: Skill, lvl: Score, f: (strings: string[], rewards: Reward[]) => void) {
+	public static resolve(skill: Skill, lvl: Score, mode: 'give' | 'string'): DataPointClass[] {
 		const found = Variable(0);
-		skill.rewards.forEach((r, i) => {
-			_.if(lvl["=="](i), () => {
-				f(Reward.join(r), r);
+		const strings: DataPointClass[] = [];
+		skill.rewards.forEach((rewards, level) => {
+			_.if(lvl["=="](level), () => {
+				if (mode === 'string') strings.push(...rewards.map(r => DataVariable(r.name)));
+				else Reward.giveAll(rewards);
 				found.set(1);
 			});
 		});
 
-		_.if(_.not(found), () => f(Reward.join(Reward.common), Reward.common));
+		_.if(_.not(found), () => {
+			if (mode === 'string') strings.push(...Reward.common.map(r => DataVariable(r.name)));
+			else Reward.giveAll(Reward.common);
+		});
+
+		return strings;
 	}
 
 	public static giveMcFn(name: string): string;

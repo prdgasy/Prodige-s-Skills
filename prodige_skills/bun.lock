@@ -6,6 +6,7 @@
       "name": "sandstone-template",
       "dependencies": {
         "@prodigelib/betterarray": "github:prdgasy/betterarray",
+        "@prodigelib/cjmap": "github:prdgasy/cjmap",
         "@prodigelib/easymacro": "github:prdgasy/easy-macro",
         "@prodigelib/floatVar": "github:prdgasy/floatvar",
         "@prodigelib/gui": "github:prdgasy/prodigelib-gui",
@@ -85,13 +86,13 @@
 
     "@prodigelib/betterarray": ["@prodigelib/betterarray@github:prdgasy/betterarray#518df5d", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-betterarray-518df5d", "sha512-Quq/4+gNmy86NrPPWgoEjaEx9TmQ72aeaC2D7JZgVfuA+/gRoAag5phV1SY3TxQeognL0ndmcIlSfVY43OMB5g=="],
 
-    "@prodigelib/cjmap": ["@prodigelib/cjmap@github:prdgasy/cjmap#2a8cbce", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-cjmap-2a8cbce", "sha512-XLWcTFKrbWydwrROpnExmJeIGxWvWpJ2v0d1ZRIWEyuyaU7S+g/RbSkH+VV/mg2wkopLKgF2c1hInsGTwW/m/w=="],
+    "@prodigelib/cjmap": ["@prodigelib/cjmap@github:prdgasy/cjmap#3db7b16", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-cjmap-3db7b16", "sha512-2PJrRzH6FgSjZW8WLMaum+0CAyWfWmhQ/YH+mrEBnSHW9/flHkW6z2B+SZ8OiYqnwA4QPHbpwuJNHqyYCXQXXA=="],
 
     "@prodigelib/easymacro": ["@prodigelib/easymacro@github:prdgasy/easy-macro#4f92548", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-easy-macro-4f92548", "sha512-Nr8SUb8NwbRQS6do6k8FBS4VNfB9LrVJb1rifMztWero+3wv/wsDcgkT8wzj5YYb0vkPHuWlmJFpY6n14uRHNw=="],
 
     "@prodigelib/floatVar": ["@prodigelib/floatVar@github:prdgasy/floatvar#443ecb1", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-floatVar-443ecb1", "sha512-M5+eKwOMG7y29gfu9oqp1WZZiyozxLoG6I+X00UX/fQOeuneoy2PaC+IyqvAOgZd7L36bOMsp9ecjK69zealtg=="],
 
-    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#f6c428e", { "dependencies": { "@prodigelib/cjmap": "github:prdgasy/cjmap", "@prodigelib/uninstaller": "github:prdgasy/uninstaller", "sandstone": "~1.2.36" } }, "prdgasy-prodigelib-gui-f6c428e", "sha512-TMvlIqOSqid3+PgANDyWBnbF7RBA15QLg6TqGPKwPdOt920rUBFi9QpsvJ94KtmhOyxGnZ4XzHcacdcvHGUyDw=="],
+    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#11e78e5", { "dependencies": { "@prodigelib/cjmap": "github:prdgasy/cjmap", "@prodigelib/uninstaller": "github:prdgasy/uninstaller", "sandstone": "~1.2.36" } }, "prdgasy-prodigelib-gui-11e78e5", "sha512-sm64gp9FkSNRT/wS8jqa36XFjOHx3bixdOMdejF0EAYajqV3pylT0H5W9atlAzxZTJe62ttrPgr1cg3n5b4enA=="],
 
     "@prodigelib/uninstaller": ["@prodigelib/uninstaller@github:prdgasy/uninstaller#8d16bef", { "dependencies": { "picocolors": "^1.1.1", "sandstone": "~1.2.36" } }, "prdgasy-uninstaller-8d16bef", "sha512-VwKZeOuymCan8F8kTgQqgXXRqn3z0yB5M2nRIkr9m5zonvETk/+0ghsiQJHgTPgli+QWNdLVgzg3gSvNPn7LsQ=="],
 
@@ -300,6 +301,10 @@
     "yoga-layout": ["yoga-layout@3.2.1", "", {}, "sha512-0LPOt3AxKqMdFBZA3HBAt/t/8vIKq7VaQYbuA8WxCgung+p9TVyKRYdpvCb80HcdTN2NkbIKbhNwKUfm3tQywQ=="],
 
     "@inquirer/core/signal-exit": ["signal-exit@4.1.0", "", {}, "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw=="],
+
+    "@prodigelib/gui/@prodigelib/cjmap": ["@prodigelib/cjmap@github:prdgasy/cjmap#3db7b16", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-cjmap-3db7b16", "sha512-2PJrRzH6FgSjZW8WLMaum+0CAyWfWmhQ/YH+mrEBnSHW9/flHkW6z2B+SZ8OiYqnwA4QPHbpwuJNHqyYCXQXXA=="],
+
+    "@prodigelib/gui/@prodigelib/uninstaller": ["@prodigelib/uninstaller@github:prdgasy/uninstaller#8d16bef", { "dependencies": { "picocolors": "^1.1.1", "sandstone": "~1.2.36" } }, "prdgasy-uninstaller-8d16bef", "sha512-VwKZeOuymCan8F8kTgQqgXXRqn3z0yB5M2nRIkr9m5zonvETk/+0ghsiQJHgTPgli+QWNdLVgzg3gSvNPn7LsQ=="],
 
     "bun-types/@types/node": ["@types/node@26.0.1", "", { "dependencies": { "undici-types": "~8.3.0" } }, "sha512-fc3KiUoBt6kie0N9bIW3E47vZsuaMf0PM2AaUpLCLT0s/LvX1nxAim6Fc049cNxODPpGm6qRAuUOB86SkRuPQw=="],
 

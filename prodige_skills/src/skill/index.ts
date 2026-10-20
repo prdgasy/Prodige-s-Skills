@@ -125,7 +125,7 @@ export class Skill {
 					$` §f§lNext Level Goal\n`,
 					$`  §8• §7Target: §d${this.name} ${this.level['+'](1)}\n`,
 					$`  §8• §7Progress: §e${percentage}%\n`,
-					$`  §8> ${bar.get()} §e${this.xp}§6/§e${this.goal} XP\n\n`,
+					$`  §8> ${bar.toData()} §e${this.xp}§6/§e${this.goal} XP\n\n`,
 					` §f§lRewards\n`,
 					...rewards.map(r => ` ${r}\n`)
 				], '@p');

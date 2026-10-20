@@ -20,6 +20,7 @@
 	},
 	"dependencies": {
 		"@prodigelib/betterarray": "github:prdgasy/betterarray",
+		"@prodigelib/cjmap": "github:prdgasy/cjmap",
 		"@prodigelib/easymacro": "github:prdgasy/easy-macro",
 		"@prodigelib/floatVar": "github:prdgasy/floatvar",
 		"@prodigelib/gui": "github:prdgasy/prodigelib-gui",
