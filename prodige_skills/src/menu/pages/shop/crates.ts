@@ -10,7 +10,7 @@ export class Crates {
 	public static init(g: Gui, p: PageClass) {
 		const crates: Button[] = [];
 		let slot = 11;
-		for (const crate of Crate.list) {
+		for (const crate of Object.values(Crate.crates)) {
 			crates.push(
 				new Button('chest', slot++, crate.color + crate.name, textWrapper(crate.description), () => crate.tryOpen())
 				// add keys

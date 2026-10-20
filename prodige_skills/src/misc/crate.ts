@@ -1,10 +1,14 @@
 import { BetterArray } from "@prodigelib/betterarray";
 import { FloatVar } from "@prodigelib/floatVar";
+import { CrateName } from "@src/data/definitions";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
 import { Macro as $, _, MCFunction, tellraw, Variable } from "sandstone";
 import { Reward } from "./reward";
 
+export type CrateOption = {
+	name: string, color: string, description: string, item: string, roll: number, rewards: Map<Reward, number>
+}
 export class Crate {
 	public name: string;
 	public color: string;
@@ -13,19 +17,18 @@ export class Crate {
 	public roll: number;
 	public rewards: Map<Reward, number>;
 	public rewardShow: string[];
-	public static list: Crate[] = [];
+	public static crates: Record<CrateName, Crate>;
 	public static storage = Global.storage.select("crate");
 
+	public constructor(opt: CrateOption) {
+		this.name = opt.name;
+		this.color = opt.color;
+		this.roll = opt.roll;
+		this.rewards = opt.rewards;
 
-	public constructor(name: string, color: string, description: string, item: string, roll: number, rewards: Map<Reward, number>) {
-		this.name = name;
-		this.color = color;
-		this.roll = roll;
-		this.rewards = rewards;
-
-		this.description = description;
+		this.description = opt.description;
 		this.rewardShow = this.setDescription();
-		this.item = item;
+		this.item = opt.item;
 	}
 
 	private setDescription(): string[] {
@@ -33,7 +36,7 @@ export class Crate {
 		let t = 0;
 		this.rewards.forEach(w => t += w);
 		this.rewards.forEach((weight, obj) => {
-			s.push(` §7> ${obj.show} §7• §e${(weight / t) * 100}%`);
+			s.push(` §7> ${obj.name} §7• §e${(weight / t) * 100}%`);
 		})
 		return s;
 	}
@@ -42,7 +45,7 @@ export class Crate {
 		const fn = MCFunction(`misc/crate/roll/${Global.toMcFunction(this.name)}`, () => {
 			let t = 0;
 			this.rewards.forEach(weight => t += weight);
-			const buyables = new BetterArray<string>(this.rewards.keys().map(b => Global.toMcFunction(b.show)).toArray());
+			const buyables = new BetterArray<string>(this.rewards.keys().map(b => Global.toMcFunction(b.name)).toArray());
 			const weights = new BetterArray<number>(this.rewards.values().toArray());
 
 			const i = Variable(0);
@@ -79,5 +82,9 @@ export class Crate {
 
 	public tryOpen() {
 		_.if(Variable(0)['=='](0), () => this.open()); // crate key
+	}
+
+	public static get(c: CrateName): Crate {
+		return Crate.crates[c];
 	}
 }

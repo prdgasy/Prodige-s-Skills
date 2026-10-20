@@ -1,4 +1,4 @@
-import { ToolName } from "@src/data/loader";
+import { ToolName } from "@src/data/definitions";
 import { Buyable } from "@src/misc/buyable";
 import { Skill } from "@src/skill";
 import { give, MCFunction } from "sandstone";
@@ -49,10 +49,6 @@ export class Tool extends Buyable {
 		this.onUse = opt.onUse;
 		this.onBreak = opt.onBreak;
 		this.onHold = opt.onHold;
-	}
-
-	public static get(toolName: ToolName): Tool {
-		return Tool.tools[toolName];
 	}
 
 	public static getFromOpt(opt: ToolOptions) {

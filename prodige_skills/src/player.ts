@@ -27,7 +27,7 @@ export class Player {
 	private static firstJoin() {
 		return MCFunction('player/first_join', () => {
 			execute.as('@a').run(() => _.if(_.not(this.hasJoined), () => {
-				for (const skill of Skill.list) skill.firstJoin();
+				for (const skill of Object.values(Skill.skills)) skill.firstJoin();
 
 				this.onEventNotif.add();
 				this.achievementNotif.add();

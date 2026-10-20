@@ -28,13 +28,13 @@ export class Main {
 		return () => {
 			let slot = 10;
 
-			for (const skill of Skill.list) {
+			for (const skill of Object.values(Skill.skills)) {
 				comment(`skill_button::${skill.name}`)
 
 				const r = skill.xp["*"](100)["/"](skill.goal);
 				const nLvl = skill.level["+"](1);
 
-				const emitBtn = (rewards: string[]) => p.add(new Button(
+				const emitBtn = (strings: string[], _: any) => p.add(new Button(
 					skill.item, slot++, $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`, [
 					$`§9${skill.name} ${skill.level}`,
 					"",
@@ -46,7 +46,7 @@ export class Main {
 					$` §8> ${new Bar(r).get()} §e${skill.xp}§6/§e${skill.goal}`,
 					"",
 					$`§f§l${skill.name} ${RomanNumbers.convert(nLvl)} Rewards:`,
-					...rewards,
+					...strings,
 					"",
 					"§eClick to view!",
 				], () => {

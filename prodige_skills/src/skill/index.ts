@@ -1,6 +1,6 @@
 import { Bar } from "@lib/bar";
 import { macro as $, smartTellraw } from "@prodigelib/easymacro";
-import { Loader } from "@src/data/loader";
+import { SkillName } from "@src/data/definitions";
 import { Reward } from "@src/misc/reward";
 import { Tool } from "@src/misc/tool";
 import { Player } from "@src/player";
@@ -11,7 +11,7 @@ import { Item } from "@src/types";
 import { _, Label, MCFunction, Objective, playsound, Score, tellraw, title } from "sandstone";
 import { Ability } from "./ability";
 
-type SkillOptions = {
+export type SkillOptions = {
 	name: string,
 	description?: string,
 	item?: Item,
@@ -25,7 +25,7 @@ type SkillOptions = {
 }
 
 export class Skill {
-	static list: Skill[] = [];
+	static skills: Record<SkillName, Skill>;
 	static levelUpNotifState = Label('level_up_notif')('@p');
 
 	public name: string;
@@ -56,10 +56,9 @@ export class Skill {
 		this.achievement = Objective.create(`${this.name}.achievement`)(`@p`);
 		this.titles = options.titles ?? [];
 		this.rewards = options.rewards ?? new Map<number, Reward[]>();
-		this.ability = options.ability ?? new Ability(this, 'notimple', '§7No ability for this skill yet.');
+		this.ability = options.ability ?? new Ability(this.name, 'notimple', '§7No ability for this skill yet.');
 		this.customItems = options.customItems ?? [];
 		this.onEvents = options.onEvents ?? [];
-		Skill.list.push(this);
 	}
 
 	public onEventTriggered(addedXp: Score, addedPoint: Score) {
@@ -153,7 +152,7 @@ export class Skill {
 		}
 	}
 
-	public static get(skill: typeof Loader.skillNames[number]): Skill {
-		return Skill.list.find(s => s.name === skill) as Skill;
+	public static get(skill: SkillName): Skill {
+		return Skill.skills[skill];
 	}
 }

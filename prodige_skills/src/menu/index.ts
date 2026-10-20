@@ -29,7 +29,7 @@ export class Menu {
 
 		for (const p of pages) {
 			if (p.getName.length > 0) {
-				for (const skill of Skill.list) {
+				for (const skill of Object.values(Skill.skills)) {
 					const name = p.getName(skill);
 					const toRegister = p.init(Menu, Menu.createPage(name), skill);
 
