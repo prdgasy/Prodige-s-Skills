@@ -1,10 +1,11 @@
-import '@src/data/load';
-import { initMenu } from '@src/menu';
-import '@src/player';
-import '@src/skill';
-
 import { Uninstaller } from '@prodigelib/uninstaller';
+import { Loader } from '@src/data/loader';
 import { Global } from '@src/global';
+import { Menu } from '@src/menu';
+import { Player } from '@src/player';
 
-initMenu();
+Loader.init();
+Player.init();
+Menu.init();
+
 Uninstaller.generate(Global);

@@ -4,7 +4,10 @@
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"lib": [
-			"ESNext"
+			"ESNext",
+		],
+		"types": [
+			"node"
 		],
 		"strict": true,
 		"esModuleInterop": true,

@@ -57,31 +57,3 @@ export class Tool extends Buyable {
 		return fn();
 	}
 }
-
-const NovicePickaxe = new Tool({
-	name: "Novice Miners Pickaxe",
-	item: "iron_pickaxe",
-	price: 50,
-	description: '§7A reliable pickaxe for aspiring miners, ideal for extracting basic ores.',
-	characteristics: ["test", "test3"],
-	rarity: "§f§lCOMMON",
-	durability: 250,
-	onUse: () => { },
-	onBreak: () => { },
-	onHold: () => { }
-});
-
-const DeepDelverPickaxe = new Tool({
-	name: "Deep Delver Pickaxe",
-	item: "diamond_pickaxe",
-	price: 250,
-	description: '§7Forged in deep caverns, this sturdy pickaxe effortlessly breaks through the toughest stone.',
-	characteristics: [],
-	rarity: "§9§lRARE",
-	durability: 1000,
-	onUse: () => { },
-	onBreak: () => { },
-	onHold: () => { }
-});
-
-Tool.list.push(NovicePickaxe, DeepDelverPickaxe);

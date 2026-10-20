@@ -22,9 +22,6 @@ export class Crate {
 		this.description = description;
 		this.rewardShow = this.setDescription();
 		this.item = item;
-
-		Crate.list.push(this);
-		// Buyable.list.push(this);
 	}
 
 	private setDescription(): string[] {

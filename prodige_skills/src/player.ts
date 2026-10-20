@@ -12,7 +12,7 @@ export class Player {
 	static onEventNotif = Label('player.on_event_notif')('@p');
 	static achievementNotif = Label('player.achievement_notif')('@p');
 
-	public static initFn() {
+	public static init() {
 		this.load();
 		OnEvent.watch();
 		this.firstJoin();
@@ -59,4 +59,3 @@ export class Player {
 	}
 }
 
-Player.initFn();
