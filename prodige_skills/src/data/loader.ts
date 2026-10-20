@@ -1,7 +1,6 @@
-import { Buyable } from '@src/misc/buyable';
 import { Crate } from '@src/misc/crate';
 import { Reward } from '@src/misc/reward';
-import { Tool } from '@src/misc/tool';
+import { Tool, ToolOptions } from '@src/misc/tool';
 import { Ability } from '@src/skill/ability';
 import { Achievement } from '@src/skill/achievement';
 import { Skill } from '@src/skill/index';
@@ -10,7 +9,24 @@ import { Criteria } from '@src/types';
 import * as fs from 'fs';
 import * as path from 'path';
 
+const toolDefs = {
+	'Novice Pickaxe': {
+		item: 'stone_pickaxe', description: 'This is a simple description',
+		rarity: '§f§lCOMMON', durability: 100,
+		price: 2500
+	},
+	'Expert Sword': {
+		item: 'diamond_sword', description: 'A very cool sword',
+		rarity: '§6§lLEGENDARY', durability: 2000,
+		price: 5000
+	}
+} satisfies Record<string, Omit<ToolOptions, 'name'>>;
+
+export type ToolName = keyof typeof toolDefs;
+
 export class Loader {
+	public static skillNames = ['Mining', 'Foraging'] as const;
+
 	private static parseCSV(filePath: string): Record<string, string>[] {
 		const content = fs.readFileSync(filePath, 'utf-8');
 		const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
@@ -75,65 +91,34 @@ export class Loader {
 	}
 
 	private static setRewards() {
-		const Mining = Loader.getSkill('Mining');
-		const r1 = Tool.list[0];
+		const Mining = Skill.get('Mining');
+		const r1 = Tool.get('Expert Sword');
 		const r2 = Reward.point(200);
 		Mining.rewards.set(10, [r1, r2]);
 		Mining.rewards.set(20, [r2, r2]);
 	}
 
-	private static crates(tools: Tool[]): Crate[] {
+	private static crates(): Crate[] {
 		const c: Crate[] = [];
-		const commonReward = new Map<Buyable, number>([
-			[tools[0], 0.5], [tools[1], 0.5],
+		const commonReward = new Map<Reward, number>([
+			[Tool.get('Expert Sword'), 0.2], [Tool.get('Novice Pickaxe'), 0.5]
 		]);
 		const common = new Crate('Common', '§a§l', 'This is a simple description', 'chest', 3, commonReward);
 		c.push(common);
 		return c;
 	}
 
-	private static tools(): Tool[] {
-		const t: Tool[] = [];
-		const NovicePickaxe = new Tool({
-			name: "Novice Miners Pickaxe",
-			item: "iron_pickaxe",
-			price: 50,
-			description: '§7A reliable pickaxe for aspiring miners, ideal for extracting basic ores.',
-			characteristics: ["test", "test3"],
-			rarity: "§f§lCOMMON",
-			durability: 250,
-			onUse: () => { },
-			onBreak: () => { },
-			onHold: () => { }
-		});
-		t.push(NovicePickaxe);
-
-		const DeepDelverPickaxe = new Tool({
-			name: "Deep Delver Pickaxe",
-			item: "diamond_pickaxe",
-			price: 250,
-			description: '§7Forged in deep caverns, this sturdy pickaxe effortlessly breaks through the toughest stone.',
-			characteristics: [],
-			rarity: "§9§lRARE",
-			durability: 1000,
-			onUse: () => { },
-			onBreak: () => { },
-			onHold: () => { }
-		});
-		t.push(DeepDelverPickaxe);
-
-		return t;
+	private static tools() {
+		return Object.fromEntries(Object.entries(toolDefs).map(([name, opt]) =>
+			[name, new Tool({ name: name, ...opt })]
+		)) as Record<ToolName, Tool>;
 	}
 
 	public static init() {
 		Skill.list = Loader.loadSkillsFromCSV(path.join(__dirname, 'csv'));
 
 		Loader.setRewards();
-		Tool.list = Loader.tools();
-		Crate.list = Loader.crates(Tool.list);
-	}
-
-	public static getSkill(skill: 'Mining' | 'Foraging'): Skill {
-		return Skill.list.find(s => s.name === skill) as Skill;
+		Tool.tools = Loader.tools();
+		Crate.list = Loader.crates();
 	}
 }

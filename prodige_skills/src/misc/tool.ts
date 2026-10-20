@@ -1,3 +1,4 @@
+import { ToolName } from "@src/data/loader";
 import { Buyable } from "@src/misc/buyable";
 import { Skill } from "@src/skill";
 import { give, MCFunction } from "sandstone";
@@ -9,9 +10,9 @@ export type ToolOptions = {
 	item: Item;
 	price: number;
 	description: string;
-	characteristics: string[];
 	rarity: ToolRarity;
 	durability: number;
+	characteristics?: string[];
 	type?: Skill;
 	onUse?: () => void;
 	onBreak?: () => void;
@@ -21,15 +22,15 @@ export type ToolOptions = {
 type ToolRarity = "§f§lCOMMON" | "§9§lRARE" | "§d§lEPIC" | "§6§lLEGENDARY";
 
 export class Tool extends Buyable {
-	public static list: Tool[] = [];
+	public static tools: Record<ToolName, Tool>;
 	public name: string;
 	public item: Item;
 	public price: number;
 	public description: string;
-	public characteristics: string[];
 	public rarity: ToolRarity;
 	public durability: number;
 
+	public characteristics?: string[];
 	public type?: Skill;
 	public onUse?: () => void;
 	public onBreak?: () => void;
@@ -48,6 +49,10 @@ export class Tool extends Buyable {
 		this.onUse = opt.onUse;
 		this.onBreak = opt.onBreak;
 		this.onHold = opt.onHold;
+	}
+
+	public static get(toolName: ToolName): Tool {
+		return Tool.tools[toolName];
 	}
 
 	public static getFromOpt(opt: ToolOptions) {

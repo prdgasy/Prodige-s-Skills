@@ -3,7 +3,6 @@ import { FloatVar } from "@prodigelib/floatVar";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
 import { Macro as $, _, MCFunction, tellraw, Variable } from "sandstone";
-import { Buyable } from "./buyable";
 import { Reward } from "./reward";
 
 export class Crate {
@@ -12,13 +11,13 @@ export class Crate {
 	public description: string;
 	public item: string;
 	public roll: number;
-	public rewards: Map<Buyable, number>;
+	public rewards: Map<Reward, number>;
 	public rewardShow: string[];
 	public static list: Crate[] = [];
 	public static storage = Global.storage.select("crate");
 
 
-	public constructor(name: string, color: string, description: string, item: string, roll: number, rewards: Map<Buyable, number>) {
+	public constructor(name: string, color: string, description: string, item: string, roll: number, rewards: Map<Reward, number>) {
 		this.name = name;
 		this.color = color;
 		this.roll = roll;
@@ -30,19 +29,20 @@ export class Crate {
 	}
 
 	private setDescription(): string[] {
-		if (this.rewards.size === 0) return ["§7No rewards."];
-		const toPrint: string[] = [];
+		const s: string[] = [];
+		let t = 0;
+		this.rewards.forEach(w => t += w);
 		this.rewards.forEach((weight, obj) => {
-			toPrint.push(` §7> ${obj.name} §7• §e${weight * 100}%`); // % => weight/total * 100
+			s.push(` §7> ${obj.show} §7• §e${(weight / t) * 100}%`);
 		})
-		return toPrint;
+		return s;
 	}
 
 	private pick(n: number) {
 		const fn = MCFunction(`misc/crate/roll/${Global.toMcFunction(this.name)}`, () => {
 			let t = 0;
 			this.rewards.forEach(weight => t += weight);
-			const buyables = new BetterArray<string>(this.rewards.keys().map(b => Global.toMcFunction(b.name)).toArray());
+			const buyables = new BetterArray<string>(this.rewards.keys().map(b => Global.toMcFunction(b.show)).toArray());
 			const weights = new BetterArray<number>(this.rewards.values().toArray());
 
 			const i = Variable(0);

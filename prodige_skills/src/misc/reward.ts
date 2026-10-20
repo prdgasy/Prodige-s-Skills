@@ -1,13 +1,14 @@
 import { Global } from "@src/global";
+import { Player } from "@src/player";
+import { Skill } from "@src/skill";
 import { Macro as $, _, DataPointClass, Score, Variable } from "sandstone";
 import { MacroLiteral } from "sandstone/core";
-import { Player } from "../player";
-import { Skill } from "../skill";
-import { Tool } from "./tool";
 
 export class Reward {
 	show: string;
 	give: () => void;
+	public static common: Reward[] = [];
+	public static rare: Reward[] = [];
 
 	constructor(show: string, give: () => void) {
 		this.show = show;
@@ -20,8 +21,8 @@ export class Reward {
 	}
 
 	/** Give every rewards inside @param rewards */
-	public static get(rewards: Reward[]) {
-		rewards.map(r => r.give);
+	public static giveAll(rewards: Reward[]) {
+		return rewards.map(r => r.give);
 	}
 
 	public static point(p: number): Reward {
@@ -32,43 +33,20 @@ export class Reward {
 		return new Reward(`§3${x} ${skill.name} Xp`, () => skill.xp.add(x));
 	}
 
-	public static common(skill: Skill): Reward[] {
-		return [
-			Reward.point(20),
-			Tool.list[0]
-		]
-	}
-
 	public static level(skill: Skill, level: number): Reward[] {
-		return skill.rewards.get(level) ?? Reward.common(skill);
+		return skill.rewards.get(level) ?? Reward.common;
 	}
 
-	public static giveRewards(skill: Skill) {
-		const found = Variable(0);
-		skill.rewards.forEach((rewards, level) => {
-			_.if(skill.level["=="](level), () => {
-				Reward.get(rewards);
-				found.set(1);
-			});
-		});
-
-		_.if(_.not(found), () => {
-			Reward.get(Reward.common(skill));
-		});
-	}
-
-	public static resolve(skill: Skill, lvl: Score, f: (rewards: string[]) => void) {
+	public static resolve(skill: Skill, lvl: Score, f: (strings: string[], rewards: Reward[]) => void) {
 		const found = Variable(0);
 		skill.rewards.forEach((r, i) => {
 			_.if(lvl["=="](i), () => {
-				f(Reward.join(r));
+				f(Reward.join(r), r);
 				found.set(1);
 			});
 		});
 
-		_.if(_.not(found), () => {
-			f(Reward.join(Reward.common(skill)))
-		});
+		_.if(_.not(found), () => f(Reward.join(Reward.common), Reward.common));
 	}
 
 	public static giveMcFn(name: string): string;
