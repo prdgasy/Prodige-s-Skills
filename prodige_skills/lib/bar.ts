@@ -1,4 +1,4 @@
-import { Macro as $, _, Data, defaultNamespace, MCFunction, Score, tellraw } from "sandstone";
+import { Macro as $, _, Data, defaultNamespace, MCFunction, Score } from "sandstone";
 
 type BarOptions = {
 	length?: number;
@@ -55,7 +55,7 @@ export class Bar {
 
 		const fn = MCFunction(`__lib/bar/get/${length}`, [index], () => {
 			$.data.modify(temp).set.from(Bar.barsByLength.select(String(length)).select($`[${index}]`));
-			tellraw('@p', [index, ': ', temp]);
+			// tellraw('@p', [index, ': ', temp]);
 		});
 
 		fn();

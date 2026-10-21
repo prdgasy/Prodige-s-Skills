@@ -1,4 +1,4 @@
-import { RomanNumbers } from "@lib/romanNumbers";
+import { Roman } from "@lib/roman";
 import { textWrapper } from "@lib/textWrapper";
 import { macro as $, smartTellraw } from "@prodigelib/easymacro";
 import { Player } from "@src/player";
@@ -45,8 +45,8 @@ export class Ability {
 			_.if(Player.sound, () => playsound('entity.ender_dragon.growl', 'master', '@p', '~ ~ ~', 1, 1));
 		})
 		const sendAbilityMessage = (unlocked: boolean) => {
-			const romanTier = RomanNumbers.convert(this.tier);
-			const romanPreviousTier = RomanNumbers.convert(this.tier['-'](1));
+			const romanTier = Roman.get(this.tier);
+			const romanPreviousTier = Roman.get(this.tier['-'](1));
 
 			const title = unlocked ? '§a§lABILITY UNLOCKED!' : '§b§lABILITY UPGRADE!';
 			const tier = unlocked

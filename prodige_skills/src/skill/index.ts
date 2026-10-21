@@ -86,7 +86,7 @@ export class Skill {
 
 		this.level["++"];
 
-		Reward.resolve(this, this.level, (_: any, r: Reward[]) => Reward.giveAll(r)); // store it in a storage associated by name; claim later in the menu;
+		Reward.cases(this, this.level, (r: Reward[]) => Reward.giveAll(r)); // store it in a storage associated by name; claim later in the menu;
 
 		this.ability?.tierUp();
 
@@ -136,7 +136,7 @@ export class Skill {
 			});
 		};
 
-		Reward.resolve(this, this.level, display);
+		Reward.cases(this, this.level, display);
 	}
 
 	public firstJoin() {

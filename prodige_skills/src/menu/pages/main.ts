@@ -1,12 +1,14 @@
 import { Bar } from "@lib/bar";
-import { RomanNumbers } from "@lib/romanNumbers";
+import { Roman } from "@lib/roman";
 import { textWrapper } from "@lib/textWrapper";
-import { GuiMacro as $, Button, Gui, PageClass } from "@prodigelib/gui";
+import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
 import { Shop } from "@src/menu/shop";
-import { Progress } from "@src/menu/skill/progress";
 import { Reward } from "@src/misc/reward";
 import { Skill } from "@src/skill";
-import { comment, tellraw } from "sandstone";
+import { _, comment, DataPointClass, DataVariable, tellraw, Macro as S, say } from "sandstone";
+import { Progress } from "./skill/progress";
+import { BetterArray } from "@prodigelib/betterarray";
+import { Global } from "@src/global";
 
 
 export class Main {
@@ -26,42 +28,43 @@ export class Main {
 
 	private static skillBts(g: Gui, p: PageClass) {
 		return () => {
-			let slot = 9;
+			let slot = 10;
 
 			for (const skill of Object.values(Skill.skills)) {
-				comment(`skill_button::${skill.name}`)
+				comment(`skill_button::${skill.name}`);
 
+				const s = slot++;
 				const r = skill.xp["*"](100)["/"](skill.goal);
-				const bar = new Bar(r);
 				const nLvl = skill.level["+"](1);
-				const rewards = Reward.resolve(skill, skill.level, 'string').map(r =>
-					$` +${r}\n`
-				)
-				slot++;
-				p.emit(new Button(
-					skill.item, slot, $`§d${skill.name} ${RomanNumbers.convert(skill.level)}`, [
-					$`§9${skill.name} ${skill.level}`,
-					"",
-					...textWrapper(skill.description),
-					"",
-					"§f§lNext Level Goal:",
-					$` §8• §7Target: §d${skill.name} ${RomanNumbers.convert(nLvl)}`,
-					$` §8• §7Progress: §e${r}%`,
-					$` §8> ${bar.toData()} §e${skill.xp}§6/§e${skill.goal}`,
-					"",
-					$`§f§l${skill.name} ${RomanNumbers.convert(nLvl)} Rewards:`,
-					...rewards,
-					"",
-					"§eClick to view!",
-				], () => {
-					Progress.pageIndex.set(skill.level["/"](18));
-					g.switch(Progress.getName(skill));
-				},
-					1,
-					["!attribute_modifiers"],
-				));
+				const lvlRoman = Roman.get(skill.level);
+				const nextRoman = Roman.get(nLvl);
+				const bar = new Bar(r).toData();
 
+				Reward.cases(skill, skill.level, (rewards) => {
+					p.emit(new Button(
+						skill.item, s, $`§d${skill.name} ${lvlRoman}`, [
+						$`§9${skill.name} ${skill.level}`,
+						"",
+						...textWrapper(skill.description),
+						"",
+						"§f§lNext Level Goal:",
+						$` §8• §7Target: §d${skill.name} ${nextRoman}`,
+						$` §8• §7Progress: §e${r}%`,
+						$` §8> ${bar} §e${skill.xp}§6/§e${skill.goal}`,
+						"",
+						$`§f§l${skill.name} ${nextRoman} Rewards:`,
+						...rewards.map(rw => ` §8+§e ${rw.name}`),   // one lore line per reward
+						"",
+						"§eClick to view!",
+					], () => {
+						Progress.pageIndex.set(skill.level["/"](18));
+						g.switch(Progress.getName(skill));
+					},
+						1,
+						["!attribute_modifiers"],
+					));
+				});
 			}
-		}
+		};
 	}
 }

@@ -1,3 +1,4 @@
+import { BetterArray } from "@prodigelib/betterarray";
 import { ToolName } from "@src/data/definitions";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
@@ -44,23 +45,17 @@ export class Reward {
 		return skill.rewards.get(level) ?? Reward.common;
 	}
 
-	public static resolve(skill: Skill, lvl: Score, mode: 'give' | 'string'): DataPointClass[] {
+	/** Runs `f` once per reward case: one branch per custom level, plus the default one. */
+	public static cases(skill: Skill, lvl: Score, f: (rewards: Reward[]) => void) {
 		const found = Variable(0);
-		const strings: DataPointClass[] = [];
 		skill.rewards.forEach((rewards, level) => {
 			_.if(lvl["=="](level), () => {
-				if (mode === 'string') strings.push(...rewards.map(r => DataVariable(r.name)));
-				else Reward.giveAll(rewards);
+				f(rewards);
 				found.set(1);
 			});
 		});
 
-		_.if(_.not(found), () => {
-			if (mode === 'string') strings.push(...Reward.common.map(r => DataVariable(r.name)));
-			else Reward.giveAll(Reward.common);
-		});
-
-		return strings;
+		_.if(_.not(found), () => f(Reward.common));
 	}
 
 	public static giveMcFn(name: string): string;
