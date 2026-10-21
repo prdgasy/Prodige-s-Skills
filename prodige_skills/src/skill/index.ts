@@ -102,7 +102,7 @@ export class Skill {
 	}
 
 	private levelUpNotif(abilityMsg?: () => void) {
-		const display = (rewards: string[]) => {
+		Reward.cases(this, this.level, (rewards: Reward[]) => {
 			_.if(Skill.levelUpNotifState, () => {
 				title('@p').title([{ text: '§d§lSKILL LEVEL UP!', bold: true }]);
 				title('@p').subtitle([
@@ -122,11 +122,11 @@ export class Skill {
 				smartTellraw([
 					encapsuler + '\n',
 					$` §e§l${this.name.toUpperCase()} LEVEL UP! §8${this.level['-'](1)} ➜ §e§l${this.level}\n\n`,
-					$` §f§lNext Level Goal\n`,
+					$` §f§lNext Level Goal:\n`,
 					$`  §8• §7Target: §d${this.name} ${this.level['+'](1)}\n`,
 					$`  §8• §7Progress: §e${percentage}%\n`,
 					$`  §8> ${bar.toData()} §e${this.xp}§6/§e${this.goal} XP\n\n`,
-					` §f§lRewards\n`,
+					` §f§lRewards:\n`,
 					...rewards.map(r => ` ${r}\n`)
 				], '@p');
 
@@ -134,9 +134,7 @@ export class Skill {
 
 				tellraw('@p', [encapsuler]);
 			});
-		};
-
-		Reward.cases(this, this.level, display);
+		});
 	}
 
 	public firstJoin() {

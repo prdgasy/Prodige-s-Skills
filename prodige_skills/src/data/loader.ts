@@ -75,7 +75,6 @@ export class Loader {
 		Mining.rewards.set(20, [r2, r2]);
 		Mining.rewards.set(21, Reward.rare);
 
-
 	}
 
 	private static setDefaultRewards() {

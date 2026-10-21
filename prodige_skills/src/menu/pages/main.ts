@@ -40,7 +40,7 @@ export class Main {
 				const nextRoman = Roman.get(nLvl);
 				const bar = new Bar(r).toData();
 
-				Reward.cases(skill, skill.level, (rewards) => {
+				Reward.cases(skill, nLvl, (rewards) => {
 					p.emit(new Button(
 						skill.item, s, $`§d${skill.name} ${lvlRoman}`, [
 						$`§9${skill.name} ${skill.level}`,
