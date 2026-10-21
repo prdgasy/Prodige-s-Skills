@@ -3,35 +3,32 @@ import { FloatVar } from "@prodigelib/floatVar";
 import { CrateName } from "@src/data/definitions";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
-import { Macro as $, _, MCFunction, tellraw, Variable } from "sandstone";
+import { Macro as $, _, DataPointClass, MCFunction, say, tellraw, Variable } from "sandstone";
 import { Reward } from "./reward";
+import { SmartTellrawClass, macro as T, smartTellraw } from "@prodigelib/easymacro";
 
 export type CrateOption = {
-	name: string, color: string, description: string, item: string, roll: number, rewards: Map<Reward, number>
+	name: string, description: string, item: string, roll: number, rewards: Map<Reward, number>
 }
 export class Crate {
 	public name: string;
-	public color: string;
 	public description: string;
 	public item: string;
 	public roll: number;
 	public rewards: Map<Reward, number>;
-	public rewardShow: string[];
 	public static crates: Record<CrateName, Crate>;
 	public static storage = Global.storage.select("crate");
 
 	public constructor(opt: CrateOption) {
 		this.name = opt.name;
-		this.color = opt.color;
 		this.roll = opt.roll;
 		this.rewards = opt.rewards;
 
 		this.description = opt.description;
-		this.rewardShow = this.setDescription();
 		this.item = opt.item;
 	}
 
-	private setDescription(): string[] {
+	public getItemDescription(): string[] {
 		const s: string[] = [];
 		let t = 0;
 		this.rewards.forEach(w => t += w);
@@ -42,37 +39,46 @@ export class Crate {
 	}
 
 	private pick(n: number) {
-		const fn = MCFunction(`misc/crate/roll/${Global.toMcFunction(this.name)}`, () => {
-			let t = 0;
-			this.rewards.forEach(weight => t += weight);
-			const buyables = new BetterArray<string>(this.rewards.keys().map(b => Global.toMcFunction(b.name)).toArray());
-			const weights = new BetterArray<number>(this.rewards.values().toArray());
+		const fn = MCFunction(`misc/crate/roll/${Global.toResource(this.name)}`, () => {
 
-			const i = Variable(0);
-			const picked = Variable(0);
 
-			_.while(picked['<'](n), () => {
-				const b = buyables.get(i);
-				const w = new FloatVar(weights.get(i));
+			const encapsuler = '§7*--*--*--*--*--* §6§lSkill Crates §7*--*--*--*--*--*';
+			smartTellraw([
+				encapsuler + '\n\n',
+				` §7You opened a ${this.name} Crate §7and received:`
+			]);
 
-				const P_b = w['/'](t);
-				const roll = FloatVar.random()['*'](t);
+			let total = 0;
+			this.rewards.forEach(w => total += w);
+			// n is known at compile time: unroll the rolls instead of looping at runtime
+			_.for([0, n], 'iterate', () => {
+				const roll = FloatVar.random()['*'](total);   // one draw in [0, total)
+				const done = Variable(0);
 
-				_.if(roll['-'](P_b)['<'](0), () => {
-					_.with([b], () => $.functionCmd($`${Global.ns}:${Reward.giveMcFn(b)}`));
-					picked.add(1);
-				})
+				let acc = 0;
+				for (const [reward, weight] of this.rewards) {
+					acc += weight;
+					// first cumulative threshold above the draw wins, exactly one per roll
+					_.if(_.and(_.not(done), roll['<'](acc)), () => {
+						reward.give();
+						smartTellraw([T`  §8• ${reward.name}`]);
+						done.set(1);
+					});
+				}
+			});
 
-				i['++']['%='](this.rewards.size);
-			})
+			smartTellraw([
+				'  \n§7§oVisit the Shop to buy more crate keys!\n\n',
+				encapsuler
+			]);
 		}, { onConflict: 'ignore' });
 
 		return fn();
 	}
 
 	private open() {
-		const fn = MCFunction(`misc/crate/open/${Global.toMcFunction(this.name)}`, () => {
-			tellraw('@p', `§eOpened x1 [${this.color}${this.name}§e]!`);
+		const fn = MCFunction(`misc/crate/open/${Global.toResource(this.name)}`, () => {
+			tellraw('@p', `§eOpened x1 [${this.name}§e]!`);
 			Player.playSound('info');
 			return this.pick(this.roll);
 		}, { onConflict: 'ignore' });

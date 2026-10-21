@@ -52,8 +52,8 @@ export class Tool extends Buyable {
 	}
 
 	public static getFromOpt(opt: ToolOptions) {
-		const fn = MCFunction(Reward.giveMcFn(opt.name), () => {
-			give('@p', opt.item, { custom_name: opt.name, lore: [{ text: opt.description }] });
+		const fn = MCFunction(Reward.giveFn(opt.name as ToolName), () => {
+			give('@p', opt.item, { custom_name: opt.name, lore: [{ text: opt.rarity }, { text: opt.description }] });
 		}, { onConflict: 'ignore' });
 
 		return () => fn();

@@ -11,8 +11,14 @@ export class Global {
 		this.storage.remove();
 	};
 
-	public static toMcFunction(name: string): string {
-		return name.replace(/ /g, '').toLowerCase();
+	public static toResource(s: string): string {
+		return s
+			.replace(/§./g, '')
+			.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+			.trim()
+			.toLowerCase()
+			.replace(/\s+/g, '_')
+			.replace(/[^a-z0-9_.\-\/]/g, '');
 	}
 }
 

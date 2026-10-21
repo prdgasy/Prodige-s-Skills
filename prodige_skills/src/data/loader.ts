@@ -69,17 +69,16 @@ export class Loader {
 	// ------------------------------------------------------------------------
 	private static setSkillsRewards() {
 		const Mining = Skill.get('Mining');
-		const r1 = Reward.get('Expert Sword');
+		const r1 = Reward.get('§bExpert Sword');
 		const r2 = Reward.point(200);
 		Mining.rewards.set(10, [r1, r2]);
 		Mining.rewards.set(20, [r2, r2]);
 		Mining.rewards.set(21, Reward.rare);
-
 	}
 
 	private static setDefaultRewards() {
 		Reward.common = [Reward.point(100)];
-		Reward.rare = [Reward.point(100), Reward.get('Novice Pickaxe')];
+		Reward.rare = [Reward.point(100), Reward.get('§aNovice Pickaxe')];
 	}
 
 	// ------------------------------------------------------------------------
@@ -87,18 +86,13 @@ export class Loader {
 	// ------------------------------------------------------------------------
 	private static crates<T>(): T {
 		return Object.fromEntries(Object.entries(crateDefs).map(([name, opt]) => {
-			const rewards = new Map<Reward, number>(
-				Object.entries(opt.rewards).map(([r, w]) =>
-					[Reward.get(r as AllRewards), w] as [Reward, number])
-			);
-
-			return [name, new Crate({ ...opt, name, rewards })]
+			return [name, new Crate({ ...opt, name, rewards: opt.rewards() })]
 		})) as T;
 	}
 
 	private static tools<T>(): T {
 		return Object.fromEntries(Object.entries(toolDefs).map(([name, opt]) =>
-			[name, new Tool({ name: name, ...opt })]
+			[name, new Tool({ name, ...opt })]
 		)) as T;
 	}
 

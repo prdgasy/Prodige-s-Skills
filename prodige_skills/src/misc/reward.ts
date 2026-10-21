@@ -58,20 +58,22 @@ export class Reward {
 		_.if(_.not(found), () => f(Reward.common));
 	}
 
-	public static giveMcFn(name: string): string;
-	public static giveMcFn(name: DataPointClass): MacroLiteral;
-	public static giveMcFn(name: string | DataPointClass) {
-		if (typeof name === 'string') return `misc/give/${Global.toMcFunction(name)}`;
+	public static giveFn(name: AllRewards): string;
+	public static giveFn(name: DataPointClass): MacroLiteral;
+	public static giveFn(name: AllRewards | DataPointClass) {
+		if (typeof name === 'string') return `misc/give/${Global.toResource(name)}`;
 
 		return $`misc/give/${name}`;
 	}
 
 	public static get(r: AllRewards): Reward {
-		try {
-			return Reward.registry.get(r) as Reward;
-		} catch (e) {
-			throw Error(`${e}: "${r}" is not registered into "Reward.registry".`);
+		const reward = Reward.registry.get(r);
+
+		if (!reward) {
+			throw Error(`"${r}" is not registered into "Reward.registry".`);
 		}
+
+		return reward;
 	}
 }
 

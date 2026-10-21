@@ -53,7 +53,7 @@ export class Main {
 						$` §8> ${bar} §e${skill.xp}§6/§e${skill.goal}`,
 						"",
 						$`§f§l${skill.name} ${nextRoman} Rewards:`,
-						...rewards.map(rw => ` §8+§e ${rw.name}`),   // one lore line per reward
+						...rewards.map(r => ` §8+§e ${r.name}`),   // one lore line per reward
 						"",
 						"§eClick to view!",
 					], () => {

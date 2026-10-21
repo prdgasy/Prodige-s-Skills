@@ -12,7 +12,7 @@ export class Crates {
 		let slot = 11;
 		for (const crate of Object.values(Crate.crates)) {
 			crates.push(
-				new Button('chest', slot++, crate.color + crate.name, textWrapper(crate.description), () => crate.tryOpen())
+				new Button('chest', slot++, crate.name, textWrapper(crate.description), () => crate.tryOpen())
 				// add keys
 			);
 		}

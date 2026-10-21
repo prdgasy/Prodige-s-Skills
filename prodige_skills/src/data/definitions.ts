@@ -1,5 +1,5 @@
 import { CrateOption } from "@src/misc/crate";
-import { AllRewards } from "@src/misc/reward";
+import { AllRewards, Reward } from "@src/misc/reward";
 import { ToolOptions } from "@src/misc/tool";
 import { SkillOptions } from "@src/skill";
 import { Ability } from "@src/skill/ability";
@@ -9,12 +9,12 @@ import { Ability } from "@src/skill/ability";
 // Add a new tool here: its name is automatically available as a `ToolName`.
 // ============================================================================
 export const toolDefs = {
-	'Novice Pickaxe': {
+	'§aNovice Pickaxe': {
 		item: 'stone_pickaxe', description: 'This is a simple description',
 		rarity: '§f§lCOMMON', durability: 100,
 		price: 2500
 	},
-	'Expert Sword': {
+	'§bExpert Sword': {
 		item: 'diamond_sword', description: 'A very cool sword',
 		rarity: '§d§lEPIC', durability: 2000,
 		price: 5000
@@ -29,15 +29,25 @@ export type ToolName = keyof typeof toolDefs;
 // Rewards are referenced name and resolved later inside `crates()`,
 // ============================================================================
 type CrateDef = Omit<CrateOption, 'name' | 'rewards'> & {
-	rewards: Partial<Record<AllRewards, number>>;   // autocomplete on tool names
+	rewards: () => Map<Reward, number>
 };
 
 export const crateDefs = {
-	'Common': {
-		color: '§a§l', description: 'This is a simple crate',
+	'§aCommon': {
+		description: 'This is a simple crate',
 		item: 'chest',
-		rewards: { 'Novice Pickaxe': 0.5, 'Expert Sword': 0.2 },
-		roll: 2
+		rewards: () => new Map<Reward, number>([
+			[Reward.get('§aNovice Pickaxe'), 0.2], [Reward.point(100), 0.5]
+		]),
+		roll: 3
+	},
+	'§dSpecial': {
+		description: 'This is a special crate',
+		item: 'ender_chest',
+		rewards: () => new Map<Reward, number>([
+			[Reward.get('§bExpert Sword'), 0.2], [Reward.point(300), 0.5]
+		]),
+		roll: 5
 	}
 } satisfies Record<string, CrateDef>;
 
