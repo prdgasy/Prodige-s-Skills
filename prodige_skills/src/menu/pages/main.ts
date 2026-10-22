@@ -9,6 +9,7 @@ import { _, comment, DataPointClass, DataVariable, tellraw, Macro as S, say } fr
 import { Progress } from "./skill/progress";
 import { BetterArray } from "@prodigelib/betterarray";
 import { Global } from "@src/global";
+import { FloatVar } from "@prodigelib/floatVar";
 
 
 export class Main {
@@ -34,13 +35,13 @@ export class Main {
 				comment(`skill_button::${skill.name}`);
 
 				const s = slot++;
-				const r = skill.xp["*"](100)["/"](skill.goal);
+				const progress = new FloatVar(skill.xp["*"](100))["/"](skill.goal);
 				const nLvl = skill.level["+"](1);
 				const lvlRoman = Roman.get(skill.level);
 				const nextRoman = Roman.get(nLvl);
-				const bar = new Bar(r).toData();
+				const bar = new Bar(progress.toScore()).toData();
 
-				Reward.cases(skill, nLvl, (rewards) => {
+				Reward.cases(skill, nLvl, rewards => {
 					p.emit(new Button(
 						skill.item, s, $`§d${skill.name} ${lvlRoman}`, [
 						$`§9${skill.name} ${skill.level}`,
@@ -49,11 +50,11 @@ export class Main {
 						"",
 						"§f§lNext Level Goal:",
 						$` §8• §7Target: §d${skill.name} ${nextRoman}`,
-						$` §8• §7Progress: §e${r}%`,
+						$` §8• §7Progress: §e${progress.toData()}%`,
 						$` §8> ${bar} §e${skill.xp}§6/§e${skill.goal}`,
 						"",
 						$`§f§l${skill.name} ${nextRoman} Rewards:`,
-						...rewards.map(r => ` §8+§e ${r.name}`),   // one lore line per reward
+						...rewards.map(r => ` §8+§e ${r.name}`),
 						"",
 						"§eClick to view!",
 					], () => {

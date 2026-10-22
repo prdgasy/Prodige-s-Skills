@@ -1,5 +1,5 @@
 import { Gui } from "@prodigelib/gui";
-import { Data, defaultNamespace } from "sandstone";
+import { data, Data, defaultNamespace, MCFunction } from "sandstone";
 
 export class Global {
 	public static ns = defaultNamespace.toString();
@@ -19,6 +19,15 @@ export class Global {
 			.toLowerCase()
 			.replace(/\s+/g, '_')
 			.replace(/[^a-z0-9_.\-\/]/g, '');
+	}
+
+	public static generateCleanFn() {
+		return MCFunction('clean_var', () => {
+			for (let i = 0; i < 200; i++) {
+				Data('storage', '__sandstone:variable', `anon_xTSjehSB_${i}`).remove();
+			}
+		})
+
 	}
 }
 

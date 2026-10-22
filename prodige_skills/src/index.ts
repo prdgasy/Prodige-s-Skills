@@ -8,4 +8,6 @@ Loader.init();
 Player.init();
 Menu.init();
 
+Global.generateCleanFn();
+
 Uninstaller.generate(Global);

@@ -7,23 +7,15 @@ import { Items } from '@src/menu/shop/items';
 import { Titles } from '@src/menu/shop/titles';
 import { Progress } from '@src/menu/skill/progress';
 import { Skill } from '@src/skill';
+import { SkillPage, SubSkillPage } from '@src/types';
+import { Actions } from '@src/menu/skill/actions';
 
 export class Menu {
 	public static init() {
-		const Menu = new Gui('prodige_skills', 'menu', '§e§l', true);
+		const Menu = new Gui('§d§lProdige Skills', 'menu', true);
 
-		type NormalPage = {
-			getName: () => string;
-			init: (g: Gui, page: PageClass) => PageClass;
-		};
-
-		type SubSkillPage = {
-			getName: (skill: Skill) => string;
-			init: (g: Gui, page: PageClass, skill: Skill) => PageClass;
-		};
-
-		const pages: (NormalPage | SubSkillPage)[] = [
-			Main, Progress, Shop, Crates, Items, Boosters, Titles
+		const pages: (SkillPage | SubSkillPage)[] = [
+			Main, Progress, Actions, Shop, Crates, Items, Boosters, Titles
 		];
 
 
@@ -36,7 +28,7 @@ export class Menu {
 					Menu.registerPage(toRegister);
 				}
 			} else {
-				const normalP = p as NormalPage;
+				const normalP = p as SkillPage;
 				const name = normalP.getName();
 				const toRegister = normalP.init(Menu, Menu.createPage(name));
 
@@ -45,26 +37,3 @@ export class Menu {
 		}
 	}
 }
-
-
-
-// reg(Shop);
-// MCFunction('menu', () => {
-
-//   initMain(Menu);
-//   initShop(Menu);
-//   // initBooster(Menu);
-//   initItem(Menu);
-//   // initTitle(Menu);
-//   // initProfile(Menu);
-//   // initSettings(Menu);
-//   // initMilestones(Menu);
-//   // initDailyTasks(Menu);
-
-//   SkillList.forEach(skill => {
-//     initProgress(Menu, skill);
-//     initOnEvent(Menu, skill);
-//     initAchievement(Menu, skill);
-//     initAbility(Menu, skill);
-//   });
-// }, { runOnLoad: true });
