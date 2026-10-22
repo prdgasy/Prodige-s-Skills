@@ -92,7 +92,7 @@
 
     "@prodigelib/floatVar": ["@prodigelib/floatVar@github:prdgasy/floatvar#443ecb1", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-floatVar-443ecb1", "sha512-M5+eKwOMG7y29gfu9oqp1WZZiyozxLoG6I+X00UX/fQOeuneoy2PaC+IyqvAOgZd7L36bOMsp9ecjK69zealtg=="],
 
-    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#3840e2a", { "dependencies": { "@prodigelib/cjmap": "github:prdgasy/cjmap", "@prodigelib/uninstaller": "github:prdgasy/uninstaller", "sandstone": "~1.2.36" } }, "prdgasy-prodigelib-gui-3840e2a", "sha512-a/l/Fw6XPrOW5cMNl1Ep1gbo7xO4jfVptiBywYjey2o5FzyyyeY+9NREC8/5FCs2ZGvud80bmnUZMem7OQnjGA=="],
+    "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#768c1ef", { "dependencies": { "@prodigelib/cjmap": "github:prdgasy/cjmap", "@prodigelib/uninstaller": "github:prdgasy/uninstaller", "sandstone": "~1.2.36" } }, "prdgasy-prodigelib-gui-768c1ef", "sha512-EB3nVccGG/QxvUFiz1Q68PfXtbIr7YALzR0wm3gPNIWRNCyxFfG30AkMYQeUPPTnLaOjy9X6qOvc2f3Tz5A8YQ=="],
 
     "@prodigelib/uninstaller": ["@prodigelib/uninstaller@github:prdgasy/uninstaller#8d16bef", { "dependencies": { "picocolors": "^1.1.1", "sandstone": "~1.2.36" } }, "prdgasy-uninstaller-8d16bef", "sha512-VwKZeOuymCan8F8kTgQqgXXRqn3z0yB5M2nRIkr9m5zonvETk/+0ghsiQJHgTPgli+QWNdLVgzg3gSvNPn7LsQ=="],
 

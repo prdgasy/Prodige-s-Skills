@@ -2,7 +2,7 @@ import { Roman } from "@lib/roman";
 import { FloatVar } from "@prodigelib/floatVar";
 import { Button, GuiMacro as $, PageClass, Gui } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
-import { DataPointClass } from "sandstone";
+import { DataPointClass, raw, say } from "sandstone";
 import { Item, SubSkillPage } from '@src/types';
 import { Progress } from "./progress";
 import { Actions } from "./actions";
@@ -38,6 +38,7 @@ export class Navigation {
 	}
 
 	public static render(g: Gui, p: PageClass, skill: Skill) {
+		raw('execute if score anon_xTSjehSB_1 __sandstone matches 0 run say hey');
 		const progress = new FloatVar(skill.xp)['*'](100)['/'](skill.goal);
 		const bar = new Bar(progress.toScore()).toData();
 		const next = Roman.get(skill.level['+'](1));
