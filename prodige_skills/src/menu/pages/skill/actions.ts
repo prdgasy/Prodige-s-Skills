@@ -43,6 +43,7 @@ export class Actions {
 		});
 
 		p.add(() => Navigation.render(g, p, skill))
+		p.add(() => Navigation.generateSliders(p, Actions.index, Math.floor(skill.onEvents.length / 18)));
 
 		return p;
 	}

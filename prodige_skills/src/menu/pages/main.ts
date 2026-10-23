@@ -58,7 +58,7 @@ export class Main {
 						"",
 						"§eClick to view!",
 					], () => {
-						Progress.pageIndex.set(skill.level["/"](18));
+						Progress.index.set(skill.level["/"](18));
 						g.switch(Progress.getName(skill));
 					},
 						1,
