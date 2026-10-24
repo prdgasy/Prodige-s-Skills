@@ -24,7 +24,7 @@ export class Reward {
 
 	/** Assemble multiple rewards into a string[] */
 	public static join(rewards: Reward[]): string[] {
-		return rewards.map(r => ` §8+ §r${r.name}`);
+		return rewards.map(r => ` §8+ ${r.name}`);
 	}
 
 	/** Give every rewards inside rewards */

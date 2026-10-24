@@ -26,8 +26,8 @@ export class Global {
 			for (let i = 0; i < 200; i++) {
 				Data('storage', '__sandstone:variable', `anon_xTSjehSB_${i}`).remove();
 			}
-		})
-
+		});
 	}
+
 }
 

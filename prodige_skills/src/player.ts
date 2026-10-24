@@ -57,5 +57,9 @@ export class Player {
 
 		return _.if(Player.sound).run.execute.at('@p').run.playsound(soundEvent.sound, 'master', '@p', rel(0, 0, 0), 1, soundEvent.pitch);
 	}
+
+	public static throw(msg: string) {
+		return `§c[Prodige Skill] • ${msg}`;
+	}
 }
 

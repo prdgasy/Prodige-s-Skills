@@ -19,7 +19,7 @@ export type SkillOptions = {
 	achievements?: Achievement[],
 	titles?: Title[],
 	rewards?: Map<number, Reward[]>,
-	ability?: Ability,
+	ability?: { name: string, description: string },
 	customItems?: Tool[],
 	onEvents?: OnEvent[],
 }
@@ -44,32 +44,40 @@ export class Skill {
 	public ability?: Ability;
 
 
-	constructor(options: SkillOptions) {
-		this.name = options.name;
-		this.description = options.description ?? "§7No description for this skill yet.";
-		this.item = options.item ?? "anvil";
+	public totalXp: Score;
+	public totalPts: Score;
+
+	constructor(opt: SkillOptions) {
+		this.name = opt.name;
+		this.description = opt.description ?? "§7No description for this skill yet.";
+		this.item = opt.item ?? "anvil";
 		this.level = Objective.create(`${this.name}.level`)('@p');
 		this.xp = Objective.create(`${this.name}.xp`)('@p');
 		this.goal = Objective.create(`${this.name}.goal`)('@p');
-		this.starting = options.starting ?? 40;
-		this.achievements = options.achievements ?? [];
+		this.starting = opt.starting ?? 40;
+		this.achievements = opt.achievements ?? [];
 		this.achievement = Objective.create(`${this.name}.achievement`)(`@p`);
-		this.titles = options.titles ?? [];
-		this.rewards = options.rewards ?? new Map<number, Reward[]>();
-		this.ability = options.ability ?? new Ability(this.name, 'notimple', '§7No ability for this skill yet.');
-		this.customItems = options.customItems ?? [];
-		this.onEvents = options.onEvents ?? [];
+		this.titles = opt.titles ?? [];
+		this.rewards = opt.rewards ?? new Map<number, Reward[]>();
+		this.ability = opt.ability ? new Ability(this, opt.ability.name, opt.ability.description) : undefined;
+		this.customItems = opt.customItems ?? [];
+		this.onEvents = opt.onEvents ?? [];
+
+		this.totalXp = Objective.create(`${this.name}.totalXp`)('@p');
+		this.totalPts = Objective.create(`${this.name}.totalPts`)('@p');
 	}
 
 	public onEventTriggered(addedXp: Score, addedPoint: Score) {
 		const fn = MCFunction('skill/on_event_triggered', () => {
 			const canLevelUp = _.and(this.xp['>='](this.goal), this.level['<'](100));
 			_.if(_.not(canLevelUp), () => {
-				this.xp['+='](addedXp);
+				this.xp.add(addedXp);
+				this.totalXp.add(addedXp);
 				this.levelUp()
 			});
 
-			Player.pts['+='](addedPoint);
+			Player.pts.add(addedPoint);
+			this.totalPts.add(addedPoint);
 			this.onEventDisplay(addedXp, addedPoint);
 		}, { onConflict: 'ignore' })
 

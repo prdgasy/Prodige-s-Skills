@@ -2,6 +2,7 @@ import { crateDefs, CrateName, skillDefs, SkillName, toolDefs, ToolName } from '
 import { Crate } from '@src/misc/crate';
 import { AllRewards, Reward } from '@src/misc/reward';
 import { Tool } from '@src/misc/tool';
+import { Ability } from '@src/skill/ability';
 import { Achievement } from '@src/skill/achievement';
 import { Skill } from '@src/skill/index';
 import { OnEvent } from '@src/skill/onEvent';
@@ -97,11 +98,15 @@ export class Loader {
 	}
 
 	private static skills<T>(): T {
-		return Object.fromEntries(Object.entries(skillDefs).map(([name, opt]) =>
-			[name, new Skill({ name: name, ...opt })]
+		return Object.fromEntries(Object.entries(skillDefs).map(([name, opt]) => {
+			const ability = opt.ability;
+			return [name, new Skill({
+				name: name,
+				...opt
+			})]
+		}
 		)) as T;
 	}
-
 	// ------------------------------------------------------------------------
 	// INIT
 	// Order matters: each step depends on the ones above it.

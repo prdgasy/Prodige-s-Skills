@@ -1,13 +1,10 @@
 import { CrateOption } from "@src/misc/crate";
 import { AllRewards, Reward } from "@src/misc/reward";
 import { ToolOptions } from "@src/misc/tool";
-import { SkillOptions } from "@src/skill";
+import { Skill, SkillOptions } from "@src/skill";
 import { Ability } from "@src/skill/ability";
 
-// ============================================================================
-// TOOL DEFINITIONS
-// Add a new tool here: its name is automatically available as a `ToolName`.
-// ============================================================================
+// TOOL
 export const toolDefs = {
 	'§aNovice Pickaxe': {
 		item: 'stone_pickaxe', description: 'This is a simple description',
@@ -24,10 +21,7 @@ export const toolDefs = {
 
 export type ToolName = keyof typeof toolDefs;
 
-// ============================================================================
-// CRATE DEFINITIONS
-// Rewards are referenced name and resolved later inside `crates()`,
-// ============================================================================
+// CRATE
 type CrateDef = Omit<CrateOption, 'name' | 'rewards'> & {
 	rewards: () => Map<Reward, number>
 };
@@ -53,21 +47,20 @@ export const crateDefs = {
 
 export type CrateName = keyof typeof crateDefs;
 
-// ============================================================================
-// SKILL DEFINITIONS
-// ============================================================================
+// SKILL
+type SkillDefType = Omit<SkillOptions, 'name' | 'ability'> & {
+	ability: { name: string, description: string }
+}
 export const skillDefs = {
 	'Mining': {
 		item: 'diamond_pickaxe', starting: 20,
 		description: 'This is a mining description',
-		ability: new Ability('Mining', 'Miner Speed', 'Increases mining speed when holding a pickaxe.')
+		ability: { name: 'Miner', description: 'Cool miner' }
 	},
 	'Foraging': {
 		item: 'oak_sapling', starting: 20,
 		description: 'Chop trees, gather wood, and master the art of forestry.',
-		ability: new Ability('Foraging', 'Tree Feller', 'Increases choppping spead and wood yields when holding an axe')
+		ability: { name: 'Pro Forager', description: 'Cool Forager' }
 	}
-
-} satisfies Record<string, Omit<SkillOptions, 'name'>>;
-
+} satisfies Record<string, SkillDefType>;
 export type SkillName = keyof typeof skillDefs;

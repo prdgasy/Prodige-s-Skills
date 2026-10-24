@@ -1,23 +1,28 @@
 import { Roman } from "@lib/roman";
-import { textWrapper } from "@lib/textWrapper";
+import { Text } from "@lib/text";
 import { macro as $, smartTellraw } from "@prodigelib/easymacro";
+import { FloatVar } from "@prodigelib/floatVar";
 import { Player } from "@src/player";
 import { _, Label, NonEmptyString, Objective, playsound, Score } from "sandstone";
 import { EntityLabel } from "sandstone/variables";
+import { Skill } from ".";
+
 
 export class Ability {
-	skill: string;
-	name: string;
-	description: string;
-	tier: Score;
-	state: EntityLabel;
+	public skill: Skill;
+	public name: string;
+	public description: string;
+	public tier: Score;
+	public buff: Score;
+	public state: EntityLabel;
 
-	constructor(parent: string, name: string, description: string) {
-		this.skill = parent;
+	constructor(skill: Skill, name: string, description: string) {
+		this.skill = skill;
 		this.name = name;
 		this.description = description;
-		this.tier = Objective.create(`${this.skill}.ability.tier`)('@p');
-		this.state = Label(`${this.skill}.ability.toggle` as NonEmptyString)('@p');
+		this.tier = Objective.create(`${this.skill.name}.ability.tier`)('@p');
+		this.buff = Objective.create(`${this.skill.name}.ability.buff`)('@p');
+		this.state = Label(`${this.skill.name}.ability.toggle` as NonEmptyString)('@p');
 	}
 
 	public disable() {
@@ -57,7 +62,7 @@ export class Ability {
 				' \n',
 				` ${title}\n`,
 				$`  §8• §7Ability: §c§l${this.name} §8[${tier}§8]\n`,
-				...textWrapper(this.description).map(r => $`   §7${r}\n`),
+				...Text.wrap(this.description).map(r => $`   §7${r}\n`),
 				' §8• §7Bonus:\n'
 			], '@p');
 		};
@@ -71,5 +76,19 @@ export class Ability {
 	public firstJoin() {
 		this.tier.set(0);
 		this.enable();
+	}
+
+	public upgradeBuff() {
+
+	}
+
+
+
+	public onEvent() {
+
+	}
+
+	public trigger() {
+
 	}
 }

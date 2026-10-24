@@ -1,6 +1,6 @@
 import { Bar } from "@lib/bar";
 import { Roman } from "@lib/roman";
-import { textWrapper } from "@lib/textWrapper";
+import { Text } from "@lib/text";
 import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
 import { Shop } from "@src/menu/shop";
 import { Reward } from "@src/misc/reward";
@@ -46,7 +46,7 @@ export class Main {
 						skill.item, s, $`§d${skill.name} ${lvlRoman}`, [
 						$`§9${skill.name} ${skill.level}`,
 						"",
-						...textWrapper(skill.description),
+						...Text.wrap(skill.description),
 						"",
 						"§f§lNext Level Goal:",
 						$` §8• §7Target: §d${skill.name} ${nextRoman}`,
