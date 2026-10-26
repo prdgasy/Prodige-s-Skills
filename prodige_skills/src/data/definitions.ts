@@ -3,6 +3,7 @@ import { AllRewards, Reward } from "@src/misc/reward";
 import { ToolOptions } from "@src/misc/tool";
 import { Skill, SkillOptions } from "@src/skill";
 import { Ability } from "@src/skill/ability";
+import { say } from "sandstone";
 
 // TOOL
 export const toolDefs = {
@@ -49,18 +50,18 @@ export type CrateName = keyof typeof crateDefs;
 
 // SKILL
 type SkillDefType = Omit<SkillOptions, 'name' | 'ability'> & {
-	ability: { name: string, description: string }
+	ability?: { name: string, description: string, trigger: () => void }
 }
 export const skillDefs = {
 	'Mining': {
 		item: 'diamond_pickaxe', starting: 20,
 		description: 'This is a mining description',
-		ability: { name: 'Miner', description: 'Cool miner' }
+		ability: { name: 'Miner', description: 'Cool miner', trigger: () => say('Miner ability triggered') }
 	},
 	'Foraging': {
-		item: 'oak_sapling', starting: 20,
+		item: 'oak_sapling', starting: 10,
 		description: 'Chop trees, gather wood, and master the art of forestry.',
-		ability: { name: 'Pro Forager', description: 'Cool Forager' }
+		ability: { name: 'Pro Forager', description: 'Cool Forager', trigger: () => say('Forager ability triggered') }
 	}
 } satisfies Record<string, SkillDefType>;
 export type SkillName = keyof typeof skillDefs;

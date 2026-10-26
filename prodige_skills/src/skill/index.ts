@@ -5,11 +5,13 @@ import { Reward } from "@src/misc/reward";
 import { Tool } from "@src/misc/tool";
 import { Player } from "@src/player";
 import { Achievement } from "@src/skill/achievement";
-import { OnEvent } from '@src/skill/onEvent';
+import { Action } from '@src/skill/action';
 import { Title } from "@src/skill/title";
 import { Item } from "@src/types";
-import { _, Label, MCFunction, Objective, playsound, Score, tellraw, title } from "sandstone";
+import { _, bossbar, Label, MCFunction, Objective, playsound, say, Score, tellraw, title, Macro as S, Variable } from "sandstone";
 import { Ability } from "./ability";
+import { Global } from "@src/global";
+import { Roman } from "@lib/roman";
 
 export type SkillOptions = {
 	name: string,
@@ -21,7 +23,7 @@ export type SkillOptions = {
 	rewards?: Map<number, Reward[]>,
 	ability?: { name: string, description: string },
 	customItems?: Tool[],
-	onEvents?: OnEvent[],
+	onEvents?: Action[],
 }
 
 export class Skill {
@@ -29,6 +31,7 @@ export class Skill {
 	static levelUpNotifState = Label('level_up_notif')('@p');
 
 	public name: string;
+	public resource: string;
 	public description: string;
 	public item: Item;
 	public level: Score;
@@ -40,15 +43,17 @@ export class Skill {
 	public titles: Title[];
 	public rewards: Map<number, Reward[]>;
 	public customItems: Tool[];
-	public onEvents: OnEvent[];
+	public onEvents: Action[];
 	public ability?: Ability;
-
 
 	public totalXp: Score;
 	public totalPts: Score;
 
+	private bossbarCount = Variable(0);
+
 	constructor(opt: SkillOptions) {
 		this.name = opt.name;
+		this.resource = Global.toResource(this.name);
 		this.description = opt.description ?? "§7No description for this skill yet.";
 		this.item = opt.item ?? "anvil";
 		this.level = Objective.create(`${this.name}.level`)('@p');
@@ -68,20 +73,22 @@ export class Skill {
 	}
 
 	public onEventTriggered(addedXp: Score, addedPoint: Score) {
-		const fn = MCFunction('skill/on_event_triggered', () => {
-			const canLevelUp = _.and(this.xp['>='](this.goal), this.level['<'](100));
-			_.if(_.not(canLevelUp), () => {
-				this.xp.add(addedXp);
-				this.totalXp.add(addedXp);
-				this.levelUp()
-			});
-
+		const fn = MCFunction(`skill/${Global.toResource(this.name)}/on_event_triggered`, () => {
+			this.xp.add(addedXp);
 			Player.pts.add(addedPoint);
 			this.totalPts.add(addedPoint);
-			this.onEventDisplay(addedXp, addedPoint);
-		}, { onConflict: 'ignore' })
+			this.totalXp.add(addedXp);
+			this.ability?.roll();
 
-		fn();
+			_.if(_.and(this.xp['>='](this.goal), this.level['<'](100)), () => {
+				this.levelUp();
+			});
+
+			this.onEventDisplay(addedXp, addedPoint);
+
+		}, { onConflict: 'ignore' });
+
+		return fn();
 	}
 
 	private levelUp() {
@@ -97,16 +104,36 @@ export class Skill {
 		Reward.cases(this, this.level, (r: Reward[]) => Reward.giveAll(r)); // store it in a storage associated by name; claim later in the menu;
 
 		this.ability?.tierUp();
-
 		const abilityMsg = this.ability?.tierUpNotif();
-
 		this.levelUpNotif(abilityMsg);
 	}
 
-	private onEventDisplay(XpAdded: Score, pointAdded: Score) {
-		return _.if(Player.onEventNotif, () => title('@p').actionbar([
-			{ text: this.name }, this.level, '+', XpAdded, 'Xp + ', pointAdded, 'Point'
-		]));
+	private onEventDisplay(xpAdded: Score, pointAdded: Score) {
+		const show = MCFunction(`skill/${this.resource}/show`, () => {
+			this.bossbarCount['++'];
+			const key = Variable(this.bossbarCount);
+			const roman = Roman.get(this.level);
+			_.with([key, roman, this.xp, this.goal, xpAdded, pointAdded], () => {
+				tellraw('@p', ['started showing: ', this.name, ', key: ', key])
+				const id = S`prodige_skills.${this.resource}.${key}`
+				S.bossbar.add(id, S`"§d§l${this.name} ${roman} §8• §e${this.xp}§6/§e${this.goal} XP §8| §b+${xpAdded} Xp §8• §e+${pointAdded} Pts"`);
+				S.bossbar.set(id).max(this.goal);
+				S.bossbar.set(id).value(this.xp);
+				S.bossbar.set(id).color('light_purple');
+				S.bossbar.set(id).style('progress');
+				S.bossbar.set(id).players('@s');
+			});
+
+			_.await.sleep("5s");
+
+			// clean
+			_.with([key], () => {
+				S.bossbar.remove(S`prodige_skills.${this.resource}.${key}`);
+			});
+			this.bossbarCount['--'];
+		}, { asyncContext: true });
+
+		return show();
 	}
 
 	private levelUpNotif(abilityMsg?: () => void) {
@@ -123,12 +150,11 @@ export class Skill {
 
 				_.if(Player.sound, () => playsound('entity.player.levelup', 'master', '@p', '~ ~ ~', 1, 0));
 
-				const encapsuler = '§7§m------------------------------------------';
 				const percentage = this.xp['*'](100)['/'](this.goal);
 				const bar = new Bar(percentage);
 
 				smartTellraw([
-					encapsuler + '\n',
+					Global.encapsuler + '\n',
 					$` §e§l${this.name.toUpperCase()} LEVEL UP! §8${this.level['-'](1)} ➜ §e§l${this.level}\n\n`,
 					$` §f§lNext Level Goal:\n`,
 					$`  §8• §7Target: §d${this.name} ${this.level['+'](1)}\n`,
@@ -137,10 +163,8 @@ export class Skill {
 					` §f§lRewards:\n`,
 					...rewards.map(r => ` ${r}\n`)
 				], '@p');
-
 				abilityMsg ? abilityMsg() : null;
-
-				tellraw('@p', [encapsuler]);
+				tellraw('@p', [Global.encapsuler]);
 			});
 		});
 	}

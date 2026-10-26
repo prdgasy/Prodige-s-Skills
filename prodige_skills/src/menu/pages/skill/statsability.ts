@@ -14,7 +14,7 @@ export class StatsAbility {
 	public static init(g: Gui, p: PageClass, skill: Skill) {
 		p.add(() => {
 			const totalGain = new Button(
-				'gold_ingot', 10, '§6§lTotal Earnings',
+				'gold_ingot', 12, '§6§lTotal Earnings',
 				[
 					`Cumulative experience and points earned since you started training ${skill.name}.`,
 					'',
@@ -29,13 +29,25 @@ export class StatsAbility {
 			const info = new Button(
 				"knowledge_book", 15, "§a§lAbility Guide",
 				[
-					"Abilities are powerful passive traits that enhance your skill performance continuously.",
+					"§8┃ §7Abilities are §dpassive bonuses §7that enhance",
+					"§8┃ §7your performance as you master each skill.",
 					"",
-					"§f§lProgression Rules",
-					" §8• §7Unlocks at §eSkill Level 10§7.",
-					" §8• §7Upgrades every §b10 levels §7(§cTier I §7➡ §cTier X§7).",
+					"§e§l┃ PROGRESSION",
+					"§e┃ §7Unlocked at §eLevel 10",
+					"§e┃ §7Upgraded every §b10 levels",
+					"§e┃ §7Maximum rank: §cTier X §8(§eLevel 100§8)",
 					"",
-					"§8No cooldown, or activation key required."
+					"§b§l┃ ABILITY EFFECTS",
+					"§b┃ §7Each skill has a §bunique passive ability",
+					"§b┃ §7Higher tiers grant §bstronger effects",
+					"§b┃ §7Bonuses apply §aautomatically",
+					"",
+					"§d§l┃ ACTIVATION",
+					"§d┃ §7No activation key required",
+					"§d┃ §7No cooldown — effects are always active",
+					"",
+					"§8┃ §7Master your skills to unlock",
+					"§8┃ §7their full potential!"
 				]
 			);
 
@@ -48,31 +60,54 @@ export class StatsAbility {
 				const isActive = DataVariable("§a§l• §aEnabled");
 				const name = DataVariable(`§d§l${skill.ability.name}`);
 				const description = Text.wrap(skill.ability.description);
+
 				_.if(_.not(skill.ability.state), () => {
 					isActive.set("§c§l• §cDisabled");
 					name.set(`§7§o${skill.ability!.name}`);
 				});
 
 				const unlocked = new Button(
-					'nether_star', 13, `§d§l${skill.ability.name} ${roman}`,
+					'nether_star', 13, `§d§l${skill.ability.name} §8[§d§l${roman}§8]`,
 					[
 						...description,
 						'',
-						"§f§lTier progression",
-						$` §8• §7Next Tier: §4§l${skill.ability.name} ${Roman.get(next)}`,
-						'§7Add more info later..',
+						`§d§l┃ ABILITY STATUS`,
+						$`§d┃ §7Status: ${isActive}`,
+						$`§d┃ §7Ability: ${name}`,
 						'',
-						"§eClick to toggle!"
-					], () => { skill.ability!.toggle(); }, 1, ["enchantment_glint_override=1"]
+						'§e§l┃ TIER PROGRESSION',
+						$`§e┃ §7Current Tier: §d${roman}`,
+						$`§e┃ §7Next Tier: §d${skill.ability.name} ${Roman.get(next)}`,
+						'§e┃ §7Improve your skill to unlock',
+						'§e┃ §7stronger ability effects.',
+						'',
+						'§b§l┃ ACTIVATION',
+						'§b┃ §7Passive ability — works automatically.',
+						'§b┃ §7Toggle it on or off at any time.',
+						'',
+						'§8┃ §eClick to toggle this ability!'
+					],
+					() => { skill.ability!.toggle(); },
+					1,
+					["enchantment_glint_override=1"]
 				);
 
 				const locked = new Button(
 					'charcoal', 13, "§7§oLocked",
 					[
-						"",
-						...description,
-						"",
-						"§8You cannot toggle this yet!"
+						'§8┃ §7This ability is not yet unlocked.',
+						'',
+						'§c§l┃ REQUIREMENTS',
+						`§c┃ §7Skill: §f${skill.name}`,
+						'§c┃ §7Required Level: §e10',
+						'§c┃ §7Current Level: §e' + skill.level,
+						'',
+						'§6§l┃ UNLOCK REWARDS',
+						'§6┃ §7Gain access to this skill\'s',
+						'§6┃ §7unique passive ability.',
+						'§6┃ §7Continue leveling to strengthen it.',
+						'',
+						'§8┃ §eReach Level 10 to unlock!'
 					],
 					() => {
 						Player.playSound('error');
@@ -84,7 +119,19 @@ export class StatsAbility {
 					.else(() => p.emit(unlocked));
 			} else {
 				p.emit(new Button(
-					'anvil', 13, '§c§oComming soon!', [], () => {
+					'anvil', 13, '§c§oComing Soon!',
+					[
+						'§8┃ §7This skill does not have an',
+						'§8┃ §7ability available yet.',
+						'',
+						'§6§l┃ WHAT TO EXPECT',
+						'§6┃ §7A unique passive effect',
+						'§6┃ §7Progression through skill tiers',
+						'§6┃ §7Bonuses that improve your gameplay',
+						'',
+						'§8┃ §7Stay tuned for future updates!'
+					],
+					() => {
 						Player.playSound('error');
 						Player.throw(`Ability for ${skill.name} coming soon!`);
 					}

@@ -5,6 +5,7 @@ export class Global {
 	public static ns = defaultNamespace.toString();
 	public static storage = Data('storage', `${this.ns}:${this.ns}`, 'data');
 	public static name = 'Prodige Skills';
+	public static encapsuler = '§7*--*--*--*--*--* §6§lProdige Skills §7*--*--*--*--*--*';
 
 	public static uninstall() {
 		Gui.uninstall();

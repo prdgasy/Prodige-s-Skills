@@ -1,6 +1,6 @@
 import { Button, Gui, PageClass, GuiMacro as $ } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
-import { OnEvent } from "@src/skill/onEvent";
+import { Action } from "@src/skill/action";
 import { _, Objective } from "sandstone";
 import { Navigation } from "./navigation";
 

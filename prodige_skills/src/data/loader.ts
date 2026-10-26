@@ -5,7 +5,7 @@ import { Tool } from '@src/misc/tool';
 import { Ability } from '@src/skill/ability';
 import { Achievement } from '@src/skill/achievement';
 import { Skill } from '@src/skill/index';
-import { OnEvent } from '@src/skill/onEvent';
+import { Action } from '@src/skill/action';
 import { Criteria } from '@src/types';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -49,7 +49,7 @@ export class Loader {
 		for (const row of onEventsData) {
 			try {
 				const skill = Skill.get(row.skillName as SkillName);
-				skill.onEvents.push(new OnEvent(skill, row.name, row.item as any, parseInt(row.Xp, 10) || 0, parseInt(row.pts, 10) || 0, row.criteria as Criteria));
+				skill.onEvents.push(new Action(skill, row.name, row.item as any, parseInt(row.Xp, 10) || 0, parseInt(row.pts, 10) || 0, row.criteria as Criteria));
 			} catch (e) { throw Error(`${e}: Skill ${row.skillName} isn't define inside loader.ts`); }
 		}
 
@@ -98,13 +98,8 @@ export class Loader {
 	}
 
 	private static skills<T>(): T {
-		return Object.fromEntries(Object.entries(skillDefs).map(([name, opt]) => {
-			const ability = opt.ability;
-			return [name, new Skill({
-				name: name,
-				...opt
-			})]
-		}
+		return Object.fromEntries(Object.entries(skillDefs).map(([name, opt]) =>
+			[name, new Skill({ ...opt, name })]
 		)) as T;
 	}
 	// ------------------------------------------------------------------------

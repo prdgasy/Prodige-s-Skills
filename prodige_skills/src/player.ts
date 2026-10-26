@@ -1,7 +1,7 @@
 import { _, execute, Label, MCFunction, Objective, playsound, rel, tellraw } from "sandstone";
 import { BoosterClass } from "./misc/booster";
 import { Skill } from "./skill";
-import { OnEvent } from "./skill/onEvent";
+import { Action } from "./skill/action";
 
 type SoundType = Parameters<typeof playsound>[0];
 export class Player {
@@ -14,7 +14,7 @@ export class Player {
 
 	public static init() {
 		this.load();
-		OnEvent.watch();
+		Action.watch();
 		this.firstJoin();
 	}
 

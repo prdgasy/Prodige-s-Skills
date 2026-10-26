@@ -40,25 +40,20 @@ export class Crate {
 
 	private pick(n: number) {
 		const fn = MCFunction(`misc/crate/roll/${Global.toResource(this.name)}`, () => {
-
-
-			const encapsuler = '§7*--*--*--*--*--* §6§lSkill Crates §7*--*--*--*--*--*';
 			smartTellraw([
-				encapsuler + '\n\n',
+				Global.encapsuler + '\n\n',
 				` §7You opened a ${this.name} Crate §7and received:`
 			]);
 
 			let total = 0;
 			this.rewards.forEach(w => total += w);
-			// n is known at compile time: unroll the rolls instead of looping at runtime
 			_.for([0, n], 'iterate', () => {
-				const roll = FloatVar.random()['*'](total);   // one draw in [0, total)
+				const roll = FloatVar.random()['*'](total);
 				const done = Variable(0);
 
 				let acc = 0;
 				for (const [reward, weight] of this.rewards) {
 					acc += weight;
-					// first cumulative threshold above the draw wins, exactly one per roll
 					_.if(_.and(_.not(done), roll['<'](acc)), () => {
 						reward.give();
 						smartTellraw([T`  §8• ${reward.name}`]);
@@ -69,7 +64,7 @@ export class Crate {
 
 			smartTellraw([
 				'  \n§7§oVisit the Shop to buy more crate keys!\n\n',
-				encapsuler
+				Global.encapsuler
 			]);
 		}, { onConflict: 'ignore' });
 
