@@ -5,11 +5,11 @@ import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
 import { Shop } from "@src/menu/shop";
 import { Reward } from "@src/misc/reward";
 import { Skill } from "@src/skill";
-import { _, comment, DataPointClass, DataVariable, tellraw, Macro as S, say } from "sandstone";
-import { Progress } from "./skill/progress";
-import { BetterArray } from "@prodigelib/betterarray";
-import { Global } from "@src/global";
-import { Float } from "@prodigelib/floatVar";
+import { comment, tellraw } from "sandstone";
+import { Progress } from "@src/menu/skill/progress";
+import { Preferences } from "@src/menu/preferences";
+import { Tasks } from "./tasks";
+import { Player } from "@src/player";
 
 
 export class Main {
@@ -19,10 +19,14 @@ export class Main {
 
 	static init(g: Gui, p: PageClass) {
 		const shop = new Button("emerald", 21, "§aShop", [], () => g.switch(Shop.getName()));
-		const profile = new Button("player_head", 4, "§bProfile", [], () => { tellraw('@p', '§cNot implemented yet.') });
-		const dailyTask = new Button("wheat", 23, "§cDaily Tasks", [], () => { tellraw('@p', '§cNot implemented yet.') });
+		const preferences = new Button("comparator", 4, "§bPreferences", [], () => g.switch(Preferences.getName()));
+		const tasks = new Button("wheat", 23, "§6Tasks", [], () => {
+			g.switch(Tasks.getName());
+			Player.playSound('block.chest.open');
+		});
+		const activeBoosters = new Button("experience_bottle", 26, "§bActive Boosters");
 
-		p.add(shop, profile, dailyTask, this.skillBts(g, p));
+		p.add(shop, preferences, tasks, this.skillBts(g, p));
 
 		return p;
 	}

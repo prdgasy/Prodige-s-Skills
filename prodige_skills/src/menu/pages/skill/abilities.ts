@@ -73,7 +73,7 @@ export class Abilities {
 					],
 					() => {
 						skill.ability!.toggle();
-						Player.playSound('switch');
+						Player.playSound('tick');
 						_.if(skill.ability!.state, () => Player.send(`Ability §c${skill.ability!.name} §ais now enabled!`, '§a')).
 							else(() => Player.send(`Ability §c${skill.ability!.name} §cis now disabled!`, '§c'));
 					},

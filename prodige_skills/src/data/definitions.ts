@@ -49,19 +49,17 @@ export const crateDefs = {
 export type CrateName = keyof typeof crateDefs;
 
 // SKILL
-type SkillDefType = Omit<SkillOptions, 'name' | 'ability'> & {
-	ability?: { name: string, description: string, trigger: () => void }
-}
+type SkillDefType = Omit<SkillOptions, 'name'>;
 export const skillDefs = {
 	'Mining': {
 		item: 'diamond_pickaxe', starting: 20,
 		description: 'This is a mining description',
-		ability: { name: 'Miner', description: 'Cool miner', trigger: () => say('Miner ability triggered') }
+		ability: { name: 'Miner', description: 'Cool miner', basePrice: 100, trigger: () => say('Miner ability triggered') }
 	},
 	'Foraging': {
 		item: 'oak_sapling', starting: 10,
 		description: 'Chop trees, gather wood, and master the art of forestry.',
-		ability: { name: 'Pro Forager', description: 'Cool Forager', trigger: () => say('Forager ability triggered') }
+		ability: { name: 'Pro Forager', description: 'Cool Forager', basePrice: 150, trigger: () => say('Forager ability triggered') }
 	}
 } satisfies Record<string, SkillDefType>;
 export type SkillName = keyof typeof skillDefs;

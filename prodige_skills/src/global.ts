@@ -1,5 +1,6 @@
-import { Gui } from "@prodigelib/gui";
+import { Button, Gui } from "@prodigelib/gui";
 import { data, Data, defaultNamespace, MCFunction } from "sandstone";
+import { Item } from "./types";
 
 export class Global {
 	public static ns = defaultNamespace.toString();
@@ -29,6 +30,7 @@ export class Global {
 			}
 		});
 	}
+
 
 }
 

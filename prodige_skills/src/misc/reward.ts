@@ -1,8 +1,10 @@
+import { Roman } from "@lib/roman";
 import { BetterArray } from "@prodigelib/betterarray";
 import { ToolName } from "@src/data/definitions";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
 import { Skill } from "@src/skill";
+import { Ability } from "@src/skill/ability";
 import { Macro as $, _, comment, DataPointClass, DataVariable, Score, Variable } from "sandstone";
 import { MacroLiteral } from "sandstone/core";
 
@@ -24,13 +26,19 @@ export class Reward {
 
 	/** Assemble multiple rewards into a string[] */
 	public static join(rewards: Reward[]): string[] {
-		return rewards.map(r => ` §8+ ${r.name}`);
+		return rewards.map(r => ` §8• ${r.name}`);
 	}
 
 	/** Give every rewards inside rewards */
 	public static giveAll(rewards: Reward[]) {
 		comment(`Reward.giveAll::${rewards.map(r => r.name).join(', ')}`);
 		rewards.forEach(r => r.give());
+	}
+
+	public static ability(ability: Ability, tier: number): Reward {
+		return new Reward(
+			`§7Unlock access to §c${ability.name} §8[§c${Roman.get(tier)}§8] • ${tier * 2.5}%»§c${(tier + 1) * 2.5}%`
+			, () => { });
 	}
 
 	public static point(p: number): Reward {

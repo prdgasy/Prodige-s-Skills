@@ -9,6 +9,7 @@ import { Action } from '@src/skill/action';
 import { Criteria } from '@src/types';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Task } from '@src/misc/task';
 
 export class Loader {
 	// ------------------------------------------------------------------------
@@ -69,12 +70,26 @@ export class Loader {
 	// SKILL LEVEL REWARDS
 	// ------------------------------------------------------------------------
 	private static setSkillsRewards() {
+
 		const Mining = Skill.get('Mining');
 		const r1 = Reward.get('§bExpert Sword');
 		const r2 = Reward.point(200);
 		Mining.rewards.set(10, [r1, r2]);
 		Mining.rewards.set(20, [r2, r2]);
 		Mining.rewards.set(21, Reward.rare);
+	}
+
+	public static setAbilityRewards() {
+		for (const skill of Object.values(Skill.skills)) {
+			if (skill.ability) {
+				for (let tier = 1; tier < 10; tier++) {
+					const reward = Reward.ability(skill.ability, tier);
+					const level = tier * 10;
+					if (!skill.rewards.has(level)) skill.rewards.set(level, []);
+					skill.rewards.get(level)?.push(reward);
+				}
+			}
+		}
 	}
 
 	private static setDefaultRewards() {
@@ -102,6 +117,16 @@ export class Loader {
 			[name, new Skill({ ...opt, name })]
 		)) as T;
 	}
+
+	private static tasks(): Task[] {
+		const t: Task[] = [];
+		t.push(new Task('stone', 'Mine stone', 100, 'minecraft.mined:minecraft:stone', [Reward.point(100)]));
+		t.push(new Task('dirt', 'Mine dirt', 1000, 'minecraft.mined:minecraft:dirt', [Reward.point(200)]));
+		t.push(new Task('sand', 'Mine sand', 10000, 'minecraft.mined:minecraft:sand', [Reward.point(300)]));
+
+
+		return t;
+	}
 	// ------------------------------------------------------------------------
 	// INIT
 	// Order matters: each step depends on the ones above it.
@@ -120,5 +145,10 @@ export class Loader {
 		// 4. Skill level and default rewards (need skills and tools)
 		Loader.setDefaultRewards();
 		Loader.setSkillsRewards();
+		Loader.setAbilityRewards();
+
+		// TASKS
+		Task.tasks = Loader.tasks();
+
 	}
 }

@@ -22,7 +22,7 @@ export type SkillOptions = {
 	achievements?: Achievement[],
 	titles?: Title[],
 	rewards?: Map<number, Reward[]>,
-	ability?: { name: string, description: string },
+	ability?: { name: string, description: string, basePrice: number, trigger: () => void },
 	customItems?: Tool[],
 	onEvents?: Action[],
 }
@@ -65,7 +65,7 @@ export class Skill {
 		this.achievement = Objective.create(`${this.name}.achievement`)(`@p`);
 		this.titles = opt.titles ?? [];
 		this.rewards = opt.rewards ?? new Map<number, Reward[]>();
-		this.ability = opt.ability ? new Ability(this, opt.ability.name, opt.ability.description) : undefined;
+		this.ability = opt.ability ? new Ability(this, opt.ability.name, opt.ability.description, opt.ability.basePrice, opt.ability.trigger) : undefined;
 		this.customItems = opt.customItems ?? [];
 		this.onEvents = opt.onEvents ?? [];
 
@@ -105,9 +105,7 @@ export class Skill {
 
 			Reward.cases(this, this.level, (r: Reward[]) => Reward.giveAll(r)); // store it in a storage associated by name; claim later in the menu;
 
-			this.ability?.tierUp();
-			const abilityMsg = this.ability?.tierUpNotif();
-			this.levelUpNotif(abilityMsg);
+			this.levelUpNotif();
 		});
 
 		return fn();
@@ -149,10 +147,11 @@ export class Skill {
 		return show();
 	}
 
-	private levelUpNotif(abilityMsg?: () => void) {
+	private levelUpNotif() {
 		_.if(Skill.levelUpNotifState, () => {
 			const roman = Roman.get(this.level);
 			const prevRoman = Roman.get(this.level['-'](1));
+			const nextRoman = Roman.get(this.level['+'](1));
 
 			Reward.cases(this, this.level, (rewards: Reward[]) => {
 				title('@s').title([{ text: '§aSKILL LEVEL UP!', bold: true }]);
@@ -167,17 +166,17 @@ export class Skill {
 
 				smartTellraw([
 					Global.encapsuler + '\n',
-					$` §e§l${this.name.toUpperCase()} LEVEL UP! §8${this.level['-'](1)} ➜ §e§l${this.level}\n\n`,
-					$` §f§lNext Level Goal:\n`,
-					$`  §8• §7Target: §d${this.name} ${this.level['+'](1)}\n`,
+					$` §e§l${this.name.toUpperCase()} LEVEL UP! §7${prevRoman}➜§e§l${roman} §7§o(${this.level})\n\n`,
+					$` §b§lNext Level:\n`,
+					$`  §8• §7Target: §d${this.name} ${nextRoman} §7§o(${this.level['+'](1)})\n`,
 					$`  §8• §7Progress: §e${progress.show()}%\n`,
 					$`  §8> ${bar.toData()} §e${this.xp.show()}§6/§e${this.goal} XP\n\n`,
-					` §f§lRewards:\n`,
-					...rewards.map(r => ` ${r}\n`)
+					` §a§lRewards:\n`,
+					...rewards.map(r => ` §8• ${r}\n\n`),
+
 				], '@p');
-				abilityMsg ? abilityMsg() : null;
-				tellraw('@p', [Global.encapsuler]);
 			});
+			tellraw('@p', [Global.encapsuler]);
 		});
 	}
 
