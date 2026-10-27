@@ -44,7 +44,7 @@ export class Player {
 		}, { runEvery: '5s' })
 	}
 
-	public static playSound(type: 'error' | 'success' | 'levelup' | 'info') {
+	public static playSound(type: 'error' | 'success' | 'levelup' | 'info' | 'switch') {
 		const soundEvent = {
 			sound: 'entity.ender_pearl.throw' as SoundType,
 			pitch: 1
@@ -54,13 +54,18 @@ export class Player {
 			case 'success': soundEvent.sound = 'block.note_block.pling'; soundEvent.pitch = 2;
 			case 'levelup': soundEvent.sound = 'entity.player.levelup'; soundEvent.pitch = 0;
 			case 'info': soundEvent.sound = 'entity.experience_orb.pickup';
+			case 'switch': soundEvent.sound = 'block.note_block.hat';
 		}
 
 		return _.if(Player.sound).run.execute.at('@p').run.playsound(soundEvent.sound, 'master', '@p', rel(0, 0, 0), 1, soundEvent.pitch);
 	}
 
 	public static throw(msg: string) {
-		return `§c[Prodige Skill] • ${msg}`;
+		return `§c[Prodige Skill] §8• §c${msg}`;
+	}
+
+	public static send(msg: string, color = '§e') {
+		return `${color}[Prodige Skill] §8• ${color}${msg}`;
 	}
 }
 

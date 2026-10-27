@@ -10,13 +10,13 @@ import { Skill } from '@src/skill';
 import { SkillPage, SubSkillPage } from '@src/types';
 import { Actions } from '@src/menu/skill/actions';
 import { Achievements } from '@src/menu/skill/achievements';
-import { StatsAbility } from '@src/menu/skill/statsability';
+import { Abilities } from '@src/menu/skill/abilities';
 export class Menu {
 	public static init() {
 		const Menu = new Gui('§d§lProdige Skills', 'menu', true);
 
 		const pages: (SkillPage | SubSkillPage)[] = [
-			Main, Progress, Actions, Achievements, StatsAbility, Shop, Crates, Items, Boosters, Titles
+			Main, Progress, Actions, Achievements, Abilities, Shop, Crates, Items, Boosters, Titles
 		];
 
 

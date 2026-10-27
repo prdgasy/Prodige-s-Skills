@@ -6,28 +6,17 @@ import { _, DataVariable, Variable } from "sandstone";
 import { Player } from "@src/player";
 import { Text } from "@lib/text";
 
-export class StatsAbility {
+export class Abilities {
 	public static getName(skill: Skill) {
 		return this.name + skill.name;
 	}
 
 	public static init(g: Gui, p: PageClass, skill: Skill) {
 		p.add(() => {
-			const totalGain = new Button(
-				'gold_ingot', 12, '§6§lTotal Earnings',
-				[
-					`Cumulative experience and points earned since you started training ${skill.name}.`,
-					'',
-					"§f§lProgression Summary",
-					$` §8• §7Total Xp: §3${skill.totalXp.show()} Xp`,
-					$` §8• §7Total Points: §e${skill.totalPts} pts`,
-					"",
-					"§8All resources earned across all activities."
-				]
-			)
+
 
 			const info = new Button(
-				"knowledge_book", 15, "§a§lAbility Guide",
+				"knowledge_book", 14, "§a§lAbility Guide",
 				[
 					"§8┃ §7Abilities are §dpassive bonuses §7that enhance",
 					"§8┃ §7your performance as you master each skill.",
@@ -51,7 +40,6 @@ export class StatsAbility {
 				]
 			);
 
-			p.emit(totalGain);
 			p.emit(info);
 
 			if (skill.ability) {
@@ -67,33 +55,34 @@ export class StatsAbility {
 				});
 
 				const unlocked = new Button(
-					'nether_star', 13, `§d§l${skill.ability.name} §8[§d§l${roman}§8]`,
+					'nether_star', 12, $`§c§l${skill.ability.name} §8[§c§l${roman}§8]`,
 					[
 						...description,
 						'',
-						`§d§l┃ ABILITY STATUS`,
-						$`§d┃ §7Status: ${isActive}`,
-						$`§d┃ §7Ability: ${name}`,
+						$`§d§l┃ ABILITY STATUS ${isActive}`,
 						'',
 						'§e§l┃ TIER PROGRESSION',
-						$`§e┃ §7Current Tier: §d${roman}`,
-						$`§e┃ §7Next Tier: §d${skill.ability.name} ${Roman.get(next)}`,
-						'§e┃ §7Improve your skill to unlock',
-						'§e┃ §7stronger ability effects.',
+						$`§e┃ §7Next Tier: §c${skill.ability.name} ${Roman.get(next)}`,
+						...Text.wrap('Improve your skill to unlock stronger ability effects.', '§e┃ §7'),
 						'',
 						'§b§l┃ ACTIVATION',
-						'§b┃ §7Passive ability — works automatically.',
+						'§b┃ §7Abilities works automatically.',
 						'§b┃ §7Toggle it on or off at any time.',
 						'',
-						'§8┃ §eClick to toggle this ability!'
+						'§8┃ §eClick to toggle!'
 					],
-					() => { skill.ability!.toggle(); },
+					() => {
+						skill.ability!.toggle();
+						Player.playSound('switch');
+						_.if(skill.ability!.state, () => Player.send(`Ability §c${skill.ability!.name} §ais now enabled!`, '§a')).
+							else(() => Player.send(`Ability §c${skill.ability!.name} §cis now disabled!`, '§c'));
+					},
 					1,
 					["enchantment_glint_override=1"]
 				);
 
 				const locked = new Button(
-					'charcoal', 13, "§7§oLocked",
+					'charcoal', 12, "§c🔒 Locked",
 					[
 						'§8┃ §7This ability is not yet unlocked.',
 						'',
@@ -119,7 +108,7 @@ export class StatsAbility {
 					.else(() => p.emit(unlocked));
 			} else {
 				p.emit(new Button(
-					'anvil', 13, '§c§oComing Soon!',
+					'anvil', 12, '§c§oComing Soon!',
 					[
 						'§8┃ §7This skill does not have an',
 						'§8┃ §7ability available yet.',

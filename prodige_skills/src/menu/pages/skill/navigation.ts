@@ -1,6 +1,6 @@
 import { Roman } from "@lib/roman";
 import { Float } from "@prodigelib/floatVar";
-import { Button, PageClass, Gui, GuiMacro as $ } from "@prodigelib/gui";
+import { Button, PageClass, Gui, GuiMacro as $, MacroTemplate } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
 import { _, DataPointClass, DataVariable, raw, say, Score, tellraw } from "sandstone";
 import { Item, SubSkillPage } from '@src/types';
@@ -9,11 +9,13 @@ import { Actions } from "./actions";
 import { Bar } from "@lib/bar";
 import { Global } from "@src/global";
 import { Achievements } from "./achievements";
-import { StatsAbility } from "./statsability";
+import { Abilities } from "./abilities";
 import { Main } from "@src/menu/main";
+import { Text } from "@lib/text";
 
 type Tab = {
 	name: string,
+	description: (string | MacroTemplate)[],
 	item: Item,
 	page: SubSkillPage
 	f?: () => void;
@@ -23,14 +25,32 @@ export class Navigation {
 	public static storage = Global.storage.select('navigation');
 	public static generateTabs(g: Gui, p: PageClass, skill: Skill) {
 		const tabs: Tab[] = [
-			{ name: 'Actions', item: 'book', page: Actions, f: () => Actions.index.set(0) },
-			{ name: 'Stats & Ability', item: 'ender_eye', page: StatsAbility },
-			{ name: 'Achievements', item: 'diamond', page: Achievements }
+			{
+				name: '§6Actions', description: [
+					...Text.wrap(`§7View all actions for §e${skill.name} and their corresponding §bXp and §ePoint §7rewards.`),
+					'',
+					"§f§lProgression Summary",
+					$` §8• §7Total Xp: §3${skill.totalXp.show()} Xp`,
+					$` §8• §7Total Points: §e${skill.totalPts} pts`,
+				], item: 'book', page: Actions, f: () => Actions.index.set(0)
+			},
+			{
+				name: '§bAbility',
+				description: Text.wrap(`§7View §e${skill.name}§7’s §bAbility, its current status, and §cTier §7progression.`),
+				item: 'ender_eye',
+				page: Abilities
+			},
+			{
+				name: '§dAchievements',
+				description: Text.wrap(`§7Track your §e${skill.name}§7 §dAchievement §7milestones, progress, and rewards.`),
+				item: 'diamond',
+				page: Achievements
+			}
 		];
 		let slot = 21;
 		for (const t of tabs) {
 			p.emit(new Button(
-				t.item, slot++, t.name, [],
+				t.item, slot++, t.name, t.description,
 				() => {
 					t.f?.();
 					g.switch(t.page.getName(skill))
@@ -46,9 +66,7 @@ export class Navigation {
 		const currentSkill = new Button(
 			skill.item, 20, '§aProgress',
 			[
-				$`§9${skill.name} ${skill.level}`,
-				'',
-				skill.description,
+				...Text.wrap(skill.description),
 				"",
 				"§f§lProgression Overview:",
 				$` §8• §7Target Level: §d${skill.name} ${next}`,
@@ -56,7 +74,7 @@ export class Navigation {
 				$` §8> ${bar} §e${skill.xp.show()}§6/§e${skill.goal}`,
 				"",
 				"§eClick to view!"
-			], () => g.switch(Progress.getName(skill)), $(skill.level), ['!attribute_modifiers', 'enchantment_glint_override=1', 'max_stack_size=99', '!max_damage']
+			], () => g.switch(Progress.getName(skill)), 1, ['!attribute_modifiers', 'enchantment_glint_override=1', '!max_damage']
 		);
 
 		p.emit(currentSkill);

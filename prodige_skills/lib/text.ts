@@ -1,5 +1,5 @@
 export class Text {
-	public static wrap(input: string, wordsPerLine = 5, color = '§7') {
+	public static wrap(input: string, debut = '§7', wordsPerLine = 5) {
 		const words = input.split(' ');
 		const result: string[] = [];
 		let currentLine: string[] = [];
@@ -7,13 +7,13 @@ export class Text {
 		words.forEach(word => {
 			currentLine.push(word);
 			if (currentLine.length == wordsPerLine) {
-				result.push(color + currentLine.join(' '));
+				result.push(debut + currentLine.join(' '));
 				currentLine = [];
 			}
 		});
 
 		if (currentLine.length > 0) {
-			result.push(color + currentLine.join(' '));
+			result.push(debut + currentLine.join(' '));
 		}
 
 		return result;
