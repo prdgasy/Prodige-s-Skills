@@ -2,7 +2,7 @@ import { Gui, PageClass, GuiMacro as $, Button } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
 import { Navigation } from "./navigation";
 import { Roman } from "@lib/roman";
-import { _, DataVariable, Variable } from "sandstone";
+import { _, DataVariable, tellraw } from "sandstone";
 import { Player } from "@src/player";
 import { Text } from "@lib/text";
 
@@ -74,8 +74,8 @@ export class Abilities {
 					() => {
 						skill.ability!.toggle();
 						Player.playSound('tick');
-						_.if(skill.ability!.state, () => Player.send(`Ability §c${skill.ability!.name} §ais now enabled!`, '§a')).
-							else(() => Player.send(`Ability §c${skill.ability!.name} §cis now disabled!`, '§c'));
+						_.if(skill.ability!.state, () => tellraw('@p', Player.send(`Ability §c${skill.ability!.name} §ais now enabled!`, '§a'))).
+							else(() => tellraw('@p', Player.send(`Ability §c${skill.ability!.name} §cis now disabled!`, '§c')));
 					},
 					1,
 					["enchantment_glint_override=1"]
