@@ -1,5 +1,5 @@
 import { Bar } from "@lib/bar";
-import { FloatVar } from "@prodigelib/floatVar";
+import { Float } from "@prodigelib/floatVar";
 import { Button, Gui, PageClass, GuiMacro as $ } from "@prodigelib/gui";
 import { Reward } from "@src/misc/reward";
 import { Skill } from "@src/skill";
@@ -14,14 +14,14 @@ export class Achievements {
 	public static init(g: Gui, p: PageClass, skill: Skill) {
 		p.add(() => {
 			skill.achievements.forEach((a, i) => {
-				const progress = new FloatVar(a.progress)['*='](100)['/='](a.goal);
+				const progress = Float.variable(a.progress)['*='](100)['/='](a.goal);
 				const bar = new Bar(progress.toScore()).toData();
 				const current = new Button(
 					a.item, i, '§e' + a.name,
 					[
 						a.description,
 						``,
-						$`§f§lProgress §e${progress.toData()}%:`,
+						$`§f§lProgress §e${progress.show()}%:`,
 						$`§8 > ${bar} §e${a.progress}§6/§e${a.goal}`,
 						``,
 						`§f§lRewards:`,

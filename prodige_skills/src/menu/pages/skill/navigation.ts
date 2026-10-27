@@ -1,5 +1,5 @@
 import { Roman } from "@lib/roman";
-import { FloatVar } from "@prodigelib/floatVar";
+import { Float } from "@prodigelib/floatVar";
 import { Button, PageClass, Gui, GuiMacro as $ } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
 import { _, DataPointClass, DataVariable, raw, say, Score, tellraw } from "sandstone";
@@ -40,7 +40,7 @@ export class Navigation {
 	}
 
 	public static render(g: Gui, p: PageClass, skill: Skill) {
-		const progress = new FloatVar(skill.xp)['*'](100)['/'](skill.goal);
+		const progress = skill.xp['*'](100)['/'](skill.goal);
 		const bar = new Bar(progress.toScore()).toData();
 		const next = Roman.get(skill.level['+'](1));
 		const currentSkill = new Button(
@@ -52,8 +52,8 @@ export class Navigation {
 				"",
 				"§f§lProgression Overview:",
 				$` §8• §7Target Level: §d${skill.name} ${next}`,
-				$` §8• §7Progress: §e${progress.toData()}%`,
-				$` §8> ${bar} §e${skill.xp}§6/§e${skill.goal}`,
+				$` §8• §7Progress: §e${progress.show()}%`,
+				$` §8> ${bar} §e${skill.xp.toScore()}§6/§e${skill.goal}`,
 				"",
 				"§eClick to view!"
 			], () => g.switch(Progress.getName(skill)), $(skill.level), ['!attribute_modifiers', 'enchantment_glint_override=1', 'max_stack_size=99', '!max_damage']

@@ -9,7 +9,7 @@ import { _, comment, DataPointClass, DataVariable, tellraw, Macro as S, say } fr
 import { Progress } from "./skill/progress";
 import { BetterArray } from "@prodigelib/betterarray";
 import { Global } from "@src/global";
-import { FloatVar } from "@prodigelib/floatVar";
+import { Float } from "@prodigelib/floatVar";
 
 
 export class Main {
@@ -35,7 +35,7 @@ export class Main {
 				comment(`skill_button::${skill.name}`);
 
 				const s = slot++;
-				const progress = new FloatVar(skill.xp["*"](100))["/"](skill.goal);
+				const progress = skill.xp["*"](100)["/"](skill.goal);
 				const nLvl = skill.level["+"](1);
 				const lvlRoman = Roman.get(skill.level);
 				const nextRoman = Roman.get(nLvl);
@@ -50,8 +50,8 @@ export class Main {
 						"",
 						"§f§lNext Level Goal:",
 						$` §8• §7Target: §d${skill.name} ${nextRoman}`,
-						$` §8• §7Progress: §e${progress.toData()}%`,
-						$` §8> ${bar} §e${skill.xp}§6/§e${skill.goal}`,
+						$` §8• §7Progress: §e${progress.show()}%`,
+						$` §8> ${bar} §e${skill.xp.show()}§6/§e${skill.goal}`,
 						"",
 						$`§f§l${skill.name} ${nextRoman} Rewards:`,
 						...rewards.map(r => ` §8+§e ${r.name}`),

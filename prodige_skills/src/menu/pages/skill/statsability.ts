@@ -19,7 +19,7 @@ export class StatsAbility {
 					`Cumulative experience and points earned since you started training ${skill.name}.`,
 					'',
 					"§f§lProgression Summary",
-					$` §8• §7Total Xp: §3${skill.totalXp} Xp`,
+					$` §8• §7Total Xp: §3${skill.totalXp.show()} Xp`,
 					$` §8• §7Total Points: §e${skill.totalPts} pts`,
 					"",
 					"§8All resources earned across all activities."

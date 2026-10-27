@@ -1,5 +1,5 @@
 import { _, execute, Label, MCFunction, Objective, playsound, rel, tellraw } from "sandstone";
-import { BoosterClass } from "./misc/booster";
+import { Booster } from "./misc/booster";
 import { Skill } from "./skill";
 import { Action } from "./skill/action";
 
@@ -7,7 +7,7 @@ type SoundType = Parameters<typeof playsound>[0];
 export class Player {
 	static hasJoined = Label('player.joined')('@p');
 	static pts = Objective.create('pts')('@p');
-	static boosterScore = new BoosterClass();
+	static boosterScore = new Booster();
 	static sound = Label('player.sound')('@p');
 	static onEventNotif = Label('player.on_event_notif')('@p');
 	static achievementNotif = Label('player.achievement_notif')('@p');

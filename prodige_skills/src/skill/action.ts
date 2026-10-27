@@ -3,7 +3,7 @@ import { Player } from "@src/player";
 import { Skill } from "@src/skill";
 import { Criteria, Item } from "@src/types";
 import { MCFunction, Objective, Score, Variable, _, execute, say } from "sandstone";
-
+import { Float } from "@prodigelib/floatVar";
 export class Action {
 	public parent: Skill;
 	public name: string;
@@ -12,10 +12,10 @@ export class Action {
 	public pts: number;
 
 	public totalExecuted: Score;
-	public totalXp: Score;
+	public totalXp: Float;
 	public totalPts: Score;
 
-	public static addedXp = Variable();
+	public static addedXp = Float.variable();
 	public static addedPts = Variable();
 
 	private criteria: Criteria;
@@ -33,13 +33,13 @@ export class Action {
 
 		this.watcher = Objective.create(`${this.parent.name}.event.${this.name.replace(/\s+/g, '')}`, this.criteria)('@p');
 		this.totalExecuted = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}`, this.criteria)('@p');
-		this.totalXp = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}.xp`, 'dummy')('@p');
+		this.totalXp = Float.objective(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}.xp`)('@p');
 		this.totalPts = Objective.create(`${this.parent.name}.total_event.${this.name.replace(/\s+/g, '')}.pts`, 'dummy')('@p');
 	}
 
 	private trigger() {
 		const fn = MCFunction(`on_event/trigger/${Global.toResource(this.name)}`, () => {
-			Action.addedXp.set(Player.boosterScore.xp["*"](this.xp)["*"](this.watcher));
+			Action.addedXp.set(Float.variable(this.xp)['*'](Player.boosterScore.xp)["*"](this.watcher));
 			Action.addedPts.set(Player.boosterScore.point["*"](this.pts)["*"](this.watcher));
 
 			this.totalPts['+='](Action.addedPts);

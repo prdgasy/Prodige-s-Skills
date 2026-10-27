@@ -3,7 +3,7 @@ import { _, DataVariable, Objective, say, tellraw, Variable } from "sandstone";
 import { Skill } from "@src/skill";
 import { Reward } from "@src/misc/reward";
 import { Roman } from "@lib/roman";
-import { FloatVar } from "@prodigelib/floatVar";
+import { Float } from "@prodigelib/floatVar";
 import { Bar } from "@lib/bar";
 import { Navigation } from "./navigation";
 
@@ -21,7 +21,7 @@ export class Progress {
 				const processedLevel = Progress.index['*'](18)['+'](slot)['+'](1);
 				_.if(processedLevel['<='](100), () => {
 					const roman = Roman.get(processedLevel);
-					const progress = new FloatVar(skill.xp["*"](100))["/"](skill.goal);
+					const progress = skill.xp["*"](100)["/"](skill.goal);
 					const bar = new Bar(progress.toScore());
 					const count = Variable(processedLevel);
 					_.if(count['=='](100), () => count.set(1));
@@ -43,8 +43,8 @@ export class Progress {
 							[
 								G`§9${skill.name} ${processedLevel}`,
 								"",
-								G`§f§lProgress: §e${progress.toData()}%`,
-								G` §8> ${bar.toData()} §e${skill.xp}§6/§e${skill.goal}`,
+								G`§f§lProgress: §e${progress.show()}%`,
+								G` §8> ${bar.toData()} §e${skill.xp.show()}§6/§e${skill.goal}`,
 								"",
 								"§f§lRewards: ",
 								...rewardLore,

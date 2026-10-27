@@ -1,5 +1,5 @@
 import { BetterArray } from "@prodigelib/betterarray";
-import { FloatVar } from "@prodigelib/floatVar";
+import { Float } from "@prodigelib/floatVar";
 import { CrateName } from "@src/data/definitions";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
@@ -48,7 +48,7 @@ export class Crate {
 			let total = 0;
 			this.rewards.forEach(w => total += w);
 			_.for([0, n], 'iterate', () => {
-				const roll = FloatVar.random()['*'](total);
+				const roll = Float.random()['*'](total);
 				const done = Variable(0);
 
 				let acc = 0;

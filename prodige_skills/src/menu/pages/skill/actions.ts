@@ -20,9 +20,9 @@ export class Actions {
 				_.if(Actions.index['=='](page), () => {
 					while (slot < 17 && i < skill.onEvents.length) {
 						const event = skill.onEvents[i++];
-						const xpGained = event.totalExecuted["*"](event.xp); // may be wrong because of boosters
-						const ptsGained = event.totalExecuted["*"](event.pts);
-						const contribution = xpGained["*"](100)["/"](6); // set total xp;
+						const xpGained = event.totalXp; // may be wrong because of boosters
+						const ptsGained = event.totalPts;
+						const contribution = xpGained["*"](100)["/"](skill.totalXp); // set total xp;
 						p.emit(new Button(
 							event.item, slot++, `${event.name}`,
 							[
@@ -30,9 +30,9 @@ export class Actions {
 								"§f§lStatistics",
 								$` §8• §7Skill Action: §b${event.name}`,
 								$` §8• §7Times Executed: §a${event.totalExecuted} §7times`,
-								$` §8• §7Total Xp Generated: §3${xpGained} Xp`,
+								$` §8• §7Total Xp Generated: §3${xpGained.show()} Xp`,
 								$` §8• §7Total Points Earned: §e${ptsGained} Pts`,
-								$` §8• §7Skill Impact: §d${contribution}% §7of all Xp`
+								$` §8• §7Skill Impact: §d${contribution.show()}% §7of all Xp`
 							],
 						))
 					}

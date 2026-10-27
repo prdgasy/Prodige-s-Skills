@@ -1,7 +1,7 @@
 import { Roman } from "@lib/roman";
 import { Text } from "@lib/text";
 import { macro as $, smartTellraw } from "@prodigelib/easymacro";
-import { FloatVar } from "@prodigelib/floatVar";
+import { Float } from "@prodigelib/floatVar";
 import { Player } from "@src/player";
 import { _, Label, MCFunction, NonEmptyString, Objective, playsound, say, Score, tellraw } from "sandstone";
 import { EntityLabel } from "sandstone/variables";
@@ -89,10 +89,7 @@ export class Ability {
 
 	public roll() {
 		const fn = MCFunction(`ability/roll/${Global.toResource(this.name)}`, () => {
-			const roll = FloatVar.random(0, 0, 100);
-
-			tellraw('@p', ['§8[§d§lABILITY ROLL§8] §7You rolled §d', roll.toData(), '§7!']);
-			_.if(_.and(this.state, roll['<'](50)), () => { // < this.buff
+			_.if(_.and(this.state, Float.random(0, 0, 100)['<='](this.buff)), () => {
 				this.trigger();
 			})
 		}, { onConflict: 'ignore' })
