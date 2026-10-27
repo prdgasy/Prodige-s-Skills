@@ -2,7 +2,7 @@ import { Global } from "@src/global";
 import { Player } from "@src/player";
 import { Skill } from "@src/skill";
 import { Criteria, Item } from "@src/types";
-import { MCFunction, Objective, Score, Variable, _, execute, say } from "sandstone";
+import { MCFunction, Objective, Score, Variable, _, execute, say, tellraw } from "sandstone";
 import { Float } from "@prodigelib/floatVar";
 export class Action {
 	public parent: Skill;

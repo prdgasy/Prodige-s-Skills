@@ -125,9 +125,11 @@ export class Skill {
 			const added = xpAdded.show();
 
 			_.with([key, roman, xp, this.goal, added, pointAdded, progress, round], () => {
-				tellraw('@p', ['started showing: ', this.name, ', key: ', key])
-				const id = S`prodige_skills.${this.resource}.${key}`
+				const id = S`prodige_skills.${this.resource}.${key}`;
+
 				S.bossbar.add(id, S`"§d${this.name} ${roman} §8| §e${xp}§6/§e${this.goal} Xp §8• §7${progress}% §8| §b+${added} Xp §8• §e+${pointAdded} Pts"`);
+				_.if(this.level['=='](0), () => S.bossbar.set(id).name(`§dUnlocking ${this.name}...`))
+
 				S.bossbar.set(id).max(this.goal);
 				S.bossbar.set(id).value(S`${round}`);
 				S.bossbar.set(id).color('yellow');
@@ -182,6 +184,8 @@ export class Skill {
 	public firstJoin() {
 		this.level.set(0);
 		this.xp.set(0);
+		this.totalXp.set(0);
+		this.totalPts.set(0);
 		this.goal.set(this.starting);
 
 		this.ability?.firstJoin();

@@ -49,7 +49,7 @@ export class Loader {
 		for (const row of onEventsData) {
 			try {
 				const skill = Skill.get(row.skillName as SkillName);
-				skill.onEvents.push(new Action(skill, row.name, row.item as any, parseInt(row.Xp, 10) || 0, parseInt(row.pts, 10) || 0, row.criteria as Criteria));
+				skill.onEvents.push(new Action(skill, row.name, row.item as any, parseFloat(row.Xp) || 0, parseInt(row.pts, 10) || 0, row.criteria as Criteria));
 			} catch (e) { throw Error(`${e}: Skill ${row.skillName} isn't define inside loader.ts`); }
 		}
 

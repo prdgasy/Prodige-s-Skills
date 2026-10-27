@@ -31,6 +31,7 @@ export class Player {
 
 				this.onEventNotif.add();
 				this.achievementNotif.add();
+				Skill.levelUpNotifState.add();
 
 				this.sound.add();
 
