@@ -35,9 +35,14 @@ export class Reward {
 		rewards.forEach(r => r.give());
 	}
 
+	public static canGiveReward(callback: () => void) {
+		return _.if(Player.isInvFull(), () => Player.throw("You don't have enough space in your inventory!"))
+			.else(() => callback());
+	}
+
 	public static ability(ability: Ability, tier: number): Reward {
 		return new Reward(
-			`§7Unlock access to §c${ability.name} §8[§c${Roman.get(tier)}§8] • ${tier * 2.5}%»§c${(tier + 1) * 2.5}%`
+			`§dUpgrade avaible: §c§l${ability.name} §8[§c§l${Roman.get(tier)}§8] • ${(tier - 1) * 2.5}%»§c${tier * 2.5}%`
 			, () => { });
 	}
 

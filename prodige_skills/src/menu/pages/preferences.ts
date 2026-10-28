@@ -30,7 +30,7 @@ export class Preferences {
 			},
 			{
 				name: 'Action Notifications',
-				description: 'Show a progression bar when you complete a skill actions.',
+				description: 'Show a progression bar when you do a skill actions.',
 				item: 'book',
 				label: Player.onEventNotif
 			},
@@ -47,10 +47,10 @@ export class Preferences {
 				label: Skill.levelUpNotifState
 			},
 			{
-				name: 'Tasks',
-				description: 'Track and randomly assign a task.',
+				name: 'Tasks Notification',
+				description: 'Show a progression bar when you progress a Task.',
 				item: 'wheat',
-				label: Player.taskProgress
+				label: Player.taskNotif
 			}
 		];
 
@@ -74,7 +74,7 @@ export class Preferences {
 					],
 					() => {
 						preference.label.toggle();
-						Player.playSound('tick');
+						Player.playSound('tick', 2);
 					}
 				));
 			}

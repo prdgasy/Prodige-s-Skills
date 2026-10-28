@@ -24,11 +24,11 @@ export class Actions {
 						const ptsGained = event.totalPts;
 						const contribution = xpGained["*"](100)["/"](skill.totalXp); // set total xp;
 						p.emit(new Button(
-							event.item, slot++, `${event.name}`,
+							event.item, slot++, `§6${event.name} §8| §b${event.xp} Xp §8• §e${event.pts} Pts`,
 							[
 								"",
-								"§f§lStatistics",
-								$` §8• §7Skill Action: §b${event.name}`,
+								"§f§lStatistics:",
+								` §8• §7Skill Action: §b${event.name}`,
 								$` §8• §7Times Executed: §a${event.totalExecuted} §7times`,
 								$` §8• §7Total Xp Generated: §3${xpGained.show()} Xp`,
 								$` §8• §7Total Points Earned: §e${ptsGained} Pts`,

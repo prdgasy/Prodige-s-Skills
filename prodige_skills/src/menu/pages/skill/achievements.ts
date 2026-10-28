@@ -5,6 +5,9 @@ import { Reward } from "@src/misc/reward";
 import { Skill } from "@src/skill";
 import { _, say } from "sandstone";
 import { Navigation } from "./navigation";
+import { Text } from "@lib/text";
+import { Player } from "@src/player";
+import { Achievement } from "@src/skill/achievement";
 
 export class Achievements {
 	public static getName(skill: Skill) {
@@ -19,32 +22,51 @@ export class Achievements {
 				const current = new Button(
 					a.item, i, '§e' + a.name,
 					[
-						a.description,
+						...Text.wrap(a.description),
 						``,
-						$`§f§lProgress §e${progress.show()}%:`,
+						$`§f§lProgress: §e${progress.show()}%`,
 						$`§8 > ${bar} §e${a.progress}§6/§e${a.goal}`,
 						``,
 						`§f§lRewards:`,
-						...Reward.join(a.reward),
+						...Reward.join(a.rewards),
 						``,
 						`§e• IN PROGRESS`
-					], () => { }, 1, ['!attribute_modifiers', 'enchantment_glint_override=1']
+					], () => { Player.playSound('tick'); Player.send('This achievement is still in progress.'); }, 1, ['!attribute_modifiers', 'enchantment_glint_override=1']
 				);
 
 				const done = new Button(
-					a.item, i, '§a' + a.name,
+					a.item, i, `§d${a.name}`,
 					[
-						a.description,
+						...Text.wrap(a.description),
 						``,
 						$`§f§lRequirement:`,
 						$` §8• §7Target: §a${a.goal} §8(Done)`,
 						``,
 						`§f§lRewards:`,
-						...Reward.join(a.reward),
+						...Reward.join(a.rewards),
 						``,
 						`§a✔ COMPLETED`
-					], () => { }, 1, ['!attribute_modifiers']
+					], () => {
+						Player.throw("This achievement's rewards has already been claimed!");
+					}, 1, ['!attribute_modifiers']
 				);
+
+				const toClaim = new Button(
+					a.item, i, `§a${a.name} §8• §a§lCLAIM`,
+					[
+						...Text.wrap(a.description),
+						``,
+						$`§f§lRequirement:`,
+						$` §8• §7Target: §a${a.goal} §8(Done)`,
+						``,
+						`§f§lRewards:`,
+						...Reward.join(a.rewards),
+						``,
+						`§eClick to claim!`
+					], () => {
+						a.claim();
+					}, 1, ['!attribute_modifiers']
+				)
 
 				const locked = new Button(
 					'crying_obsidian', i, `§8Locked Step #${i + 1}`,
@@ -57,7 +79,10 @@ export class Achievements {
 					], () => { }
 				);
 
-				_.if(skill.achievement[">"](i), () => p.emit(done))
+				_.if(skill.achievement[">"](i), () => {
+					_.if(a.claimed, () => p.emit(done))
+						.else(() => p.emit(toClaim));
+				})
 					.elseIf(skill.achievement["=="](i), () => p.emit(current))
 					.else(() => p.emit(locked));
 			});

@@ -25,18 +25,14 @@ export class Buyable extends Reward {
 			tellraw("@p", `§cYou don't have enough points to buy [${this.name}§c]!`);
 			Player.playSound('error');
 		})
-			.elseIf(this.isInvFull(), () => {
+			.elseIf(Player.isInvFull(), () => {
 				tellraw("@p", "§cYour inventory is full!");
 				Player.playSound('error');
 			})
 			.else(() => {
 				Player.pts['-='](this.price);
 				this.give();
-				Player.playSound('success');
+				Player.playSound('success', 2);
 			});
-	}
-
-	public isInvFull(): ConditionClass {
-		return Variable(Data('entity', '@p', 'Inventory'))['>'](28);
 	}
 }

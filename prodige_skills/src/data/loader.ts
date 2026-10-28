@@ -82,7 +82,7 @@ export class Loader {
 	public static setAbilityRewards() {
 		for (const skill of Object.values(Skill.skills)) {
 			if (skill.ability) {
-				for (let tier = 1; tier < 10; tier++) {
+				for (let tier = 1; tier <= 10; tier++) {
 					const reward = Reward.ability(skill.ability, tier);
 					const level = tier * 10;
 					if (!skill.rewards.has(level)) skill.rewards.set(level, []);
@@ -139,17 +139,19 @@ export class Loader {
 		// 1. Skills (needed by the CSV data and the rewards)
 		Skill.skills = Loader.skills<Record<SkillName, Skill>>();
 
-		// 2. CSV data (attached to the skills)
-		Loader.loadDataFromCSV(path.join(__dirname, 'csv'));
-
-		// 3. Tools, then crates (crates look their rewards up among the tools)
+		// 2. Tools, then crates (crates look their rewards up among the tools)
 		Tool.tools = Loader.tools<Record<ToolName, Tool>>();
 		Crate.crates = Loader.crates<Record<CrateName, Crate>>();
 
-		// 4. Skill level and default rewards (need skills and tools)
+		// 3. Default rewards (needed when achievements are created from CSV)
 		Loader.setDefaultRewards();
+
+		// 5. Skill level rewards
 		Loader.setSkillsRewards();
 		Loader.setAbilityRewards();
+
+		// 4. CSV data (attached to the skills)
+		Loader.loadDataFromCSV(path.join(__dirname, 'csv'));
 
 		// TASKS
 		Task.tasks = Loader.tasks();

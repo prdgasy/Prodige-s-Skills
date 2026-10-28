@@ -22,7 +22,7 @@ export class Main {
 		const preferences = new Button("comparator", 4, "§bPreferences", [], () => g.switch(Preferences.getName()));
 		const tasks = new Button("wheat", 23, "§6Tasks", [], () => {
 			g.switch(Tasks.getName());
-			Player.playSound('block.chest.open');
+			Player.playSound('block.chest.open', 0);
 		});
 		const activeBoosters = new Button("experience_bottle", 26, "§bActive Boosters");
 

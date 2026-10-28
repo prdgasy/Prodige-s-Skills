@@ -69,7 +69,7 @@ export class Task {
 	private onEvent() {
 		const fn = MCFunction(`misc/task/on_event/${this.id}`, () => {
 			this.executed['+='](this.watcher);
-			this.display();
+			_.if(Player.taskNotif, () => this.display());
 			_.if(this.executed['>='](this.goal), () => {
 				this.finished();
 			})
@@ -89,7 +89,7 @@ export class Task {
 		Reward.giveAll(this.rewards);
 		Player.task(this.id, 'claimed').add();
 		Player.task(this.id, 'done').remove();
-		Player.playSound('succes2');
+		Player.playSound('levelup', 2);
 		smartTellraw([
 			Global.encapsuler + '\n',
 			` §6§lTASK COMPLETE!\n\n`,
@@ -115,7 +115,7 @@ export class Task {
 	public static roll() {
 		const fn = MCFunction('misc/task/roll', () => {
 			Player.firstTask.add();
-			Player.playSound('success');
+			Player.playSound('success', 2);
 			this.reset();
 			const assigned: Score[] = [];
 			const taskCount = Task.tasks.length;
@@ -129,9 +129,10 @@ export class Task {
 						_.if(roll['>='](taskCount), () => roll.set(0));
 					});
 				}
+
 				_.with([roll], () => {
-					Player.addTask(roll, "progress");
-					Player.addTask(roll, "assigned");
+					Player.addMacroTask(roll, "progress");
+					Player.addMacroTask(roll, "assigned");
 				});
 				assigned.push(Variable(roll));
 			}
@@ -154,7 +155,7 @@ export class Task {
 
 	public static watch() {
 		return MCFunction('misc/task/watch', () => {
-			execute.as('@a').run(() => _.if(Player.taskProgress, () => {
+			execute.as('@a').run(() => {
 				for (const task of Task.tasks) {
 					_.if(task.watcher['>'](0), () => {
 						_.if(Player.task(task.id, 'progress'), () => {
@@ -163,7 +164,7 @@ export class Task {
 						task.watcher.reset();
 					})
 				}
-			}));
+			});
 		}, { runEvery: '5s' });
 	}
 

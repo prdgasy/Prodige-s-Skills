@@ -16,7 +16,7 @@ export class Ability {
 	public price: Score;
 	public basePrice: number;
 	public tier: Score;
-	public buff: Score;
+	public buff: Float;
 	public trigger: () => void;
 	public state: EntityLabel;
 
@@ -26,7 +26,7 @@ export class Ability {
 		this.basePrice = basePrice;
 		this.description = description;
 		this.tier = Objective.create(`${this.skill.name}.ability.tier`)('@p');
-		this.buff = Objective.create(`${this.skill.name}.ability.buff`)('@p');
+		this.buff = Float.objective(`${this.skill.name}.ability.buff`)('@p');
 		this.state = Label(`${this.skill.name}.ability.toggle` as NonEmptyString)('@p');
 		this.trigger = trigger;
 		this.price = Objective.create(`${this.skill.name}.ability.price`)('@p');
@@ -45,7 +45,6 @@ export class Ability {
 		const state = DataVariable('§aEnabled');
 		_.if(_.not(this.state), () => state.set('§cDisabled'));
 
-		Player.playSound('success');
 		Player.smartSend(E`§c${this.name} §eis now ${state}.`);
 	}
 
@@ -61,7 +60,7 @@ export class Ability {
 
 	public tierUp() {
 		this.tier["++"];
-		this.buff.add(5);
+		this.buff.add(2.5);
 		Player.pts['-='](this.price);
 
 		this.price['*='](2);
@@ -82,11 +81,10 @@ export class Ability {
 			$`§c§l${this.name} §8[§7${romanPreviousTier}➜§c§l${romanTier}§8]\n`,
 			'',
 			...Text.wrap(this.description, ` §7§o`),
-			$` §dBonus: §7${this.buff['-'](5)}%»§c§l${this.buff}%`,
-
+			$` §dBonus: §8${this.buff['-'](2.5).show()}%»§c${this.buff.show()}%`,
 			$`§b§lNext Upgrade: §c${this.name} §8[§7${romanTier}➜§c§l${Roman.get(this.tier['+'](1))}§8]\n`,
 			$` • §7Price: §e${this.price} Pts\n`,
-			$` • §7Bonus: §7${this.buff}%»§c§l${this.buff['+'](5)}%`,
+			$` • §7Bonus: §7${this.buff.show()}%»§c§l${this.buff['+'](2.5).show()}%`,
 			Global.encapsuler
 		], '@p');
 	}
@@ -100,7 +98,7 @@ export class Ability {
 
 	public roll() {
 		const fn = MCFunction(`ability/roll/${Global.toResource(this.name)}`, () => {
-			_.if(_.and(this.state, Float.random(0, 0, 100)['<='](this.buff)), () => {
+			_.if(_.and(this.state, Float.random(1, 0, 100)['<='](this.buff)), () => {
 				this.trigger();
 			})
 		}, { onConflict: 'ignore' })

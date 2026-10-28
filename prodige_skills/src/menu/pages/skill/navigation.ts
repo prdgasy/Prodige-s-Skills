@@ -29,14 +29,14 @@ export class Navigation {
 				name: '§6Actions', description: [
 					...Text.wrap(`§7View all actions for §e${skill.name} and their corresponding §bXp and §ePoint §7rewards.`),
 					'',
-					"§f§lProgression Summary",
+					"§f§lProgression Summary:",
 					$` §8• §7Total Xp: §3${skill.totalXp.show()} Xp`,
 					$` §8• §7Total Points: §e${skill.totalPts} pts`,
 				], item: 'book', page: Actions, f: () => Actions.index.set(0)
 			},
 			{
 				name: '§bAbility',
-				description: Text.wrap(`§7View §e${skill.name}§7’s §bAbility, its current status, and §cTier §7progression.`),
+				description: Text.wrap(`§7View §e${skill.name}§7's §bAbility, its current status, and §cTier §7progression.`),
 				item: 'ender_eye',
 				page: Abilities
 			},
