@@ -126,7 +126,7 @@ export class Skill {
 				const id = S`prodige_skills.${this.resource}.${key}`;
 
 				S.bossbar.add(id, S`"§d${this.name} ${roman} §8| §e${xp}§6/§e${this.goal} Xp §8• §7${progress}% §8| §b+${added} Xp §8• §e+${pointAdded} Pts"`);
-				_.if(this.level['=='](0), () => S.bossbar.set(id).name(`§dUnlocking ${this.name}...`))
+				_.if(this.level['=='](0), () => S.bossbar.set(id).name(`§aUnlocking ${this.name}...`))
 
 				S.bossbar.set(id).max(this.goal);
 				S.bossbar.set(id).value(S`${round}`);

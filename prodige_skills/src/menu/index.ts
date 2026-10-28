@@ -13,6 +13,7 @@ import { Achievements } from '@src/menu/skill/achievements';
 import { Abilities } from '@src/menu/skill/abilities';
 import { Preferences } from './pages/preferences';
 import { Tasks } from './pages/tasks';
+import { targetParser } from 'sandstone/variables';
 
 export class Menu {
 	public static init() {
@@ -62,6 +63,13 @@ export class Menu {
 		}
 		p.add(...btns);
 		return btns;
+	}
+
+	public static back(g: Gui, target: { getName: () => string }) {
+		return new Button(
+			'arrow', 18, '§cBack', [],
+			() => g.switch(target.getName())
+		);
 	}
 
 

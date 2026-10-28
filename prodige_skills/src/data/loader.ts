@@ -120,9 +120,13 @@ export class Loader {
 
 	private static tasks(): Task[] {
 		const t: Task[] = [];
-		t.push(new Task('stone', 'Mine stone', 100, 'minecraft.mined:minecraft:stone', [Reward.point(100)]));
-		t.push(new Task('dirt', 'Mine dirt', 1000, 'minecraft.mined:minecraft:dirt', [Reward.point(200)]));
-		t.push(new Task('sand', 'Mine sand', 10000, 'minecraft.mined:minecraft:sand', [Reward.point(300)]));
+		t.push(new Task('stone', 'Mine stone', 100, 'minecraft.mined:minecraft.stone', [Reward.point(100)]));
+		t.push(new Task('dirt', 'Mine dirt', 1000, 'minecraft.mined:minecraft.dirt', [Reward.point(200)]));
+		t.push(new Task('sand', 'Mine sand', 10000, 'minecraft.mined:minecraft.sand', [Reward.point(300)]));
+
+		t.push(new Task('brick', 'Mine stone', 100, 'minecraft.mined:minecraft.stone', [Reward.point(100)]));
+		t.push(new Task('diamond', 'Mine dirt', 1000, 'minecraft.mined:minecraft.dirt', [Reward.point(200)]));
+		t.push(new Task('sandstone', 'Mine sand', 10000, 'minecraft.mined:minecraft.sand', [Reward.point(300)]));
 
 
 		return t;

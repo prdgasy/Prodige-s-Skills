@@ -90,7 +90,7 @@
 
     "@prodigelib/easymacro": ["@prodigelib/easymacro@github:prdgasy/easy-macro#4f92548", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-easy-macro-4f92548", "sha512-Nr8SUb8NwbRQS6do6k8FBS4VNfB9LrVJb1rifMztWero+3wv/wsDcgkT8wzj5YYb0vkPHuWlmJFpY6n14uRHNw=="],
 
-    "@prodigelib/floatVar": ["@prodigelib/floatVar@github:prdgasy/floatvar#2ef7a0b", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-floatVar-2ef7a0b", "sha512-k/0CGFl4R6upv91qI9iV4jDEpsfEgYoWv/Xv0LK1QRzYxe3y3qI3qrGZpcRAVugieksCNn5ZGCrEjPaFzo+FPw=="],
+    "@prodigelib/floatVar": ["@prodigelib/floatVar@github:prdgasy/floatvar#b1d02fb", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-floatVar-b1d02fb", "sha512-LbKw9iOwWpXmCVOQiQ8oaxzKyP/wWfnzBleDv9mmVTZ2GusrETmRPyNf2BPt7Qp1MoiCJYKPGjJeqRhW7yA78Q=="],
 
     "@prodigelib/gui": ["@prodigelib/gui@github:prdgasy/prodigelib-gui#768c1ef", { "dependencies": { "@prodigelib/cjmap": "github:prdgasy/cjmap", "@prodigelib/uninstaller": "github:prdgasy/uninstaller", "sandstone": "~1.2.36" } }, "prdgasy-prodigelib-gui-768c1ef", "sha512-EB3nVccGG/QxvUFiz1Q68PfXtbIr7YALzR0wm3gPNIWRNCyxFfG30AkMYQeUPPTnLaOjy9X6qOvc2f3Tz5A8YQ=="],
 

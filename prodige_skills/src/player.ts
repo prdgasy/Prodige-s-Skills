@@ -5,6 +5,7 @@ import { Action } from "./skill/action";
 import { Task } from "./misc/task";
 import { FinalCommandOutput } from "sandstone/commands";
 import { EntityLabel } from "sandstone/variables";
+import { macro as E, Macroable, smartTellraw } from "@prodigelib/easymacro";
 
 type SoundType = Parameters<typeof playsound>[0];
 export class Player {
@@ -52,7 +53,7 @@ export class Player {
 		}, { runEvery: '5s' })
 	}
 
-	public static playSound(sound: 'error' | 'success' | 'levelup' | 'info' | 'tick' | SoundType) {
+	public static playSound(sound: 'error' | 'success' | 'succes2' | 'levelup' | 'info' | 'tick' | SoundType) {
 		const soundEvent = {
 			sound: 'entity.ender_pearl.throw' as SoundType,
 			pitch: 1
@@ -60,6 +61,7 @@ export class Player {
 
 		switch (sound) {
 			case 'success': soundEvent.sound = 'block.note_block.pling'; soundEvent.pitch = 2;
+			// case 'success2': soundEvent.sound = 'entity.player.levelup'; soundEvent.pitch = 2;
 			case 'levelup': soundEvent.sound = 'entity.player.levelup'; soundEvent.pitch = 0;
 			case 'info': soundEvent.sound = 'entity.experience_orb.pickup';
 			case 'tick': soundEvent.sound = 'block.note_block.hat';
@@ -68,12 +70,23 @@ export class Player {
 		return _.if(Player.sound).run.execute.at('@p').run.playsound(soundEvent.sound, 'master', '@p', rel(0, 0, 0), 1, soundEvent.pitch);
 	}
 
+	public static smartThrow(msg: string) {
+		Player.playSound('error');
+		return smartTellraw([
+			E`§c[Prodige Skill] §8• §c${msg}`
+		], '@p');
+	}
+
 	public static throw(msg: string) {
-		return `§c[Prodige Skill] §8• §c${msg}`;
+		Player.playSound('error');
+		return tellraw('@p', `§c[Prodige Skill] §8• §c${msg}`);
 	}
 
 	public static send(msg: string, color = '§e') {
-		return `${color}[Prodige Skill] §8• ${color}${msg}`;
+		return tellraw('@p', `${color}[Prodige Skill] §8• ${color}${msg}`);
+	}
+	public static smartSend(msg: string, color = '§e') {
+		return smartTellraw([E`${color}[Prodige Skill] §8• ${color}${msg}`], '@p');
 	}
 
 	public static removeTask(id: Score, type: 'progress' | 'done' | 'claimed' | 'assigned') {
@@ -81,7 +94,7 @@ export class Player {
 	}
 
 	public static addTask(id: Score, type: 'progress' | 'done' | 'claimed' | 'assigned') {
-		return $.tag('@p').add($`task.${id}.${type}`);
+		return $.tag('@p').add($`prodige_skills.player.task.${id}.${type}`);
 	}
 
 	public static task(id: number, type: 'progress' | 'done' | 'claimed' | 'assigned') {

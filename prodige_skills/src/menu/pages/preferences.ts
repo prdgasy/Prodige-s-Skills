@@ -5,6 +5,8 @@ import { Skill } from "@src/skill";
 import { Item } from "@src/types";
 import { _, DataVariable } from "sandstone";
 import { EntityLabel } from "sandstone/variables";
+import { Menu } from "..";
+import { Main } from "./main";
 
 type Switch = {
 	name: string,
@@ -53,10 +55,10 @@ export class Preferences {
 		];
 
 		p.add(() => {
-			let slot = 10;
+			let slot = 11;
 			for (const preference of switches) {
-				const status = DataVariable('§a[ON]');
-				_.if(_.not(preference.label), () => status.set('§c[OFF]'));
+				const status = DataVariable('§a§l[ON]');
+				_.if(_.not(preference.label), () => status.set('§c§l[OFF]'));
 
 				p.emit(new Button(
 					preference.item,
@@ -66,7 +68,7 @@ export class Preferences {
 
 						...Text.wrap(`§7${preference.description}`),
 						'',
-						$`§7Status: §f• ${status}`,
+						$`§fStatus §8• ${status}`,
 						'',
 						'§eClick to toggle!'
 					],
@@ -77,7 +79,7 @@ export class Preferences {
 				));
 			}
 		});
-
+		p.add(Menu.back(g, Main));
 		return p;
 	}
 }

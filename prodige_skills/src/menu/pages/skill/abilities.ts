@@ -2,19 +2,18 @@ import { Gui, PageClass, GuiMacro as $, Button } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
 import { Navigation } from "./navigation";
 import { Roman } from "@lib/roman";
-import { _, DataVariable, tellraw } from "sandstone";
+import { _, DataPointClass, DataVariable, tellraw } from "sandstone";
 import { Player } from "@src/player";
 import { Text } from "@lib/text";
+import { Ability } from "@src/skill/ability";
 
 export class Abilities {
 	public static getName(skill: Skill) {
 		return this.name + skill.name;
 	}
 
-	public static init(g: Gui, p: PageClass, skill: Skill) {
+	public static init(g: Gui, p: PageClass, s: Skill) {
 		p.add(() => {
-
-
 			const info = new Button(
 				"knowledge_book", 14, "§a§lAbility Guide",
 				[
@@ -39,97 +38,177 @@ export class Abilities {
 					"§8┃ §7their full potential!"
 				]
 			);
-
 			p.emit(info);
 
-			if (skill.ability) {
-				const next = skill.ability.tier['+'](1);
-				const roman = Roman.get(skill.ability.tier);
-				const isActive = DataVariable("§a§l• §aEnabled");
-				const name = DataVariable(`§d§l${skill.ability.name}`);
-				const description = Text.wrap(skill.ability.description);
-
-				_.if(_.not(skill.ability.state), () => {
-					isActive.set("§c§l• §cDisabled");
-					name.set(`§7§o${skill.ability!.name}`);
-				});
-
-				const unlocked = new Button(
-					'nether_star', 12, $`§c§l${skill.ability.name} §8[§c§l${roman}§8]`,
-					[
-						...description,
-						'',
-						$`§d§l┃ ABILITY STATUS ${isActive}`,
-						'',
-						'§e§l┃ TIER PROGRESSION',
-						$`§e┃ §7Next Tier: §c${skill.ability.name} ${Roman.get(next)}`,
-						...Text.wrap('Improve your skill to unlock stronger ability effects.', '§e┃ §7'),
-						'',
-						'§b§l┃ ACTIVATION',
-						'§b┃ §7Abilities works automatically.',
-						'§b┃ §7Toggle it on or off at any time.',
-						'',
-						'§8┃ §eClick to toggle!'
-					],
-					() => {
-						skill.ability!.toggle();
-						Player.playSound('tick');
-						_.if(skill.ability!.state, () => tellraw('@p', Player.send(`Ability §c${skill.ability!.name} §ais now enabled!`, '§a'))).
-							else(() => tellraw('@p', Player.send(`Ability §c${skill.ability!.name} §cis now disabled!`, '§c')));
-					},
-					1,
-					["enchantment_glint_override=1"]
-				);
-
-				const locked = new Button(
-					'charcoal', 12, "§c🔒 Locked",
-					[
-						'§8┃ §7This ability is not yet unlocked.',
-						'',
-						'§c§l┃ REQUIREMENTS',
-						`§c┃ §7Skill: §f${skill.name}`,
-						'§c┃ §7Required Level: §e10',
-						'§c┃ §7Current Level: §e' + skill.level,
-						'',
-						'§6§l┃ UNLOCK REWARDS',
-						'§6┃ §7Gain access to this skill\'s',
-						'§6┃ §7unique passive ability.',
-						'§6┃ §7Continue leveling to strengthen it.',
-						'',
-						'§8┃ §eReach Level 10 to unlock!'
-					],
-					() => {
-						Player.playSound('error');
-						Player.throw(`You need to reach Level 10 in ${skill.name} to unlock this!`);
-					}
-				);
-
-				_.if(skill.ability.tier['=='](0), () => p.emit(locked))
-					.else(() => p.emit(unlocked));
-			} else {
-				p.emit(new Button(
-					'anvil', 12, '§c§oComing Soon!',
-					[
-						'§8┃ §7This skill does not have an',
-						'§8┃ §7ability available yet.',
-						'',
-						'§6§l┃ WHAT TO EXPECT',
-						'§6┃ §7A unique passive effect',
-						'§6┃ §7Progression through skill tiers',
-						'§6┃ §7Bonuses that improve your gameplay',
-						'',
-						'§8┃ §7Stay tuned for future updates!'
-					],
-					() => {
-						Player.playSound('error');
-						Player.throw(`Ability for ${skill.name} coming soon!`);
-					}
-				));
+			const a = s.ability;
+			if (a) {
+				_.if(a.tier['=='](0), () => this.locked(p, s, a))
+					.else(() => this.unlocked(p, s, a));
+				this.toggler(p, a);
 			}
+			else this.comingSoon(p, s);
 		});
 
-
-		p.add(() => Navigation.render(g, p, skill));
+		p.add(() => Navigation.render(g, p, s));
 		return p;
+	}
+
+	public static toggler(p: PageClass, a: Ability) {
+		const status = DataVariable("§a§l[ENABLED]");
+		_.if(_.not(a.state), () => {
+			status.set("§c§l[DISABLED]");
+		});
+
+		p.emit(
+			new Button(
+				'gold_ingot', 4, $`${status}`,
+				[
+					'§7Toggle ability perks and buffs.',
+					'',
+					'§eClick to toggle!'
+				], () => {
+					Player.playSound('tick');
+					a.toggle();
+				}
+			))
+	}
+
+	private static unlocked(p: PageClass, s: Skill, a: Ability) {
+		const isActive = DataVariable("§a§l• §aEnabled");
+		_.if(_.not(a.state), () => {
+			isActive.set("§c§l• §cDisabled");
+		});
+
+		_.if(a.tier['=='](10), () => this.maxTier(p, a, isActive)).
+			else(() => this.upgradeBtn(p, s, a, isActive));
+	}
+
+	private static upgradeBtn(p: PageClass, s: Skill, a: Ability, isActive: DataPointClass) {
+		const next = a.tier['+'](1);
+		const roman = Roman.get(a.tier);
+		const romanNext = Roman.get(next);
+		const description = Text.wrap(a.description);
+		const levelRequired = next['*'](10);
+		const romanLevelRequired = Roman.get(levelRequired);
+
+		const unlock = DataVariable('');
+		const point = DataVariable('§8[§c✘§8]');
+		const level = DataVariable('§8[§c✘§8]');
+
+		const isPoint = Player.pts['>='](a.basePrice);
+		const isLevel = s.level['>='](10)
+		_.if(isPoint, () => point.set('§8[§a✔§8]'));
+		_.if(isLevel, () => level.set('§8[§a✔§8]'));
+		_.if(_.and(isPoint, isLevel), () => unlock.set('§8• §a§lUNLOCK'));
+
+		p.emit(
+			new Button(
+				'nether_star', 12, $`§c§l${a.name} §8[§c§l${roman}§8] ${unlock}`,
+				[
+					...description,
+					'',
+					$`§d§l┃ STATUS ${isActive}`,
+					'',
+					'§e§l┃ TIER PROGRESSION',
+					$`§e┃ §7Next Tier: §c${a.name} §8[§7${roman}§c§l${romanNext}]`,
+					$`§e┃ > §7${a.buff}%»§c§l${a.buff['+'](5)}%`,
+					'§e┃',
+					`§e┃ §7Requires:`,
+					$`§e┃ ${level} §8• §d${s.name} §l${romanLevelRequired} §7(${levelRequired})`,
+					$`§e┃ ${point} §8• §e${a.price} Pts`,
+					...Text.wrap('Improve your skill to unlock stronger ability effects.', '§e┃ §7'),
+					'',
+					'§b§l┃ ACTIVATION',
+					'§b┃ §7Abilities works automatically.',
+					'§b┃ §7Toggle it on or off at any time.',
+					'',
+					'§8┃ §eClick to upgrade!'
+				],
+				() => a.tryUpgrade(), 1, ["enchantment_glint_override=1"]
+			)
+		);
+	}
+
+	private static maxTier(p: PageClass, a: Ability, isActive: DataPointClass) {
+		p.emit(
+			new Button(
+				'nether_star', 12, `${a.name} §8[§c§lX§8]`,
+				[
+					...Text.wrap(a.description),
+					'',
+					$`§d§l┃ STATUS ${isActive}`,
+					'',
+					'§c§l┃ MAX TIER',
+					'§c┃ §7You have reached the max tier!',
+					$`§c┃ §7Perks: ${a.name} §c§l${a.buff}%`,
+					'',
+					'§b§l┃ ACTIVATION',
+					'§b┃ §7Abilities works automatically.',
+					'§b┃ §7Toggle it on or off at any time.',
+					'',
+					'§8You cannot upgrade this more!'
+				], () => Player.throw('You have already reached the max tier for this Ability!')
+			)
+		);
+	}
+
+	private static locked(p: PageClass, s: Skill, a: Ability) {
+		const next = a.tier['+'](1);
+		const levelRequired = next['*'](10);
+		const romanLevelRequired = Roman.get(levelRequired);
+		const unlock = DataVariable('');
+		const point = DataVariable('§8[§c✘§8]');
+		const level = DataVariable('§8[§c✘§8]');
+
+		const isPoint = Player.pts['>='](a.basePrice);
+		const isLevel = s.level['>='](10);
+		_.if(isPoint, () => point.set('§8[§a✔§8]'));
+		_.if(isLevel, () => level.set('§8[§a✔§8]'));
+		_.if(_.and(isPoint, isLevel), () => unlock.set('§8• §a§lUNLOCK'));
+
+		return p.emit(
+			new Button(
+				'charcoal', 12, $`§c🔒 Locked ${unlock}`,
+				[
+					'§8┃ §7This ability is not yet unlocked.',
+					'',
+					'§6§l┃ UNLOCK REQUIREMENT',
+					$`§6┃ ${level} §8• §d${s.name} §l${romanLevelRequired} §7(${levelRequired})`,
+					$`§6┃ ${point} §8• §e${a.basePrice} Pts`,
+					'',
+					'§5§l┃ PERKS',
+					'§5┃ §7Gain access to this skill\'s',
+					'§5┃ §7unique passive ability.',
+					'§5┃ §7Continue leveling to strengthen it.',
+					'',
+					'§eClick to unlock!'
+				],
+				() => {
+					a.tryUpgrade();
+				}
+			)
+		);
+	}
+
+	private static comingSoon(p: PageClass, s: Skill) {
+
+		return p.emit(new Button(
+			'anvil', 12, '§c§oComing Soon!',
+			[
+				'§8┃ §7This skill does not have an',
+				'§8┃ §7ability available yet.',
+				'',
+				'§6§l┃ WHAT TO EXPECT',
+				'§6┃ §7A unique passive effect',
+				'§6┃ §7Progression through skill tiers',
+				'§6┃ §7Bonuses that improve your gameplay',
+				'',
+				'§8┃ §7Stay tuned for future updates!'
+			],
+			() => {
+				Player.playSound('error');
+				Player.throw(`Ability for ${s.name} coming soon!`);
+			}
+		));
 	}
 }

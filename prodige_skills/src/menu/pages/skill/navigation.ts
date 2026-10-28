@@ -72,8 +72,6 @@ export class Navigation {
 				$` §8• §7Target Level: §d${skill.name} ${next}`,
 				$` §8• §7Progress: §e${progress.show()}%`,
 				$` §8> ${bar} §e${skill.xp.show()}§6/§e${skill.goal}`,
-				"",
-				"§eClick to view!"
 			], () => g.switch(Progress.getName(skill)), 1, ['!attribute_modifiers', 'enchantment_glint_override=1', '!max_damage']
 		);
 
