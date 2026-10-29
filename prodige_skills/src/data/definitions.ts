@@ -28,21 +28,62 @@ type CrateDef = Omit<CrateOption, 'name' | 'rewards'> & {
 };
 
 export const crateDefs = {
-	'§aCommon': {
-		description: 'This is a simple crate',
+	'§a§lCommon': {
+		description: 'A crate with dependable rewards for every skill adventurer.',
 		item: 'chest',
+		keyPrice: 250,
 		rewards: () => new Map<Reward, number>([
-			[Reward.get('§aNovice Pickaxe'), 0.2], [Reward.point(100), 0.5]
+			[Reward.point(100), 65],
+			[Reward.get('§aNovice Pickaxe'), 35]
 		]),
-		roll: 3
+		roll: 1
 	},
-	'§dSpecial': {
-		description: 'This is a special crate',
-		item: 'ender_chest',
+	'§9§lRare': {
+		description: 'A rare collection of useful gear and valuable points.',
+		item: 'barrel',
+		keyPrice: 750,
 		rewards: () => new Map<Reward, number>([
-			[Reward.get('§bExpert Sword'), 0.2], [Reward.point(300), 0.5]
+			[Reward.point(250), 55],
+			[Reward.get('§aNovice Pickaxe'), 30],
+			[Reward.get('§bExpert Sword'), 15]
 		]),
-		roll: 5
+		roll: 1
+	},
+	'§5§lEpic': {
+		description: 'A mythic cache with powerful gear and a generous points reward.',
+		item: 'ender_chest',
+		keyPrice: 1500,
+		animated: true,
+		rewards: () => new Map<Reward, number>([
+			[Reward.point(500), 55],
+			[Reward.get('§bExpert Sword'), 35],
+			[Reward.get('§aNovice Pickaxe'), 10]
+		]),
+		roll: 1
+	},
+	'§6§lLegendary': {
+		description: 'A legendary chest holding exceptional rewards for dedicated players.',
+		item: 'ancient_debris',
+		keyPrice: 5000,
+		animated: true,
+		rewards: () => new Map<Reward, number>([
+			[Reward.point(1000), 50],
+			[Reward.get('§bExpert Sword'), 40],
+			[Reward.point(2000), 10]
+		]),
+		roll: 1
+	},
+	'§c§lMythic': {
+		description: 'An epic trove packed with the most valuable rewards in the shop.',
+		item: 'dragon_egg',
+		keyPrice: 10000,
+		animated: true,
+		rewards: () => new Map<Reward, number>([
+			[Reward.point(2000), 55],
+			[Reward.get('§bExpert Sword'), 35],
+			[Reward.get('§aNovice Pickaxe'), 10]
+		]),
+		roll: 1
 	}
 } satisfies Record<string, CrateDef>;
 

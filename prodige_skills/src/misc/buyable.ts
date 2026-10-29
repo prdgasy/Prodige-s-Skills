@@ -2,6 +2,7 @@ import { Reward } from "@src/misc/reward";
 import { Player } from "@src/player";
 import { Item } from "@src/types";
 import { _, Data, tellraw, Variable } from "sandstone";
+import { PARTICLE_TYPES_SET } from "sandstone/arguments";
 import { ConditionClass } from "sandstone/variables";
 
 export class Buyable extends Reward {
@@ -33,6 +34,7 @@ export class Buyable extends Reward {
 				Player.pts['-='](this.price);
 				this.give();
 				Player.playSound('success', 2);
+				Player.send(`You bought x1 ${this.name} §afor §6${this.price} Pts§a!`, '§a');
 			});
 	}
 }

@@ -106,7 +106,7 @@ export class Tasks {
 
 	private static done(p: PageClass, task: Task, s: Score) {
 		return p.emit(new Button(
-			task.item, $(s), `§9${task.name} §8• §e${task.goal}§6/§e${task.goal} §8• §a§lCLAIM`,
+			task.item, $(s), `§9${task.name} §8• §e${task.goal}§6/§e${task.goal} §8• §a§lCLAIM!`,
 			[
 				'',
 				'§f§lProgress: §e100%',

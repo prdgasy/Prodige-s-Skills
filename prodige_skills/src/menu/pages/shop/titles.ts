@@ -1,5 +1,7 @@
 import { Button, Gui, PageClass } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
+import { Shop } from ".";
+import { Menu } from "@src/menu";
 
 
 
@@ -14,6 +16,8 @@ export class Titles {
 			const t = new Button('name_tag', s++, title.name, [title.description]);
 			p.add(t);
 		}
+		p.add(Shop.balance(), Menu.back(g, Shop));
+
 		return p;
 	}
 }

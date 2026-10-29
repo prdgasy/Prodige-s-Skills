@@ -65,10 +65,13 @@ export class Menu {
 		return btns;
 	}
 
-	public static back(g: Gui, target: { getName: () => string }) {
+	public static back(g: Gui, target: { getName: () => string }, callback?: () => void) {
 		return new Button(
 			'arrow', 18, '§cBack', [],
-			() => g.switch(target.getName())
+			() => {
+				g.switch(target.getName()); 
+				callback?.();
+			}
 		);
 	}
 

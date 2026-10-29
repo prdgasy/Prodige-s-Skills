@@ -93,10 +93,10 @@ export class Abilities {
 		const level = DataVariable('§8[§c✘§8]');
 
 		const isPoint = Player.pts['>='](a.basePrice);
-		const isLevel = s.level['>='](levelRequired); // SHOW UPGRADE BUG
+		const isLevel = s.level['>='](levelRequired);
 		_.if(isPoint, () => point.set('§8[§a✔§8]'));
 		_.if(isLevel, () => level.set('§8[§a✔§8]'));
-		_.if(_.and(isPoint, isLevel), () => unlock.set('§8• §a§lUNLOCK'));
+		_.if(_.and(isPoint, isLevel), () => unlock.set('§8• §a§lUNLOCK!'));
 
 		p.emit(
 			new Button(
@@ -156,7 +156,7 @@ export class Abilities {
 		const isLevel = s.level['>='](10);
 		_.if(isPoint, () => point.set('§8[§a✔§8]'));
 		_.if(isLevel, () => level.set('§8[§a✔§8]'));
-		_.if(_.and(isPoint, isLevel), () => unlock.set('§8• §a§lUNLOCK'));
+		_.if(_.and(isPoint, isLevel), () => unlock.set('§8• §a§lUNLOCK!'));
 
 		return p.emit(
 			new Button(

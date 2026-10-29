@@ -1,4 +1,6 @@
 import { Gui, PageClass } from "@prodigelib/gui";
+import { Shop } from ".";
+import { Menu } from "@src/menu";
 
 export class Items {
 	public static getName() {
@@ -32,6 +34,7 @@ export class Items {
 		//   );
 		//   p.add(t);
 		// }
+		p.add(Shop.balance(), Menu.back(g, Shop));
 		return p;
 	}
 }

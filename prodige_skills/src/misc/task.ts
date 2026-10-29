@@ -34,6 +34,7 @@ export class Task {
 
 	public static init() {
 		this.manageTimer();
+		this.watch();
 	}
 
 	private display() {
@@ -152,6 +153,7 @@ export class Task {
 			Player.task(task.id, 'assigned').remove();
 		}
 	}
+
 
 	public static watch() {
 		return MCFunction('misc/task/watch', () => {

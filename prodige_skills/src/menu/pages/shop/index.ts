@@ -1,9 +1,13 @@
-import { Button, Gui, PageClass } from "@prodigelib/gui";
+import { Button, Gui, PageClass, GuiMacro as $ } from "@prodigelib/gui";
 import { Text } from "@lib/text";
 import { Items } from "./items";
 import { Boosters } from "./booster";
 import { Crates } from "./crates";
 import { Titles } from "./titles";
+import { Menu } from "@src/menu";
+import { Main } from "@src/menu/main";
+import { Player } from "@src/player";
+import { macro as E } from "@prodigelib/easymacro";
 
 export class Shop {
 	public static getName() {
@@ -11,75 +15,111 @@ export class Shop {
 	}
 
 	public static init(g: Gui, p: PageClass) {
-		const items = new Button(
+		p.add(
+			this.items(g),
+			this.boosters(g),
+			this.crates(g),
+			this.titles(g),
+			this.balance()
+		);
+
+		p.add(Menu.back(g, Main));
+		return p;
+	}
+
+	private static items(g: Gui) {
+		return new Button(
 			"emerald",
-			10,
-			"§a§l⚒ Items & Gear",
+			11,
+			"§a⚒ Items & Gear",
 			[
-				...Text.wrap("§7Discover exclusive equipment designed to enhance your skills."),
-				"",
-				"§a§lWhat's inside?",
-				"§7• §fExclusive tools & weapons",
-				"§7• §fCustom item abilities",
-				"§7• §fSpecialized gear",
-				"",
-				"§e➜ Click to browse items!"
+				'',
+				'§e§l┃ Gear for Your Journey',
+				...Text.wrap('Browse equipment made to support your skill progression.', '§e┃ §7'),
+				'',
+				'§a§l┃ What You Can Find',
+				'§a┃ §7Tools and weapons',
+				'§a┃ §7Special item effects',
+				'§a┃ §7Equipment details and prices',
+				'',
+				'§eClick to browse the gear!'
 			],
 			() => g.switch(Items.getName())
 		);
+	}
 
-		const boosters = new Button(
+	private static boosters(g: Gui) {
+		return new Button(
 			"experience_bottle",
 			12,
-			"§b§l✦ Boosters",
+			"§b✦ Boosters",
 			[
-				...Text.wrap("§7Accelerate your progression with powerful multipliers."),
-				"",
-				"§b§lAvailable boosts",
-				"§7• §fSkill experience multipliers",
-				"§7• §fSkill point multipliers",
-				"",
-				"§e➜ Click to explore boosts!"
+				'',
+				'§e§l┃ Speed Up Your Progress',
+				...Text.wrap('Boosters multiply the rewards you earn from skill actions.', '§e┃ §7'),
+				'',
+				'§b§l┃ Booster Types',
+				'§b┃ §7XP Boosters increase skill experience.',
+				'§b┃ §7Point Boosters increase skill points.',
+				'§b┃ §7Choose from multipliers ranging from §ex2 §7to §ex5§7!',
+				'',
+				'§eClick to view the available boosters!'
 			],
 			() => g.switch(Boosters.getName())
 		);
+	}
 
-		const crates = new Button(
+	private static crates(g: Gui) {
+		return new Button(
 			"ender_chest",
 			14,
-			"§6§l✧ Crates",
+			"§6✧ Crates",
 			[
-				...Text.wrap("§7Open mysterious crates and discover valuable rewards."),
-				"",
-				"§6§lPossible rewards",
-				"§7• §fCommon & legendary loot",
-				"§7• §6Rare jackpot rewards",
-				"§7• §eExclusive titles & points",
-				"",
-				"§e➜ Click to discover crates!"
+				'',
+				'§e§l┃ A Chance at Great Rewards',
+				...Text.wrap('Open a crate to claim its rewards and add them to your collection.', '§e┃ §7'),
+				'',
+				'§6§l┃ Discover What Awaits',
+				'§6┃ §7Check each crate for its rewards.',
+				'§6┃ §7Choose a crate and see what luck brings!',
+				'',
+				'§eClick to explore the crates!'
 			],
-			() => g.switch(Crates.getName())
-		);
+			() => {
+				Crates.frame.set(0);
+				g.switch(Crates.getName());
 
-		const titles = new Button(
+			}
+		);
+	}
+
+	private static titles(g: Gui) {
+		return new Button(
 			"name_tag",
-			16,
-			"§d§l✦ Titles",
+			15,
+			"§d✦ Titles",
 			[
-				...Text.wrap("§7Show off your achievements with prestigious cosmetic titles."),
-				"",
-				"§d§lPersonalize your profile",
-				"§7• §fSkill-themed titles",
-				"§7• §fCustom chat prefixes",
-				"§7• §fShowcase your progress",
-				"",
-				"§e➜ Click to customize titles!"
+				'',
+				'§e§l┃ Make Your Mark',
+				...Text.wrap('§7Discover titles earned through your skill progression.', '§e┃ §7'),
+				'',
+				'§d§l┃ Show Your Achievements',
+				'§d┃ §7Titles celebrate your progress in each skill.',
+				'§d┃ §7Read each description to learn how it was earned.',
+				'',
+				'§eClick to browse the titles!'
 			],
 			() => g.switch(Titles.getName())
 		);
+	}
 
-		p.add(items, boosters, crates, titles);
-		return p;
+	public static balance() {
+		return new Button(
+			'gold_block', 22, $`§eBalance §8• §6${Player.pts} Pts`, [],
+			() => {
+				Player.playSound('tick', 2);
+				Player.smartSend(E`You have §6${Player.pts} Pts§e.`, '§e');
+			}
+		)
 	}
 }
-

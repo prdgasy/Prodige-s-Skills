@@ -52,7 +52,7 @@ export class Achievements {
 				);
 
 				const toClaim = new Button(
-					a.item, i, `§a${a.name} §8• §a§lCLAIM`,
+					a.item, i, `§a${a.name} §8• §a§lCLAIM!`,
 					[
 						...Text.wrap(a.description),
 						``,

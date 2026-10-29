@@ -72,19 +72,21 @@ export class Ability {
 
 		const romanTier = Roman.get(this.tier);
 		const romanPreviousTier = Roman.get(this.tier['-'](1));
+		const levelRequired = this.tier['+'](1)['*'](10);
+		const romanLevelRequired = Roman.get(levelRequired);
 		const title = DataVariable('ABILITY UPGRADED');
 		_.if(this.tier['=='](1), () => title.set('ABILITY UNLOCKED'))
 
 		smartTellraw([
 			`${Global.encapsuler}\n`,
-			$` §d§l${this.skill.name.toUpperCase()} ${title}!\n`,
-			$`§c§l${this.name} §8[§7${romanPreviousTier}➜§c§l${romanTier}§8]\n`,
-			'',
-			...Text.wrap(this.description, ` §7§o`),
-			$` §dBonus: §8${this.buff['-'](2.5).show()}%»§c${this.buff.show()}%`,
-			$`§b§lNext Upgrade: §c${this.name} §8[§7${romanTier}➜§c§l${Roman.get(this.tier['+'](1))}§8]\n`,
-			$` • §7Price: §e${this.price} Pts\n`,
-			$` • §7Bonus: §7${this.buff.show()}%»§c§l${this.buff['+'](2.5).show()}%`,
+			$` §d§l${this.skill.name.toUpperCase()} ${title}! `,
+			$`§c§l${this.name} §8[§7${romanPreviousTier}➜§c§l${romanTier}§8]\n\n`,
+			...Text.wrap(this.description, ` §7§o`), '\n\n',
+			$` §6§lPerks §8• §8${this.buff['-'](2.5).show()}%»§c§l${this.buff.show()}%\n\n`,
+			$`§b§lNext Tier:\n §c${this.name} §8[§7${romanTier}➜§c§l${Roman.get(this.tier['+'](1))}§8]\n`,
+			$` §8• §e${this.price} Pts\n`,
+			$` §8• §d${this.skill.name} ${romanLevelRequired} §7(${levelRequired})\n`,
+			$` §8• §6§lPerks §8• §7${this.buff.show()}%»§c§l${this.buff['+'](2.5).show()}%\n\n`,
 			Global.encapsuler
 		], '@p');
 	}

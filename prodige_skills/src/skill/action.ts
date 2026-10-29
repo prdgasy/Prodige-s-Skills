@@ -4,6 +4,7 @@ import { Skill } from "@src/skill";
 import { Criteria, Item } from "@src/types";
 import { MCFunction, Objective, Score, Variable, _, execute, say, tellraw } from "sandstone";
 import { Float } from "@prodigelib/floatVar";
+import { Booster } from "@src/misc/booster";
 export class Action {
 	public parent: Skill;
 	public name: string;
@@ -39,8 +40,8 @@ export class Action {
 
 	private trigger() {
 		const fn = MCFunction(`on_event/trigger/${Global.toResource(this.name)}`, () => {
-			Action.addedXp.set(Float.variable(this.xp)['*'](Player.boosterScore.xp)["*"](this.watcher));
-			Action.addedPts.set(Player.boosterScore.point["*"](this.pts)["*"](this.watcher));
+			Action.addedXp.set(Float.variable(this.xp)['*'](Booster.getMult('Xp'))["*"](this.watcher));
+			Action.addedPts.set(Player.pts['*'](Booster.getMult('Pts')["*"](this.watcher)));
 
 			this.totalPts['+='](Action.addedPts);
 			this.totalXp['+='](Action.addedXp);
@@ -54,6 +55,9 @@ export class Action {
 		return fn();
 	}
 
+	public static init() {
+		this.watch();
+	}
 	public static watch() {
 		return MCFunction('on_event/watch', () =>
 			execute.as('@a').at('@s').run(() => {

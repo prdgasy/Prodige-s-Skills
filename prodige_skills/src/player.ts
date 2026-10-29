@@ -1,5 +1,5 @@
 import { _, execute, Label, MCFunction, NonEmptyString, Objective, playsound, rel, tellraw, Macro as $, Score, say, Variable, Data } from "sandstone";
-import { Booster } from "./misc/booster";
+import { Booster, BOOSTER_TYPE } from "./misc/booster";
 import { Skill } from "./skill";
 import { Action } from "./skill/action";
 import { Task } from "./misc/task";
@@ -10,8 +10,7 @@ import { macro as E, Macroable, smartTellraw } from "@prodigelib/easymacro";
 type SoundType = Parameters<typeof playsound>[0];
 export class Player {
 	static hasJoined = Label('player.joined')('@p');
-	static pts = Objective.create('pts')('@p');
-	static boosterScore = new Booster();
+	static pts = Objective.create('player.pts')('@p');
 	static sound = Label('player.sound')('@p');
 	static onEventNotif = Label('player.on_event_notif')('@p');
 	static achievementNotif = Label('player.achievement_notif')('@p');
@@ -20,8 +19,6 @@ export class Player {
 
 	public static init() {
 		this.load();
-		Action.watch();
-		Task.watch();
 		this.firstJoin();
 	}
 
@@ -48,8 +45,10 @@ export class Player {
 
 				this.sound.add();
 
-				this.boosterScore.point.set(1);
-				this.boosterScore.xp.set(1);
+				for (const type of BOOSTER_TYPE) {
+					Booster.getMult(type).set(1);
+					Booster.getTimer(type).set(0);
+				}
 
 				this.hasJoined.add();
 			})
