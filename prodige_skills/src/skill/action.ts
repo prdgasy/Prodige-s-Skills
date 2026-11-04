@@ -41,7 +41,7 @@ export class Action {
 	private trigger() {
 		const fn = MCFunction(`on_event/trigger/${Global.toResource(this.name)}`, () => {
 			Action.addedXp.set(Float.variable(this.xp)['*'](Booster.getMult('Xp'))["*"](this.watcher));
-			Action.addedPts.set(Player.pts['*'](Booster.getMult('Pts')["*"](this.watcher)));
+			Action.addedPts.set(Variable(this.pts)['*'](Booster.getMult('Pts')["*"](this.watcher)));
 
 			this.totalPts['+='](Action.addedPts);
 			this.totalXp['+='](Action.addedXp);
