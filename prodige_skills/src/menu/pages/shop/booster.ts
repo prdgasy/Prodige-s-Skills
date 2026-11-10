@@ -21,8 +21,8 @@ export class Boosters {
 		for (let i = 1; i < 5; i++) {
 			const multiplier = i + 1;
 			p.add(
-				this.boosterButton('Xp', multiplier, i + 10),
-				this.boosterButton('Pts', multiplier, i + 18)
+				this.boosterButton('Xp', multiplier, i + 9),
+				this.boosterButton('Pts', multiplier, i + 13)
 			);
 		}
 
@@ -43,7 +43,7 @@ export class Boosters {
 		const color = type === 'Xp' ? '§b' : '§e';
 
 		return new Button(
-			booster.item,
+			type === 'Xp' ? 'minecraft:experience_bottle' : 'minecraft:gold_ingot',
 			slot,
 			`${color}§l${multiplier}x ${type} Booster`,
 			[
@@ -61,14 +61,13 @@ export class Boosters {
 				'',
 				'§eClick to purchase!'
 			],
-			() => buyable.buy()
-		);
+			() => buyable.buy());
 	}
 
 	private static howItWorks() {
 		return new Button(
 			'knowledge_book',
-			22,
+			4,
 			'§6§lHow Boosters Work',
 			[
 				'',

@@ -13,7 +13,8 @@ import { Player } from "@src/player";
 import { Task } from "@src/misc/task";
 import { Float } from "@prodigelib/floatVar";
 import { Booster, BOOSTER_TYPE, BoosterType } from "@src/misc/booster";
-
+import { RewardVault } from "@src/menu/rewards";
+import { Mask } from "../mask";
 
 export class Main {
 	static getName() {
@@ -21,8 +22,11 @@ export class Main {
 	}
 
 	public static init(g: Gui, p: PageClass) {
+		p.add(() => Mask.mainLayered(p));
+
 		p.add(() => {
 			this.tasks(g, p);
+			this.rewardVault(g, p);
 			this.shop(g, p);
 			this.infoAndPreferences(g, p);
 
@@ -30,6 +34,33 @@ export class Main {
 		});
 
 		return p;
+	}
+
+	private static rewardVault(g: Gui, p: PageClass) {
+		const pending = Variable(0);
+		for (const reward of Reward.registry.values()) {
+			if (reward.takesPlace) pending['+='](reward.pending);
+		}
+
+		return p.emit(new Button(
+			'ender_chest',
+			22,
+			$`§dReward Vault §8• §e${pending}`,
+			[
+				'',
+				'§d§l┃ Your Unclaimed Rewards',
+				'§d┃ §7Crate and skill rewards wait here.',
+				'§d┃ §7Claim each reward whenever you are ready.',
+				'',
+				$`§e┃ §7Rewards waiting: §d${pending}`,
+				'',
+				'§eClick to view your rewards!'
+			],
+			() => {
+				RewardVault.index.set(0);
+				g.switch(RewardVault.getName());
+			}
+		));
 	}
 
 	private static infoAndPreferences(g: Gui, p: PageClass) {
@@ -108,7 +139,7 @@ export class Main {
 			new Button("wheat", 23, $`§6Tasks §8• §e${done}§6/§e3`,
 				[
 					'',
-					'§l§6┃ Challenge Board',
+					'§l§6┃ §lChallenge Board',
 					'§6┃ §7Complete tasks to earn their rewards.',
 					'§6┃ §7Claim finished tasks from this menu.',
 					'',
@@ -151,7 +182,7 @@ export class Main {
 					$` §8> ${bar} §e${skill.xp.show()}§6/§e${skill.goal}`,
 					"",
 					$`§f§l${skill.name} ${nextRoman} Rewards:`,
-					...rewards.map(r => ` §8+§e ${r.name}`),
+					...rewards.map(r => ` §8• §e${r.name}`),
 					"",
 					"§eClick to view!",
 				], () => {

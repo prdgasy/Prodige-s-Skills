@@ -3,7 +3,7 @@ import { Button, Gui, PageClass } from "@prodigelib/gui";
 import { Crate } from "@src/misc/crate";
 import { Shop } from ".";
 import { Menu } from "@src/menu";
-import { _, Data, item, MCFunction, Objective, Score, Variable } from "sandstone";
+import { _, Data, item, MCFunction, Objective, Score, Variable, say } from "sandstone";
 import { ItemSlotSource } from "sandstone/commands";
 
 export class Crates {
@@ -47,17 +47,17 @@ export class Crates {
 
 	private static setFrame(crate: Crate, slot: number, frame: Score) {
 		const titles = [
-			`§b✦ §f${crate.name} §bCrate ✦`,
-			`§3✧ §b${crate.name} §fCrate ✧`,
-			`§d❖ §5${crate.name} §dCrate ❖`,
-			`§5✹ §d${crate.name} §fCrate ✹`,
-			`§f✧ §d${crate.name} §5Crate ✧`
+			`§b✦ ${crate.name} Crate §b✦`,
+			`§3✧ ${crate.name} Crate §f✧`,
+			`§d❖ ${crate.name} Crate §d❖`,
+			`§5✹ ${crate.name} Crate §f✹`,
+			`§f✧ ${crate.name} Crate §5✧`
 		];
 
 		for (let i = 0; i < titles.length; i++) {
 			_.if(frame['=='](i), () => {
 				const name = Data('entity', '@s', `Items[{Slot:${slot}b}].components."minecraft:custom_name"`);
-				name.set(titles[i]);
+				name.set({ text: titles[i], italic: false, color: 'white' });
 			});
 		}
 	}
@@ -68,7 +68,9 @@ export class Crates {
 			slot,
 			`${crate.name} Crate`,
 			crate.getMenuDescription(),
-			() => crate.tryOpen(), 1, ['enchantment_glint_override=1']
+			() => {
+				crate.tryOpen()
+			}, 1, ['enchantment_glint_override=1']
 		);
 	}
 
@@ -93,7 +95,7 @@ export class Crates {
 	private static howItWorks() {
 		return new Button(
 			'knowledge_book',
-			4,
+			0,
 			'§6§lHow Crates Work',
 			[
 				'',

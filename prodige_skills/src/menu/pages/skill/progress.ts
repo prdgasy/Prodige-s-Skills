@@ -6,6 +6,7 @@ import { Roman } from "@lib/roman";
 import { Float } from "@prodigelib/floatVar";
 import { Bar } from "@lib/bar";
 import { Navigation } from "./navigation";
+import { Menu } from "@src/menu";
 
 export class Progress {
 	public static index = Objective.create('progress_page_index')('@s');
@@ -48,7 +49,7 @@ export class Progress {
 								"",
 								"§f§lRewards: ",
 								...rewardLore,
-							], () => { say('test'); }, G(count), ['max_stack_size=99']
+							], () => { }, G(count), ['max_stack_size=99']
 						);
 
 						const reached = new Button(
@@ -79,7 +80,7 @@ export class Progress {
 
 		// Navigation
 		p.add(() => Navigation.render(g, p, skill));
-		p.add(() => Navigation.generateSliders(p, Progress.index, 5))
+		p.add(() => Menu.sliders(p, Progress.index, 5))
 		return p;
 	}
 }

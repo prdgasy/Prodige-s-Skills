@@ -115,7 +115,7 @@ export class Task {
 
 	public static roll() {
 		const fn = MCFunction('misc/task/roll', () => {
-			Player.firstTask.add();
+			Player.gotFirstTask.add();
 			Player.playSound('success', 2);
 			this.reset();
 			const assigned: Score[] = [];

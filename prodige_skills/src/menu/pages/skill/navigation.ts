@@ -12,6 +12,7 @@ import { Achievements } from "./achievements";
 import { Abilities } from "./abilities";
 import { Main } from "@src/menu/main";
 import { Text } from "@lib/text";
+import { Mask } from "../../mask";
 
 type Tab = {
 	name: string,
@@ -24,6 +25,8 @@ type Tab = {
 export class Navigation {
 	public static storage = Global.storage.select('navigation');
 	public static generateTabs(g: Gui, p: PageClass, skill: Skill) {
+		p.add(() => Mask.bottom(p, 'gray_stained_glass_pane'));
+
 		const tabs: Tab[] = [
 			{
 				name: '§6Actions', description: [
@@ -60,6 +63,7 @@ export class Navigation {
 	}
 
 	public static render(g: Gui, p: PageClass, skill: Skill) {
+
 		const progress = skill.xp['*'](100)['/'](skill.goal);
 		const bar = new Bar(progress.toScore()).toData();
 		const next = Roman.get(skill.level['+'](1));
@@ -80,29 +84,5 @@ export class Navigation {
 		p.emit(new Button(
 			'arrow', 18, '§cBack', [], () => g.switch(Main.getName())
 		))
-	}
-
-	public static generateSliders(p: PageClass, slider: Score, max: number) {
-		const bottom = slider['=='](0);
-		const top = slider['=='](max);
-
-		const p_name = DataVariable('§cPrevious');
-		_.if(bottom, () => p_name.set('§7Previous'));
-		const previous = new Button(
-			'paper', 25, $`${p_name}`, [],
-			() => { _.if(_.not(bottom), () => { slider['--']; }) }
-		)
-
-		const n_name = DataVariable('§aNext');
-		_.if(top, () => n_name.set('§7Next'));
-		const next = new Button(
-			'paper', 26, $`${n_name}`, [],
-			() => { _.if(_.not(top), () => { slider['++']; }) }
-		)
-
-		p.emit(previous);
-		p.emit(next);
-
-
 	}
 }

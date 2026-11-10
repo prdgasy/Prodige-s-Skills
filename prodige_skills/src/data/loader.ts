@@ -59,7 +59,7 @@ export class Loader {
 		for (const row of achievementsData) {
 			try {
 				const skill = Skill.get(row.skillName as SkillName);
-				if (skill) skill.achievements.push(new Achievement(skill, row.name, row.item as any, parseInt(row.target, 10) || 0, row.description));
+				if (skill) skill.achievements.push(new Achievement(skill, row.name, row.item as any, parseInt(row.target, 10) || 0, row.criteria as Criteria, row.description));
 			} catch (e) {
 				throw Error(`${e}: Skill ${row.skillName} isn't define inside loader.ts`);
 			}

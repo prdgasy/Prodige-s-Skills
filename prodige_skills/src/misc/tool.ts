@@ -24,7 +24,7 @@ type ToolRarity = "§f§lCOMMON" | "§9§lRARE" | "§d§lEPIC" | "§6§lLEGENDAR
 export class Tool extends Buyable {
 	public static tools: Record<ToolName, Tool>;
 	public name: string;
-	public item: Item;
+	public icon: Item;
 	public price: number;
 	public description: string;
 	public rarity: ToolRarity;
@@ -39,7 +39,9 @@ export class Tool extends Buyable {
 	constructor(opt: ToolOptions) {
 		super(opt.name, opt.description, opt.item, opt.price, Tool.getFromOpt(opt));
 		this.name = opt.name;
-		this.item = opt.item;
+		this.icon = opt.item;
+		this.icon = opt.item;
+		this.takesPlace = true;
 		this.price = opt.price;
 		this.description = opt.description;
 		this.characteristics = opt.characteristics;

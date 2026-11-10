@@ -1,3 +1,4 @@
+import path from 'node:path'
 import type { DatapackConfig, ResourcePackConfig, SandstoneConfig } from 'sandstone'
 
 export default {
@@ -18,6 +19,11 @@ export default {
 	namespace: 'prodige_skills',
 	packUid: 'xTSjehSB',
 	mcmeta: 'latest',
+	scripts: {
+		beforeSave: (local) => {
+			local.outputFolder = path.join(local.folder, '.build')
+		},
+	},
 	saveOptions: {
 
 	},

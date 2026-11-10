@@ -84,7 +84,7 @@
 
     "@parcel/watcher-win32-x64": ["@parcel/watcher-win32-x64@2.6.0", "", { "os": "win32", "cpu": "x64" }, "sha512-cA+/pXV2YkfxlIcXOQ5fSWqAzzPyD78/x5qbK/I0vUkrlYHA8TIz+MXjAbGouguKVSI4bOmkTSJ1/poVSsgt+A=="],
 
-    "@prodigelib/betterarray": ["@prodigelib/betterarray@github:prdgasy/betterarray#518df5d", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-betterarray-518df5d", "sha512-Quq/4+gNmy86NrPPWgoEjaEx9TmQ72aeaC2D7JZgVfuA+/gRoAag5phV1SY3TxQeognL0ndmcIlSfVY43OMB5g=="],
+    "@prodigelib/betterarray": ["@prodigelib/betterarray@github:prdgasy/betterarray#56e125b", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-betterarray-56e125b", "sha512-NerjmYj716MhQEryUsF6c2xTAvovqMCtOzOhuqSth6ArzdiPyo7ZaZ4a/euvqnW8Wx8+6PXkFVVEiXHhVrk6fQ=="],
 
     "@prodigelib/cjmap": ["@prodigelib/cjmap@github:prdgasy/cjmap#3db7b16", { "dependencies": { "sandstone": "~1.2.36" } }, "prdgasy-cjmap-3db7b16", "sha512-2PJrRzH6FgSjZW8WLMaum+0CAyWfWmhQ/YH+mrEBnSHW9/flHkW6z2B+SZ8OiYqnwA4QPHbpwuJNHqyYCXQXXA=="],
 

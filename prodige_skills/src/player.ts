@@ -1,11 +1,6 @@
-import { _, execute, Label, MCFunction, NonEmptyString, Objective, playsound, rel, tellraw, Macro as $, Score, say, Variable, Data } from "sandstone";
-import { Booster, BOOSTER_TYPE } from "./misc/booster";
-import { Skill } from "./skill";
-import { Action } from "./skill/action";
-import { Task } from "./misc/task";
-import { FinalCommandOutput } from "sandstone/commands";
-import { ConditionClass, EntityLabel } from "sandstone/variables";
-import { macro as E, Macroable, smartTellraw } from "@prodigelib/easymacro";
+import { _, Data, execute, Label, MCFunction, NonEmptyString, Objective, playsound, rel, tellraw, Macro as $, Score, Variable } from "sandstone";
+import type { ConditionClass } from "sandstone/variables";
+import { macro as E, smartTellraw } from "@prodigelib/easymacro";
 
 type SoundType = Parameters<typeof playsound>[0];
 export class Player {
@@ -15,60 +10,42 @@ export class Player {
 	static onEventNotif = Label('player.on_event_notif')('@p');
 	static achievementNotif = Label('player.achievement_notif')('@p');
 	public static taskNotif = Label('player.task_notif')('@p');
-	public static firstTask = Label('player.firstTask')('@p'); // do not init
+	public static gotFirstTask = Label('player.gotFirstTask')('@p');
 
-	public static init() {
-		this.load();
-		this.firstJoin();
+	public static init(setup: () => void) {
+		MCFunction('player/first_join', () => {
+			execute.as('@a').at('@s').run(() => _.if(_.not(Player.hasJoined), () => {
+				setup();
+				Player.taskNotif.add();
+				Player.onEventNotif.add();
+				Player.achievementNotif.add();
+				Player.sound.add();
+				Player.hasJoined.add();
+			}));
+		}, { runEvery: '5s' });
 	}
 
 	private static load() {
-		return MCFunction('player/load', () => {
-			tellraw('@p', '§e[Skills/Player] Loaded');
-		}, { runOnLoad: true });
+		return
 	}
 
 	public static isInvFull(): ConditionClass {
-		return Variable(Data('entity', '@p', 'Inventory'))['>'](28);
-	}
-
-	private static firstJoin() {
-		return MCFunction('player/first_join', () => {
-			execute.as('@a').run(() => _.if(_.not(this.hasJoined), () => {
-				for (const skill of Object.values(Skill.skills)) skill.firstJoin();
-				Task.firstJoin();
-
-				this.taskNotif.add();
-				this.onEventNotif.add();
-				this.achievementNotif.add();
-				Skill.levelUpNotifState.add();
-
-				this.sound.add();
-
-				for (const type of BOOSTER_TYPE) {
-					Booster.getMult(type).set(1);
-					Booster.getTimer(type).set(0);
-				}
-
-				this.hasJoined.add();
-			})
-			)
-		}, { runEvery: '5s' })
+		return Variable(Data('entity', '@p', 'Inventory'))['>'](35);
 	}
 
 	public static playSound(sound: 'error' | 'success' | 'levelup' | 'info' | 'tick' | SoundType, pitch: number = 1) {
-		let s: SoundType;
+		let id: SoundType;
 
 		switch (sound) {
-			case 'success': s = 'block.note_block.pling'; break
-			case 'levelup': s = 'entity.player.levelup'; break
-			case 'info': s = 'entity.experience_orb.pickup'; break
-			case 'tick': s = 'block.note_block.hat'; break
-			case 'error': s = 'entity.enderman.teleport'; break
-			default: s = sound as SoundType;
+			case 'success': id = 'block.note_block.pling'; break;
+			case 'levelup': id = 'entity.player.levelup'; break;
+			case 'info': id = 'entity.experience_orb.pickup'; break;
+			case 'tick': id = 'block.note_block.hat'; break;
+			case 'error': id = 'entity.enderman.teleport'; break;
+			default: id = sound;
 		}
 
-		return _.if(Player.sound).run.execute.at('@p').run.playsound(s, 'master', '@p', rel(0, 0, 0), 1, pitch);
+		return _.if(Player.sound).run.execute.at('@p').run.playsound(id, 'master', '@p', rel(0, 0, 0), 1, pitch);
 	}
 
 	public static smartThrow(msg: string) {
@@ -99,4 +76,3 @@ export class Player {
 		return Label(`misc.task.${id}.${type}` as NonEmptyString)('@p');
 	}
 }
-

@@ -1,6 +1,5 @@
 import { Player } from "@src/player";
-import { _, clear, execute, give, MCFunction, Objective, Score } from "sandstone";
-import { ItemPredicate } from "sandstone";
+import { _, clear, execute, give, ItemPredicate, MCFunction, Objective, Score } from "sandstone";
 import { Item } from "@src/types";
 
 export type BoosterType = 'Xp' | 'Pts';
@@ -8,8 +7,7 @@ export const BOOSTER_TYPE: BoosterType[] = ['Xp', 'Pts'];
 
 export class Booster {
 	public static boosters: Booster[] = [];
-	private static usedXp = Objective.create('boost.xp.used', 'minecraft.used:minecraft.carrot_on_a_stick')('@p');
-	private static usedPts = Objective.create('boost.pts.used', 'minecraft.used:minecraft.warped_fungus_on_a_stick')('@p');
+	private static used = Objective.create('boost.used', 'minecraft.used:minecraft.warped_fungus_on_a_stick')('@p');
 
 	public name: string;
 	public description: string;
@@ -22,7 +20,7 @@ export class Booster {
 
 	constructor(mult: number, type: BoosterType, price: number, duration = 30) {
 		const name = `§${type === 'Xp' ? 'b' : 'e'}x${mult} ${type} Booster`;
-		const item = type === 'Xp' ? 'carrot_on_a_stick' : 'warped_fungus_on_a_stick';
+		const item = 'warped_fungus_on_a_stick';
 		const customData = { prodige_skills: { booster: `${type.toLowerCase()}_${mult}` } };
 		const predicate = ItemPredicate(`minecraft:${item}`).match('minecraft:custom_data', customData);
 		this.name = name;
@@ -66,8 +64,7 @@ export class Booster {
 		return MCFunction('misc/booster/use', () => {
 			execute.as('@a').at('@s').run(() => {
 				for (const booster of Booster.boosters) {
-					const used = booster.type === 'Xp' ? Booster.usedXp : Booster.usedPts;
-					_.if(used['>'](0), () => {
+					_.if(Booster.used['>'](0), () => {
 						execute.if.items.entity('@s', 'weapon.mainhand', booster.predicate).run(() => {
 							_.if(Booster.getTimer(booster.type)['>'](0), () => {
 								Player.throw(`You already have an active ${booster.type} Booster!`);
@@ -78,8 +75,7 @@ export class Booster {
 						});
 					});
 				}
-				Booster.usedXp.reset();
-				Booster.usedPts.reset();
+				Booster.used.reset();
 			});
 		}, { runEvery: '1t' });
 	}

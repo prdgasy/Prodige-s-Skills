@@ -7,8 +7,9 @@
 	"scripts": {
 		"dev:watch": "sand watch",
 		"dev:build": "sand build",
+		"copy": "bun ./copy.ts",
 		"setup": "bun i",
-		"clean": "rm -rf .sandstone/cache.json"
+		"clean": "rm -rf .sandstone/cache.json .build"
 	},
 	"keywords": [],
 	"author": "",

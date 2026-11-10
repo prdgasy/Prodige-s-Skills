@@ -13,6 +13,8 @@ import { Ability } from "./ability";
 import { Global } from "@src/global";
 import { Roman } from "@lib/roman";
 import { Float } from "@prodigelib/floatVar";
+import { BetterArray } from "@prodigelib/betterarray";
+import type { TitleOptions } from "./title";
 
 export type SkillOptions = {
 	name: string,
@@ -20,7 +22,7 @@ export type SkillOptions = {
 	item?: Item,
 	starting?: number,
 	achievements?: Achievement[],
-	titles?: Title[],
+	titles?: TitleOptions[],
 	rewards?: Map<number, Reward[]>,
 	ability?: { name: string, description: string, basePrice: number, trigger: () => void },
 	customItems?: Tool[],
@@ -32,7 +34,7 @@ export class Skill {
 	static levelUpNotifState = Label('level_up_notif')('@p');
 
 	public name: string;
-	public resource: string;
+	public resourceId: string;
 	public description: string;
 	public item: Item;
 	public level: Score;
@@ -40,7 +42,8 @@ export class Skill {
 	public goal: Score;
 	public starting: number;
 	public achievements: Achievement[];
-	public achievement: Score;
+	public achievementArray!: BetterArray;
+	public achievementId: Score;
 	public titles: Title[];
 	public rewards: Map<number, Reward[]>;
 	public customItems: Tool[];
@@ -50,31 +53,34 @@ export class Skill {
 	public totalXp: Float;
 	public totalPts: Score;
 
-	private bossbarCount = Variable(0);
+	public static bossbarCount = Variable(0);
 
 	constructor(opt: SkillOptions) {
 		this.name = opt.name;
-		this.resource = Global.toResource(this.name);
+		this.resourceId = Global.toResource(this.name);
 		this.description = opt.description ?? "§7No description for this skill yet.";
 		this.item = opt.item ?? "anvil";
-		this.level = Objective.create(`${this.name}.level`)('@p');
-		this.xp = Float.objective(`${this.name}.xp`)('@p');
-		this.goal = Objective.create(`${this.name}.goal`)('@p');
+		this.level = Objective.create(`${this.resourceId}.level`)('@p');
+		this.xp = Float.objective(`${this.resourceId}.xp`)('@p');
+		this.goal = Objective.create(`${this.resourceId}.goal`)('@p');
 		this.starting = opt.starting ?? 40;
+
 		this.achievements = opt.achievements ?? [];
-		this.achievement = Objective.create(`${this.name}.achievement`)(`@p`);
-		this.titles = opt.titles ?? [];
+
+		this.achievementId = Objective.create(`${this.resourceId}.achievement`)(`@p`);
+		this.titles = (opt.titles ?? []).map(title => new Title(this, title));
+
 		this.rewards = opt.rewards ?? new Map<number, Reward[]>();
 		this.ability = opt.ability ? new Ability(this, opt.ability.name, opt.ability.description, opt.ability.basePrice, opt.ability.trigger) : undefined;
 		this.customItems = opt.customItems ?? [];
 		this.onEvents = opt.onEvents ?? [];
 
-		this.totalXp = Float.objective(`${this.name}.totalXp`)('@p');
-		this.totalPts = Objective.create(`${this.name}.totalPts`)('@p');
+		this.totalXp = Float.objective(`${this.resourceId}.totalXp`)('@p');
+		this.totalPts = Objective.create(`${this.resourceId}.totalPts`)('@p');
 	}
 
 	public onEventTriggered(addedXp: Float, addedPoint: Score) {
-		const fn = MCFunction(`skill/${this.resource}/on_event_triggered`, () => {
+		const fn = MCFunction(`skill/${this.resourceId}/on_event_triggered`, () => {
 			this.xp.add(addedXp);
 			Player.pts.add(addedPoint);
 			this.totalPts.add(addedPoint);
@@ -93,7 +99,7 @@ export class Skill {
 	}
 
 	private levelUp() {
-		const fn = MCFunction(`skill/${this.resource}/level_up`, () => {
+		const fn = MCFunction(`skill/${this.resourceId}/level_up`, () => {
 			this.xp["-="](this.goal);
 
 			this.goal["*="](13)["/="](10);
@@ -103,7 +109,10 @@ export class Skill {
 
 			this.level["++"];
 
-			Reward.cases(this, this.level, (r: Reward[]) => Reward.giveAll(r)); // store it in a storage associated by name; claim later in the menu;
+			Reward.cases(this, this.level, Reward.enqueueAll);
+			for (const title of this.titles) {
+				if (title.obtain === 'level') _.if(this.level['=='](title.requires), () => title.unlock());
+			}
 
 			this.levelUpNotif();
 		});
@@ -113,9 +122,9 @@ export class Skill {
 
 
 	private onEventDisplay(xpAdded: Float, pointAdded: Score) {
-		const show = MCFunction(`skill/${this.resource}/show`, () => {
-			this.bossbarCount['++'];
-			const key = Variable(this.bossbarCount);
+		const show = MCFunction(`skill/${this.resourceId}/show`, () => {
+			Skill.bossbarCount['++'];
+			const key = Variable(Skill.bossbarCount);
 			const roman = Roman.get(this.level);
 			const progress = this.xp['*'](100)['/'](this.goal).show();
 			const xp = this.xp.show();
@@ -123,7 +132,7 @@ export class Skill {
 			const added = xpAdded.show();
 
 			_.with([key, roman, xp, this.goal, added, pointAdded, progress, round], () => {
-				const id = S`prodige_skills.${this.resource}.${key}`;
+				const id = S`prodige_skills.${this.resourceId}.${key}`;
 
 				S.bossbar.add(id, S`"§d${this.name} ${roman} §8| §e${xp}§6/§e${this.goal} Xp §8• §7${progress}% §8| §b+${added} Xp §8• §e+${pointAdded} Pts"`);
 				_.if(this.level['=='](0), () => S.bossbar.set(id).name(`§aUnlocking ${this.name}...`))
@@ -139,9 +148,8 @@ export class Skill {
 
 			// clean
 			_.with([key], () => {
-				S.bossbar.remove(S`prodige_skills.${this.resource}.${key}`);
+				S.bossbar.remove(S`prodige_skills.${this.resourceId}.${key}`);
 			});
-			this.bossbarCount['--'];
 		}, { asyncContext: true });
 
 		return show();
@@ -171,11 +179,17 @@ export class Skill {
 					$`  §8• §7Target: §d${this.name} ${nextRoman} §7§o(${this.level['+'](1)})\n`,
 					$`  §8• §7Progress: §e${progress.show()}%\n`,
 					$`  §8> ${bar.toData()} §e${this.xp.show()}§6/§e${this.goal} XP\n\n`,
-					` §a§lRewards:\n`,
-					...rewards.map(r => ` §8• ${r}\n\n`),
-
+					` §a§lRewards: §7(Claim them in the Reward Vault)\n`,
+					...rewards.map(r => ` §8• ${r.name}\n`),
 				], '@p');
 			});
+			for (const title of this.titles) {
+				if (title.obtain === 'level') {
+					_.if(this.level['=='](title.requires), () => {
+						Player.send(`New title unlocked: ${title.name}`, '§a');
+					});
+				}
+			}
 			tellraw('@p', [Global.encapsuler]);
 		});
 	}
@@ -189,7 +203,7 @@ export class Skill {
 
 		this.ability?.firstJoin();
 
-		this.achievement.set(0);
+		this.achievementId.set(0);
 		for (const achievement of this.achievements) {
 			achievement.progress.set(0);
 		}

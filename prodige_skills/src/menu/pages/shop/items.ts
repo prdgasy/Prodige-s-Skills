@@ -1,40 +1,63 @@
-import { Gui, PageClass } from "@prodigelib/gui";
+import { Button, Gui, PageClass } from "@prodigelib/gui";
 import { Shop } from ".";
 import { Menu } from "@src/menu";
+import { Tool } from "@src/misc/tool";
+import { Text } from "@lib/text";
+import { _, Objective } from "sandstone";
 
 export class Items {
+	public static index = Objective.create('menu.shop.items.index')('@s');
+
 	public static getName() {
 		return this.name;
 	}
 
 	public static init(g: Gui, p: PageClass) {
-		let slot = 0;
+		const tools = Object.values(Tool.tools);
 
-		// for (const tool of Tool.tools) {
-		//   const t = new Button(
-		//     tool.item,
-		//     slot++,
-		//     `§a§l${tool.name}`,
-		//     [
-		//       `§7Rarity: ${tool.rarity}`,
-		//       "",
-		//       "§f§lDescription",
-		//       ...Text.wrap(`§7${tool.description}`),
-		//       "",
-		//       "§d§l✦ Special Characteristic",
-		//       ...tool.characteristics.flatMap(c => Text.wrap(c)),
-		//       "",
-		//       "§b§lStatistics",
-		//       `§7Durability: §f${tool.durability}`,
-		//       `§7Price: §6${tool.price} Points`,
-		//       "",
-		//       "§e§l➜ Click to purchase",
-		//     ],
-		//     () => tool.buy()
-		//   );
-		//   p.add(t);
-		// }
+		p.add(() => {
+			let slot = 0;
+			let page = 0;
+			for (let i = 0; i < tools.length; i++) {
+				_.if(Items.index['=='](page), () => {
+					while (slot < 18 && i < tools.length) {
+						const tool = tools[i];
+						p.emit(this.displayItem(tool, slot++));
+					}
+					slot = 0;
+				})
+				page++;
+			}
+		});
+
+		p.add(() => Menu.sliders(p, Items.index, Math.floor(tools.length / 18)));
+
+
+
 		p.add(Shop.balance(), Menu.back(g, Shop));
 		return p;
+	}
+
+	private static displayItem(tool: Tool, slot: number) {
+		return new Button(
+			tool.icon,
+			slot,
+			`§a§l${tool.name} §8• §6${tool.price} Pts`,
+			[
+				"",
+				...Text.wrap(tool.description, `§7`),
+				"",
+				...(tool.characteristics?.length ? [
+					`§d§l┃ Special Characteristics`,
+					...tool.characteristics.flatMap(c => Text.wrap(c, '§d┃ §7')),
+					"",
+				] : []),
+				`§b§l┃ Price §8• §6${tool.price} Pts`,
+				"§7↪ §8Click to purchase!",
+				"",
+				tool.rarity
+			],
+			() => tool.buy()
+		);
 	}
 }

@@ -1,27 +1,41 @@
 import { Roman } from "@lib/roman";
-import { BetterArray } from "@prodigelib/betterarray";
-import { ToolName } from "@src/data/definitions";
+import type { ToolName } from "@src/data/definitions";
 import { Global } from "@src/global";
 import { Player } from "@src/player";
-import { Skill } from "@src/skill";
-import { Ability } from "@src/skill/ability";
-import { Macro as $, _, comment, DataPointClass, DataVariable, Score, Variable } from "sandstone";
+import type { Skill } from "@src/skill";
+import type { Ability } from "@src/skill/ability";
+import type { Item } from "@src/types";
+import { Macro as $, _, comment, DataPointClass, Objective, Score, Variable } from "sandstone";
 import { MacroLiteral } from "sandstone/core";
 
 export type AllRewards = ToolName | 'Common Crate Key'
 
 export class Reward {
-	name: string;
-	give: () => void;
+	public static registry = new Map<string, Reward>();
+	public name: string;
+	public resourceId: string;
+	public give: () => void;
+	public icon: Item;
+	public takesPlace: boolean;
+	public pending: Score;
 	public static common: Reward[];
 	public static rare: Reward[];
-	public static registry = new Map<string, Reward>();
 
-	constructor(name: string, give: () => void) {
+	constructor(
+		name: string,
+		give: () => void,
+		opt: { icon?: Item; takesPlace?: boolean } = {}
+	) {
 		this.name = name;
+		this.resourceId = Global.toResource(this.name);
 		this.give = give;
+		this.icon = opt.icon ?? 'chest';
+		this.takesPlace = opt.takesPlace ?? false;
 
-		Reward.registry.set(this.name, this);
+		const objectiveName = 'reward.pending.' + this.resourceId;
+		this.pending = Objective.create(objectiveName)('@p');
+
+		Reward.registry.set(this.resourceId, this);
 	}
 
 	/** Assemble multiple rewards into a string[] */
@@ -35,15 +49,37 @@ export class Reward {
 		rewards.forEach(r => r.give());
 	}
 
+	public static enqueue(reward: Reward) {
+		if (reward.takesPlace)
+			return reward.pending.add(1);
+
+		reward.give();
+	}
+
+	public static enqueueAll(rewards: Reward[]) {
+		rewards.forEach(reward => Reward.enqueue(reward));
+	}
+
+	public claim() {
+		_.if(this.pending['>'](0), () => {
+			Reward.canGiveReward(() => {
+				this.pending['--'];
+				this.give();
+				Player.playSound('success', 2);
+			});
+		});
+	}
+
 	public static canGiveReward(callback: () => void) {
-		return _.if(Player.isInvFull(), () => Player.throw("You don't have enough space in your inventory!"))
-			.else(() => callback());
+		return _.if(Player.isInvFull(), () => {
+			Player.throw("You don't have enough space in your inventory!");
+		}).else(() => callback());
 	}
 
 	public static ability(ability: Ability, tier: number): Reward {
 		return new Reward(
 			`§dUpgrade avaible: §c§l${ability.name} §8[§c§l${Roman.get(tier)}§8] • ${(tier - 1) * 2.5}%»§c${tier * 2.5}%`
-			, () => { });
+			, () => { }, { icon: 'experience_bottle', takesPlace: false });
 	}
 
 	public static point(p: number): Reward {
@@ -80,7 +116,7 @@ export class Reward {
 	}
 
 	public static get(r: AllRewards): Reward {
-		const reward = Reward.registry.get(r);
+		const reward = Reward.registry.get(Global.toResource(r));
 
 		if (!reward) {
 			throw Error(`"${r}" is not registered into "Reward.registry".`);
@@ -89,4 +125,3 @@ export class Reward {
 		return reward;
 	}
 }
-

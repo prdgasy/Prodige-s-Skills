@@ -7,6 +7,7 @@ import { Player } from "@src/player";
 import { _, Score, Variable } from "sandstone";
 import { Menu } from "@src/menu";
 import { Main } from "@src/menu/main";
+import { Mask } from "../mask";
 
 const SLOTS = [11, 13, 15];
 
@@ -16,8 +17,10 @@ export class Tasks {
 	}
 
 	public static init(g: Gui, p: PageClass) {
+		p.add(() => Mask.layered(p, "orange_stained_glass_pane", "brown_stained_glass_pane"));
+
 		p.add(() => {
-			_.if(_.not(Player.firstTask), () => {
+			_.if(_.not(Player.gotFirstTask), () => {
 				const noTask = (slot: number) =>
 					new Button('gunpowder', slot, '§7§lNo Task', [
 						'',

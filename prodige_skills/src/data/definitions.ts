@@ -8,9 +8,9 @@ import { say } from "sandstone";
 // TOOL
 export const toolDefs = {
 	'§aNovice Pickaxe': {
-		item: 'stone_pickaxe', description: 'This is a simple description',
+		item: 'diamond_pickaxe', description: 'This is a simple description tester a b c',
 		rarity: '§f§lCOMMON', durability: 100,
-		price: 2500
+		price: 2500, characteristics: ['§7This is a characteristic', '§7This is another characteristic'],
 	},
 	'§bExpert Sword': {
 		item: 'diamond_sword', description: 'A very cool sword',
@@ -55,11 +55,11 @@ export const crateDefs = {
 		keyPrice: 1500,
 		animated: true,
 		rewards: () => new Map<Reward, number>([
-			[Reward.point(500), 55],
-			[Reward.get('§bExpert Sword'), 35],
-			[Reward.get('§aNovice Pickaxe'), 10]
+			[Reward.point(500), 20],
+			[Reward.get('§bExpert Sword'), 62],
+			[Reward.get('§aNovice Pickaxe'), 100]
 		]),
-		roll: 1
+		roll: 4
 	},
 	'§6§lLegendary': {
 		description: 'A legendary chest holding exceptional rewards for dedicated players.',
@@ -95,11 +95,21 @@ export const skillDefs = {
 	'Mining': {
 		item: 'diamond_pickaxe', starting: 20,
 		description: 'This is a mining description',
+		titles: [
+			{ name: '§6Stone Seeker', description: 'A miner who has begun mastering the depths.', icon: 'stone_pickaxe', level: 10 },
+			{ name: '§bDeep Delver', description: 'A seasoned explorer of the underground.', icon: 'deepslate', level: 30 },
+			{ name: '§cMaster Miner', description: 'A legend among the miners of the realm.', icon: 'diamond_pickaxe', price: 25000 },
+		],
 		ability: { name: 'Miner', description: 'Cool miner', basePrice: 100, trigger: () => say('Miner ability triggered') }
 	},
 	'Foraging': {
 		item: 'oak_sapling', starting: 10,
 		description: 'Chop trees, gather wood, and master the art of forestry.',
+		titles: [
+			{ name: '§aSapling', description: 'A new gatherer ready to grow.', icon: 'oak_sapling', level: 10 },
+			{ name: '§2Forest Guardian', description: 'A trusted protector of the forest.', icon: 'oak_log', level: 30 },
+			{ name: '§5Verdant Legend', description: 'A true master of woodlands and wild growth.', icon: 'cherry_sapling', price: 25000 },
+		],
 		ability: { name: 'Pro Forager', description: 'Cool Forager', basePrice: 150, trigger: () => say('Forager ability triggered') }
 	}
 } satisfies Record<string, SkillDefType>;

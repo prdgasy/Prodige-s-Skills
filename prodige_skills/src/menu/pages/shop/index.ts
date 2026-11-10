@@ -44,7 +44,10 @@ export class Shop {
 				'',
 				'§eClick to browse the gear!'
 			],
-			() => g.switch(Items.getName())
+			() => {
+				Items.index.set(0);
+				g.switch(Items.getName())
+			}
 		);
 	}
 
@@ -109,7 +112,10 @@ export class Shop {
 				'',
 				'§eClick to browse the titles!'
 			],
-			() => g.switch(Titles.getName())
+			() => {
+				Titles.index.set(0);
+				g.switch(Titles.getName());
+			}
 		);
 	}
 

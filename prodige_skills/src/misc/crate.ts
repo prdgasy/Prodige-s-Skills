@@ -72,7 +72,7 @@ export class Crate {
 			'§e§l┃ Possible Rewards',
 			...Array.from(this.rewards, ([reward, weight]) => {
 				const chance = Math.round((weight / totalWeight) * 10000) / 100;
-				return `§e┃ §7${reward.name} §8• §b${chance}%`;
+				return `§e┃ §7${reward.name} §8• §7${chance}%`;
 			})
 		];
 	}
@@ -84,8 +84,6 @@ export class Crate {
 			...Text.wrap(this.description, '§e┃ §7'),
 			'',
 			...this.getItemDescription(),
-			'',
-			`§e┃ §7Key price: §6${this.key.price} Points`,
 			'',
 			'§eClick while holding its key to open!'
 		];
@@ -99,7 +97,7 @@ export class Crate {
 				Global.encapsuler + '\n',
 				` §5§lCRATE OPENED!\n\n`,
 				` §7You opened x1 §8[${this.name} Crate §8]!\n\n`,
-				' §e§lRewards:'
+				' §e§lRewards added to your Reward Vault:'
 			]);
 
 			let total = 0;
@@ -113,7 +111,7 @@ export class Crate {
 				for (const [reward, weight] of this.rewards) {
 					acc += weight;
 					_.if(_.and(_.not(done), roll['<'](acc)), () => {
-						reward.give();
+						Reward.enqueue(reward);
 						smartTellraw([T` §8• ${reward.name}`]);
 						done.set(1);
 					});
@@ -121,7 +119,7 @@ export class Crate {
 			});
 
 			smartTellraw([
-				' \n§7Visit the shop for more!\n',
+				' \n§7Claim your rewards from the Reward Vault!\n',
 				Global.encapsuler
 			]);
 		}, { onConflict: 'ignore' });

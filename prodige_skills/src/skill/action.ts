@@ -22,6 +22,8 @@ export class Action {
 	private criteria: Criteria;
 	private watcher: Score;
 
+	private static eventListened = Variable(0);
+
 	// static score = Objective.create('on_event');
 
 	constructor(parent: Skill, name: string, item: Item, xp: number, pts: number, criteria = "dummy" as Criteria) {
@@ -40,12 +42,14 @@ export class Action {
 
 	private trigger() {
 		const fn = MCFunction(`on_event/trigger/${Global.toResource(this.name)}`, () => {
+			Action.eventListened.set(1);
 			Action.addedXp.set(Float.variable(this.xp)['*'](Booster.getMult('Xp'))["*"](this.watcher));
 			Action.addedPts.set(Variable(this.pts)['*'](Booster.getMult('Pts')["*"](this.watcher)));
 
 			this.totalPts['+='](Action.addedPts);
 			this.totalXp['+='](Action.addedXp);
 			this.totalExecuted['+='](this.watcher);
+
 
 			this.parent.onEventTriggered(Action.addedXp, Action.addedPts);
 
@@ -58,13 +62,19 @@ export class Action {
 	public static init() {
 		this.watch();
 	}
+
 	public static watch() {
-		return MCFunction('on_event/watch', () =>
+		return MCFunction('on_event/watch', () =>{
 			execute.as('@a').at('@s').run(() => {
 				for (const skill of Object.values(Skill.skills))
 					for (const event of skill.onEvents)
 						_.if(event.watcher['>'](0), () => event.trigger())
 			})
+
+			_.if(_.not(this.eventListened), () => Skill.bossbarCount.reset()
+			)
+			this.eventListened.set(0);
+		}
 			, { runEvery: '5s' })
 	}
 }

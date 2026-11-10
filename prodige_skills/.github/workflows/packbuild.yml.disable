@@ -25,7 +25,7 @@ jobs:
         run: |
           git worktree add gen generated
           rm -rf gen/*
-          mv ./.sandstone/output/* gen
+          mv ./.build/datapack ./.build/resourcepack gen
           cd gen
           git config --local user.email 'action@github.com'
           git config --local user.name 'GitHub Action'

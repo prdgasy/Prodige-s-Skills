@@ -79,11 +79,11 @@ export class Achievements {
 					], () => { }
 				);
 
-				_.if(skill.achievement[">"](i), () => {
+				_.if(skill.achievementId[">"](i), () => {
 					_.if(a.claimed, () => p.emit(done))
 						.else(() => p.emit(toClaim));
 				})
-					.elseIf(skill.achievement["=="](i), () => p.emit(current))
+					.elseIf(skill.achievementId["=="](i), () => p.emit(current))
 					.else(() => p.emit(locked));
 			});
 		});

@@ -8,13 +8,13 @@ Starter template for creating Minecraft datapacks and resource packs with [Sands
 
 ### Cache & clean rebuilds
 
-- **Trust the CLI's cache.** If a file in `.sandstone/output/` isn't rewritten on a rebuild, that's intentional — Sandstone hashes the fully-visited-and-serialized resource data in-memory and compares it against the hash stored in `.sandstone/cache.json`. A stale-looking file means the generator produced the same bytes as the previous run, not that the build skipped it.
-- **To force a clean rebuild, delete the entire `.sandstone/` folder**, not just `.sandstone/output/`. The `.sandstone/cache.json` tracks resource state across builds; clearing only `output/` leaves stale cache entries that suppress regeneration.
+- **Trust the CLI's cache.** If a file in `.build/` isn't rewritten on a rebuild, that's intentional — Sandstone hashes the fully-visited-and-serialized resource data in-memory and compares it against the hash stored in `.sandstone/cache.json`. A stale-looking file means the generator produced the same bytes as the previous run, not that the build skipped it.
+- **To force a clean rebuild, delete `.sandstone/` and `.build/`.** The `.sandstone/cache.json` tracks resource state across builds, so clearing only `.build/` leaves stale cache entries that suppress regeneration.
 
 ## Commands
 
 ```bash
-bun dev:build    # Build the pack (outputs to `.sandstone/output/`)
+bun dev:build    # Build the pack (outputs to `.build/datapack/` and `.build/resourcepack/`)
 bun dev:build --debug  # Same, but mirror console output to `.sandstone/build-debug.log` (overwritten each run) for targeted inspection
 bun dev:watch    # Watch mode - rebuilds on file changes, run this in a background shell and read from `.sandstone/watch.log` rather than your own background shell log
 ```
@@ -28,7 +28,9 @@ src/
 ├── index.ts              # Entry point - import your files here
 └── *.ts                  # Your datapack code files
 sandstone.config.ts       # Pack configuration (name, namespace, formats)
-.sandstone/output/        # Generated packs (created on build)
+.sandstone/               # Generated resource cache
+└── cache.json
+.build/                   # Generated packs (created on build)
 ├── datapack/             # Generated datapack
 │   ├── pack.mcmeta
 │   └── data/
@@ -50,7 +52,7 @@ sandstone.config.ts       # Pack configuration (name, namespace, formats)
 ```
 
 **Finding generated files:**
-- MCFunctions: `.sandstone/output/datapack/data/<namespace>/function/<name>.mcfunction`
+- MCFunctions: `.build/datapack/data/<namespace>/function/<name>.mcfunction`
 - The namespace is set in `sandstone.config.ts` (defaults to "default")
 - Nested function names like `MCFunction('foo/bar', ...)` create `foo/bar.mcfunction`
 

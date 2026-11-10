@@ -2,10 +2,11 @@ import { Gui, PageClass, GuiMacro as $, Button } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
 import { Navigation } from "./navigation";
 import { Roman } from "@lib/roman";
-import { _, DataPointClass, DataVariable, tellraw } from "sandstone";
+import { _, DataPointClass, DataVariable } from "sandstone";
 import { Player } from "@src/player";
 import { Text } from "@lib/text";
 import { Ability } from "@src/skill/ability";
+import { Mask } from "../../mask";
 
 export class Abilities {
 	public static getName(skill: Skill) {
@@ -13,6 +14,8 @@ export class Abilities {
 	}
 
 	public static init(g: Gui, p: PageClass, s: Skill) {
+		p.add(() => Mask.layered(p, "white_stained_glass_pane", "gray_stained_glass_pane"));
+
 		p.add(() => {
 			const info = new Button(
 				"knowledge_book", 14, "§a§lAbility Guide",
@@ -71,20 +74,20 @@ export class Abilities {
 	}
 
 	private static unlocked(p: PageClass, s: Skill, a: Ability) {
-		const isActive = DataVariable("§8• §aActive");
+
+		const icon = DataVariable("small_amethyst_bud");
 		_.if(_.not(a.state), () => {
-			isActive.set("§8• §7Inactive");
+			icon.set("amethyst_cluster");
 		});
 
-		_.if(a.tier['=='](10), () => this.maxTier(p, a, isActive)).
-			else(() => this.upgradeBtn(p, s, a, isActive));
+		_.if(a.tier['=='](10), () => this.maxTier(p, a, icon)).
+			else(() => this.upgradeBtn(p, s, a, icon));
 	}
 
-	private static upgradeBtn(p: PageClass, s: Skill, a: Ability, isActive: DataPointClass) {
+	private static upgradeBtn(p: PageClass, s: Skill, a: Ability, icon: DataPointClass) {
 		const next = a.tier['+'](1);
 		const roman = Roman.get(a.tier);
 		const romanNext = Roman.get(next);
-		const description = Text.wrap(a.description);
 		const levelRequired = next['*'](10);
 		const romanLevelRequired = Roman.get(levelRequired);
 
@@ -96,23 +99,26 @@ export class Abilities {
 		const isLevel = s.level['>='](levelRequired);
 		_.if(isPoint, () => point.set('§8[§a✔§8]'));
 		_.if(isLevel, () => level.set('§8[§a✔§8]'));
-		_.if(_.and(isPoint, isLevel), () => unlock.set('§8• §a§lUNLOCK!'));
+		_.if(_.and(isPoint, isLevel), () => {
+			unlock.set('§8• §a§lUNLOCK!');
+			icon.set('amethyst_block');
+		});
 
 		p.emit(
 			new Button(
-				'nether_star', 4, $`§c§l${a.name} §8[§c§l${roman}§8] ${unlock}`,
+				$(icon), 4, $`§c§l${a.name} §8[§c§l${roman}§8] ${unlock}`,
 				[
-					$`${isActive}`,
 					'',
-					...description,
+					'§d§l┃ Ability Perks',
+					...Text.wrap(a.description, '§d┃ §7'),
 					'',
-					'§e§l┃ Next Tier',
-					$`§e┃ §c${a.name} §8[${roman}➜§c§l${romanNext}§8] §8• ${a.buff.show()}%»§c§l${a.buff['+'](2.5).show()}%`,
-					'§e┃',
-					$`§e┃ ${level} §8• §d${s.name} §l${romanLevelRequired} §7(${levelRequired})`,
-					$`§e┃ ${point} §8• §e${a.price} Pts`,
-					'',
-					...Text.wrap('Improve your skill to unlock stronger ability effects.', '§e┃ §7'),
+					'§d§l┃ Next Tier',
+					$`§d┃ §c${a.name} §8[${roman}➜§c§l${romanNext}§8] §8• ${a.buff.show()}%»§c§l${a.buff['+'](2.5).show()}%`,
+					'§d┃',
+					$`§d┃ ${level} §8• §d${s.name} §l${romanLevelRequired} §7(${levelRequired})`,
+					$`§d┃ ${point} §8• §e${a.price} Pts`,
+					'§d┃',
+					...Text.wrap('Improve your skill to unlock stronger ability effects.', '§d┃ §7'),
 					'',
 					'§eClick to upgrade!'
 				],

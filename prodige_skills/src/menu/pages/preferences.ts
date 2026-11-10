@@ -7,6 +7,7 @@ import { _, DataVariable } from "sandstone";
 import { EntityLabel } from "sandstone/variables";
 import { Menu } from "..";
 import { Main } from "./main";
+import { Mask } from "../mask";
 
 type Switch = {
 	name: string,
@@ -21,6 +22,7 @@ export class Preferences {
 	}
 
 	public static init(g: Gui, p: PageClass) {
+		p.add(() => Mask.mainLayered(p));
 		const switches: Switch[] = [
 			{
 				name: 'Sound Effects',

@@ -63,7 +63,7 @@ export class Ability {
 		this.buff.add(2.5);
 		Player.pts['-='](this.price);
 
-		this.price['*='](2);
+		this.price['*='](3);
 		this.tierUpShow();
 	}
 
