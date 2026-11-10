@@ -3,11 +3,10 @@ import { Float } from "@prodigelib/floatVar";
 import { Button, Gui, PageClass, GuiMacro as $ } from "@prodigelib/gui";
 import { Reward } from "@src/misc/reward";
 import { Skill } from "@src/skill";
-import { _, say } from "sandstone";
+import { _ } from "sandstone";
 import { Navigation } from "./navigation";
 import { Text } from "@lib/text";
 import { Player } from "@src/player";
-import { Achievement } from "@src/skill/achievement";
 
 export class Achievements {
 	public static getName(skill: Skill) {
@@ -46,27 +45,8 @@ export class Achievements {
 						...Reward.join(a.rewards),
 						``,
 						`§a✔ COMPLETED`
-					], () => {
-						Player.throw("This achievement's rewards has already been claimed!");
-					}, 1, ['!attribute_modifiers']
+					], () => Player.send("This achievement is already completed.", "§a"), 1, ['!attribute_modifiers']
 				);
-
-				const toClaim = new Button(
-					a.item, i, `§a${a.name} §8• §a§lCLAIM!`,
-					[
-						...Text.wrap(a.description),
-						``,
-						$`§f§lRequirement:`,
-						$` §8• §7Target: §a${a.goal} §8(Done)`,
-						``,
-						`§f§lRewards:`,
-						...Reward.join(a.rewards),
-						``,
-						`§eClick to claim!`
-					], () => {
-						a.claim();
-					}, 1, ['!attribute_modifiers']
-				)
 
 				const locked = new Button(
 					'crying_obsidian', i, `§8Locked Step #${i + 1}`,
@@ -76,13 +56,10 @@ export class Achievements {
 						`§7achievement step yet!`,
 						``,
 						`§c🔒 LOCKED`
-					], () => { }
+					], () => Player.send("Complete the previous achievement first.", "§7")
 				);
 
-				_.if(skill.achievementId[">"](i), () => {
-					_.if(a.claimed, () => p.emit(done))
-						.else(() => p.emit(toClaim));
-				})
+				_.if(skill.achievementId[">"](i), () => p.emit(done))
 					.elseIf(skill.achievementId["=="](i), () => p.emit(current))
 					.else(() => p.emit(locked));
 			});

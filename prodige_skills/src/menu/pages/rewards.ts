@@ -5,6 +5,7 @@ import { Main } from "@src/menu/main";
 import { Reward } from "@src/misc/reward";
 import { _, Objective, Score, Variable } from "sandstone";
 import { Mask } from "../mask";
+import { Player } from "@src/player";
 
 const REWARDS_PER_PAGE = 18;
 
@@ -16,24 +17,27 @@ export class RewardVault {
 	}
 
 	public static init(g: Gui, p: PageClass) {
-		const rewards = [...Reward.registry.values()].filter(reward => reward.takesPlace);
+		const rewards = [...Reward.registry.values()];
 
 		p.add(() => Mask.bottom(p, "magenta_stained_glass_pane"));
 
 		p.add(() => {
 			const hasRewardOnPage = Variable(0);
-			this.displayAll(p, rewards, hasRewardOnPage)
+			const rewardCount = this.displayAll(p, rewards, hasRewardOnPage);
+			const maxPage = Variable(0);
+			_.if(rewardCount['>'](REWARDS_PER_PAGE), () => {
+				maxPage.set(rewardCount['-'](1)['/'](REWARDS_PER_PAGE));
+			});
+			Menu.sliders(p, this.index, maxPage);
 
 			_.if(_.not(hasRewardOnPage), () => {
 				Mask.full(p, "red_stained_glass_pane");
 
 				p.emit(new Button('barrier', 13, '§cYour Vault Is Empty', [
 					'',
-					'§6§l┃ No Items to Claim',
-					...Text.wrap('Items won from crates and skill levels will appear here.', '§6┃ §7'),
-				], () => {
-					p.add(() => Menu.sliders(p, this.index, Math.max(0, Math.ceil(rewards.length / REWARDS_PER_PAGE) - 1)));
-				}));
+					'§6§l┃ No Rewards to Claim',
+					...Text.wrap('Rewards from achievements, crates and skill levels will appear here.', '§6┃ §7'),
+				], () => Player.send('Your Reward Vault is empty.', '§7')));
 			})
 		});
 
@@ -42,7 +46,7 @@ export class RewardVault {
 		return p;
 	}
 
-	private static displayAll(p: PageClass, rewards: Reward[], hasRewardOnPage: Score) {
+	private static displayAll(p: PageClass, rewards: Reward[], hasRewardOnPage: Score): Score {
 		const rewardIndex = Variable(0);
 
 		for (const reward of rewards) {
@@ -56,6 +60,8 @@ export class RewardVault {
 				rewardIndex['++'];
 			});
 		}
+
+		return rewardIndex;
 	}
 	private static display(reward: Reward, slot: Score) {
 		return new Button(
@@ -64,8 +70,11 @@ export class RewardVault {
 			$`§6§l${reward.name} §8× §e${reward.pending}`,
 			[
 				'',
-				'§6§l┃ Item Reward',
-				...Text.wrap('This item is waiting safely in your vault.', '§6┃ §7'),
+				`§6§l┃ ${reward.takesPlace ? 'Item Reward' : 'Reward'}`,
+				...Text.wrap(
+					reward.takesPlace ? 'This item is waiting safely in your vault.' : 'This reward is waiting safely in your vault.',
+					'§6┃ §7'
+				),
 				'',
 				$`§6┃ §7Available: §e${reward.pending}`,
 				'',

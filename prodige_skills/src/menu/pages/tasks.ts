@@ -23,11 +23,11 @@ export class Tasks {
 			_.if(_.not(Player.gotFirstTask), () => {
 				const noTask = (slot: number) =>
 					new Button('gunpowder', slot, '§7§lNo Task', [
-						'',
+
 						'§7This slot is waiting for a task.',
 						'§7Roll a new set to begin!',
 						'',
-						'§eUse §6Get New Tasks §eto get started.'
+						'§8Use Get New Tasks §eto get started.'
 					], () => Player.throw('No task assigned yet!'));
 				p.emit(noTask(SLOTS[0]));
 				p.emit(noTask(SLOTS[1]));

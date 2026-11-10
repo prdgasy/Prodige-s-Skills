@@ -60,13 +60,20 @@ export class Reward {
 		rewards.forEach(reward => Reward.enqueue(reward));
 	}
 
+	public static vaultAll(rewards: Reward[]) {
+		rewards.forEach(reward => reward.pending.add(1));
+	}
+
 	public claim() {
 		_.if(this.pending['>'](0), () => {
-			Reward.canGiveReward(() => {
+			const claim = () => {
 				this.pending['--'];
 				this.give();
 				Player.playSound('success', 2);
-			});
+			};
+
+			if (this.takesPlace) Reward.canGiveReward(claim);
+			else claim();
 		});
 	}
 

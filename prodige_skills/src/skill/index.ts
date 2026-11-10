@@ -13,7 +13,6 @@ import { Ability } from "./ability";
 import { Global } from "@src/global";
 import { Roman } from "@lib/roman";
 import { Float } from "@prodigelib/floatVar";
-import { BetterArray } from "@prodigelib/betterarray";
 import type { TitleOptions } from "./title";
 
 export type SkillOptions = {
@@ -42,7 +41,6 @@ export class Skill {
 	public goal: Score;
 	public starting: number;
 	public achievements: Achievement[];
-	public achievementArray!: BetterArray;
 	public achievementId: Score;
 	public titles: Title[];
 	public rewards: Map<number, Reward[]>;

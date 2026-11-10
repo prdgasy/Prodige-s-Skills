@@ -9,7 +9,7 @@ import { Shop } from ".";
 import { Item } from "@src/types";
 import { Player } from "@src/player";
 
-const FILTER_ICONS = ['paper', 'apple', 'golden_apple'];
+const FILTER_ICONS: Item[] = ['chest', 'ender_chest', 'barrel'];
 const FILTER_NAMES = ['All Titles', 'Owned Titles', 'Locked Titles'];
 
 export class Titles {
@@ -58,6 +58,22 @@ export class Titles {
 				.else(() => Menu.sliders(p, this.index, toRender['/'](18)));
 		});
 
+		p.add(new Button(
+			"emerald",
+			22,
+			"§a⚒ Items & Gear",
+			[
+				'',
+				'§e§l┃ Gear for Your Journey',
+				...Text.wrap('Browse equipment made to support your skill progression.', '§e┃ §7'),
+				'',
+				'§a§l┃ What You Can Find',
+				'§a┃ §7Tools and weapons',
+				'§a┃ §7Special item effects',
+				'§a┃ §7Equipment details and prices',
+			]
+		));
+
 		p.add(Shop.balance(), Menu.back(g, Shop));
 		return p;
 	}
@@ -77,7 +93,7 @@ export class Titles {
 
 	private static filterBtn(p: PageClass, name: string, icon: string) {
 		return p.emit(
-			new Button(icon as Item, 24, name, [],
+			new Button(icon as Item, 23, name, [],
 				() => {
 					this.filter['++']['%='](3);
 					this.index.set(0);

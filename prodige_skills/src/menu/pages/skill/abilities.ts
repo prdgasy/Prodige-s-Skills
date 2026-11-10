@@ -74,9 +74,8 @@ export class Abilities {
 	}
 
 	private static unlocked(p: PageClass, s: Skill, a: Ability) {
-
 		const icon = DataVariable("small_amethyst_bud");
-		_.if(_.not(a.state), () => {
+		_.if(a.state, () => {
 			icon.set("amethyst_cluster");
 		});
 

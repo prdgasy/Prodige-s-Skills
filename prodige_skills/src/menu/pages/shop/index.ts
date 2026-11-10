@@ -121,7 +121,7 @@ export class Shop {
 
 	public static balance() {
 		return new Button(
-			'gold_block', 22, $`§eBalance §8• §6${Player.pts} Pts`, [],
+			'gold_block', 21, $`§eBalance §8• §6${Player.pts} Pts`, [],
 			() => {
 				Player.playSound('tick', 2);
 				Player.smartSend(E`You have §6${Player.pts} Pts§e.`, '§e');

@@ -18,11 +18,13 @@ export class Items {
 		p.add(() => {
 			let slot = 0;
 			let page = 0;
-			for (let i = 0; i < tools.length; i++) {
+			let t = 0;
+			while (t < tools.length) {
 				_.if(Items.index['=='](page), () => {
-					while (slot < 18 && i < tools.length) {
-						const tool = tools[i];
+					while (slot < 18 && t < tools.length) {
+						const tool = tools[t];
 						p.emit(this.displayItem(tool, slot++));
+						t++;
 					}
 					slot = 0;
 				})

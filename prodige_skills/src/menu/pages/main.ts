@@ -39,7 +39,7 @@ export class Main {
 	private static rewardVault(g: Gui, p: PageClass) {
 		const pending = Variable(0);
 		for (const reward of Reward.registry.values()) {
-			if (reward.takesPlace) pending['+='](reward.pending);
+			_.if(reward.pending['>'](0), () => pending['+='](reward.pending));
 		}
 
 		return p.emit(new Button(
@@ -49,7 +49,7 @@ export class Main {
 			[
 				'',
 				'§d§l┃ Your Unclaimed Rewards',
-				'§d┃ §7Crate and skill rewards wait here.',
+				'§d┃ §7Achievement, crate and skill rewards wait here.',
 				'§d┃ §7Claim each reward whenever you are ready.',
 				'',
 				$`§e┃ §7Rewards waiting: §d${pending}`,
