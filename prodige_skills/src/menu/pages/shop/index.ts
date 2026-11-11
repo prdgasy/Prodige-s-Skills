@@ -1,4 +1,4 @@
-import { Button, Gui, PageClass, GuiMacro as $ } from "@prodigelib/gui";
+import { Button, Gui, Page, GuiMacro as $ } from "@prodigelib/gui";
 import { Text } from "@lib/text";
 import { Items } from "./items";
 import { Boosters } from "./booster";
@@ -14,7 +14,7 @@ export class Shop {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		p.add(
 			this.items(g),
 			this.boosters(g),

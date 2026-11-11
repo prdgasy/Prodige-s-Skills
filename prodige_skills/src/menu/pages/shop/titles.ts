@@ -1,5 +1,5 @@
 import { Text } from "@lib/text";
-import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
+import { Button, Gui, GuiMacro as $, Page } from "@prodigelib/gui";
 import { Menu } from "@src/menu";
 import { Skill } from "@src/skill";
 import { Title } from "@src/skill/title";
@@ -20,7 +20,7 @@ export class Titles {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		const titles = Object.values(Skill.skills).flatMap(skill => skill.titles);
 
 		p.add(() => {
@@ -78,7 +78,7 @@ export class Titles {
 		return p;
 	}
 
-	private static setFilter(p: PageClass, icon: string) {
+	private static setFilter(p: Page, icon: string) {
 		return () => {
 			const s: string[] = [];
 
@@ -91,18 +91,17 @@ export class Titles {
 		}
 	}
 
-	private static filterBtn(p: PageClass, name: string, icon: string) {
-		return p.emit(
-			new Button(icon as Item, 23, name, [],
-				() => {
-					this.filter['++']['%='](3);
-					this.index.set(0);
-					Player.playSound('block.lever.click');
-				}
-			));
+	private static filterBtn(p: Page, name: string, icon: string) {
+		return p.emit(new Button(icon as Item, 23, name, [],
+			() => {
+				this.filter['++']['%='](3);
+				this.index.set(0);
+				Player.playSound('block.lever.click');
+			}
+		));
 	}
 
-	private static renderTitle(p: PageClass, title: Title, slot: Score) {
+	private static renderTitle(p: Page, title: Title, slot: Score) {
 		const isOwned = DataVariable('§cNOT OWNED');
 		const equipped = DataVariable('');
 		_.if(title.owned, () => {

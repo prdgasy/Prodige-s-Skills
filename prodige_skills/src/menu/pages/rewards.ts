@@ -1,4 +1,4 @@
-import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
+import { Button, Gui, GuiMacro as $, Page } from "@prodigelib/gui";
 import { Text } from "@lib/text";
 import { Menu } from "@src/menu";
 import { Main } from "@src/menu/main";
@@ -16,7 +16,7 @@ export class RewardVault {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		const rewards = [...Reward.registry.values()];
 
 		p.add(() => Mask.bottom(p, "magenta_stained_glass_pane"));
@@ -46,7 +46,7 @@ export class RewardVault {
 		return p;
 	}
 
-	private static displayAll(p: PageClass, rewards: Reward[], hasRewardOnPage: Score): Score {
+	private static displayAll(p: Page, rewards: Reward[], hasRewardOnPage: Score): Score {
 		const rewardIndex = Variable(0);
 
 		for (const reward of rewards) {

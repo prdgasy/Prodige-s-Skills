@@ -1,4 +1,4 @@
-import { Gui, PageClass } from "@prodigelib/gui";
+import { Gui, Page } from "@prodigelib/gui";
 import { give, Objective } from "sandstone";
 import { Skill } from "@src/skill";
 
@@ -12,10 +12,10 @@ export type Criteria = Parameters<typeof Objective.create>[1];
 
 export type SkillPage = {
 	getName: () => string;
-	init: (g: Gui, page: PageClass) => PageClass;
+	init: (g: Gui, page: Page) => Page;
 };
 
 export type SubSkillPage = {
 	getName: (skill: Skill) => string;
-	init: (g: Gui, page: PageClass, skill: Skill) => PageClass;
+	init: (g: Gui, page: Page, skill: Skill) => Page;
 };

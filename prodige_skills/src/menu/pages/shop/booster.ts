@@ -1,5 +1,5 @@
 import { Text } from "@lib/text";
-import { Button, Gui, PageClass } from "@prodigelib/gui";
+import { Button, Gui, Page } from "@prodigelib/gui";
 import { Buyable } from "@src/misc/buyable";
 import { Booster } from "@src/misc/booster";
 import { Shop } from ".";
@@ -17,7 +17,7 @@ export class Boosters {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		for (let i = 1; i < 5; i++) {
 			const multiplier = i + 1;
 			p.add(

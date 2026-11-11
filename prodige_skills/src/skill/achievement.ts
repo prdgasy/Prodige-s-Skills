@@ -62,18 +62,16 @@ export class Achievement {
 			smartTellraw([
 				`${Global.encapsuler}\n\n`,
 				` §d§lACHIEVEMENT COMPLETE! §7(${skill.name})\n\n`,
-				` §a§l${achievement.name}\n`,
-				...Text.wrap(achievement.description + ` §e${achievement.goal}§6/§e${achievement.goal}`, ' §7'),
+				` §a§l${achievement.name} §e${achievement.goal}§6/§e${achievement.goal}\n`,
+				...Text.wrap(achievement.description, ' §7'),
 				'\n\n',
-				' §6§lREWARDS\n',
-				...achievement.rewards.map(reward => ` §8• §a${reward.name}\n`),
-				' §7All rewards are waiting in your Reward Vault.\n',
+				' §a§lRewards:\n',
+				...achievement.rewards.map(reward => `  §8• ${reward.name}\n`),
+				'\n §8All rewards are waiting in your Reward Vault.\n',
 				...(next ? [
 					'\n §b§lUP NEXT\n',
-					` §f§l${next.name}\n`,
-					...Text.wrap(next.description),
-					`\n §7Next goal: §e${next.goal}\n\n`,
-					' §eKeep going — your next milestone awaits!\n\n',
+					` §2§l${next.name} §e0§6/§e${next.goal}\n`,
+					...Text.wrap(next.description, ' §7'), '\n'
 				] : [
 					'\n §6§lALL MILESTONES COMPLETE!\n',
 					' §eYou have mastered every achievement for this skill!\n\n',

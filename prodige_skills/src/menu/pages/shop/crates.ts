@@ -1,5 +1,5 @@
 import { Text } from "@lib/text";
-import { Button, Gui, PageClass } from "@prodigelib/gui";
+import { Button, Gui, Page } from "@prodigelib/gui";
 import { Crate } from "@src/misc/crate";
 import { Shop } from ".";
 import { Menu } from "@src/menu";
@@ -13,7 +13,7 @@ export class Crates {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		p.add(this.howItWorks());
 
 		const crates = Object.values(Crate.crates);

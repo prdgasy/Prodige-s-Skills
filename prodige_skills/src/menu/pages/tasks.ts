@@ -1,7 +1,7 @@
 import { Bar } from "@lib/bar";
 import { Text } from "@lib/text";
 import { Float } from "@prodigelib/floatVar";
-import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
+import { Button, Gui, GuiMacro as $, Page } from "@prodigelib/gui";
 import { Task } from "@src/misc/task";
 import { Player } from "@src/player";
 import { _, Score, Variable } from "sandstone";
@@ -16,7 +16,7 @@ export class Tasks {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		p.add(() => Mask.layered(p, "orange_stained_glass_pane", "brown_stained_glass_pane"));
 
 		p.add(() => {
@@ -50,7 +50,7 @@ export class Tasks {
 		return p;
 	}
 
-	private static getNewTasks(p: PageClass) {
+	private static getNewTasks(p: Page) {
 		_.if(Task.timer['>'](0), () => {
 			p.emit(new Button(
 				'anvil', 4, $`§cTask Refresh §8• §c${Task.timer}m`,
@@ -80,13 +80,13 @@ export class Tasks {
 			})
 	}
 
-	private static btn(p: PageClass, task: Task, s: Score) {
+	private static btn(p: Page, task: Task, s: Score) {
 		_.if(Player.task(task.id, 'progress'), () => this.progress(p, task, s)).
 			elseIf(Player.task(task.id, 'done'), () => this.done(p, task, s)).
 			elseIf(Player.task(task.id, 'claimed'), () => this.claimed(p, task, s));
 	}
 
-	private static progress(p: PageClass, task: Task, s: Score) {
+	private static progress(p: Page, task: Task, s: Score) {
 		const progress = Float.variable(task.executed)['*='](100)['/='](task.goal);
 		const bar = new Bar(progress.toScore()).toData({ length: 10 });
 		return p.emit(new Button(
@@ -107,7 +107,7 @@ export class Tasks {
 		));
 	}
 
-	private static done(p: PageClass, task: Task, s: Score) {
+	private static done(p: Page, task: Task, s: Score) {
 		return p.emit(new Button(
 			task.item, $(s), `§9${task.name} §8• §e${task.goal}§6/§e${task.goal} §8• §a§lCLAIM!`,
 			[
@@ -126,7 +126,7 @@ export class Tasks {
 		))
 	}
 
-	private static claimed(p: PageClass, task: Task, s: Score) {
+	private static claimed(p: Page, task: Task, s: Score) {
 		return p.emit(new Button(
 			'gunpowder', $(s), `§7${task.name} §8• §7${task.goal}§8/§7${task.goal}`,
 			[

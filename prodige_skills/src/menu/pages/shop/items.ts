@@ -1,4 +1,4 @@
-import { Button, Gui, PageClass } from "@prodigelib/gui";
+import { Button, Gui, Page } from "@prodigelib/gui";
 import { Shop } from ".";
 import { Menu } from "@src/menu";
 import { Tool } from "@src/misc/tool";
@@ -12,7 +12,7 @@ export class Items {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		const tools = Object.values(Tool.tools);
 
 		p.add(() => {

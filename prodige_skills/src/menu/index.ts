@@ -1,4 +1,4 @@
-import { Button, Gui, PageClass, GuiMacro as G } from '@prodigelib/gui';
+import { Button, Gui, Page, GuiMacro as G } from '@prodigelib/gui';
 import { Main } from '@src/menu/main';
 import { Shop } from '@src/menu/shop';
 import { Boosters } from '@src/menu/shop/booster';
@@ -19,7 +19,7 @@ import { Score, DataVariable, _ } from 'sandstone';
 
 export class Menu {
 	public static init() {
-		const Menu = new Gui('§d§lProdige Skills', 'menu', true);
+		const Menu = new Gui('§dProdige Skills', 'menu');
 
 		const pages: (SkillPage | SubSkillPage)[] = [
 			Main, Progress, Actions, Achievements, Abilities, Shop, Crates, Items, Boosters, Titles, Preferences, Tasks, RewardVault
@@ -56,7 +56,7 @@ export class Menu {
 		);
 	}
 
-	public static sliders(p: PageClass, slider: Score, max: number | Score) {
+	public static sliders(p: Page, slider: Score, max: number | Score) {
 		const bottom = slider['=='](0);
 		const top = slider['=='](max);
 

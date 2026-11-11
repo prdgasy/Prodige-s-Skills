@@ -25,10 +25,10 @@ export class Global {
 
 	public static generateCleanFn() {
 		return MCFunction('clean_var', () => {
-			for (let i = 0; i < 200; i++) {
+			for (let i = 0; i < 1000; i++) {
 				Data('storage', '__sandstone:variable', `anon_xTSjehSB_${i}`).remove();
 			}
-		});
+		}, { onConflict: 'ignore' });
 	}
 
 

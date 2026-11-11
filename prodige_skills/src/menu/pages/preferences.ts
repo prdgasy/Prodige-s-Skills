@@ -1,5 +1,5 @@
 import { Text } from "@lib/text";
-import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
+import { Button, Gui, GuiMacro as $, Page } from "@prodigelib/gui";
 import { Player } from "@src/player";
 import { Skill } from "@src/skill";
 import { Item } from "@src/types";
@@ -21,7 +21,7 @@ export class Preferences {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		p.add(() => Mask.mainLayered(p));
 		const switches: Switch[] = [
 			{
@@ -59,13 +59,17 @@ export class Preferences {
 		p.add(() => {
 			let slot = 11;
 			for (const preference of switches) {
+				const color = DataVariable('§a');
 				const status = DataVariable('§a§l[ON]');
-				_.if(_.not(preference.label), () => status.set('§c§l[OFF]'));
+				_.if(_.not(preference.label), () => {
+					status.set('§c§l[OFF]');
+					color.set('§c');
+				});
 
 				p.emit(new Button(
 					preference.item,
 					slot++,
-					`§b${preference.name}`,
+					$`${color}${preference.name}`,
 					[
 
 						...Text.wrap(`§7${preference.description}`),

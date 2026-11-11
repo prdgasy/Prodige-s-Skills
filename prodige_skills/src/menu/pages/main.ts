@@ -1,7 +1,7 @@
 import { Bar } from "@lib/bar";
 import { Roman } from "@lib/roman";
 import { Text } from "@lib/text";
-import { Button, Gui, GuiMacro as $, PageClass } from "@prodigelib/gui";
+import { Button, Gui, GuiMacro as $, Page } from "@prodigelib/gui";
 import { Shop } from "@src/menu/shop";
 import { Reward } from "@src/misc/reward";
 import { Skill } from "@src/skill";
@@ -21,7 +21,7 @@ export class Main {
 		return this.name;
 	}
 
-	public static init(g: Gui, p: PageClass) {
+	public static init(g: Gui, p: Page) {
 		p.add(() => Mask.mainLayered(p));
 
 		p.add(() => {
@@ -36,7 +36,7 @@ export class Main {
 		return p;
 	}
 
-	private static rewardVault(g: Gui, p: PageClass) {
+	private static rewardVault(g: Gui, p: Page) {
 		const pending = Variable(0);
 		for (const reward of Reward.registry.values()) {
 			_.if(reward.pending['>'](0), () => pending['+='](reward.pending));
@@ -63,7 +63,7 @@ export class Main {
 		));
 	}
 
-	private static infoAndPreferences(g: Gui, p: PageClass) {
+	private static infoAndPreferences(g: Gui, p: Page) {
 		const totalXp = Float.variable();
 		for (const skill of Object.values(Skill.skills)) {
 			totalXp['+='](skill.xp);
@@ -99,7 +99,7 @@ export class Main {
 		);
 	}
 
-	private static shop(g: Gui, p: PageClass) {
+	private static shop(g: Gui, p: Page) {
 		return p.emit(
 			new Button('emerald', 21, `§aShop`,
 				[
@@ -120,7 +120,7 @@ export class Main {
 		);
 	}
 
-	private static tasks(g: Gui, p: PageClass) {
+	private static tasks(g: Gui, p: Page) {
 		const done = Variable(0);
 		for (const task of Task.tasks) {
 			_.if(_.or(Player.task(task.id, 'done'), Player.task(task.id, 'claimed')), () => {
@@ -156,12 +156,10 @@ export class Main {
 
 	}
 
-	private static skillBts(g: Gui, p: PageClass) {
+	private static skillBts(g: Gui, p: Page) {
 		let slot = 10;
 
 		for (const skill of Object.values(Skill.skills)) {
-			comment(`skill_button::${skill.name}`);
-
 			const s = slot++;
 			const progress = skill.xp["*"](100)["/"](skill.goal);
 			const nLvl = skill.level["+"](1);
@@ -176,13 +174,13 @@ export class Main {
 					"",
 					...Text.wrap(skill.description),
 					"",
-					"§f§lNext Level Goal:",
-					$` §8• §7Target: §d${skill.name} ${nextRoman}`,
-					$` §8• §7Progress: §e${progress.show()}%`,
-					$` §8> ${bar} §e${skill.xp.show()}§6/§e${skill.goal}`,
+					"§d§l┃ Next Level Goal",
+					$`§d┃ §8• §7Target: §d${skill.name} ${nextRoman}`,
+					$`§d┃ §8• §7Progress: §e${progress.show()}%`,
+					$`§d┃ §8> ${bar} §e${skill.xp.show()}§6/§e${skill.goal}`,
 					"",
-					$`§f§l${skill.name} ${nextRoman} Rewards:`,
-					...rewards.map(r => ` §8• §e${r.name}`),
+					$`§e§l┃ ${skill.name} ${nextRoman} Rewards`,
+					...rewards.map(r => `§e┃ §8• §e${r.name}`),
 					"",
 					"§eClick to view!",
 				], () => {

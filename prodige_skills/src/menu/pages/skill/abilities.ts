@@ -1,4 +1,4 @@
-import { Gui, PageClass, GuiMacro as $, Button } from "@prodigelib/gui";
+import { Gui, Page, GuiMacro as $, Button } from "@prodigelib/gui";
 import { Skill } from "@src/skill";
 import { Navigation } from "./navigation";
 import { Roman } from "@lib/roman";
@@ -13,12 +13,12 @@ export class Abilities {
 		return this.name + skill.name;
 	}
 
-	public static init(g: Gui, p: PageClass, s: Skill) {
+	public static init(g: Gui, p: Page, s: Skill) {
 		p.add(() => Mask.layered(p, "white_stained_glass_pane", "gray_stained_glass_pane"));
 
 		p.add(() => {
 			const info = new Button(
-				"knowledge_book", 14, "§a§lAbility Guide",
+				"knowledge_book", 10, "§a§lAbility Guide",
 				[
 					...Text.wrap("§7Abilities are §dpassive bonuses §7that enhance your performance as you master each skill."),
 					"",
@@ -51,7 +51,7 @@ export class Abilities {
 		return p;
 	}
 
-	public static toggler(p: PageClass, a: Ability) {
+	public static toggler(p: Page, a: Ability) {
 		const status = DataVariable("§a§lOn");
 		_.if(_.not(a.state), () => {
 			status.set("§c§lOff");
@@ -59,7 +59,7 @@ export class Abilities {
 
 		p.emit(
 			new Button(
-				'lever', 12, '§d§lAbility Perks',
+				'lever', 16, '§d§lAbility Perks',
 				[
 					'§7Toggle your ability perks and buffs.',
 					'',
@@ -73,7 +73,7 @@ export class Abilities {
 			))
 	}
 
-	private static unlocked(p: PageClass, s: Skill, a: Ability) {
+	private static unlocked(p: Page, s: Skill, a: Ability) {
 		const icon = DataVariable("small_amethyst_bud");
 		_.if(a.state, () => {
 			icon.set("amethyst_cluster");
@@ -83,7 +83,7 @@ export class Abilities {
 			else(() => this.upgradeBtn(p, s, a, icon));
 	}
 
-	private static upgradeBtn(p: PageClass, s: Skill, a: Ability, icon: DataPointClass) {
+	private static upgradeBtn(p: Page, s: Skill, a: Ability, icon: DataPointClass) {
 		const next = a.tier['+'](1);
 		const roman = Roman.get(a.tier);
 		const romanNext = Roman.get(next);
@@ -105,7 +105,7 @@ export class Abilities {
 
 		p.emit(
 			new Button(
-				$(icon), 4, $`§c§l${a.name} §8[§c§l${roman}§8] ${unlock}`,
+				$(icon), 13, $`§c§l${a.name} §8[§c§l${roman}§8] ${unlock}`,
 				[
 					'',
 					'§d§l┃ Ability Perks',
@@ -126,10 +126,10 @@ export class Abilities {
 		);
 	}
 
-	private static maxTier(p: PageClass, a: Ability, isActive: DataPointClass) {
+	private static maxTier(p: Page, a: Ability, isActive: DataPointClass) {
 		p.emit(
 			new Button(
-				'nether_star', 4, `${a.name} §8[§c§lX§8]`,
+				'nether_star', 13, `${a.name} §8[§c§lX§8]`,
 				[
 					...Text.wrap(a.description),
 					'',
@@ -149,7 +149,7 @@ export class Abilities {
 		);
 	}
 
-	private static locked(p: PageClass, s: Skill, a: Ability) {
+	private static locked(p: Page, s: Skill, a: Ability) {
 		const next = a.tier['+'](1);
 		const levelRequired = next['*'](10);
 		const romanLevelRequired = Roman.get(levelRequired);
@@ -165,7 +165,7 @@ export class Abilities {
 
 		return p.emit(
 			new Button(
-				'charcoal', 4, $`§c🔒 Locked ${unlock}`,
+				'charcoal', 13, $`§c🔒 Locked ${unlock}`,
 				[
 					'§8┃ §7This ability is not yet unlocked.',
 					'',
@@ -187,10 +187,10 @@ export class Abilities {
 		);
 	}
 
-	private static comingSoon(p: PageClass, s: Skill) {
+	private static comingSoon(p: Page, s: Skill) {
 
 		return p.emit(new Button(
-			'anvil', 4, '§c§lComing Soon!',
+			'anvil', 13, '§c§lComing Soon!',
 			[
 				'§8┃ §7This skill does not have an',
 				'§8┃ §7ability available yet.',
